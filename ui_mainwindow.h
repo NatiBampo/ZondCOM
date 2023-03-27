@@ -131,7 +131,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1195, 615);
+        MainWindow->resize(1195, 621);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         gridLayout_5 = new QGridLayout(centralwidget);
@@ -150,7 +150,7 @@ public:
         tableView->setBaseSize(QSize(400, 200));
         tableView->setDragDropOverwriteMode(false);
         tableView->horizontalHeader()->setCascadingSectionResizes(true);
-        tableView->horizontalHeader()->setMinimumSectionSize(30);
+        tableView->horizontalHeader()->setMinimumSectionSize(33);
         tableView->horizontalHeader()->setDefaultSectionSize(60);
         tableView->verticalHeader()->setMinimumSectionSize(24);
         tableView->verticalHeader()->setDefaultSectionSize(27);

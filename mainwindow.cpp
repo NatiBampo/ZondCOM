@@ -192,15 +192,14 @@ void MainWindow::pauseButton_clicked(bool checked)
 {
     if (checked){
         ui->pauseButton->setText("Продолжить");
-        worker->pauseWalk();
-
         //emit sendPauseCommandSignal();
 
     } else {
         ui->pauseButton->setText("Пауза");
-        worker->continueWalk(currentIndex);
+        //worker->continueWalk(currentIndex);
         //emit sendContinueWalkSignal(0);
     }
+    worker->pauseWalk();
 }
 
 
@@ -236,8 +235,8 @@ void MainWindow::continueFromButton_clicked()
     int numberY = ui->numXspinBox->value();
     int index = (row - 1) * (numberY + 1) + element - 1;
     currentIndex = index;
-    worker->continueWalk(currentIndex);
-    //emit sendContinueWalkSignal(index);
+    //worker->continueWalk(currentIndex);
+    emit sendContinueWalkSignal(index);
 }
 
 void MainWindow::scanPushButton_clicked(bool checked)

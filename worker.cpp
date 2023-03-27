@@ -58,7 +58,7 @@ void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay)
 void Worker::scanningPlate(double AX, double AY, double BX, double BY, double stepX, double stepY, double numberX, double numberY, QString dir_cur) {
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
-    dir = dir_cur;
+    dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
     pauseIndex = 0;
     currentIndex = 0;
     cells_X = numberX;
@@ -81,20 +81,19 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
             if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
-    autoWalk(false);
+    autoWalk(true);
 }
 
 void Worker::autoWalk(bool allNew) {
     emit sendProgressBarRangeSignal(currentIndex, DotsX.count() - 1);
     int i = 0;
     //спросить начать обход или продолжить?
-    if (allNew) {
-        currentIndex = 0;
-    } else {
-        Worker::copyUpToIndex(currentIndex);
-    }
-
-    QFile file(dir + ".csv");
+    Worker::copyUpToIndex(currentIndex);
+    QFile file(dir);
+    QString dir1 = file.fileName();
+    //QString dir2 = file.filesystemFileName();
+    qDebug() << dir1;
+    //qDebug() << dir2;
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
         QTextStream output(&file);
@@ -107,7 +106,7 @@ void Worker::autoWalk(bool allNew) {
             Worker::measureElement();
             //запускаем единичное измерение
             //запись в файл строки с измерениями токов
-            output << QString::number(i, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+            output << QString::number(i, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                       QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
             output.flush();
 
@@ -160,11 +159,16 @@ void Worker::copyUpToIndex(int index) {
     QFile dest (dir + "tmp.csv");
     QFile source (dir + ".csv");
     if (dest.open(QIODevice::ReadWrite) && source.open(QIODevice::ReadWrite)) {
-        QTextStream input(&source);
-        QTextStream output(&dest);
-        for (int i = 0; i<index && !input.atEnd(); ++i) {
-            output << input.readLine()<<'\n';
-            output.flush();
+        QTextStream output(&source);
+        QTextStream input(&dest);
+        int i = 0;
+        for (; i < index; ++i) {
+            if (output.atEnd()){
+                input << QString::number(i, 'D', 0) + ",,,,"  + '\n';
+            } else {
+                input << output.readLine()<<'\n';
+            }
+            input.flush();
         }
     }
 
@@ -176,7 +180,7 @@ void Worker::copyUpToIndex(int index) {
 
 void Worker::pauseWalk() {
     //приостановить измерения
-    pause = true;
+    pause = !pause;
     pauseIndex = currentIndex;
 }
 
@@ -184,6 +188,7 @@ void Worker::continueWalk(int index) {
     //обновить индекс для обхода с нового элемента
     if (index!=currentIndex) {
         currentIndex = index;
+        overwrite = true;
     }
     pause = false;
     autoWalk(false);
@@ -201,16 +206,21 @@ void Worker::saveMeasure(int index) {
     QFile newDest (dir + "tmp.csv");
     QFile oldSource (dir + ".csv");
     if (newDest.open(QIODevice::ReadWrite) && oldSource.open(QIODevice::ReadWrite)) {
-        QTextStream input(&oldSource);
-        QTextStream output(&newDest);
-        for (int i = 0; !input.atEnd(); ++i) {
+        QTextStream output(&oldSource);
+        QTextStream input(&newDest);
+        int i = 0;
+        for (; !output.atEnd(); ++i) {
             if (i==index) {
-                output << QString::number(i, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+                input << QString::number(i, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                           QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
             } else {
-                output << input.readLine();
+                output << input.readLine() << '\n';
             }
             output.flush();
+        }
+        if (index > i) {
+            input << QString::number(index, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+                      QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
         }
         //копируем всё обратно и удаляем временный файл
         newDest.close();

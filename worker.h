@@ -26,6 +26,7 @@ private:
     QList<double> DotsY;
     QString dir = "С:\temp\1";
     bool pause = false;
+    bool overwrite = false;
     int currentIndex = 0;
     int pauseIndex = 0;
     double cells_X = 15;
