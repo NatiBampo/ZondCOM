@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1195</width>
+    <height>615</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_5">
+    <item row="0" column="2" rowspan="6">
+     <layout class="QGridLayout" name="gridLayout_10">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>Последние измерения</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QTableView" name="tableView">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>400</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="dragDropOverwriteMode">
+         <bool>false</bool>
+        </property>
+        <attribute name="horizontalHeaderCascadingSectionResizes">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderMinimumSectionSize">
+         <number>30</number>
+        </attribute>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>60</number>
+        </attribute>
+        <attribute name="verticalHeaderMinimumSectionSize">
+         <number>24</number>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>27</number>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="0" rowspan="5">
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Порты</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="portComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="placeholderText">
+           <string>Планар</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="keithlyPortComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="placeholderText">
+           <string>Keithley</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="lightPortComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="placeholderText">
+           <string>Диод</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="openPortPushButton">
+          <property name="text">
+           <string>Открыть</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="1">
+       <widget class="QTabWidget" name="tabWidget">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="tab">
+         <attribute name="title">
+          <string>Ручной</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="6" column="0">
+           <widget class="QGroupBox" name="groupBox_3">
+            <property name="title">
+             <string>Управление столом</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="2" column="1">
+              <widget class="QPushButton" name="backwardPushButton">
+               <property name="text">
+                <string>Назад</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QPushButton" name="rightPushButton">
+               <property name="text">
+                <string>Вправо</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QPushButton" name="leftPushButton">
+               <property name="text">
+                <string>Влево</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QPushButton" name="forwardPushButton">
+               <property name="text">
+                <string>Вперед</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Координаты</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="yLineEdit"/>
+             </item>
+             <item row="2" column="0" colspan="2">
+              <widget class="QPushButton" name="coordsPushButton">
+               <property name="text">
+                <string>Отправить</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="xLineEdit"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>X:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Y:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QGroupBox" name="groupBox_4">
+            <property name="title">
+             <string>Освещение</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_7">
+             <item row="0" column="0">
+              <widget class="QPushButton" name="lightPushButton">
+               <property name="text">
+                <string>Включить</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QPushButton" name="statePushButton">
+            <property name="text">
+             <string>Состояние</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>Стол</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="1" column="0">
+              <widget class="QPushButton" name="tableDownPushButton">
+               <property name="text">
+                <string>Опустить</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QPushButton" name="tableUpPushButton">
+               <property name="text">
+                <string>Поднять</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Журнал</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0" colspan="2">
+           <widget class="QListWidget" name="logsListWidget"/>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_2">
+         <attribute name="title">
+          <string>Авто</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="2">
+           <widget class="QSpinBox" name="AXspinBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>400000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Шаг</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QLabel" name="label_23">
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="4">
+           <widget class="QPushButton" name="pauseButton">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Пауза</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="3">
+           <widget class="QPushButton" name="scanPushButton">
+            <property name="text">
+             <string>Начать</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QDoubleSpinBox" name="stepYspinBox">
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="value">
+             <double>2.805000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QSpinBox" name="numXspinBox">
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>15</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>X:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Начало</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QDoubleSpinBox" name="stepColSpinBox">
+            <property name="value">
+             <double>26.059999999999999</double>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QProgressBar" name="progressBar">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>X:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Конец</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QSpinBox" name="AYspinBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>400000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QSpinBox" name="BYspinBox">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>400000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QSpinBox" name="numYspinBox">
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>30</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Количество шагов</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Шаг мультипликации</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QSpinBox" name="BXspinBox">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>400000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>X:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QPushButton" name="orientationButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Ориентация пластины</string>
+            </property>
+            <property name="default">
+             <bool>false</bool>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QDoubleSpinBox" name="stepRowSpinBox_2">
+            <property name="value">
+             <double>2.810000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>X:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QDoubleSpinBox" name="stepXspinBox">
+            <property name="decimals">
+             <number>3</number>
+            </property>
+            <property name="value">
+             <double>1.550000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>X:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="5">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QGroupBox" name="groupBox_5">
+              <property name="title">
+               <string>Переход на нужный элемент</string>
+              </property>
+              <widget class="QWidget" name="gridLayoutWidget">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>20</y>
+                 <width>551</width>
+                 <height>201</height>
+                </rect>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_9">
+                <item row="0" column="0">
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <widget class="QLabel" name="label_17">
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="text">
+                     <string>Столбец</string>
+                    </property>
+                    <property name="margin">
+                     <number>6</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_18">
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="text">
+                     <string>Ряд</string>
+                    </property>
+                    <property name="margin">
+                     <number>6</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_19">
+                    <property name="layoutDirection">
+                     <enum>Qt::LeftToRight</enum>
+                    </property>
+                    <property name="text">
+                     <string>Элемент</string>
+                    </property>
+                    <property name="margin">
+                     <number>6</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="0" column="2">
+                 <layout class="QVBoxLayout" name="verticalLayout_2">
+                  <item>
+                   <widget class="QPushButton" name="goToButton">
+                    <property name="text">
+                     <string>Перейти</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="measurePushButton">
+                    <property name="text">
+                     <string>Измерение</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="saveMeasureButton">
+                    <property name="text">
+                     <string>Записать</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="continueFromButton">
+                    <property name="text">
+                     <string>Продолжить обход с элемента</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="0" column="1">
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <item>
+                   <widget class="QSpinBox" name="columnSpinBox">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>3</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="rowSpinBox">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>30</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="elemSpinBox">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>16</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_24">
+      <property name="text">
+       <string>hhjhghg</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1195</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
