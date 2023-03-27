@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 6.4.2
+** Created by: Qt User Interface Compiler version 6.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -123,6 +123,7 @@ public:
     QSpinBox *columnSpinBox;
     QSpinBox *rowSpinBox;
     QSpinBox *elemSpinBox;
+    QLabel *label_24;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -130,7 +131,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1195, 612);
+        MainWindow->resize(1195, 615);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         gridLayout_5 = new QGridLayout(centralwidget);
@@ -147,6 +148,7 @@ public:
         tableView->setObjectName("tableView");
         tableView->setMinimumSize(QSize(400, 200));
         tableView->setBaseSize(QSize(400, 200));
+        tableView->setDragDropOverwriteMode(false);
         tableView->horizontalHeader()->setCascadingSectionResizes(true);
         tableView->horizontalHeader()->setMinimumSectionSize(30);
         tableView->horizontalHeader()->setDefaultSectionSize(60);
@@ -552,16 +554,22 @@ public:
         verticalLayout_4->setObjectName("verticalLayout_4");
         columnSpinBox = new QSpinBox(gridLayoutWidget);
         columnSpinBox->setObjectName("columnSpinBox");
+        columnSpinBox->setMinimum(1);
+        columnSpinBox->setMaximum(3);
 
         verticalLayout_4->addWidget(columnSpinBox);
 
         rowSpinBox = new QSpinBox(gridLayoutWidget);
         rowSpinBox->setObjectName("rowSpinBox");
+        rowSpinBox->setMinimum(1);
+        rowSpinBox->setMaximum(30);
 
         verticalLayout_4->addWidget(rowSpinBox);
 
         elemSpinBox = new QSpinBox(gridLayoutWidget);
         elemSpinBox->setObjectName("elemSpinBox");
+        elemSpinBox->setMinimum(1);
+        elemSpinBox->setMaximum(16);
 
         verticalLayout_4->addWidget(elemSpinBox);
 
@@ -581,10 +589,15 @@ public:
 
         gridLayout_5->addLayout(formLayout, 0, 0, 5, 1);
 
+        label_24 = new QLabel(centralwidget);
+        label_24->setObjectName("label_24");
+
+        gridLayout_5->addWidget(label_24, 5, 0, 1, 1);
+
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1195, 22));
+        menubar->setGeometry(QRect(0, 0, 1195, 26));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -652,6 +665,7 @@ public:
         saveMeasureButton->setText(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214", nullptr));
         continueFromButton->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214 \320\276\320\261\321\205\320\276\320\264 \321\201 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\320\260", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
+        label_24->setText(QCoreApplication::translate("MainWindow", "hhjhghg", nullptr));
     } // retranslateUi
 
 };

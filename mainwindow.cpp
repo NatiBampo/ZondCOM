@@ -269,7 +269,8 @@ void MainWindow::scanPushButton_clicked(bool checked)
         emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, dir_name);
     } else {
         ui->scanPushButton->setText("Начать");
-        ui->pauseButton->isEnabled();
+        ui->pauseButton->setChecked(false);
+        ui->pauseButton->setText("Пауза");
         currentIndex = finalIndex;
         worker->stopWalk();
     }
