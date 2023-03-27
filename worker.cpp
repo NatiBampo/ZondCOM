@@ -88,8 +88,12 @@ void Worker::autoWalk(bool allNew) {
     emit sendProgressBarRangeSignal(currentIndex, DotsX.count() - 1);
     int i = 0;
     //спросить начать обход или продолжить?
-    if (allNew) currentIndex = 0;
-    Worker::copyUpToIndex(currentIndex);
+    if (allNew) {
+        currentIndex = 0;
+    } else {
+        Worker::copyUpToIndex(currentIndex);
+    }
+
     QFile file(dir + ".csv");
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
@@ -159,7 +163,7 @@ void Worker::copyUpToIndex(int index) {
         QTextStream input(&source);
         QTextStream output(&dest);
         for (int i = 0; i<index && !input.atEnd(); ++i) {
-            output << input.readLine();
+            output << input.readLine()<<'\n';
             output.flush();
         }
     }
@@ -182,6 +186,7 @@ void Worker::continueWalk(int index) {
         currentIndex = index;
     }
     pause = false;
+    autoWalk(false);
 }
 
 void Worker::stopWalk() {
