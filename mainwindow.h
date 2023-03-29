@@ -29,7 +29,7 @@ private:
     void addElement(int, int, double);
 
 signals:
-    void scanningPlateSignal(double, double, double, double, double, double, double, double, QString);
+    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, double, QString);
     void measureSignal();
     void tableControllerSignal(QByteArray);
     void lightControllerSignal(QByteArray);

@@ -55,7 +55,8 @@ void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay)
     if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
 }
 
-void Worker::scanningPlate(double AX, double AY, double BX, double BY, double stepX, double stepY, double numberX, double numberY, QString dir_cur) {
+void Worker::scanningPlate(double AX, double AY, double BX, double BY, double stepX, double stepY,
+                           double numberX, double numberY, double colSlide, double rowSlide, QString dir_cur) {
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";

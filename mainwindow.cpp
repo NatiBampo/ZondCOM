@@ -251,6 +251,9 @@ void MainWindow::scanPushButton_clicked(bool checked)
         double stepY = (double)ui->stepYspinBox->value();
         double numberX = (double)ui->numXspinBox->value();
         double numberY = (double)ui->numYspinBox->value();
+        //сдвиг меж столбцов и рядов
+        double colSlide = (double)ui->stepColSpinBox->value();
+        double rowSlide = (double)ui->stepRowSpinBox->value();
 
         //создаем модель таблицы для отображения(впоследствие можно сократить до N рядов)
         model = new QStandardItemModel(numberX * numberY, 8, this);
@@ -265,7 +268,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
         ui->tableView->setModel(model);
         QFileDialog directory;
         QString dir_name = directory.getSaveFileName(this,"Choose directory and name");
-        emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, dir_name);
+        emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, dir_name);
     } else {
         ui->scanPushButton->setText("Начать");
         ui->pauseButton->setChecked(false);

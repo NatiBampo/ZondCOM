@@ -58,7 +58,7 @@ signals:
 public slots:
     void measureElement();
     void sendPackage(QSerialPort * , QByteArray, int);
-    void scanningPlate(double, double, double, double, double, double, double, double, QString);
+    void scanningPlate(double, double, double, double, double, double, double, double, double, double, QString);
     void tableController(QByteArray);
     void lightController(QByteArray);
     void openPorts(QString, QString, QString);

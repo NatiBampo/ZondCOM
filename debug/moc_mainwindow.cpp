@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.3)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.3. It"
+#error "This file was generated using the moc from 6.4.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -156,43 +156,43 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
       10,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    9,  206,    2, 0x06,    1 /* Public */,
-       3,    0,  225,    2, 0x06,   11 /* Public */,
-       4,    1,  226,    2, 0x06,   12 /* Public */,
-       5,    1,  229,    2, 0x06,   14 /* Public */,
-       6,    3,  232,    2, 0x06,   16 /* Public */,
-       7,    0,  239,    2, 0x06,   20 /* Public */,
-       8,    1,  240,    2, 0x06,   21 /* Public */,
-       9,    0,  243,    2, 0x06,   23 /* Public */,
-      10,    1,  244,    2, 0x06,   24 /* Public */,
-      11,    1,  247,    2, 0x06,   26 /* Public */,
+       1,   11,  206,    2, 0x06,    1 /* Public */,
+       3,    0,  229,    2, 0x06,   13 /* Public */,
+       4,    1,  230,    2, 0x06,   14 /* Public */,
+       5,    1,  233,    2, 0x06,   16 /* Public */,
+       6,    3,  236,    2, 0x06,   18 /* Public */,
+       7,    0,  243,    2, 0x06,   22 /* Public */,
+       8,    1,  244,    2, 0x06,   23 /* Public */,
+       9,    0,  247,    2, 0x06,   25 /* Public */,
+      10,    1,  248,    2, 0x06,   26 /* Public */,
+      11,    1,  251,    2, 0x06,   28 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      12,    0,  250,    2, 0x08,   28 /* Private */,
-      13,    0,  251,    2, 0x08,   29 /* Private */,
-      14,    0,  252,    2, 0x08,   30 /* Private */,
-      15,    0,  253,    2, 0x08,   31 /* Private */,
-      16,    0,  254,    2, 0x08,   32 /* Private */,
-      17,    0,  255,    2, 0x08,   33 /* Private */,
-      18,    0,  256,    2, 0x08,   34 /* Private */,
-      19,    0,  257,    2, 0x08,   35 /* Private */,
-      20,    0,  258,    2, 0x08,   36 /* Private */,
-      21,    0,  259,    2, 0x08,   37 /* Private */,
-      22,    0,  260,    2, 0x08,   38 /* Private */,
-      23,    1,  261,    2, 0x08,   39 /* Private */,
-      24,    1,  264,    2, 0x08,   41 /* Private */,
-      25,    2,  267,    2, 0x08,   43 /* Private */,
-      26,    2,  272,    2, 0x08,   46 /* Private */,
-      27,    5,  277,    2, 0x08,   49 /* Private */,
-      28,    1,  288,    2, 0x08,   55 /* Private */,
-      29,    0,  291,    2, 0x08,   57 /* Private */,
-      30,    0,  292,    2, 0x08,   58 /* Private */,
-      31,    0,  293,    2, 0x08,   59 /* Private */,
-      32,    0,  294,    2, 0x08,   60 /* Private */,
-      33,    1,  295,    2, 0x08,   61 /* Private */,
+      12,    0,  254,    2, 0x08,   30 /* Private */,
+      13,    0,  255,    2, 0x08,   31 /* Private */,
+      14,    0,  256,    2, 0x08,   32 /* Private */,
+      15,    0,  257,    2, 0x08,   33 /* Private */,
+      16,    0,  258,    2, 0x08,   34 /* Private */,
+      17,    0,  259,    2, 0x08,   35 /* Private */,
+      18,    0,  260,    2, 0x08,   36 /* Private */,
+      19,    0,  261,    2, 0x08,   37 /* Private */,
+      20,    0,  262,    2, 0x08,   38 /* Private */,
+      21,    0,  263,    2, 0x08,   39 /* Private */,
+      22,    0,  264,    2, 0x08,   40 /* Private */,
+      23,    1,  265,    2, 0x08,   41 /* Private */,
+      24,    1,  268,    2, 0x08,   43 /* Private */,
+      25,    2,  271,    2, 0x08,   45 /* Private */,
+      26,    2,  276,    2, 0x08,   48 /* Private */,
+      27,    5,  281,    2, 0x08,   51 /* Private */,
+      28,    1,  292,    2, 0x08,   57 /* Private */,
+      29,    0,  295,    2, 0x08,   59 /* Private */,
+      30,    0,  296,    2, 0x08,   60 /* Private */,
+      31,    0,  297,    2, 0x08,   61 /* Private */,
+      32,    0,  298,    2, 0x08,   62 /* Private */,
+      33,    1,  299,    2, 0x08,   63 /* Private */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::QString,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::QString,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QByteArray,    2,
     QMetaType::Void, QMetaType::QByteArray,    2,
@@ -241,6 +241,8 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<MainWindow, std::true_type>,
         // method 'scanningPlateSignal'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
@@ -343,7 +345,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->scanningPlateSignal((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[9]))); break;
+        case 0: _t->scanningPlateSignal((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[10])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[11]))); break;
         case 1: _t->measureSignal(); break;
         case 2: _t->tableControllerSignal((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
         case 3: _t->lightControllerSignal((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
@@ -380,7 +382,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (MainWindow::*)(double , double , double , double , double , double , double , double , QString );
+            using _t = void (MainWindow::*)(double , double , double , double , double , double , double , double , double , double , QString );
             if (_t _q_method = &MainWindow::scanningPlateSignal; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
@@ -483,9 +485,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void MainWindow::scanningPlateSignal(double _t1, double _t2, double _t3, double _t4, double _t5, double _t6, double _t7, double _t8, QString _t9)
+void MainWindow::scanningPlateSignal(double _t1, double _t2, double _t3, double _t4, double _t5, double _t6, double _t7, double _t8, double _t9, double _t10, QString _t11)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t7))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t8))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t9))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t7))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t8))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t9))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t10))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t11))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
