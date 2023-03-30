@@ -90,7 +90,7 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
 }
 
 void Worker::autoWalk(bool allNew) {
-    emit sendProgressBarRangeSignal(currentIndex, lastIndex);//DotsX.count()-1
+    emit sendProgressBarRangeSignal(currentIndex, lastIndex);
     int i = 0;
     //спросить начать обход или продолжить?
     Worker::copyUpToIndex(currentIndex);
@@ -102,7 +102,7 @@ void Worker::autoWalk(bool allNew) {
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
         QTextStream output(&file);
-        while (currentIndex < lastIndex) //DotsX.count()
+        while (currentIndex < lastIndex)
         {
             //опустить стол
             emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);

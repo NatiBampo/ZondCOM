@@ -269,6 +269,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
         QFileDialog directory;
         QString dir_name = directory.getSaveFileName(this,"Choose directory and name");
         emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, dir_name);
+
     } else {
         ui->scanPushButton->setText("Начать");
         ui->pauseButton->setChecked(false);

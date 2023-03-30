@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QSerialPort>
 #include <QFile>
+#include <QSqlQuery>
+
 
 #define ANSWER_DELAY 1000
 #define NO_ANSWER_DELAY 10
