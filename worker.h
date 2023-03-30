@@ -25,10 +25,12 @@ private:
     QList<double> DotsX;
     QList<double> DotsY;
     QString dir = "С:\temp\1";
-    bool pause = false;
+
+    volatile bool pause = false;
     bool overwrite = false;
     int currentIndex = 0;
     int pauseIndex = 0;
+    int lastIndex = 0;
     double cells_X = 15;
     double rows_Y = 30;
     double ForwardCurrent = 0.0;

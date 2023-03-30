@@ -329,7 +329,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="3">
+          <item row="4" column="4">
            <widget class="QLabel" name="label_23">
             <property name="text">
              <string>Y:</string>
@@ -353,7 +353,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="4">
+          <item row="2" column="5">
            <widget class="QDoubleSpinBox" name="stepYspinBox">
             <property name="decimals">
              <number>3</number>
@@ -363,7 +363,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="4">
+          <item row="0" column="5">
            <widget class="QSpinBox" name="AYspinBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -379,7 +379,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="4">
+          <item row="5" column="5">
            <widget class="QPushButton" name="pauseButton">
             <property name="enabled">
              <bool>true</bool>
@@ -392,6 +392,13 @@
             </property>
             <property name="flat">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Y:</string>
             </property>
            </widget>
           </item>
@@ -409,14 +416,14 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="3">
+          <item row="1" column="4">
            <widget class="QLabel" name="label_13">
             <property name="text">
              <string>Y:</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="0" colspan="5">
+          <item row="8" column="0" colspan="6">
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
              <widget class="QGroupBox" name="groupBox_5">
@@ -586,7 +593,7 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="4">
+          <item row="1" column="5">
            <widget class="QSpinBox" name="BYspinBox">
             <property name="minimum">
              <number>0</number>
@@ -645,14 +652,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="4">
+          <item row="3" column="5">
            <widget class="QSpinBox" name="numYspinBox">
             <property name="maximum">
              <number>100</number>
@@ -662,7 +662,7 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="4">
+          <item row="4" column="5">
            <widget class="QDoubleSpinBox" name="stepRowSpinBox">
             <property name="value">
              <double>2.810000000000000</double>
@@ -676,7 +676,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="3">
+          <item row="5" column="4">
            <widget class="QPushButton" name="scanPushButton">
             <property name="text">
              <string>Начать</string>
@@ -686,14 +686,14 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="3">
+          <item row="3" column="4">
            <widget class="QLabel" name="label_15">
             <property name="text">
              <string>Y:</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="3">
+          <item row="2" column="4">
            <widget class="QLabel" name="label_14">
             <property name="text">
              <string>Y:</string>
@@ -715,6 +715,36 @@
            </widget>
           </item>
          </layout>
+         <zorder>label_12</zorder>
+         <zorder>AXspinBox</zorder>
+         <zorder>label_10</zorder>
+         <zorder>label_23</zorder>
+         <zorder>pauseButton</zorder>
+         <zorder>scanPushButton</zorder>
+         <zorder>stepYspinBox</zorder>
+         <zorder>numXspinBox</zorder>
+         <zorder>label_9</zorder>
+         <zorder>label_4</zorder>
+         <zorder>stepColSpinBox</zorder>
+         <zorder>progressBar</zorder>
+         <zorder>label_5</zorder>
+         <zorder>label_6</zorder>
+         <zorder>AYspinBox</zorder>
+         <zorder>label_15</zorder>
+         <zorder>BYspinBox</zorder>
+         <zorder>numYspinBox</zorder>
+         <zorder>label_11</zorder>
+         <zorder>label_14</zorder>
+         <zorder>label_21</zorder>
+         <zorder>BXspinBox</zorder>
+         <zorder>label_22</zorder>
+         <zorder>orientationButton</zorder>
+         <zorder>stepRowSpinBox</zorder>
+         <zorder>label_7</zorder>
+         <zorder>stepXspinBox</zorder>
+         <zorder>label_13</zorder>
+         <zorder>label_8</zorder>
+         <zorder>verticalSpacer</zorder>
         </widget>
        </widget>
       </item>

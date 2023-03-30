@@ -62,7 +62,9 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
     pauseIndex = 0;
     currentIndex = 0;
-    cells_X = numberX;
+    //numberX необходимо привести к фактическому параметру
+    lastIndex = (numberX + 1) * numberY * 3;
+    cells_X = numberX + 1;
     rows_Y = numberY;
 
     double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
@@ -76,17 +78,19 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     double StepyY = (BY - Y3) / (numberY - 1);
     double K = 1.75 / 2.805;
 
-    for (int j = 0; j < numberY; j++) {
-        for (int i = -1; i < numberX; i++) {
-            if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K);
-            if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+    for(int h = -1; h < 2; h++) {
+        for (int j = 0; j < numberY; j++) {
+            for (int i = -1; i < numberX; i++) {
+                if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j + h * colSlide); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K + h * colSlide);
+                if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j + h * rowSlide); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K + h * rowSlide);
+            }
         }
     }
-    autoWalk(true);
+    //autoWalk(true);
 }
 
 void Worker::autoWalk(bool allNew) {
-    emit sendProgressBarRangeSignal(currentIndex, DotsX.count() - 1);
+    emit sendProgressBarRangeSignal(currentIndex, lastIndex);//DotsX.count()-1
     int i = 0;
     //спросить начать обход или продолжить?
     Worker::copyUpToIndex(currentIndex);
@@ -98,7 +102,8 @@ void Worker::autoWalk(bool allNew) {
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
         QTextStream output(&file);
-        while (currentIndex < DotsX.count()) {
+        while (currentIndex < lastIndex) //DotsX.count()
+        {
             //опустить стол
             emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
             //перевод координат в массив байтов для передачи станку
@@ -197,7 +202,7 @@ void Worker::continueWalk(int index) {
 
 void Worker::stopWalk() {
     pause = false;
-    currentIndex = DotsX.count();
+    currentIndex = lastIndex;//DotsX.count()
 }
 
 void Worker::saveMeasure(int index) {
