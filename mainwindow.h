@@ -28,6 +28,7 @@ private:
     int finalIndex = 0;
     void createWorkerThread();
     void addElement(int, int, double);
+    int getIndex();
 
 signals:
     void scanningPlateSignal(double, double, double, double, double, double, double, double, double, double, QString);
