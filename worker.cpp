@@ -66,6 +66,7 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     lastIndex = (numberX + 1) * numberY * 3;
     cells_X = numberX + 1;
     rows_Y = numberY;
+    bool all_three = true;
 
     double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
     double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
@@ -77,12 +78,36 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     double StepyX = (BX - X3) / (numberY - 1);
     double StepyY = (BY - Y3) / (numberY - 1);
     double K = 1.75 / 2.805;
+    double slideX = colSlide - numberX  * stepX;
 
-    for(int h = -1; h < 2; h++) {
+    //for(int h = -1; h < 2; h++) {
+      //  for (int j = 0; j < numberY; j++) {
+        //    for (int i = -1; i < numberX; i++) {
+          //      if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j + h * colSlide); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K + h * colSlide);
+            //    if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j ); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K );
+       //     }
+      //  }
+    //}
+
+    for (int j = 0; j < numberY; j++) {
+        for (int i = -1; i < numberX; i++) {
+            if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K);
+            if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+        }
+    }
+    if(all_three) {//все три столбца измеряем
+        //сперва левый столбец
         for (int j = 0; j < numberY; j++) {
-            for (int i = -1; i < numberX; i++) {
-                if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j + h * colSlide); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K + h * colSlide);
-                if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j + h * rowSlide); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K + h * rowSlide);
+            for (int i = -2; i > -2 - numberX; i--) {
+                if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j  - slideX); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K - slideX);
+                if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+            }
+        }
+        //потом правый столбец
+        for (int j = 0; j < numberY; j++) {
+            for (int i = 15; i > numberX*2-1; i++) {
+                if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j  + slideX); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K + slideX);
+                if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
     }

@@ -203,40 +203,33 @@ void MainWindow::pauseButton_clicked(bool checked)
 }
 
 
-void MainWindow::goToButton_clicked()
+int MainWindow::getIndex()
 {
-    //int column = ui->columnSpinBox->value();
     int row = ui->rowSpinBox->value();
     int element = ui->elemSpinBox->value();
+    int col = ui->columnSpinBox->value();
+    int numberX = ui->numXspinBox->value();
+    int numberY = ui->numYspinBox->value();
+    int index = (col - 1) * (numberX + 1) * numberY + (row - 1) * (numberX + 1) + element - 1;
+    return index;
+}
 
-    int numberY = ui->numXspinBox->value();
-    int index = (row - 1) * (numberY + 1) + element - 1;
-
-    emit goToElementSignal(index);
+void MainWindow::goToButton_clicked()
+{
+    emit goToElementSignal(getIndex());
 }
 
 
 void MainWindow::saveMeasureButton_clicked()
 {
-    int row = ui->rowSpinBox->value();
-    int element = ui->elemSpinBox->value();
-    int numberY = ui->numXspinBox->value();
-    int index = (row - 1) * (numberY + 1) + element - 1;
-
-    emit saveMeasureSignal(index);
+    emit saveMeasureSignal(getIndex());
 }
 
 
 void MainWindow::continueFromButton_clicked()
 {
     ui->pauseButton->setText("Пауза");
-    int row = ui->rowSpinBox->value();
-    int element = ui->elemSpinBox->value();
-    int numberY = ui->numXspinBox->value();
-    int index = (row - 1) * (numberY + 1) + element - 1;
-    currentIndex = index;
-    //worker->continueWalk(currentIndex);
-    emit sendContinueWalkSignal(index);
+    emit sendContinueWalkSignal(getIndex());
 }
 
 void MainWindow::scanPushButton_clicked(bool checked)

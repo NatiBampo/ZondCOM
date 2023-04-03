@@ -24,9 +24,10 @@ private:
     QSerialPort *serialPortKeithly;
     QSerialPort *serialPortLight;
     QByteArray lastAnswer;
+
     QList<double> DotsX;
     QList<double> DotsY;
-    QString dir = "С:\temp\1";
+    QString dir = "С:\temp\1.csv";
 
     volatile bool pause = false;
     bool overwrite = false;
