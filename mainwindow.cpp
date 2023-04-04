@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->continueFromButton, &QPushButton::clicked, this, &MainWindow::continueFromButton_clicked);
     connect(ui->saveMeasureButton, &QPushButton::clicked, this, &MainWindow::saveMeasureButton_clicked);
     connect(ui->pauseButton, &QPushButton::clicked, this, &MainWindow::pauseButton_clicked);
+
     createWorkerThread();
 
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
@@ -54,6 +55,7 @@ void MainWindow::createWorkerThread() {
     worker = new Worker();
     worker->moveToThread(&workerThread);
     workerThread.start();
+
     connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::scanningPlate);
     connect(this, &MainWindow::measureSignal, worker, &Worker::measureElement);
     connect(this, &MainWindow::openPortsSignal, worker, &Worker::openPorts);
@@ -68,12 +70,13 @@ void MainWindow::createWorkerThread() {
     connect(this, &MainWindow::goToElementSignal, worker, &Worker::goToElement);
     //сохрание элемента в строке
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
+    //начать обход
+    connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
 
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
     connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
     connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
-
     //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
 }
@@ -236,34 +239,13 @@ void MainWindow::scanPushButton_clicked(bool checked)
 {
     if (checked) {
         ui->scanPushButton->setText("Завершить обход");
-        double AX = (double)ui->AXspinBox->value();
-        double AY = (double)ui->AYspinBox->value();
-        double BX = (double)ui->BXspinBox->value();
-        double BY = (double)ui->BYspinBox->value();
-        double stepX = (double)ui->stepXspinBox->value();
-        double stepY = (double)ui->stepYspinBox->value();
-        double numberX = (double)ui->numXspinBox->value();
-        double numberY = (double)ui->numYspinBox->value();
-        //сдвиг меж столбцов и рядов
-        double colSlide = (double)ui->stepColSpinBox->value();
-        double rowSlide = (double)ui->stepRowSpinBox->value();
 
-        //создаем модель таблицы для отображения(впоследствие можно сократить до N рядов)
-        model = new QStandardItemModel(numberX * numberY, 8, this);
-        model->setHeaderData(0, Qt::Horizontal, "Столбец");
-        model->setHeaderData(1, Qt::Horizontal, "Ряд");
-        model->setHeaderData(2, Qt::Horizontal, "Элемент");
-        model->setHeaderData(3, Qt::Horizontal, "FC");
-        model->setHeaderData(4, Qt::Horizontal, "DC10mV");
-        model->setHeaderData(5, Qt::Horizontal, "DC1V");
-        model->setHeaderData(6, Qt::Horizontal, "PhotoC");
-        model->setHeaderData(7, Qt::Horizontal, "№");
-        ui->tableView->setModel(model);
         QFileDialog directory;
         QString dir_name = directory.getSaveFileName(this,"Choose directory and name");
-        emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, dir_name);
 
-    } else {
+        emit autoWalkSignal(true, dir_name);
+    }
+    else {
         ui->scanPushButton->setText("Начать");
         ui->pauseButton->setChecked(false);
         ui->pauseButton->setText("Пауза");
@@ -275,6 +257,34 @@ void MainWindow::scanPushButton_clicked(bool checked)
 
 void MainWindow::orientationButton_clicked()
 {
+    double AX = (double)ui->AXspinBox->value();
+    double AY = (double)ui->AYspinBox->value();
+    double BX = (double)ui->BXspinBox->value();
+    double BY = (double)ui->BYspinBox->value();
+    double stepX = (double)ui->stepXspinBox->value();
+    double stepY = (double)ui->stepYspinBox->value();
+    double numberX = (double)ui->numXspinBox->value();
+    double numberY = (double)ui->numYspinBox->value();
+    //сдвиг меж столбцов и рядов
+    double colSlide = (double)ui->stepColSpinBox->value();
+    double rowSlide = (double)ui->stepRowSpinBox->value();
+
+    //создаем модель таблицы для отображения(впоследствие можно сократить до N рядов)
+    model = new QStandardItemModel(numberX * numberY, 8, this);
+    model->setHeaderData(0, Qt::Horizontal, "Столбец");
+    model->setHeaderData(1, Qt::Horizontal, "Ряд");
+    model->setHeaderData(2, Qt::Horizontal, "Элемент");
+    model->setHeaderData(3, Qt::Horizontal, "FC");
+    model->setHeaderData(4, Qt::Horizontal, "DC10mV");
+    model->setHeaderData(5, Qt::Horizontal, "DC1V");
+    model->setHeaderData(6, Qt::Horizontal, "PhotoC");
+    model->setHeaderData(7, Qt::Horizontal, "№");
+    ui->tableView->setModel(model);
+
+    bool all_three = ui->checkBox->isChecked();
+    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three);
 
 }
+
+
 

@@ -8,6 +8,7 @@
 Worker::Worker()
 {
     connect(this, &Worker::sendPackageSignal, this, &Worker::sendPackage);
+    connect(this, &Worker::autoWalkSignal, this, &Worker::autoWalk);
 }
 
 Worker::~Worker() {
@@ -56,17 +57,12 @@ void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay)
 }
 
 void Worker::scanningPlate(double AX, double AY, double BX, double BY, double stepX, double stepY,
-                           double numberX, double numberY, double colSlide, double rowSlide, QString dir_cur) {
+                           double numberX, double numberY, double colSlide, double rowSlide, bool all_three) {
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
-    dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
-    pauseIndex = 0;
-    currentIndex = 0;
     //numberX необходимо привести к фактическому параметру
     lastIndex = (numberX + 1) * numberY * 3;
-    cells_X = numberX + 1;
-    rows_Y = numberY;
-    bool all_three = true;
+    rowSlide;
 
     double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
     double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
@@ -80,22 +76,15 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     double K = 1.75 / 2.805;
     double slideX = colSlide - numberX  * stepX;
 
-    //for(int h = -1; h < 2; h++) {
-      //  for (int j = 0; j < numberY; j++) {
-        //    for (int i = -1; i < numberX; i++) {
-          //      if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j + h * colSlide); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K + h * colSlide);
-            //    if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j ); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K );
-       //     }
-      //  }
-    //}
-
     for (int j = 0; j < numberY; j++) {
         for (int i = -1; i < numberX; i++) {
             if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K);
             if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
+
     if(all_three) {//все три столбца измеряем
+
         //сперва левый столбец
         for (int j = 0; j < numberY; j++) {
             for (int i = -2; i > -2 - numberX; i--) {
@@ -103,6 +92,7 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
                 if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
+
         //потом правый столбец
         for (int j = 0; j < numberY; j++) {
             for (int i = 15; i > numberX*2-1; i++) {
@@ -111,19 +101,17 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
             }
         }
     }
-    //autoWalk(true);
 }
 
-void Worker::autoWalk(bool allNew) {
+void Worker::autoWalk(bool allNew, QString dir_cur) {
+
+    dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
     emit sendProgressBarRangeSignal(currentIndex, lastIndex);
     int i = 0;
     //спросить начать обход или продолжить?
     Worker::copyUpToIndex(currentIndex);
     QFile file(dir);
     QString dir1 = file.fileName();
-    //QString dir2 = file.filesystemFileName();
-    qDebug() << dir1;
-    //qDebug() << dir2;
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
         QTextStream output(&file);
@@ -150,7 +138,7 @@ void Worker::autoWalk(bool allNew) {
             //проверка нажатия Паузы
             int tmp = 0;
             while (true) {
-                QThread::msleep(100);
+                QThread::msleep(1000);
                 if (!pause) {
                     break;
                 }
@@ -222,7 +210,7 @@ void Worker::continueWalk(int index) {
         overwrite = true;
     }
     pause = false;
-    autoWalk(false);
+    emit autoWalkSignal(false, dir);
 }
 
 void Worker::stopWalk() {

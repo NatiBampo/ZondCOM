@@ -30,8 +30,9 @@ private:
     void addElement(int, int, double);
     int getIndex();
 
+
 signals:
-    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, double, QString);
+    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, double, bool);
     void measureSignal();
     void tableControllerSignal(QByteArray);
     void lightControllerSignal(QByteArray);
@@ -41,6 +42,7 @@ signals:
     void sendPauseCommandSignal();
     void sendContinueWalkSignal(int);
     void saveMeasureSignal(int);
+    void autoWalkSignal(bool, QString);
 
 private slots:
     void openPortPushButton_on();

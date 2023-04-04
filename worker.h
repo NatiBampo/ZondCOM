@@ -34,8 +34,6 @@ private:
     int currentIndex = 0;
     int pauseIndex = 0;
     int lastIndex = 0;
-    double cells_X = 15;
-    double rows_Y = 30;
     double ForwardCurrent = 0.0;
     double DarkCurrent10mV = 0.0;
     double DarkCurrent1V = 0.0;
@@ -49,7 +47,6 @@ private:
     void Keithly1VSet(QSerialPort *);
     void LightOn();
     void LightOff();
-    void autoWalk(bool);
     void copyUpToIndex(int);
 
 signals:
@@ -59,11 +56,12 @@ signals:
     void sendProgressBarRangeSignal(int, int);
     void openPortResultSignal(QString, bool);
     void sendAddTableSignal(int, double, double, double, double);
+    void autoWalkSignal(bool, QString);
 
 public slots:
     void measureElement();
     void sendPackage(QSerialPort * , QByteArray, int);
-    void scanningPlate(double, double, double, double, double, double, double, double, double, double, QString);
+    void scanningPlate(double, double, double, double, double, double, double, double, double, double, bool);
     void tableController(QByteArray);
     void lightController(QByteArray);
     void openPorts(QString, QString, QString);
@@ -72,6 +70,7 @@ public slots:
     void continueWalk(int);
     void goToElement(int);
     void saveMeasure(int);
+    void autoWalk(bool, QString);
 };
 
 #endif // WORKER_H
