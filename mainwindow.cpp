@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->continueFromButton, &QPushButton::clicked, this, &MainWindow::continueFromButton_clicked);
     connect(ui->saveMeasureButton, &QPushButton::clicked, this, &MainWindow::saveMeasureButton_clicked);
     connect(ui->pauseButton, &QPushButton::clicked, this, &MainWindow::pauseButton_clicked);
+    connect(ui->orientationButton, &QPushButton::clicked, this, &MainWindow::orientationButton_clicked);
+
 
     createWorkerThread();
 

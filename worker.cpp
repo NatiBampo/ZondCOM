@@ -61,6 +61,8 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     //numberX необходимо привести к фактическому параметру
+    DotsX.clear();
+    DotsY.clear();
     lastIndex = (numberX + 1) * numberY * 3;
     rowSlide;
 
@@ -74,7 +76,8 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     double StepyX = (BX - X3) / (numberY - 1);
     double StepyY = (BY - Y3) / (numberY - 1);
     double K = 1.75 / 2.805;
-    double slideX = colSlide - numberX  * stepX;
+    double slideX = (colSlide - (numberX+1) * stepX) * 1000;
+    qDebug()<<"slideX = "<<slideX;
 
     for (int j = 0; j < numberY; j++) {
         for (int i = -1; i < numberX; i++) {
@@ -82,24 +85,25 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
             if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
-
+    qDebug()<<"Элементов 1:"<<DotsX.count();
     if(all_three) {//все три столбца измеряем
 
         //сперва левый столбец
         for (int j = 0; j < numberY; j++) {
-            for (int i = -2; i > -2 - numberX; i--) {
-                if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j  - slideX); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K - slideX);
-                if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
-            }
-        }
-
-        //потом правый столбец
-        for (int j = 0; j < numberY; j++) {
-            for (int i = 15; i > numberX*2-1; i++) {
+            for (int i = -2-numberX; i < -1 ; i++) {
                 if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j  + slideX); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K + slideX);
                 if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
+        qDebug()<<"Элементов 2:"<<DotsX.count();
+        //потом правый столбец
+        for (int j = 0; j < numberY; j++) {
+            for (int i = 15; i < numberX*2+1; i++) {
+                if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j  - slideX); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K - slideX);
+                if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+            }
+        }
+        qDebug()<<"Элементов 3:"<<DotsX.count();
     }
 }
 
