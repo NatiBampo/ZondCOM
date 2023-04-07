@@ -6,6 +6,7 @@
 #include <worker.h>
 #include <QStandardItemModel>
 #include <QSqlDatabase>
+#include <QMutex>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,11 +25,12 @@ private:
     Worker *worker;
     QStandardItemModel *model;
     QThread workerThread;
+    QMutex mutex;
     int currentIndex = 0;
     int finalIndex = 0;
     void createWorkerThread();
     void addElement(int, int, double);
-    int getIndex();
+    int getUIIndex();
 
 
 signals:
@@ -42,7 +44,7 @@ signals:
     void sendPauseCommandSignal();
     void sendContinueWalkSignal(int);
     void saveMeasureSignal(int);
-    void autoWalkSignal(bool, QString);
+    void autoWalkSignal(bool, QString, QMutex);
 
 private slots:
     void openPortPushButton_on();

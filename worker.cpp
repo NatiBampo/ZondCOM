@@ -77,7 +77,6 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     double StepyY = (BY - Y3) / (numberY - 1);
     double K = 1.75 / 2.805;
     double slideX = (colSlide - (numberX+1) * stepX) * 1000;
-    qDebug()<<"slideX = "<<slideX;
 
     for (int j = 0; j < numberY; j++) {
         for (int i = -1; i < numberX; i++) {
@@ -85,7 +84,6 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
             if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
-    qDebug()<<"Элементов 1:"<<DotsX.count();
     if(all_three) {//все три столбца измеряем
 
         //сперва левый столбец
@@ -95,7 +93,6 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
                 if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
-        qDebug()<<"Элементов 2:"<<DotsX.count();
         //потом правый столбец
         for (int j = 0; j < numberY; j++) {
             for (int i = 15; i < numberX*2+1; i++) {
@@ -103,11 +100,10 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
                 if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
-        qDebug()<<"Элементов 3:"<<DotsX.count();
     }
 }
 
-void Worker::autoWalk(bool allNew, QString dir_cur) {
+void Worker::autoWalk(bool allNew, QString dir_cur, QMutex &mutex) {
 
     dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
     emit sendProgressBarRangeSignal(currentIndex, lastIndex);
@@ -116,6 +112,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
     Worker::copyUpToIndex(currentIndex);
     QFile file(dir);
     QString dir1 = file.fileName();
+    qDebug()<<"Если 0, то строки идентичны  : "<<QString::compare(dir1, dir_cur, Qt::CaseInsensitive);
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
         QTextStream output(&file);
@@ -141,16 +138,25 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
 
             //проверка нажатия Паузы
             int tmp = 0;
-            while (true) {
-                QThread::msleep(1000);
-                if (!pause) {
-                    break;
+
+            mutex.lock();
+            if (pause){
+                mutex.unlock();
+                while (true) {
+                    QThread::msleep(100);
+                    mutex.lock();
+                    if (!pause) {
+                        break;
+                    }
+                    else if (tmp%100==0){
+                        qDebug()<<"pause is going  another 10s   tmp : " << tmp/100;
+                    }
+                    mutex.unlock();
+                    tmp++;
                 }
-                else {
-                    qDebug()<<"pause is going       tmp : " << tmp;
-                }
-                tmp++;
             }
+            mutex.unlock();
+
         }
         file.close();
 
@@ -202,19 +208,15 @@ void Worker::copyUpToIndex(int index) {
 }
 
 void Worker::pauseWalk() {
-    //приостановить измерения
+    //поменять статус паузы
     pause = !pause;
     pauseIndex = currentIndex;
 }
 
-void Worker::continueWalk(int index) {
+void Worker::setIndex(int index) {
     //обновить индекс для обхода с нового элемента
-    if (index!=currentIndex) {
-        currentIndex = index;
-        overwrite = true;
-    }
-    pause = false;
-    emit autoWalkSignal(false, dir);
+    pauseIndex = currentIndex;
+    currentIndex = index;
 }
 
 void Worker::stopWalk() {

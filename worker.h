@@ -5,6 +5,7 @@
 #include <QSerialPort>
 #include <QFile>
 #include <QSqlQuery>
+#include <QMutex>
 
 
 #define ANSWER_DELAY 1000
@@ -24,6 +25,7 @@ private:
     QSerialPort *serialPortKeithly;
     QSerialPort *serialPortLight;
     QByteArray lastAnswer;
+    QMutex mutex;
 
     QList<double> DotsX;
     QList<double> DotsY;
@@ -56,7 +58,7 @@ signals:
     void sendProgressBarRangeSignal(int, int);
     void openPortResultSignal(QString, bool);
     void sendAddTableSignal(int, double, double, double, double);
-    void autoWalkSignal(bool, QString);
+    void autoWalkSignal(bool, QString, QMutex);
 
 public slots:
     void measureElement();
@@ -67,10 +69,10 @@ public slots:
     void openPorts(QString, QString, QString);
     void closePorts();
     void pauseWalk();
-    void continueWalk(int);
+    void continueWalk();
     void goToElement(int);
     void saveMeasure(int);
-    void autoWalk(bool, QString);
+    void autoWalk(bool, QString, QMutex);
 };
 
 #endif // WORKER_H

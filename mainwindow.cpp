@@ -74,6 +74,7 @@ void MainWindow::createWorkerThread() {
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
     //начать обход
     connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
+    connect(this, &MainWindow::pauseWalk, this, &Worker::pauseStatusSignal);
 
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
@@ -81,6 +82,8 @@ void MainWindow::createWorkerThread() {
     connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
     //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
+    //сигнал паузы
+
 }
 
 void MainWindow::openPortPushButton_on() {
@@ -197,18 +200,21 @@ void MainWindow::pauseButton_clicked(bool checked)
 {
     if (checked){
         ui->pauseButton->setText("Продолжить");
-        //emit sendPauseCommandSignal();
+
 
     } else {
         ui->pauseButton->setText("Пауза");
         //worker->continueWalk(currentIndex);
         //emit sendContinueWalkSignal(0);
     }
+    mutex.lock();
+    //в перспективе добавить вспомогателный поток или выходить из цикла обхода пластины вместо ожидания даже при паузе
     worker->pauseWalk();
+    mutex.unlock();
 }
 
 
-int MainWindow::getIndex()
+int MainWindow::getUIIndex()
 {
     int row = ui->rowSpinBox->value();
     int element = ui->elemSpinBox->value();
@@ -227,14 +233,21 @@ void MainWindow::goToButton_clicked()
 
 void MainWindow::saveMeasureButton_clicked()
 {
-    emit saveMeasureSignal(getIndex());
+    if (!ui->scanPushButton->isChecked()) {
+        emit saveMeasureSignal(getIndex());
+    }
 }
 
 
 void MainWindow::continueFromButton_clicked()
 {
-    ui->pauseButton->setText("Пауза");
-    emit sendContinueWalkSignal(getIndex());
+    if (!ui->scanPushButton->isChecked()){
+        ui->pauseButton->setText("Пауза");
+        mutex.lock();
+        worker->setIndex(getIndex());
+        mutex.unlock();
+        emit autoWalkSignal();
+    }
 }
 
 void MainWindow::scanPushButton_clicked(bool checked)
@@ -244,15 +257,16 @@ void MainWindow::scanPushButton_clicked(bool checked)
 
         QFileDialog directory;
         QString dir_name = directory.getSaveFileName(this,"Choose directory and name");
-
-        emit autoWalkSignal(true, dir_name);
+        emit autoWalkSignal(true, dir_name, *mutex);
     }
     else {
         ui->scanPushButton->setText("Начать");
         ui->pauseButton->setChecked(false);
         ui->pauseButton->setText("Пауза");
         currentIndex = finalIndex;
+        mutex.lock();
         worker->stopWalk();
+        mutex.unlock();
     }
 }
 
@@ -287,6 +301,3 @@ void MainWindow::orientationButton_clicked()
     emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three);
 
 }
-
-
-

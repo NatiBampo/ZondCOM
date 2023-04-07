@@ -26,7 +26,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_Worker_t {
-    uint offsetsAndSizes[44];
+    uint offsetsAndSizes[46];
     char stringdata0[7];
     char stringdata1[18];
     char stringdata2[1];
@@ -49,6 +49,7 @@ struct qt_meta_stringdata_Worker_t {
     char stringdata19[12];
     char stringdata20[12];
     char stringdata21[9];
+    char stringdata22[7];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_Worker_t::offsetsAndSizes) + ofs), len 
@@ -75,7 +76,8 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
         QT_MOC_LITERAL(266, 12),  // "continueWalk"
         QT_MOC_LITERAL(279, 11),  // "goToElement"
         QT_MOC_LITERAL(291, 11),  // "saveMeasure"
-        QT_MOC_LITERAL(303, 8)   // "autoWalk"
+        QT_MOC_LITERAL(303, 8),  // "autoWalk"
+        QT_MOC_LITERAL(312, 6)   // "QMutex"
     },
     "Worker",
     "sendPackageSignal",
@@ -98,7 +100,8 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
     "continueWalk",
     "goToElement",
     "saveMeasure",
-    "autoWalk"
+    "autoWalk",
+    "QMutex"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -137,7 +140,7 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
       18,    1,  213,    2, 0x0a,   51 /* Public */,
       19,    1,  216,    2, 0x0a,   53 /* Public */,
       20,    1,  219,    2, 0x0a,   55 /* Public */,
-      21,    2,  222,    2, 0x0a,   57 /* Public */,
+      21,    3,  222,    2, 0x0a,   57 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::QByteArray, QMetaType::Int,    2,    2,    2,
@@ -160,7 +163,7 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, QMetaType::Bool, QMetaType::QString,    2,    2,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString, 0x80000000 | 22,    2,    2,    2,
 
        0        // eod
 };
@@ -251,7 +254,8 @@ Q_CONSTINIT const QMetaObject Worker::staticMetaObject = { {
         // method 'autoWalk'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
-        QtPrivate::TypeAndForceComplete<QString, std::false_type>
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QMutex, std::false_type>
     >,
     nullptr
 } };
@@ -280,7 +284,7 @@ void Worker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 15: _t->continueWalk((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 16: _t->goToElement((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 17: _t->saveMeasure((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 18: _t->autoWalk((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 18: _t->autoWalk((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QMutex>>(_a[3]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
