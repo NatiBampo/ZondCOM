@@ -16,16 +16,17 @@ class Worker : public QObject
     Q_OBJECT
 
 public:
-    Worker();
+    Worker(QMutex*);
     ~Worker();
 
     void stopWalk();
+    void setIndex(int);
 private:
     QSerialPort *serialPortA5;
     QSerialPort *serialPortKeithly;
     QSerialPort *serialPortLight;
     QByteArray lastAnswer;
-    QMutex mutex;
+    QMutex* mutex;
 
     QList<double> DotsX;
     QList<double> DotsY;
@@ -40,7 +41,7 @@ private:
     double DarkCurrent10mV = 0.0;
     double DarkCurrent1V = 0.0;
     double LightCurrent = 0.0;
-    void openPort(QSerialPort *, QString, QSerialPort::BaudRate, QSerialPort::DataBits, QSerialPort::StopBits, QSerialPort::Parity, QSerialPort::FlowControl);
+    bool openPort(QSerialPort *, QString, QSerialPort::BaudRate);
     void MeasureDie(QSerialPort *, QSerialPort *);
     void KeithlyZeroCorrection(QSerialPort *);
     void Keithly05VSet(QSerialPort *);
@@ -58,7 +59,7 @@ signals:
     void sendProgressBarRangeSignal(int, int);
     void openPortResultSignal(QString, bool);
     void sendAddTableSignal(int, double, double, double, double);
-    void autoWalkSignal(bool, QString, QMutex);
+    void autoWalkSignal(bool, QString);
 
 public slots:
     void measureElement();
@@ -66,13 +67,13 @@ public slots:
     void scanningPlate(double, double, double, double, double, double, double, double, double, double, bool);
     void tableController(QByteArray);
     void lightController(QByteArray);
-    void openPorts(QString, QString, QString);
+    void openPorts();
     void closePorts();
     void pauseWalk();
-    void continueWalk();
+    //void continueWalk();
     void goToElement(int);
     void saveMeasure(int);
-    void autoWalk(bool, QString, QMutex);
+    void autoWalk(bool, QString);
 };
 
 #endif // WORKER_H

@@ -4,38 +4,53 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QFileDialog>
+#include <QSerialPortInfo>
 
-Worker::Worker()
+Worker::Worker(QMutex* mtxp)
 {
+    this->mutex = mtxp;
     connect(this, &Worker::sendPackageSignal, this, &Worker::sendPackage);
-    connect(this, &Worker::autoWalkSignal, this, &Worker::autoWalk);
 }
 
 Worker::~Worker() {
 
 }
 
-void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight) {
+//void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight) {
+void Worker::openPorts() {
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
-    openPort(serialPortA5, portNameA5, QSerialPort::Baud115200, QSerialPort::DataBits::Data8, QSerialPort::StopBits::OneStop,
-             QSerialPort::Parity::NoParity, QSerialPort::NoFlowControl);
-    openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600, QSerialPort::DataBits::Data8, QSerialPort::StopBits::OneStop,
-             QSerialPort::Parity::NoParity, QSerialPort::NoFlowControl);
-    openPort(serialPortLight, portNameLight, QSerialPort::Baud9600, QSerialPort::DataBits::Data8, QSerialPort::StopBits::OneStop,
-             QSerialPort::Parity::NoParity, QSerialPort::NoFlowControl);
+    QList<QString> list;
+    foreach(const QSerialPortInfo &port,  QSerialPortInfo::availablePorts()) {
+        list.append(port.portName());
+    };
+    QMap<QSerialPort *, QString> map;
+    for (int i=0; i < list.length(); i++) {
+        if (!map.contains(serialPortA5) && openPort(serialPortA5, list[i], QSerialPort::Baud115200)){
+            map.insert(serialPortA5, list[i]);
+            qDebug()<<"serialPortA is now open";
+        }else if (!map.contains(serialPortKeithly) && openPort(serialPortKeithly, list[i], QSerialPort::Baud57600)) {
+            map.insert(serialPortKeithly, list[i]);
+            qDebug()<<"serialPortKeithly is now open";
+        }else if (!map.contains(serialPortLight) && openPort(serialPortLight, list[i], QSerialPort::Baud9600)) {
+            map.insert(serialPortLight, list[i]);
+            qDebug()<<"portNameLight is now open";
+        }
+    }
 }
 
-void Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate, QSerialPort::DataBits dataBits,
-                          QSerialPort::StopBits stopBits, QSerialPort::Parity parity, QSerialPort::FlowControl flowControl) {
+
+bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate) {
     port->setPortName(portName);
     port->setBaudRate(baudRate);
-    port->setDataBits(dataBits);
-    port->setStopBits(stopBits);
-    port->setParity(parity);
-    port->setFlowControl(flowControl);
-    emit openPortResultSignal(portName, port->open(QSerialPort::ReadWrite));
+    port->setDataBits(QSerialPort::DataBits::Data8);
+    port->setStopBits(QSerialPort::StopBits::OneStop);
+    port->setParity(QSerialPort::Parity::NoParity);
+    port->setFlowControl(QSerialPort::NoFlowControl);
+
+    //emit openPortResultSignal(portName, port->open(QSerialPort::ReadWrite));
+    return port->open(QSerialPort::ReadWrite);
 }
 
 void Worker::closePorts() {
@@ -103,7 +118,7 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     }
 }
 
-void Worker::autoWalk(bool allNew, QString dir_cur, QMutex &mutex) {
+void Worker::autoWalk(bool allNew, QString dir_cur) {
 
     dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
     emit sendProgressBarRangeSignal(currentIndex, lastIndex);
@@ -139,23 +154,23 @@ void Worker::autoWalk(bool allNew, QString dir_cur, QMutex &mutex) {
             //проверка нажатия Паузы
             int tmp = 0;
 
-            mutex.lock();
+            mutex->lock();
             if (pause){
-                mutex.unlock();
+                mutex->unlock();
                 while (true) {
                     QThread::msleep(100);
-                    mutex.lock();
+                    mutex->lock();
                     if (!pause) {
                         break;
                     }
                     else if (tmp%100==0){
                         qDebug()<<"pause is going  another 10s   tmp : " << tmp/100;
                     }
-                    mutex.unlock();
+                    mutex->unlock();
                     tmp++;
                 }
             }
-            mutex.unlock();
+            mutex->unlock();
 
         }
         file.close();

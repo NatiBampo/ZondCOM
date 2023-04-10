@@ -26,6 +26,7 @@ private:
     QStandardItemModel *model;
     QThread workerThread;
     QMutex mutex;
+    QString dir_name;
     int currentIndex = 0;
     int finalIndex = 0;
     void createWorkerThread();
@@ -42,9 +43,9 @@ signals:
     void closePortsSignal();
     void goToElementSignal(int);
     void sendPauseCommandSignal();
-    void sendContinueWalkSignal(int);
+    //void sendContinueWalkSignal(int);
     void saveMeasureSignal(int);
-    void autoWalkSignal(bool, QString, QMutex);
+    void autoWalkSignal(bool, QString);
 
 private slots:
     void openPortPushButton_on();

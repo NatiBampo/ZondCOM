@@ -54,7 +54,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::createWorkerThread() {
-    worker = new Worker();
+    worker = new Worker(&mutex);
     worker->moveToThread(&workerThread);
     workerThread.start();
 
@@ -67,14 +67,14 @@ void MainWindow::createWorkerThread() {
     //остановка цикла обхода
     connect(this, &MainWindow::sendPauseCommandSignal, worker, &Worker::pauseWalk);
     //продолжение обхода
-    connect(this, &MainWindow::sendContinueWalkSignal, worker, &Worker::continueWalk);
+    //connect(this, &MainWindow::sendContinueWalkSignal, worker, &Worker::continueWalk);
     //переход на элемент в строке
     connect(this, &MainWindow::goToElementSignal, worker, &Worker::goToElement);
     //сохрание элемента в строке
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
     //начать обход
     connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
-    connect(this, &MainWindow::pauseWalk, this, &Worker::pauseStatusSignal);
+    //connect(this, &MainWindow::pauseStatus, this, &Worker::pauseStatusSignal);
 
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
@@ -227,14 +227,14 @@ int MainWindow::getUIIndex()
 
 void MainWindow::goToButton_clicked()
 {
-    emit goToElementSignal(getIndex());
+    emit goToElementSignal(getUIIndex());
 }
 
 
 void MainWindow::saveMeasureButton_clicked()
 {
     if (!ui->scanPushButton->isChecked()) {
-        emit saveMeasureSignal(getIndex());
+        emit saveMeasureSignal(getUIIndex());
     }
 }
 
@@ -244,9 +244,9 @@ void MainWindow::continueFromButton_clicked()
     if (!ui->scanPushButton->isChecked()){
         ui->pauseButton->setText("Пауза");
         mutex.lock();
-        worker->setIndex(getIndex());
+        worker->setIndex(getUIIndex());
         mutex.unlock();
-        emit autoWalkSignal();
+        emit autoWalkSignal(false, dir_name);
     }
 }
 
@@ -256,8 +256,8 @@ void MainWindow::scanPushButton_clicked(bool checked)
         ui->scanPushButton->setText("Завершить обход");
 
         QFileDialog directory;
-        QString dir_name = directory.getSaveFileName(this,"Choose directory and name");
-        emit autoWalkSignal(true, dir_name, *mutex);
+        dir_name = directory.getSaveFileName(this,"Choose directory and name");
+        emit autoWalkSignal(true, dir_name);
     }
     else {
         ui->scanPushButton->setText("Начать");
