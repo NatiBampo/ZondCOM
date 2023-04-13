@@ -51,6 +51,7 @@ private:
     void LightOn();
     void LightOff();
     void copyUpToIndex(int);
+    bool checkPlanarCOM(QSerialPort *serialPort, QByteArray package, int delay);
 
 signals:
     void sendPackageSignal(QSerialPort * , QByteArray, int);

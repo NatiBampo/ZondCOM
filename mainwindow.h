@@ -43,7 +43,6 @@ signals:
     void closePortsSignal();
     void goToElementSignal(int);
     void sendPauseCommandSignal();
-    //void sendContinueWalkSignal(int);
     void saveMeasureSignal(int);
     void autoWalkSignal(bool, QString);
 

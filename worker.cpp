@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QSerialPortInfo>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 Worker::Worker(QMutex* mtxp)
 {
@@ -25,21 +27,41 @@ void Worker::openPorts() {
     foreach(const QSerialPortInfo &port,  QSerialPortInfo::availablePorts()) {
         list.append(port.portName());
     };
-    QMap<QSerialPort *, QString> map;
+    QHash<QSerialPort *, QString> map;
     for (int i=0; i < list.length(); i++) {
         if (!map.contains(serialPortA5) && openPort(serialPortA5, list[i], QSerialPort::Baud115200)){
-            map.insert(serialPortA5, list[i]);
+            if (checkPlanarCOM(serialPortA5, "State\r\n", ANSWER_DELAY)) map.insert(serialPortA5, list[i]);
             qDebug()<<"serialPortA is now open";
-        }else if (!map.contains(serialPortKeithly) && openPort(serialPortKeithly, list[i], QSerialPort::Baud57600)) {
+
+        } else if (!map.contains(serialPortKeithly) && openPort(serialPortKeithly, list[i], QSerialPort::Baud57600)) {
             map.insert(serialPortKeithly, list[i]);
             qDebug()<<"serialPortKeithly is now open";
-        }else if (!map.contains(serialPortLight) && openPort(serialPortLight, list[i], QSerialPort::Baud9600)) {
+        } else if (!map.contains(serialPortLight) && openPort(serialPortLight, list[i], QSerialPort::Baud9600)) {
             map.insert(serialPortLight, list[i]);
             qDebug()<<"portNameLight is now open";
         }
     }
 }
 
+bool Worker::checkPlanarCOM(QSerialPort *serialPort, QByteArray package, int delay) {
+    QString localAnswer = "";
+    serialPort->write(package);
+    serialPort->flush();
+    //emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
+    while (serialPort->waitForReadyRead(delay)) localAnswer.append(serialPort->readAll());
+
+    if (localAnswer != "") {
+        qDebug()<<localAnswer;
+        QRegularExpression re(R"(<0 \d+ \d+ \d+ \d+\r\n)");
+        //QRegularExpressionMatch match = re.match(localAnswer);
+        bool hasMatch = re.match(localAnswer).hasMatch(); // true
+        qDebug() << "Is it planar : " << hasMatch;
+        return hasMatch;
+    }
+
+    return false;
+    //emit sendLogSignal(localAnswer.remove(localAnswer.indexOf("\\"), localAnswer.length() - localAnswer.indexOf("\\")));
+}
 
 bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate) {
     port->setPortName(portName);
@@ -79,7 +101,7 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     DotsX.clear();
     DotsY.clear();
     lastIndex = (numberX + 1) * numberY * 3;
-    rowSlide;
+    qDebug()<<"Your commercial could be here. Call us now 1-800-  " << rowSlide; //vertical gap between rows
 
     double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
     double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
