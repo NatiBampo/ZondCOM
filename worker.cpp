@@ -29,50 +29,42 @@ void Worker::openPorts() {
     };
     QHash<QSerialPort *, QString> map;
 
-    QByteArray byteArray = "";
-    byteArray = byteArray.remove(byteArray.indexOf("A"), byteArray.length() - byteArray.indexOf("A"));
-    qDebug() << byteArray.toDouble();
-    byteArray  = "A1";
-    byteArray = byteArray.remove(byteArray.indexOf("A"), byteArray.length() - byteArray.indexOf("A"));
-    qDebug() << byteArray.toDouble();
-
-    //for (int i=0; i < list.length(); i++) {
-//    int i = 0;
-//    while (map.size() < 3) {
-//        qDebug() << "cycle" << i << "  port " << list[i%3];
-
-//        if (!map.contains(serialPortA5)){
-//            qDebug()<<i<<" planar condition";
-//            openPort(serialPortA5, list[i%3], QSerialPort::Baud115200);
-//            if (checkPlanarCOM()) {
-//                map.insert(serialPortA5, list[i%3]);
-//                qDebug()<<"serialPortA5 is now open with :" << list[i%3];
-//                continue;
-//            }
-//            if (serialPortA5->isOpen())serialPortA5->close();
-//        }
-//        else if (map.contains(serialPortA5) && !map.contains(serialPortKeithly)) {
-//            qDebug()<<i<<" keithley condition";
-//            openPort(serialPortKeithly, list[i%3], QSerialPort::Baud57600);
-//            if (checkKeithlyCOM()) {
-//                map.insert(serialPortKeithly, list[i%3]);
-//                qDebug()<<"serialPortKeithly is now open with " << list[i%3];
-//                continue;
-//            }
-//            if (serialPortKeithly->isOpen()) serialPortKeithly->close();
-//        }
-//        else if (map.contains(serialPortKeithly)) {
-//            qDebug()<<i<<" light condition";
-//            openPort(serialPortLight, list[i%3], QSerialPort::Baud9600);
-//            if (checkLightCOM()) {
-//                map.insert(serialPortLight, list[i%3]);
-//                qDebug()<<"portNameLight is now open with :" << list[i%3];
-//            } else {
-//                if (serialPortLight->isOpen()) serialPortKeithly->close();
-//            }
-//        }
-//        i++;
-//    }
+    for (int i=0; i < list.length(); i++) {
+        qDebug() << "cycle" << i << "  port " << list[i%3];
+        //сперва окрываем порт планара
+        if (!map.contains(serialPortA5)){
+            qDebug()<<i<<" planar condition";
+            openPort(serialPortA5, list[i%3], QSerialPort::Baud115200);
+            if (checkPlanarCOM()) {
+                map.insert(serialPortA5, list[i%3]);
+                qDebug()<<"serialPortA5 is now open with :" << list[i%3];
+                continue;
+            }
+            if (serialPortA5->isOpen())serialPortA5->close();
+        }
+        //порт кейтли
+        if (!map.contains(serialPortKeithly)) {
+            qDebug()<<i<<" keithley condition";
+            openPort(serialPortKeithly, list[i%3], QSerialPort::Baud57600);
+            if (checkKeithlyCOM()) {
+                map.insert(serialPortKeithly, list[i%3]);
+                qDebug()<<"serialPortKeithly is now open with " << list[i%3];
+                continue;
+            }
+            if (serialPortKeithly->isOpen()) serialPortKeithly->close();
+        }
+        //порт ардуины/диода
+        if (!map.contains(serialPortLight)) {
+            qDebug()<<i<<" light condition";
+            openPort(serialPortLight, list[i%3], QSerialPort::Baud9600);
+            if (checkLightCOM()) {
+                map.insert(serialPortLight, list[i%3]);
+                qDebug()<<"portNameLight is now open with :" << list[i%3];
+            } else {
+                if (serialPortLight->isOpen()) serialPortKeithly->close();
+            }
+        }
+    }
 }
 
 bool Worker::checkPlanarCOM() {
@@ -92,24 +84,17 @@ bool Worker::checkPlanarCOM() {
 }
 
 bool Worker::checkKeithlyCOM() {
-
-    //QSerialPort::NotOpenError
     try {
-        //MeasureDie(serialPortA5, serialPortKeithly);
         KeithlyZeroCorrection(serialPortKeithly);
-        emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
+        //emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
         Keithly05VSet(serialPortKeithly);
-
-        //double current = KeithlyGet(serialPortKeithly);
-        emit sendPackageSignal(serialPortKeithly, "READ?\n", ANSWER_DELAY);
-        QByteArray byteArray = lastAnswer;
-        byteArray = byteArray.remove(byteArray.indexOf("A"), byteArray.length() - byteArray.indexOf("A"));
-        return byteArray.toDouble();
-        emit sendPackageSignal(serialPortA5, "Table DOWN\r\n", ANSWER_DELAY);
-        //qDebug()<<"current is "<<current;
-        return true;
+        ForwardCurrent = KeithlyGet(serialPortKeithly);
+        QString responce = QString(lastAnswer);
+        //emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
+        qDebug() << lastAnswer;
+        if (responce.contains(QRegularExpression(R"(\d+A,)"))) return true;//\d+.\d+[+-]\d+A,
     } catch (QSerialPort::SerialPortError error) {
-        qDebug() << "error with Keithley COM port" <<error;
+        qDebug() << "error with Keithley COM port" << error;
     } catch (const char* error_message) {
         qDebug() << error_message;
     }
@@ -118,15 +103,13 @@ bool Worker::checkKeithlyCOM() {
 }
 
 bool Worker::checkLightCOM() {
-    //QSerialPort::NotOpenError
     try {
-        emit sendPackageSignal(serialPortLight, "1101\n", NO_ANSWER_DELAY);
-
-        return true;
+        LightOn();
+        qDebug() << lastAnswer;
+        if (lastAnswer.contains("A1B2C3")) return true;
     } catch (QSerialPort::SerialPortError error) {
         qDebug() << error;
     }
-
     return false;
 }
 
