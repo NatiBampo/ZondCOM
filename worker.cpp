@@ -41,12 +41,12 @@ void Worker::autoOpenPorts() {
         qDebug() << "cycle" << i << "  port " << list[i%3];
         //сперва окрываем порт планара
         if (!map.contains(serialPortA5)) {
-            qDebug()<<i<<" planar condition";
+            qDebug() << i << " planar condition";
             tmp_flag = openPort(serialPortA5, list[i%3], QSerialPort::Baud115200);
             if (checkPlanarCOM()) {
                 map.insert(serialPortA5, list[i%3]);
                 emit openPortResultSignal(list[i%3], "Planar", tmp_flag);
-                qDebug()<<"serialPortA5 is now open with :" << list[i%3];
+                qDebug() << "serialPortA5 is now open with :" << list[i%3];
                 continue;
             }
             if (serialPortA5->isOpen())serialPortA5->close();
@@ -156,48 +156,70 @@ void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay)
     if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
 }
 
-void Worker::scanningPlate(double AX, double AY, double BX, double BY, double stepX, double stepY,
-                           double numberX, double numberY, double colSlide, double rowSlide, bool all_three) {
+void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, double numberX,
+                           double numberY, double colSlide, double rowSlide, bool all_three) {
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     //numberX необходимо привести к фактическому параметру
     DotsX.clear();
     DotsY.clear();
     lastIndex = (numberX + 1) * numberY * 3;
-    qDebug()<<"Your commercial could be here. Call us now 1-800-  " << rowSlide; //vertical gap between columns of rows
+    qDebug() << "Your commercial could be here. Call us now 1-800-  " << rowSlide; //vertical gap between columns of rows
+
+
+//    double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
+//    double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
+//    double SinAlpha = tgAlpha * CosAlpha;
+//    double X3 = (BX - AX) * CosAlpha * CosAlpha + (BY - AY) * SinAlpha * CosAlpha + AX;
+//    double Y3 = (BY - AY) * CosAlpha * CosAlpha - (BX - AX) * SinAlpha * CosAlpha + AY;
+//    double StepxX = (X3 - AX) / (numberX - 1);
+//    double StepxY = (Y3 - AY) / (numberX - 1);
+//    double StepyX = (BX - X3) / (numberY - 1);
+//    double StepyY = (BY - Y3) / (numberY - 1);
+//    double K = 1.75 / 2.805;
+
+//    QList<double> DotsX;
+//    QList<double> DotsY;
+//    for (int j = 0; j < numberY; j++) {
+//        for (int i = -1; i < numberX; i++) {
+//            if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K);
+//            if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+//        }
+//    }
 
     double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
     double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
     double SinAlpha = tgAlpha * CosAlpha;
-    double X3 = (BX - AX) * CosAlpha * CosAlpha + (BY - AY) * SinAlpha * CosAlpha + AX;
-    double Y3 = (BY - AY) * CosAlpha * CosAlpha - (BX - AX) * SinAlpha * CosAlpha + AY;
-    double StepxX = (X3 - AX) / (numberX - 1);
-    double StepxY = (Y3 - AY) / (numberX - 1);
-    double StepyX = (BX - X3) / (numberY - 1);
-    double StepyY = (BY - Y3) / (numberY - 1);
+    double X3 = -BX * CosAlpha * CosAlpha - BY * SinAlpha * CosAlpha + BX;
+    double Y3 = -BY * CosAlpha * CosAlpha + BX * SinAlpha * CosAlpha + BY;
+    double StepxX = (X3 - BX) / (numberX - 1);
+    double StepxY = (Y3 - BY) / (numberX - 1);
+    double StepyX = -X3 / (numberY - 1);
+    double StepyY = -Y3 / (numberY - 1);
     double K = 1.75 / 2.805;
     double slideX = (colSlide - (numberX+1) * stepX) * 1000;
 
     for (int j = 0; j < numberY; j++) {
         for (int i = -1; i < numberX; i++) {
-            if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K);
-            if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+            if (i % 2 == 0) DotsX.append(BX + StepxX * i + StepyX * j); else DotsX.append(BX + StepxX * i + StepyX * j - StepyX * K);
+            if (i % 2 == 0) DotsY.append(BY + StepxY * i + StepyY * j); else DotsY.append(BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
+
     if(all_three) {//все три столбца измеряем
 
         //сперва левый столбец
         for (int j = 0; j < numberY; j++) {
             for (int i = -2-numberX; i < -1 ; i++) {
-                if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j  + slideX); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K + slideX);
-                if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+                if (i % 2 == 0) DotsX.append(BX + StepxX * i + StepyX * j  + slideX); else DotsX.append(BX + StepxX * i + StepyX * j - StepyX * K + slideX);
+                if (i % 2 == 0) DotsY.append(BY + StepxY * i + StepyY * j); else DotsY.append(BY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
         //потом правый столбец
         for (int j = 0; j < numberY; j++) {
             for (int i = 15; i < numberX*2+1; i++) {
-                if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j  - slideX); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K - slideX);
-                if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+                if (i % 2 == 0) DotsX.append(BX + StepxX * i + StepyX * j  - slideX); else DotsX.append(BX + StepxX * i + StepyX * j - StepyX * K - slideX);
+                if (i % 2 == 0) DotsY.append(BY + StepxY * i + StepyY * j); else DotsY.append(BY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
     }
@@ -366,6 +388,23 @@ void Worker::tableController(QByteArray message) {
     emit sendPackageSignal(serialPortA5, message, ANSWER_DELAY);
 }
 
+void Worker::getBCoordinates() {
+    int x = 0;
+    int y = 0;
+    QByteArray package = "State\r\n";
+    QString localAnswer = "";
+    serialPortA5->write(package);
+    serialPortA5->flush();
+    emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")) + " ");
+
+    while (serialPortA5->waitForReadyRead(ANSWER_DELAY)) localAnswer.append(serialPortA5->readAll());
+    if (localAnswer.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
+        x = localAnswer.split(" ")[2].toInt();
+        y = localAnswer.split(" ")[3].toInt();
+        emit sendBCoordsSignal(x, y);
+        //if (localAnswer != "") emit sendLogSignal("Bx = " + x + "  By = " + y); не работает
+    }
+}
 void Worker::lightController(QByteArray message) {
     emit sendPackageSignal(serialPortLight, message, NO_ANSWER_DELAY);
 }

@@ -63,21 +63,22 @@ signals:
     void openPortResultSignal(QString, QString, bool);
     void sendAddTableSignal(int, double, double, double, double);
     void autoWalkSignal(bool, QString);
+    void sendBCoordsSignal(int, int);
 
 public slots:
     void measureElement();
     void sendPackage(QSerialPort * , QByteArray, int);
-    void scanningPlate(double, double, double, double, double, double, double, double, double, double, bool);
+    void scanningPlate(double, double, double, double, double, double, double, double, bool);
     void tableController(QByteArray);
     void lightController(QByteArray);
     void openPorts(QString, QString, QString);
     void closePorts();
     void pauseWalk();
-    //void continueWalk();
     void goToElement(int);
     void saveMeasure(int);
     void autoWalk(bool, QString);
     void autoOpenPorts();
+    void getBCoordinates();
 };
 
 #endif // WORKER_H

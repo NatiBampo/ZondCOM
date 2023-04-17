@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pauseButton, &QPushButton::clicked, this, &MainWindow::pauseButton_clicked);
     connect(ui->orientationButton, &QPushButton::clicked, this, &MainWindow::orientationButton_clicked);
     connect(ui->autoPortButton, &QPushButton::clicked, this, &MainWindow::autoPortButton_clicked);
-
+    connect(ui->measureBButton, &QPushButton::clicked, this, &MainWindow::measureBButton_clicked);
 
     createWorkerThread();
 
@@ -79,6 +79,7 @@ void MainWindow::createWorkerThread() {
     //начать обход
     connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
     //connect(this, &MainWindow::pauseStatus, this, &Worker::pauseStatusSignal);
+    connect(this, &MainWindow::getBCoordinatesSignal, worker, &Worker::getBCoordinates);
 
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
@@ -87,6 +88,8 @@ void MainWindow::createWorkerThread() {
     //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
     //сигнал паузы
+
+    connect(worker, &Worker::sendBCoordsSignal, this, &MainWindow::setBCoords);
 }
 
 
@@ -299,8 +302,6 @@ void MainWindow::scanPushButton_clicked(bool checked)
 
 void MainWindow::orientationButton_clicked()
 {
-    double AX = (double)ui->AXspinBox->value();
-    double AY = (double)ui->AYspinBox->value();
     double BX = (double)ui->BXspinBox->value();
     double BY = (double)ui->BYspinBox->value();
     double stepX = (double)ui->stepXspinBox->value();
@@ -325,7 +326,7 @@ void MainWindow::orientationButton_clicked()
     ui->tableView->setModel(model);
 
 
-    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three);
+    emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three);
 
 }
 
@@ -335,3 +336,13 @@ void MainWindow::autoPortButton_clicked()
     emit autoOpenPortsSignal();
 }
 
+
+void MainWindow::measureBButton_clicked()
+{
+    emit getBCoordinatesSignal();
+}
+
+void MainWindow::setBCoords(int x, int y) {
+    ui->BXspinBox->setValue(x);
+    ui->BYspinBox->setValue(y);
+}

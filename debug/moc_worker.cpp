@@ -26,7 +26,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_Worker_t {
-    uint offsetsAndSizes[44];
+    uint offsetsAndSizes[48];
     char stringdata0[7];
     char stringdata1[18];
     char stringdata2[1];
@@ -37,18 +37,20 @@ struct qt_meta_stringdata_Worker_t {
     char stringdata7[21];
     char stringdata8[19];
     char stringdata9[15];
-    char stringdata10[15];
-    char stringdata11[12];
-    char stringdata12[14];
-    char stringdata13[16];
+    char stringdata10[18];
+    char stringdata11[15];
+    char stringdata12[12];
+    char stringdata13[14];
     char stringdata14[16];
-    char stringdata15[10];
-    char stringdata16[11];
-    char stringdata17[10];
-    char stringdata18[12];
+    char stringdata15[16];
+    char stringdata16[10];
+    char stringdata17[11];
+    char stringdata18[10];
     char stringdata19[12];
-    char stringdata20[9];
-    char stringdata21[14];
+    char stringdata20[12];
+    char stringdata21[9];
+    char stringdata22[14];
+    char stringdata23[16];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_Worker_t::offsetsAndSizes) + ofs), len 
@@ -64,18 +66,20 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
         QT_MOC_LITERAL(107, 20),  // "openPortResultSignal"
         QT_MOC_LITERAL(128, 18),  // "sendAddTableSignal"
         QT_MOC_LITERAL(147, 14),  // "autoWalkSignal"
-        QT_MOC_LITERAL(162, 14),  // "measureElement"
-        QT_MOC_LITERAL(177, 11),  // "sendPackage"
-        QT_MOC_LITERAL(189, 13),  // "scanningPlate"
-        QT_MOC_LITERAL(203, 15),  // "tableController"
-        QT_MOC_LITERAL(219, 15),  // "lightController"
-        QT_MOC_LITERAL(235, 9),  // "openPorts"
-        QT_MOC_LITERAL(245, 10),  // "closePorts"
-        QT_MOC_LITERAL(256, 9),  // "pauseWalk"
-        QT_MOC_LITERAL(266, 11),  // "goToElement"
-        QT_MOC_LITERAL(278, 11),  // "saveMeasure"
-        QT_MOC_LITERAL(290, 8),  // "autoWalk"
-        QT_MOC_LITERAL(299, 13)   // "autoOpenPorts"
+        QT_MOC_LITERAL(162, 17),  // "sendBCoordsSignal"
+        QT_MOC_LITERAL(180, 14),  // "measureElement"
+        QT_MOC_LITERAL(195, 11),  // "sendPackage"
+        QT_MOC_LITERAL(207, 13),  // "scanningPlate"
+        QT_MOC_LITERAL(221, 15),  // "tableController"
+        QT_MOC_LITERAL(237, 15),  // "lightController"
+        QT_MOC_LITERAL(253, 9),  // "openPorts"
+        QT_MOC_LITERAL(263, 10),  // "closePorts"
+        QT_MOC_LITERAL(274, 9),  // "pauseWalk"
+        QT_MOC_LITERAL(284, 11),  // "goToElement"
+        QT_MOC_LITERAL(296, 11),  // "saveMeasure"
+        QT_MOC_LITERAL(308, 8),  // "autoWalk"
+        QT_MOC_LITERAL(317, 13),  // "autoOpenPorts"
+        QT_MOC_LITERAL(331, 15)   // "getBCoordinates"
     },
     "Worker",
     "sendPackageSignal",
@@ -87,6 +91,7 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
     "openPortResultSignal",
     "sendAddTableSignal",
     "autoWalkSignal",
+    "sendBCoordsSignal",
     "measureElement",
     "sendPackage",
     "scanningPlate",
@@ -98,7 +103,8 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
     "goToElement",
     "saveMeasure",
     "autoWalk",
-    "autoOpenPorts"
+    "autoOpenPorts",
+    "getBCoordinates"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -109,35 +115,37 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      19,   14, // methods
+      21,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       7,       // signalCount
+       8,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    3,  128,    2, 0x06,    1 /* Public */,
-       4,    1,  135,    2, 0x06,    5 /* Public */,
-       5,    1,  138,    2, 0x06,    7 /* Public */,
-       6,    2,  141,    2, 0x06,    9 /* Public */,
-       7,    3,  146,    2, 0x06,   12 /* Public */,
-       8,    5,  153,    2, 0x06,   16 /* Public */,
-       9,    2,  164,    2, 0x06,   22 /* Public */,
+       1,    3,  140,    2, 0x06,    1 /* Public */,
+       4,    1,  147,    2, 0x06,    5 /* Public */,
+       5,    1,  150,    2, 0x06,    7 /* Public */,
+       6,    2,  153,    2, 0x06,    9 /* Public */,
+       7,    3,  158,    2, 0x06,   12 /* Public */,
+       8,    5,  165,    2, 0x06,   16 /* Public */,
+       9,    2,  176,    2, 0x06,   22 /* Public */,
+      10,    2,  181,    2, 0x06,   25 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      10,    0,  169,    2, 0x0a,   25 /* Public */,
-      11,    3,  170,    2, 0x0a,   26 /* Public */,
-      12,   11,  177,    2, 0x0a,   30 /* Public */,
-      13,    1,  200,    2, 0x0a,   42 /* Public */,
-      14,    1,  203,    2, 0x0a,   44 /* Public */,
-      15,    3,  206,    2, 0x0a,   46 /* Public */,
-      16,    0,  213,    2, 0x0a,   50 /* Public */,
-      17,    0,  214,    2, 0x0a,   51 /* Public */,
-      18,    1,  215,    2, 0x0a,   52 /* Public */,
-      19,    1,  218,    2, 0x0a,   54 /* Public */,
-      20,    2,  221,    2, 0x0a,   56 /* Public */,
-      21,    0,  226,    2, 0x0a,   59 /* Public */,
+      11,    0,  186,    2, 0x0a,   28 /* Public */,
+      12,    3,  187,    2, 0x0a,   29 /* Public */,
+      13,    9,  194,    2, 0x0a,   33 /* Public */,
+      14,    1,  213,    2, 0x0a,   43 /* Public */,
+      15,    1,  216,    2, 0x0a,   45 /* Public */,
+      16,    3,  219,    2, 0x0a,   47 /* Public */,
+      17,    0,  226,    2, 0x0a,   51 /* Public */,
+      18,    0,  227,    2, 0x0a,   52 /* Public */,
+      19,    1,  228,    2, 0x0a,   53 /* Public */,
+      20,    1,  231,    2, 0x0a,   55 /* Public */,
+      21,    2,  234,    2, 0x0a,   57 /* Public */,
+      22,    0,  239,    2, 0x0a,   60 /* Public */,
+      23,    0,  240,    2, 0x0a,   61 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::QByteArray, QMetaType::Int,    2,    2,    2,
@@ -147,11 +155,12 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Bool,    2,    2,    2,
     QMetaType::Void, QMetaType::Int, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    2,    2,    2,    2,    2,
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,    2,    2,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 3, QMetaType::QByteArray, QMetaType::Int,    2,    2,    2,
-    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Bool,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Bool,    2,    2,    2,    2,    2,    2,    2,    2,    2,
     QMetaType::Void, QMetaType::QByteArray,    2,
     QMetaType::Void, QMetaType::QByteArray,    2,
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString,    2,    2,    2,
@@ -160,6 +169,7 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,    2,    2,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -205,6 +215,10 @@ Q_CONSTINIT const QMetaObject Worker::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'sendBCoordsSignal'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'measureElement'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'sendPackage'
@@ -214,8 +228,6 @@ Q_CONSTINIT const QMetaObject Worker::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'scanningPlate'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
@@ -251,6 +263,8 @@ Q_CONSTINIT const QMetaObject Worker::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'autoOpenPorts'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'getBCoordinates'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -269,18 +283,20 @@ void Worker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 4: _t->openPortResultSignal((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[3]))); break;
         case 5: _t->sendAddTableSignal((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5]))); break;
         case 6: _t->autoWalkSignal((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
-        case 7: _t->measureElement(); break;
-        case 8: _t->sendPackage((*reinterpret_cast< std::add_pointer_t<QSerialPort*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
-        case 9: _t->scanningPlate((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[10])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[11]))); break;
-        case 10: _t->tableController((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
-        case 11: _t->lightController((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
-        case 12: _t->openPorts((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[3]))); break;
-        case 13: _t->closePorts(); break;
-        case 14: _t->pauseWalk(); break;
-        case 15: _t->goToElement((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 16: _t->saveMeasure((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 17: _t->autoWalk((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
-        case 18: _t->autoOpenPorts(); break;
+        case 7: _t->sendBCoordsSignal((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 8: _t->measureElement(); break;
+        case 9: _t->sendPackage((*reinterpret_cast< std::add_pointer_t<QSerialPort*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
+        case 10: _t->scanningPlate((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[9]))); break;
+        case 11: _t->tableController((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
+        case 12: _t->lightController((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
+        case 13: _t->openPorts((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[3]))); break;
+        case 14: _t->closePorts(); break;
+        case 15: _t->pauseWalk(); break;
+        case 16: _t->goToElement((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 17: _t->saveMeasure((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 18: _t->autoWalk((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 19: _t->autoOpenPorts(); break;
+        case 20: _t->getBCoordinates(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -293,7 +309,7 @@ void Worker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
                 *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QSerialPort* >(); break;
             }
             break;
-        case 8:
+        case 9:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
@@ -352,6 +368,13 @@ void Worker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
                 return;
             }
         }
+        {
+            using _t = void (Worker::*)(int , int );
+            if (_t _q_method = &Worker::sendBCoordsSignal; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 7;
+                return;
+            }
+        }
     }
 }
 
@@ -374,13 +397,13 @@ int Worker::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 19)
+        if (_id < 21)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 19;
+        _id -= 21;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 19)
+        if (_id < 21)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 19;
+        _id -= 21;
     }
     return _id;
 }
@@ -432,6 +455,13 @@ void Worker::autoWalkSignal(bool _t1, QString _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 6, _a);
+}
+
+// SIGNAL 7
+void Worker::sendBCoordsSignal(int _t1, int _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 7, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

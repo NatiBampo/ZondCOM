@@ -35,7 +35,7 @@ private:
 
 
 signals:
-    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, double, bool);
+    void scanningPlateSignal(double, double, double, double, double, double, double, double, bool);
     void measureSignal();
     void tableControllerSignal(QByteArray);
     void lightControllerSignal(QByteArray);
@@ -46,6 +46,7 @@ signals:
     void saveMeasureSignal(int);
     void autoWalkSignal(bool, QString);
     void autoOpenPortsSignal();
+    void getBCoordinatesSignal();
 
 private slots:
     void openPortPushButton_on();
@@ -65,6 +66,8 @@ private slots:
     void setProgressBarRange(int, int);
     void openPortResult(QString, QString, bool);
     void addRowToTable(int, double, double, double, double);
+    void setBCoords(int, int);
+
     void pauseButton_clicked(bool);
     void goToButton_clicked();
     void saveMeasureButton_clicked();
@@ -72,5 +75,6 @@ private slots:
     void orientationButton_clicked();
     void scanPushButton_clicked(bool checked);
     void autoPortButton_clicked();
+    void measureBButton_clicked();
 };
 #endif // MAINWINDOW_H

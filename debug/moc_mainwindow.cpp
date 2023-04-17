@@ -26,7 +26,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_MainWindow_t {
-    uint offsetsAndSizes[74];
+    uint offsetsAndSizes[80];
     char stringdata0[11];
     char stringdata1[20];
     char stringdata2[1];
@@ -41,29 +41,32 @@ struct qt_meta_stringdata_MainWindow_t {
     char stringdata11[15];
     char stringdata12[20];
     char stringdata13[22];
-    char stringdata14[20];
-    char stringdata15[21];
-    char stringdata16[23];
-    char stringdata17[21];
-    char stringdata18[22];
-    char stringdata19[18];
-    char stringdata20[19];
+    char stringdata14[22];
+    char stringdata15[20];
+    char stringdata16[21];
+    char stringdata17[23];
+    char stringdata18[21];
+    char stringdata19[22];
+    char stringdata20[18];
     char stringdata21[19];
-    char stringdata22[21];
-    char stringdata23[19];
-    char stringdata24[9];
-    char stringdata25[20];
+    char stringdata22[19];
+    char stringdata23[21];
+    char stringdata24[19];
+    char stringdata25[9];
     char stringdata26[20];
-    char stringdata27[15];
-    char stringdata28[14];
-    char stringdata29[20];
-    char stringdata30[19];
-    char stringdata31[26];
-    char stringdata32[27];
+    char stringdata27[20];
+    char stringdata28[15];
+    char stringdata29[14];
+    char stringdata30[11];
+    char stringdata31[20];
+    char stringdata32[19];
     char stringdata33[26];
-    char stringdata34[23];
-    char stringdata35[8];
+    char stringdata34[27];
+    char stringdata35[26];
     char stringdata36[23];
+    char stringdata37[8];
+    char stringdata38[23];
+    char stringdata39[23];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MainWindow_t::offsetsAndSizes) + ofs), len 
@@ -82,30 +85,33 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
         QT_MOC_LITERAL(164, 17),  // "saveMeasureSignal"
         QT_MOC_LITERAL(182, 14),  // "autoWalkSignal"
         QT_MOC_LITERAL(197, 19),  // "autoOpenPortsSignal"
-        QT_MOC_LITERAL(217, 21),  // "openPortPushButton_on"
-        QT_MOC_LITERAL(239, 19),  // "coordsPushButton_on"
-        QT_MOC_LITERAL(259, 20),  // "tableUpPushButton_on"
-        QT_MOC_LITERAL(280, 22),  // "tableDownPushButton_on"
-        QT_MOC_LITERAL(303, 20),  // "forwardPushButton_on"
-        QT_MOC_LITERAL(324, 21),  // "backwardPushButton_on"
-        QT_MOC_LITERAL(346, 17),  // "leftPushButton_on"
-        QT_MOC_LITERAL(364, 18),  // "rightPushButton_on"
-        QT_MOC_LITERAL(383, 18),  // "statePushButton_on"
-        QT_MOC_LITERAL(402, 20),  // "measurePushButton_on"
-        QT_MOC_LITERAL(423, 18),  // "lightPushButton_on"
-        QT_MOC_LITERAL(442, 8),  // "writeLog"
-        QT_MOC_LITERAL(451, 19),  // "setProgressBarValue"
-        QT_MOC_LITERAL(471, 19),  // "setProgressBarRange"
-        QT_MOC_LITERAL(491, 14),  // "openPortResult"
-        QT_MOC_LITERAL(506, 13),  // "addRowToTable"
-        QT_MOC_LITERAL(520, 19),  // "pauseButton_clicked"
-        QT_MOC_LITERAL(540, 18),  // "goToButton_clicked"
-        QT_MOC_LITERAL(559, 25),  // "saveMeasureButton_clicked"
-        QT_MOC_LITERAL(585, 26),  // "continueFromButton_clicked"
-        QT_MOC_LITERAL(612, 25),  // "orientationButton_clicked"
-        QT_MOC_LITERAL(638, 22),  // "scanPushButton_clicked"
-        QT_MOC_LITERAL(661, 7),  // "checked"
-        QT_MOC_LITERAL(669, 22)   // "autoPortButton_clicked"
+        QT_MOC_LITERAL(217, 21),  // "getBCoordinatesSignal"
+        QT_MOC_LITERAL(239, 21),  // "openPortPushButton_on"
+        QT_MOC_LITERAL(261, 19),  // "coordsPushButton_on"
+        QT_MOC_LITERAL(281, 20),  // "tableUpPushButton_on"
+        QT_MOC_LITERAL(302, 22),  // "tableDownPushButton_on"
+        QT_MOC_LITERAL(325, 20),  // "forwardPushButton_on"
+        QT_MOC_LITERAL(346, 21),  // "backwardPushButton_on"
+        QT_MOC_LITERAL(368, 17),  // "leftPushButton_on"
+        QT_MOC_LITERAL(386, 18),  // "rightPushButton_on"
+        QT_MOC_LITERAL(405, 18),  // "statePushButton_on"
+        QT_MOC_LITERAL(424, 20),  // "measurePushButton_on"
+        QT_MOC_LITERAL(445, 18),  // "lightPushButton_on"
+        QT_MOC_LITERAL(464, 8),  // "writeLog"
+        QT_MOC_LITERAL(473, 19),  // "setProgressBarValue"
+        QT_MOC_LITERAL(493, 19),  // "setProgressBarRange"
+        QT_MOC_LITERAL(513, 14),  // "openPortResult"
+        QT_MOC_LITERAL(528, 13),  // "addRowToTable"
+        QT_MOC_LITERAL(542, 10),  // "setBCoords"
+        QT_MOC_LITERAL(553, 19),  // "pauseButton_clicked"
+        QT_MOC_LITERAL(573, 18),  // "goToButton_clicked"
+        QT_MOC_LITERAL(592, 25),  // "saveMeasureButton_clicked"
+        QT_MOC_LITERAL(618, 26),  // "continueFromButton_clicked"
+        QT_MOC_LITERAL(645, 25),  // "orientationButton_clicked"
+        QT_MOC_LITERAL(671, 22),  // "scanPushButton_clicked"
+        QT_MOC_LITERAL(694, 7),  // "checked"
+        QT_MOC_LITERAL(702, 22),  // "autoPortButton_clicked"
+        QT_MOC_LITERAL(725, 22)   // "measureBButton_clicked"
     },
     "MainWindow",
     "scanningPlateSignal",
@@ -120,6 +126,7 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "saveMeasureSignal",
     "autoWalkSignal",
     "autoOpenPortsSignal",
+    "getBCoordinatesSignal",
     "openPortPushButton_on",
     "coordsPushButton_on",
     "tableUpPushButton_on",
@@ -136,6 +143,7 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "setProgressBarRange",
     "openPortResult",
     "addRowToTable",
+    "setBCoords",
     "pauseButton_clicked",
     "goToButton_clicked",
     "saveMeasureButton_clicked",
@@ -143,7 +151,8 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "orientationButton_clicked",
     "scanPushButton_clicked",
     "checked",
-    "autoPortButton_clicked"
+    "autoPortButton_clicked",
+    "measureBButton_clicked"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -154,53 +163,56 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      34,   14, // methods
+      37,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      11,       // signalCount
+      12,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,   11,  218,    2, 0x06,    1 /* Public */,
-       3,    0,  241,    2, 0x06,   13 /* Public */,
-       4,    1,  242,    2, 0x06,   14 /* Public */,
-       5,    1,  245,    2, 0x06,   16 /* Public */,
-       6,    3,  248,    2, 0x06,   18 /* Public */,
-       7,    0,  255,    2, 0x06,   22 /* Public */,
-       8,    1,  256,    2, 0x06,   23 /* Public */,
-       9,    0,  259,    2, 0x06,   25 /* Public */,
-      10,    1,  260,    2, 0x06,   26 /* Public */,
-      11,    2,  263,    2, 0x06,   28 /* Public */,
-      12,    0,  268,    2, 0x06,   31 /* Public */,
+       1,    9,  236,    2, 0x06,    1 /* Public */,
+       3,    0,  255,    2, 0x06,   11 /* Public */,
+       4,    1,  256,    2, 0x06,   12 /* Public */,
+       5,    1,  259,    2, 0x06,   14 /* Public */,
+       6,    3,  262,    2, 0x06,   16 /* Public */,
+       7,    0,  269,    2, 0x06,   20 /* Public */,
+       8,    1,  270,    2, 0x06,   21 /* Public */,
+       9,    0,  273,    2, 0x06,   23 /* Public */,
+      10,    1,  274,    2, 0x06,   24 /* Public */,
+      11,    2,  277,    2, 0x06,   26 /* Public */,
+      12,    0,  282,    2, 0x06,   29 /* Public */,
+      13,    0,  283,    2, 0x06,   30 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      13,    0,  269,    2, 0x08,   32 /* Private */,
-      14,    0,  270,    2, 0x08,   33 /* Private */,
-      15,    0,  271,    2, 0x08,   34 /* Private */,
-      16,    0,  272,    2, 0x08,   35 /* Private */,
-      17,    0,  273,    2, 0x08,   36 /* Private */,
-      18,    0,  274,    2, 0x08,   37 /* Private */,
-      19,    0,  275,    2, 0x08,   38 /* Private */,
-      20,    0,  276,    2, 0x08,   39 /* Private */,
-      21,    0,  277,    2, 0x08,   40 /* Private */,
-      22,    0,  278,    2, 0x08,   41 /* Private */,
-      23,    0,  279,    2, 0x08,   42 /* Private */,
-      24,    1,  280,    2, 0x08,   43 /* Private */,
-      25,    1,  283,    2, 0x08,   45 /* Private */,
-      26,    2,  286,    2, 0x08,   47 /* Private */,
-      27,    3,  291,    2, 0x08,   50 /* Private */,
-      28,    5,  298,    2, 0x08,   54 /* Private */,
-      29,    1,  309,    2, 0x08,   60 /* Private */,
-      30,    0,  312,    2, 0x08,   62 /* Private */,
-      31,    0,  313,    2, 0x08,   63 /* Private */,
-      32,    0,  314,    2, 0x08,   64 /* Private */,
-      33,    0,  315,    2, 0x08,   65 /* Private */,
-      34,    1,  316,    2, 0x08,   66 /* Private */,
-      36,    0,  319,    2, 0x08,   68 /* Private */,
+      14,    0,  284,    2, 0x08,   31 /* Private */,
+      15,    0,  285,    2, 0x08,   32 /* Private */,
+      16,    0,  286,    2, 0x08,   33 /* Private */,
+      17,    0,  287,    2, 0x08,   34 /* Private */,
+      18,    0,  288,    2, 0x08,   35 /* Private */,
+      19,    0,  289,    2, 0x08,   36 /* Private */,
+      20,    0,  290,    2, 0x08,   37 /* Private */,
+      21,    0,  291,    2, 0x08,   38 /* Private */,
+      22,    0,  292,    2, 0x08,   39 /* Private */,
+      23,    0,  293,    2, 0x08,   40 /* Private */,
+      24,    0,  294,    2, 0x08,   41 /* Private */,
+      25,    1,  295,    2, 0x08,   42 /* Private */,
+      26,    1,  298,    2, 0x08,   44 /* Private */,
+      27,    2,  301,    2, 0x08,   46 /* Private */,
+      28,    3,  306,    2, 0x08,   49 /* Private */,
+      29,    5,  313,    2, 0x08,   53 /* Private */,
+      30,    2,  324,    2, 0x08,   59 /* Private */,
+      31,    1,  329,    2, 0x08,   62 /* Private */,
+      32,    0,  332,    2, 0x08,   64 /* Private */,
+      33,    0,  333,    2, 0x08,   65 /* Private */,
+      34,    0,  334,    2, 0x08,   66 /* Private */,
+      35,    0,  335,    2, 0x08,   67 /* Private */,
+      36,    1,  336,    2, 0x08,   68 /* Private */,
+      38,    0,  339,    2, 0x08,   70 /* Private */,
+      39,    0,  340,    2, 0x08,   71 /* Private */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Bool,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Bool,    2,    2,    2,    2,    2,    2,    2,    2,    2,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QByteArray,    2,
     QMetaType::Void, QMetaType::QByteArray,    2,
@@ -210,6 +222,7 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,    2,    2,
+    QMetaType::Void,
     QMetaType::Void,
 
  // slots: parameters
@@ -229,12 +242,14 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Bool,    2,    2,    2,
     QMetaType::Void, QMetaType::Int, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    2,    2,    2,    2,    2,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
     QMetaType::Void, QMetaType::Bool,    2,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Bool,   35,
+    QMetaType::Void, QMetaType::Bool,   37,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -251,8 +266,6 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<MainWindow, std::true_type>,
         // method 'scanningPlateSignal'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
@@ -290,6 +303,8 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'autoOpenPortsSignal'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'getBCoordinatesSignal'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'openPortPushButton_on'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
@@ -335,6 +350,10 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        // method 'setBCoords'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'pauseButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
@@ -350,6 +369,8 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         // method 'autoPortButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'measureBButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -361,7 +382,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->scanningPlateSignal((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[10])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[11]))); break;
+        case 0: _t->scanningPlateSignal((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[9]))); break;
         case 1: _t->measureSignal(); break;
         case 2: _t->tableControllerSignal((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
         case 3: _t->lightControllerSignal((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
@@ -372,35 +393,38 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 8: _t->saveMeasureSignal((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 9: _t->autoWalkSignal((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
         case 10: _t->autoOpenPortsSignal(); break;
-        case 11: _t->openPortPushButton_on(); break;
-        case 12: _t->coordsPushButton_on(); break;
-        case 13: _t->tableUpPushButton_on(); break;
-        case 14: _t->tableDownPushButton_on(); break;
-        case 15: _t->forwardPushButton_on(); break;
-        case 16: _t->backwardPushButton_on(); break;
-        case 17: _t->leftPushButton_on(); break;
-        case 18: _t->rightPushButton_on(); break;
-        case 19: _t->statePushButton_on(); break;
-        case 20: _t->measurePushButton_on(); break;
-        case 21: _t->lightPushButton_on(); break;
-        case 22: _t->writeLog((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
-        case 23: _t->setProgressBarValue((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 24: _t->setProgressBarRange((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 25: _t->openPortResult((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[3]))); break;
-        case 26: _t->addRowToTable((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5]))); break;
-        case 27: _t->pauseButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 28: _t->goToButton_clicked(); break;
-        case 29: _t->saveMeasureButton_clicked(); break;
-        case 30: _t->continueFromButton_clicked(); break;
-        case 31: _t->orientationButton_clicked(); break;
-        case 32: _t->scanPushButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 33: _t->autoPortButton_clicked(); break;
+        case 11: _t->getBCoordinatesSignal(); break;
+        case 12: _t->openPortPushButton_on(); break;
+        case 13: _t->coordsPushButton_on(); break;
+        case 14: _t->tableUpPushButton_on(); break;
+        case 15: _t->tableDownPushButton_on(); break;
+        case 16: _t->forwardPushButton_on(); break;
+        case 17: _t->backwardPushButton_on(); break;
+        case 18: _t->leftPushButton_on(); break;
+        case 19: _t->rightPushButton_on(); break;
+        case 20: _t->statePushButton_on(); break;
+        case 21: _t->measurePushButton_on(); break;
+        case 22: _t->lightPushButton_on(); break;
+        case 23: _t->writeLog((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
+        case 24: _t->setProgressBarValue((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 25: _t->setProgressBarRange((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 26: _t->openPortResult((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[3]))); break;
+        case 27: _t->addRowToTable((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5]))); break;
+        case 28: _t->setBCoords((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 29: _t->pauseButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 30: _t->goToButton_clicked(); break;
+        case 31: _t->saveMeasureButton_clicked(); break;
+        case 32: _t->continueFromButton_clicked(); break;
+        case 33: _t->orientationButton_clicked(); break;
+        case 34: _t->scanPushButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 35: _t->autoPortButton_clicked(); break;
+        case 36: _t->measureBButton_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (MainWindow::*)(double , double , double , double , double , double , double , double , double , double , bool );
+            using _t = void (MainWindow::*)(double , double , double , double , double , double , double , double , bool );
             if (_t _q_method = &MainWindow::scanningPlateSignal; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
@@ -476,6 +500,13 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
                 return;
             }
         }
+        {
+            using _t = void (MainWindow::*)();
+            if (_t _q_method = &MainWindow::getBCoordinatesSignal; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 11;
+                return;
+            }
+        }
     }
 }
 
@@ -498,21 +529,21 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 34)
+        if (_id < 37)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 34;
+        _id -= 37;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 34)
+        if (_id < 37)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 34;
+        _id -= 37;
     }
     return _id;
 }
 
 // SIGNAL 0
-void MainWindow::scanningPlateSignal(double _t1, double _t2, double _t3, double _t4, double _t5, double _t6, double _t7, double _t8, double _t9, double _t10, bool _t11)
+void MainWindow::scanningPlateSignal(double _t1, double _t2, double _t3, double _t4, double _t5, double _t6, double _t7, double _t8, bool _t9)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t7))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t8))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t9))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t10))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t11))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t7))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t8))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t9))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
@@ -580,6 +611,12 @@ void MainWindow::autoWalkSignal(bool _t1, QString _t2)
 void MainWindow::autoOpenPortsSignal()
 {
     QMetaObject::activate(this, &staticMetaObject, 10, nullptr);
+}
+
+// SIGNAL 11
+void MainWindow::getBCoordinatesSignal()
+{
+    QMetaObject::activate(this, &staticMetaObject, 11, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE
