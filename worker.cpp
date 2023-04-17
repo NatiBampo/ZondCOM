@@ -212,7 +212,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
     Worker::copyUpToIndex(currentIndex);
     QFile file(dir);
     QString dir1 = file.fileName();
-    qDebug()<<"Если 0, то строки идентичны  : "<<QString::compare(dir1, dir_cur, Qt::CaseInsensitive);
+    qDebug() << "Если 0, то строки идентичны  : " << QString::compare(dir1, dir_cur, Qt::CaseInsensitive);
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
         QTextStream output(&file);
