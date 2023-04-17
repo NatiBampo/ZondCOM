@@ -858,7 +858,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="autoPortButton">
             <property name="text">
              <string>Авто</string>
             </property>

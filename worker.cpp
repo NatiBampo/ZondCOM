@@ -18,8 +18,16 @@ Worker::~Worker() {
 
 }
 
-//void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight) {
-void Worker::openPorts2() {
+void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight) {
+    serialPortA5 = new QSerialPort();
+    serialPortKeithly = new QSerialPort();
+    serialPortLight = new QSerialPort();
+    emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));
+    emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));
+    emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));
+}
+
+void Worker::autoOpenPorts() {
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
@@ -28,37 +36,42 @@ void Worker::openPorts2() {
         list.append(port.portName());
     };
     QHash<QSerialPort *, QString> map;
-
+    bool tmp_flag;
     for (int i=0; i < list.length(); i++) {
         qDebug() << "cycle" << i << "  port " << list[i%3];
         //сперва окрываем порт планара
-        if (!map.contains(serialPortA5)){
+        if (!map.contains(serialPortA5)) {
             qDebug()<<i<<" planar condition";
-            openPort(serialPortA5, list[i%3], QSerialPort::Baud115200);
+            tmp_flag = openPort(serialPortA5, list[i%3], QSerialPort::Baud115200);
             if (checkPlanarCOM()) {
                 map.insert(serialPortA5, list[i%3]);
+                emit openPortResultSignal(list[i%3], "Planar", tmp_flag);
                 qDebug()<<"serialPortA5 is now open with :" << list[i%3];
                 continue;
             }
             if (serialPortA5->isOpen())serialPortA5->close();
         }
+
         //порт кейтли
         if (!map.contains(serialPortKeithly)) {
             qDebug()<<i<<" keithley condition";
-            openPort(serialPortKeithly, list[i%3], QSerialPort::Baud57600);
+            tmp_flag = openPort(serialPortKeithly, list[i%3], QSerialPort::Baud57600);
             if (checkKeithlyCOM()) {
                 map.insert(serialPortKeithly, list[i%3]);
+                emit openPortResultSignal(list[i%3], "Keithley", tmp_flag);
                 qDebug()<<"serialPortKeithly is now open with " << list[i%3];
                 continue;
             }
             if (serialPortKeithly->isOpen()) serialPortKeithly->close();
         }
         //порт ардуины/диода
+
         if (!map.contains(serialPortLight)) {
             qDebug()<<i<<" light condition";
-            openPort(serialPortLight, list[i%3], QSerialPort::Baud9600);
+            tmp_flag = openPort(serialPortLight, list[i%3], QSerialPort::Baud9600);
             if (checkLightCOM()) {
                 map.insert(serialPortLight, list[i%3]);
+                emit openPortResultSignal(list[i%3], "Light", tmp_flag);
                 qDebug()<<"portNameLight is now open with :" << list[i%3];
             } else {
                 if (serialPortLight->isOpen()) serialPortKeithly->close();

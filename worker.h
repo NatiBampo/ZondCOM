@@ -60,7 +60,7 @@ signals:
     void sendLogSignal(QByteArray);
     void sendProgressBarValueSignal(int);
     void sendProgressBarRangeSignal(int, int);
-    void openPortResultSignal(QString, bool);
+    void openPortResultSignal(QString, QString, bool);
     void sendAddTableSignal(int, double, double, double, double);
     void autoWalkSignal(bool, QString);
 
@@ -70,13 +70,14 @@ public slots:
     void scanningPlate(double, double, double, double, double, double, double, double, double, double, bool);
     void tableController(QByteArray);
     void lightController(QByteArray);
-    void openPorts();
+    void openPorts(QString, QString, QString);
     void closePorts();
     void pauseWalk();
     //void continueWalk();
     void goToElement(int);
     void saveMeasure(int);
     void autoWalk(bool, QString);
+    void autoOpenPorts();
 };
 
 #endif // WORKER_H

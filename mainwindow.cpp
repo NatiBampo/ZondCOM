@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->saveMeasureButton, &QPushButton::clicked, this, &MainWindow::saveMeasureButton_clicked);
     connect(ui->pauseButton, &QPushButton::clicked, this, &MainWindow::pauseButton_clicked);
     connect(ui->orientationButton, &QPushButton::clicked, this, &MainWindow::orientationButton_clicked);
+    connect(ui->autoPortButton, &QPushButton::clicked, this, &MainWindow::autoPortButton_clicked);
 
 
     createWorkerThread();
@@ -61,6 +62,7 @@ void MainWindow::createWorkerThread() {
     connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::scanningPlate);
     connect(this, &MainWindow::measureSignal, worker, &Worker::measureElement);
     connect(this, &MainWindow::openPortsSignal, worker, &Worker::openPorts);
+    connect(this, &MainWindow::autoOpenPortsSignal, worker, &Worker::autoOpenPorts);
     connect(this, &MainWindow::tableControllerSignal, worker, &Worker::tableController);
     connect(this, &MainWindow::lightControllerSignal, worker, &Worker::lightController);
     connect(this, &MainWindow::closePortsSignal, worker, &Worker::closePorts);
@@ -83,8 +85,8 @@ void MainWindow::createWorkerThread() {
     //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
     //сигнал паузы
-
 }
+
 
 void MainWindow::openPortPushButton_on() {
     if (ui->openPortPushButton->text() == "Открыть") {
@@ -96,11 +98,14 @@ void MainWindow::openPortPushButton_on() {
     }
 }
 
-void MainWindow::openPortResult(QString portName, bool result) {
+void MainWindow::openPortResult(QString port, QString portName, bool result) {
     if (!result) {
-        QMessageBox::warning(this, "Ошибка", "Не удалось подключиться к порту " + portName);
+        QMessageBox::warning(this, "Ошибка", "Не удалось подключиться к порту " + port);
     } else {
-        QMessageBox::information(this, "Сообщение", "Выбранный порт: " + portName);
+        QMessageBox::information(this, "Сообщение", "Выбранный порт: " + port + " для " + portName);
+        if (portName.compare("Planar")) ui->portComboBox->setCurrentText(port);
+        else if (portName.compare("Keithley")) ui->keithlyPortComboBox->setCurrentText(port);
+        else if (portName.compare("Light")) ui->lightPortComboBox->setCurrentText(port);
     }
 }
 
@@ -182,6 +187,7 @@ void MainWindow::addElement(int row, int element, double value) {
     index = model->index(row, element);
     model->setData(index, value);
 }
+
 void MainWindow::writeLog(QByteArray log) {
     ui->logsListWidget->addItem(log);
 }
@@ -194,7 +200,6 @@ void MainWindow::setProgressBarRange(int minVal, int maxVal) {
     ui->progressBar->setMinimum(minVal);
     ui->progressBar->setMaximum(maxVal);
 }
-
 
 void MainWindow::pauseButton_clicked(bool checked)
 {
@@ -301,3 +306,11 @@ void MainWindow::orientationButton_clicked()
     emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three);
 
 }
+
+
+
+void MainWindow::autoPortButton_clicked()
+{
+    emit autoOpenPortsSignal();
+}
+

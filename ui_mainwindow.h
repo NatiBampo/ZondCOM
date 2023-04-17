@@ -45,12 +45,6 @@ public:
     QLabel *label_16;
     QTableView *tableView;
     QFormLayout *formLayout;
-    QHBoxLayout *horizontalLayout;
-    QLabel *label;
-    QComboBox *portComboBox;
-    QComboBox *keithlyPortComboBox;
-    QComboBox *lightPortComboBox;
-    QPushButton *openPortPushButton;
     QTabWidget *tabWidget;
     QWidget *tab;
     QGridLayout *gridLayout_3;
@@ -129,6 +123,20 @@ public:
     QSpinBox *BXspinBox;
     QProgressBar *progressBar;
     QCheckBox *checkBox;
+    QVBoxLayout *verticalLayout_3;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer_2;
+    QLabel *label_26;
+    QLabel *label_25;
+    QLabel *label_24;
+    QSpacerItem *horizontalSpacer;
+    QHBoxLayout *horizontalLayout;
+    QLabel *label;
+    QComboBox *portComboBox;
+    QComboBox *keithlyPortComboBox;
+    QComboBox *lightPortComboBox;
+    QPushButton *autoPortButton;
+    QPushButton *openPortPushButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -136,7 +144,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1175, 634);
+        MainWindow->resize(1022, 692);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         gridLayout_5 = new QGridLayout(centralwidget);
@@ -167,45 +175,6 @@ public:
 
         formLayout = new QFormLayout();
         formLayout->setObjectName("formLayout");
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName("horizontalLayout");
-        label = new QLabel(centralwidget);
-        label->setObjectName("label");
-
-        horizontalLayout->addWidget(label);
-
-        portComboBox = new QComboBox(centralwidget);
-        portComboBox->setObjectName("portComboBox");
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
-        portComboBox->setSizePolicy(sizePolicy);
-
-        horizontalLayout->addWidget(portComboBox);
-
-        keithlyPortComboBox = new QComboBox(centralwidget);
-        keithlyPortComboBox->setObjectName("keithlyPortComboBox");
-        sizePolicy.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
-        keithlyPortComboBox->setSizePolicy(sizePolicy);
-
-        horizontalLayout->addWidget(keithlyPortComboBox);
-
-        lightPortComboBox = new QComboBox(centralwidget);
-        lightPortComboBox->setObjectName("lightPortComboBox");
-        sizePolicy.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
-        lightPortComboBox->setSizePolicy(sizePolicy);
-
-        horizontalLayout->addWidget(lightPortComboBox);
-
-        openPortPushButton = new QPushButton(centralwidget);
-        openPortPushButton->setObjectName("openPortPushButton");
-
-        horizontalLayout->addWidget(openPortPushButton);
-
-
-        formLayout->setLayout(0, QFormLayout::FieldRole, horizontalLayout);
-
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName("tabWidget");
         tabWidget->setMaximumSize(QSize(167772, 16777215));
@@ -323,6 +292,9 @@ public:
         gridLayout_6->setObjectName("gridLayout_6");
         AXspinBox = new QSpinBox(tab_2);
         AXspinBox->setObjectName("AXspinBox");
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(AXspinBox->sizePolicy().hasHeightForWidth());
         AXspinBox->setSizePolicy(sizePolicy);
         AXspinBox->setMinimum(0);
@@ -650,13 +622,87 @@ public:
 
         formLayout->setWidget(1, QFormLayout::FieldRole, tabWidget);
 
+        verticalLayout_3 = new QVBoxLayout();
+        verticalLayout_3->setObjectName("verticalLayout_3");
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName("horizontalLayout_2");
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Maximum, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_2);
+
+        label_26 = new QLabel(centralwidget);
+        label_26->setObjectName("label_26");
+
+        horizontalLayout_2->addWidget(label_26);
+
+        label_25 = new QLabel(centralwidget);
+        label_25->setObjectName("label_25");
+
+        horizontalLayout_2->addWidget(label_25);
+
+        label_24 = new QLabel(centralwidget);
+        label_24->setObjectName("label_24");
+
+        horizontalLayout_2->addWidget(label_24);
+
+        horizontalSpacer = new QSpacerItem(150, 20, QSizePolicy::Maximum, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_2);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName("horizontalLayout");
+        label = new QLabel(centralwidget);
+        label->setObjectName("label");
+
+        horizontalLayout->addWidget(label);
+
+        portComboBox = new QComboBox(centralwidget);
+        portComboBox->setObjectName("portComboBox");
+        sizePolicy.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
+        portComboBox->setSizePolicy(sizePolicy);
+
+        horizontalLayout->addWidget(portComboBox);
+
+        keithlyPortComboBox = new QComboBox(centralwidget);
+        keithlyPortComboBox->setObjectName("keithlyPortComboBox");
+        sizePolicy.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
+        keithlyPortComboBox->setSizePolicy(sizePolicy);
+
+        horizontalLayout->addWidget(keithlyPortComboBox);
+
+        lightPortComboBox = new QComboBox(centralwidget);
+        lightPortComboBox->setObjectName("lightPortComboBox");
+        sizePolicy.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
+        lightPortComboBox->setSizePolicy(sizePolicy);
+
+        horizontalLayout->addWidget(lightPortComboBox);
+
+        autoPortButton = new QPushButton(centralwidget);
+        autoPortButton->setObjectName("autoPortButton");
+
+        horizontalLayout->addWidget(autoPortButton);
+
+        openPortPushButton = new QPushButton(centralwidget);
+        openPortPushButton->setObjectName("openPortPushButton");
+
+        horizontalLayout->addWidget(openPortPushButton);
+
+
+        verticalLayout_3->addLayout(horizontalLayout);
+
+
+        formLayout->setLayout(0, QFormLayout::FieldRole, verticalLayout_3);
+
 
         gridLayout_5->addLayout(formLayout, 0, 0, 6, 1);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1175, 22));
+        menubar->setGeometry(QRect(0, 0, 1022, 22));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -675,11 +721,6 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\321\201\320\273\320\265\320\264\320\275\320\270\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\321\200\321\202\321\213", nullptr));
-        portComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
-        keithlyPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
-        lightPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
-        openPortPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));
         groupBox_3->setTitle(QCoreApplication::translate("MainWindow", "\320\243\320\277\321\200\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \321\201\321\202\320\276\320\273\320\276\320\274", nullptr));
         backwardPushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\320\267\320\260\320\264", nullptr));
         rightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\277\321\200\320\260\320\262\320\276", nullptr));
@@ -725,6 +766,15 @@ public:
         continueFromButton->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214 \320\276\320\261\321\205\320\276\320\264 \321\201 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\320\260", nullptr));
         checkBox->setText(QCoreApplication::translate("MainWindow", "3", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
+        label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
+        label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
+        label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\321\200\321\202\321\213", nullptr));
+        portComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
+        keithlyPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
+        lightPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
+        autoPortButton->setText(QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
+        openPortPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));
     } // retranslateUi
 
 };
