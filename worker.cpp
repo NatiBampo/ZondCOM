@@ -19,7 +19,7 @@ Worker::~Worker() {
 }
 
 //void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight) {
-void Worker::openPorts() {
+void Worker::openPorts2() {
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
