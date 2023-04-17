@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 }
 
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -53,6 +54,7 @@ MainWindow::~MainWindow()
     workerThread.quit();
     workerThread.terminate();
 }
+
 
 void MainWindow::createWorkerThread() {
     worker = new Worker(&mutex);
@@ -98,6 +100,7 @@ void MainWindow::openPortPushButton_on() {
     }
 }
 
+
 void MainWindow::openPortResult(QString port, QString portName, bool result) {
     if (!result) {
         QMessageBox::warning(this, "Ошибка", "Не удалось подключиться к порту " + port);
@@ -109,10 +112,12 @@ void MainWindow::openPortResult(QString port, QString portName, bool result) {
     }
 }
 
+
 void MainWindow::statePushButton_on() {
     //emit sendPackageSignal(serialPortA5, "State\r\n", 1000);
     emit tableControllerSignal("State\r\n");
 }
+
 
 void MainWindow::coordsPushButton_on() {
     QByteArray x = ui->xLineEdit->text().toUtf8();
@@ -121,39 +126,47 @@ void MainWindow::coordsPushButton_on() {
     emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n');
 }
 
+
 void MainWindow::tableUpPushButton_on() {
     //emit sendPackageSignal(serialPortA5, "Table UP\r\n", 1000);
     emit tableControllerSignal("Table UP\r\n");
 }
+
 
 void MainWindow::tableDownPushButton_on() {
     //emit sendPackageSignal(serialPortA5, "Table DN\r\n", 1000);
     emit tableControllerSignal("Table DN\r\n");
 }
 
+
 void MainWindow::forwardPushButton_on() {
     //emit sendPackageSignal(serialPortA5, "Move 0 100\r\n", 1000);
     emit tableControllerSignal("Move 0 100\r\n");
 }
+
 
 void MainWindow::backwardPushButton_on() {
     //emit sendPackageSignal(serialPortA5, "Move 0 -100\r\n", 1000);
     emit tableControllerSignal("Move 0 -100\r\n");
 }
 
+
 void MainWindow::leftPushButton_on() {
     //emit sendPackageSignal(serialPortA5, "Move -100 0\r\n", 1000);
     emit tableControllerSignal("Move -100 0\r\n");
 }
+
 
 void MainWindow::rightPushButton_on() {
     //emit sendPackageSignal(serialPortA5, "Move 100 0\r\n", 1000);
     emit tableControllerSignal("Move 100 0\r\n");
 }
 
+
 void MainWindow::measurePushButton_on() {
     emit measureSignal();
 }
+
 
 void MainWindow::lightPushButton_on() {
     if (ui->lightPushButton->text() == "Включить") {
@@ -164,6 +177,7 @@ void MainWindow::lightPushButton_on() {
         ui->lightPushButton->setText("Включить");
     }
 }
+
 
 //функция записи последних измерений в таблицу
 void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V, double LC) {
@@ -181,6 +195,7 @@ void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V,
     addElement(index, 7, index);//индекс
 }
 
+
 //записываем ячейку таблицы на форму
 void MainWindow::addElement(int row, int element, double value) {
     QModelIndex index;
@@ -188,18 +203,22 @@ void MainWindow::addElement(int row, int element, double value) {
     model->setData(index, value);
 }
 
+
 void MainWindow::writeLog(QByteArray log) {
     ui->logsListWidget->addItem(log);
 }
+
 
 void MainWindow::setProgressBarValue(int val) {
     ui->progressBar->setValue(val);
 }
 
+
 void MainWindow::setProgressBarRange(int minVal, int maxVal) {
     ui->progressBar->setMinimum(minVal);
     ui->progressBar->setMaximum(maxVal);
 }
+
 
 void MainWindow::pauseButton_clicked(bool checked)
 {
@@ -230,6 +249,7 @@ int MainWindow::getUIIndex()
     return index;
 }
 
+
 void MainWindow::goToButton_clicked()
 {
     emit goToElementSignal(getUIIndex());
@@ -254,6 +274,7 @@ void MainWindow::continueFromButton_clicked()
         emit autoWalkSignal(false, dir_name);
     }
 }
+
 
 void MainWindow::scanPushButton_clicked(bool checked)
 {
@@ -289,9 +310,10 @@ void MainWindow::orientationButton_clicked()
     //сдвиг меж столбцов и рядов
     double colSlide = (double)ui->stepColSpinBox->value();
     double rowSlide = (double)ui->stepRowSpinBox->value();
+    bool all_three = ui->checkBox->isChecked();
 
     //создаем модель таблицы для отображения(впоследствие можно сократить до N рядов)
-    model = new QStandardItemModel(numberX * numberY, 8, this);
+    model = new QStandardItemModel(numberX * numberY * (all_three ? 3 : 1), 8, this);
     model->setHeaderData(0, Qt::Horizontal, "Столбец");
     model->setHeaderData(1, Qt::Horizontal, "Ряд");
     model->setHeaderData(2, Qt::Horizontal, "Элемент");
@@ -302,11 +324,10 @@ void MainWindow::orientationButton_clicked()
     model->setHeaderData(7, Qt::Horizontal, "№");
     ui->tableView->setModel(model);
 
-    bool all_three = ui->checkBox->isChecked();
+
     emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three);
 
 }
-
 
 
 void MainWindow::autoPortButton_clicked()

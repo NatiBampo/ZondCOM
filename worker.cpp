@@ -164,7 +164,7 @@ void Worker::scanningPlate(double AX, double AY, double BX, double BY, double st
     DotsX.clear();
     DotsY.clear();
     lastIndex = (numberX + 1) * numberY * 3;
-    qDebug()<<"Your commercial could be here. Call us now 1-800-  " << rowSlide; //vertical gap between column of rows
+    qDebug()<<"Your commercial could be here. Call us now 1-800-  " << rowSlide; //vertical gap between columns of rows
 
     double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
     double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
@@ -285,8 +285,10 @@ void Worker::copyUpToIndex(int index) {
     if (index==0){
         return;
     }
-    QFile dest (dir + "tmp.csv");
-    QFile source (dir + ".csv");
+    dir = dir.endsWith(".csv") ? dir : dir + ".csv";
+    QString dir_tmp = dir.remove(dir.indexOf(".csv"), dir.length() - dir.indexOf(".csv")) + "tmp.csv";
+    QFile dest (dir_tmp);
+    QFile source (dir);
     if (dest.open(QIODevice::ReadWrite) && source.open(QIODevice::ReadWrite)) {
         QTextStream output(&source);
         QTextStream input(&dest);
@@ -304,7 +306,7 @@ void Worker::copyUpToIndex(int index) {
     dest.close();
     source.close();
     source.remove();
-    QFile::rename(dir + "tmp.csv", dir + ".csv");
+    QFile::rename(dir_tmp, dir);
 }
 
 void Worker::pauseWalk() {
@@ -328,11 +330,14 @@ void Worker::saveMeasure(int index) {
     //функция копирует файл до нужного индекса и заменяет собой файл источник
     Worker::goToElement(index);
     MeasureDie(serialPortA5, serialPortKeithly);
-    QFile newDest (dir + "tmp.csv");
-    QFile oldSource (dir + ".csv");
-    if (newDest.open(QIODevice::ReadWrite) && oldSource.open(QIODevice::ReadWrite)) {
-        QTextStream output(&oldSource);
-        QTextStream input(&newDest);
+    dir = dir.endsWith(".csv") ? dir : dir + ".csv";
+    QString dir_tmp = dir.remove(dir.indexOf(".csv"), dir.length() - dir.indexOf(".csv")) + "tmp.csv";
+    QFile dest (dir_tmp);
+    QFile source (dir);
+
+    if (dest.open(QIODevice::ReadWrite) && source.open(QIODevice::ReadWrite)) {
+        QTextStream output(&source);
+        QTextStream input(&dest);
         int i = 0;
         for (; !output.atEnd(); ++i) {
             if (i==index) {
@@ -343,15 +348,16 @@ void Worker::saveMeasure(int index) {
             }
             output.flush();
         }
+
         if (index > i) {
             input << QString::number(index, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                       QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
         }
         //копируем всё обратно и удаляем временный файл
-        newDest.close();
-        oldSource.close();
-        oldSource.remove();
-        QFile::rename(dir + "tmp.csv", dir + ".csv");
+        dest.close();
+        source.close();
+        source.remove();
+        QFile::rename(dir_tmp, dir);
     }
     emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
 }
