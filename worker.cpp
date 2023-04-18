@@ -43,7 +43,7 @@ void Worker::autoOpenPorts() {
         if (!map.contains(serialPortA5)) {
             qDebug() << i << " planar condition";
             tmp_flag = openPort(serialPortA5, list[i%3], QSerialPort::Baud115200);
-            if (checkPlanarCOM()) {
+            if (tmp_flag && checkPlanarCOM()) {
                 map.insert(serialPortA5, list[i%3]);
                 emit openPortResultSignal(list[i%3], "Planar", tmp_flag);
                 qDebug() << "serialPortA5 is now open with :" << list[i%3];
@@ -56,7 +56,7 @@ void Worker::autoOpenPorts() {
         if (!map.contains(serialPortKeithly)) {
             qDebug()<<i<<" keithley condition";
             tmp_flag = openPort(serialPortKeithly, list[i%3], QSerialPort::Baud57600);
-            if (checkKeithlyCOM()) {
+            if (tmp_flag && checkKeithlyCOM()) {
                 map.insert(serialPortKeithly, list[i%3]);
                 emit openPortResultSignal(list[i%3], "Keithley", tmp_flag);
                 qDebug()<<"serialPortKeithly is now open with " << list[i%3];
@@ -69,12 +69,13 @@ void Worker::autoOpenPorts() {
         if (!map.contains(serialPortLight)) {
             qDebug()<<i<<" light condition";
             tmp_flag = openPort(serialPortLight, list[i%3], QSerialPort::Baud9600);
-            if (checkLightCOM()) {
+            if (tmp_flag && checkLightCOM()) {
+                qDebug()<<"inside light";
                 map.insert(serialPortLight, list[i%3]);
                 emit openPortResultSignal(list[i%3], "Light", tmp_flag);
                 qDebug()<<"portNameLight is now open with :" << list[i%3];
             } else {
-                if (serialPortLight->isOpen()) serialPortKeithly->close();
+                if (serialPortLight->isOpen()) serialPortLight->close();
             }
         }
     }
@@ -117,9 +118,15 @@ bool Worker::checkKeithlyCOM() {
 
 bool Worker::checkLightCOM() {
     try {
-        LightOn();
-        qDebug() << lastAnswer;
-        if (lastAnswer.contains("A1B2C3")) return true;
+        lastAnswer = "";
+        QByteArray package = "1101/n";
+        serialPortLight->write(package);
+        serialPortLight->flush();
+        emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
+        while (serialPortLight->waitForReadyRead(ANSWER_DELAY)) lastAnswer.append(serialPortLight->readAll());
+        if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
+        qDebug() <<"light response: " << lastAnswer;
+        if (lastAnswer.contains("C3B2A1") || lastAnswer.contains("A1B2C3")) return true;
     } catch (QSerialPort::SerialPortError error) {
         qDebug() << error;
     }
@@ -141,7 +148,7 @@ bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate
 void Worker::closePorts() {
     if (serialPortA5->isOpen()) serialPortA5->close();
     if (serialPortKeithly->isOpen()) serialPortKeithly->close();
-    if (serialPortLight->isOpen()) serialPortKeithly->close();
+    if (serialPortLight->isOpen()) serialPortLight->close();
     delete serialPortA5;
     delete serialPortKeithly;
     delete serialPortLight;
@@ -164,7 +171,7 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
     DotsX.clear();
     DotsY.clear();
     lastIndex = (numberX + 1) * numberY * 3;
-    qDebug() << "Your commercial could be here. Call us now 1-800-  " << rowSlide; //vertical gap between columns of rows
+    qDebug() << "Your commercial could be here. Call us now 1-300-  " << rowSlide; //vertical gap between columns of rows
 
 
 //    double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
@@ -234,7 +241,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
     Worker::copyUpToIndex(currentIndex);
     QFile file(dir);
     QString dir1 = file.fileName();
-    qDebug() << "Если 0, то строки идентичны  : " << QString::compare(dir1, dir_cur, Qt::CaseInsensitive);
+    //qDebug() << "Если 0, то строки идентичны  : " << QString::compare(dir1, dir_cur, Qt::CaseInsensitive);
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
         QTextStream output(&file);
