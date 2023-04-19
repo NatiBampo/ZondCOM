@@ -74,7 +74,7 @@ void Worker::autoOpenPorts() {
                 emit openPortResultSignal(list[i%3], "Light", tmp_flag);
                 qDebug()<<"portNameLight is now open with :" << list[i%3];
             } else {
-                if (serialPortLight->isOpen()) serialPortKeithly->close();
+                if (serialPortLight->isOpen()) serialPortLight->close();
             }
         }
     }
@@ -90,7 +90,7 @@ bool Worker::checkPlanarCOM() {
         qDebug()<<localAnswer;
         if (localAnswer.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
             qDebug() << "Planar : " << true;
-            return true;
+            return true;//just writing smth down while being watched from my back. and once again i've been followed
         }
     }
     return false;
@@ -141,7 +141,7 @@ bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate
 void Worker::closePorts() {
     if (serialPortA5->isOpen()) serialPortA5->close();
     if (serialPortKeithly->isOpen()) serialPortKeithly->close();
-    if (serialPortLight->isOpen()) serialPortKeithly->close();
+    if (serialPortLight->isOpen()) serialPortLight->close();
     delete serialPortA5;
     delete serialPortKeithly;
     delete serialPortLight;
@@ -164,7 +164,7 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
     DotsX.clear();
     DotsY.clear();
     lastIndex = (numberX + 1) * numberY * 3;
-    qDebug() << "Your commercial could be here. Call us now 1-800-  " << rowSlide; //vertical gap between columns of rows
+    //qDebug() << "Your commercial could be here. Call us now 1-300-  " << rowSlide; //vertical gap between columns of rows
 
 
 //    double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
