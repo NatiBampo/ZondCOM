@@ -90,12 +90,32 @@ public:
     QListWidget *logsListWidget;
     QWidget *tab_2;
     QGridLayout *gridLayout_6;
-    QLabel *label_8;
-    QDoubleSpinBox *stepColSpinBox;
-    QLabel *label_14;
-    QLabel *label_11;
+    QProgressBar *progressBar;
     QPushButton *scanPushButton;
+    QLabel *label_11;
     QLabel *label_9;
+    QCheckBox *checkBox;
+    QLabel *label_14;
+    QLabel *label_15;
+    QSpinBox *numYspinBox;
+    QLabel *label_22;
+    QLabel *label_10;
+    QDoubleSpinBox *stepRowSpinBox;
+    QDoubleSpinBox *stepXspinBox;
+    QPushButton *measureBButton;
+    QPushButton *orientationButton;
+    QLabel *label_5;
+    QLabel *label_8;
+    QSpinBox *BXspinBox;
+    QPushButton *pauseButton;
+    QLabel *label_12;
+    QDoubleSpinBox *stepYspinBox;
+    QSpinBox *numXspinBox;
+    QSpacerItem *verticalSpacer;
+    QSpinBox *BYspinBox;
+    QLabel *label_21;
+    QDoubleSpinBox *stepColSpinBox;
+    QLabel *label_23;
     QVBoxLayout *verticalLayout;
     QGroupBox *groupBox_5;
     QWidget *gridLayoutWidget;
@@ -115,26 +135,6 @@ public:
     QSpinBox *columnSpinBox;
     QSpinBox *rowSpinBox;
     QSpinBox *elemSpinBox;
-    QDoubleSpinBox *stepYspinBox;
-    QLabel *label_12;
-    QSpinBox *numYspinBox;
-    QDoubleSpinBox *stepRowSpinBox;
-    QSpinBox *BYspinBox;
-    QCheckBox *checkBox;
-    QLabel *label_22;
-    QDoubleSpinBox *stepXspinBox;
-    QPushButton *pauseButton;
-    QPushButton *orientationButton;
-    QLabel *label_15;
-    QSpacerItem *verticalSpacer;
-    QLabel *label_23;
-    QLabel *label_10;
-    QProgressBar *progressBar;
-    QSpinBox *numXspinBox;
-    QLabel *label_21;
-    QSpinBox *BXspinBox;
-    QLabel *label_5;
-    QPushButton *measureBButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -392,29 +392,12 @@ public:
         tab_2->setObjectName("tab_2");
         gridLayout_6 = new QGridLayout(tab_2);
         gridLayout_6->setObjectName("gridLayout_6");
-        label_8 = new QLabel(tab_2);
-        label_8->setObjectName("label_8");
-        label_8->setMinimumSize(QSize(10, 10));
-        label_8->setMaximumSize(QSize(16, 16777215));
+        progressBar = new QProgressBar(tab_2);
+        progressBar->setObjectName("progressBar");
+        progressBar->setMinimumSize(QSize(200, 30));
+        progressBar->setValue(24);
 
-        gridLayout_6->addWidget(label_8, 1, 1, 1, 1);
-
-        stepColSpinBox = new QDoubleSpinBox(tab_2);
-        stepColSpinBox->setObjectName("stepColSpinBox");
-        stepColSpinBox->setValue(26.059999999999999);
-
-        gridLayout_6->addWidget(stepColSpinBox, 3, 2, 1, 1);
-
-        label_14 = new QLabel(tab_2);
-        label_14->setObjectName("label_14");
-        label_14->setMaximumSize(QSize(16, 16777215));
-
-        gridLayout_6->addWidget(label_14, 1, 5, 1, 1);
-
-        label_11 = new QLabel(tab_2);
-        label_11->setObjectName("label_11");
-
-        gridLayout_6->addWidget(label_11, 2, 0, 1, 1);
+        gridLayout_6->addWidget(progressBar, 5, 0, 1, 1);
 
         scanPushButton = new QPushButton(tab_2);
         scanPushButton->setObjectName("scanPushButton");
@@ -422,12 +405,159 @@ public:
 
         gridLayout_6->addWidget(scanPushButton, 5, 2, 1, 1);
 
+        label_11 = new QLabel(tab_2);
+        label_11->setObjectName("label_11");
+
+        gridLayout_6->addWidget(label_11, 2, 0, 1, 1);
+
         label_9 = new QLabel(tab_2);
         label_9->setObjectName("label_9");
         label_9->setMinimumSize(QSize(10, 10));
         label_9->setMaximumSize(QSize(16, 16777215));
 
         gridLayout_6->addWidget(label_9, 2, 1, 1, 1);
+
+        checkBox = new QCheckBox(tab_2);
+        checkBox->setObjectName("checkBox");
+
+        gridLayout_6->addWidget(checkBox, 4, 6, 1, 1);
+
+        label_14 = new QLabel(tab_2);
+        label_14->setObjectName("label_14");
+        label_14->setMaximumSize(QSize(16, 16777215));
+
+        gridLayout_6->addWidget(label_14, 1, 5, 1, 1);
+
+        label_15 = new QLabel(tab_2);
+        label_15->setObjectName("label_15");
+        label_15->setMaximumSize(QSize(16, 16777215));
+
+        gridLayout_6->addWidget(label_15, 2, 5, 1, 1);
+
+        numYspinBox = new QSpinBox(tab_2);
+        numYspinBox->setObjectName("numYspinBox");
+        numYspinBox->setMaximum(100);
+        numYspinBox->setValue(30);
+
+        gridLayout_6->addWidget(numYspinBox, 2, 6, 1, 1);
+
+        label_22 = new QLabel(tab_2);
+        label_22->setObjectName("label_22");
+        label_22->setMinimumSize(QSize(10, 10));
+        label_22->setMaximumSize(QSize(16, 16777215));
+
+        gridLayout_6->addWidget(label_22, 3, 1, 1, 1);
+
+        label_10 = new QLabel(tab_2);
+        label_10->setObjectName("label_10");
+
+        gridLayout_6->addWidget(label_10, 1, 0, 1, 1);
+
+        stepRowSpinBox = new QDoubleSpinBox(tab_2);
+        stepRowSpinBox->setObjectName("stepRowSpinBox");
+        stepRowSpinBox->setValue(2.810000000000000);
+
+        gridLayout_6->addWidget(stepRowSpinBox, 3, 6, 1, 1);
+
+        stepXspinBox = new QDoubleSpinBox(tab_2);
+        stepXspinBox->setObjectName("stepXspinBox");
+        stepXspinBox->setDecimals(3);
+        stepXspinBox->setValue(1.550000000000000);
+
+        gridLayout_6->addWidget(stepXspinBox, 1, 2, 1, 1);
+
+        measureBButton = new QPushButton(tab_2);
+        measureBButton->setObjectName("measureBButton");
+
+        gridLayout_6->addWidget(measureBButton, 0, 0, 1, 1);
+
+        orientationButton = new QPushButton(tab_2);
+        orientationButton->setObjectName("orientationButton");
+        orientationButton->setEnabled(true);
+        orientationButton->setFlat(false);
+
+        gridLayout_6->addWidget(orientationButton, 4, 2, 1, 1);
+
+        label_5 = new QLabel(tab_2);
+        label_5->setObjectName("label_5");
+        label_5->setMinimumSize(QSize(10, 10));
+        label_5->setMaximumSize(QSize(16, 16777215));
+
+        gridLayout_6->addWidget(label_5, 0, 1, 1, 1);
+
+        label_8 = new QLabel(tab_2);
+        label_8->setObjectName("label_8");
+        label_8->setMinimumSize(QSize(10, 10));
+        label_8->setMaximumSize(QSize(16, 16777215));
+
+        gridLayout_6->addWidget(label_8, 1, 1, 1, 1);
+
+        BXspinBox = new QSpinBox(tab_2);
+        BXspinBox->setObjectName("BXspinBox");
+        sizePolicy.setHeightForWidth(BXspinBox->sizePolicy().hasHeightForWidth());
+        BXspinBox->setSizePolicy(sizePolicy);
+        BXspinBox->setMinimum(0);
+        BXspinBox->setMaximum(400000);
+
+        gridLayout_6->addWidget(BXspinBox, 0, 2, 1, 1);
+
+        pauseButton = new QPushButton(tab_2);
+        pauseButton->setObjectName("pauseButton");
+        pauseButton->setEnabled(true);
+        pauseButton->setCheckable(true);
+        pauseButton->setFlat(false);
+
+        gridLayout_6->addWidget(pauseButton, 5, 6, 1, 1);
+
+        label_12 = new QLabel(tab_2);
+        label_12->setObjectName("label_12");
+        label_12->setMaximumSize(QSize(16, 16777215));
+
+        gridLayout_6->addWidget(label_12, 0, 5, 1, 1);
+
+        stepYspinBox = new QDoubleSpinBox(tab_2);
+        stepYspinBox->setObjectName("stepYspinBox");
+        stepYspinBox->setDecimals(3);
+        stepYspinBox->setValue(2.805000000000000);
+
+        gridLayout_6->addWidget(stepYspinBox, 1, 6, 1, 1);
+
+        numXspinBox = new QSpinBox(tab_2);
+        numXspinBox->setObjectName("numXspinBox");
+        numXspinBox->setMaximum(100);
+        numXspinBox->setValue(15);
+
+        gridLayout_6->addWidget(numXspinBox, 2, 2, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 41, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        gridLayout_6->addItem(verticalSpacer, 7, 0, 1, 1);
+
+        BYspinBox = new QSpinBox(tab_2);
+        BYspinBox->setObjectName("BYspinBox");
+        sizePolicy.setHeightForWidth(BYspinBox->sizePolicy().hasHeightForWidth());
+        BYspinBox->setSizePolicy(sizePolicy);
+        BYspinBox->setMinimum(0);
+        BYspinBox->setMaximum(400000);
+
+        gridLayout_6->addWidget(BYspinBox, 0, 6, 1, 1);
+
+        label_21 = new QLabel(tab_2);
+        label_21->setObjectName("label_21");
+
+        gridLayout_6->addWidget(label_21, 3, 0, 1, 1);
+
+        stepColSpinBox = new QDoubleSpinBox(tab_2);
+        stepColSpinBox->setObjectName("stepColSpinBox");
+        stepColSpinBox->setValue(26.059999999999999);
+
+        gridLayout_6->addWidget(stepColSpinBox, 3, 2, 1, 1);
+
+        label_23 = new QLabel(tab_2);
+        label_23->setObjectName("label_23");
+        label_23->setMaximumSize(QSize(16, 16777215));
+
+        gridLayout_6->addWidget(label_23, 3, 5, 1, 1);
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName("verticalLayout");
@@ -532,136 +662,6 @@ public:
 
         gridLayout_6->addLayout(verticalLayout, 9, 0, 1, 7);
 
-        stepYspinBox = new QDoubleSpinBox(tab_2);
-        stepYspinBox->setObjectName("stepYspinBox");
-        stepYspinBox->setDecimals(3);
-        stepYspinBox->setValue(2.805000000000000);
-
-        gridLayout_6->addWidget(stepYspinBox, 1, 6, 1, 1);
-
-        label_12 = new QLabel(tab_2);
-        label_12->setObjectName("label_12");
-        label_12->setMaximumSize(QSize(16, 16777215));
-
-        gridLayout_6->addWidget(label_12, 0, 5, 1, 1);
-
-        numYspinBox = new QSpinBox(tab_2);
-        numYspinBox->setObjectName("numYspinBox");
-        numYspinBox->setMaximum(100);
-        numYspinBox->setValue(30);
-
-        gridLayout_6->addWidget(numYspinBox, 2, 6, 1, 1);
-
-        stepRowSpinBox = new QDoubleSpinBox(tab_2);
-        stepRowSpinBox->setObjectName("stepRowSpinBox");
-        stepRowSpinBox->setValue(2.810000000000000);
-
-        gridLayout_6->addWidget(stepRowSpinBox, 3, 6, 1, 1);
-
-        BYspinBox = new QSpinBox(tab_2);
-        BYspinBox->setObjectName("BYspinBox");
-        sizePolicy.setHeightForWidth(BYspinBox->sizePolicy().hasHeightForWidth());
-        BYspinBox->setSizePolicy(sizePolicy);
-        BYspinBox->setMinimum(0);
-        BYspinBox->setMaximum(400000);
-
-        gridLayout_6->addWidget(BYspinBox, 0, 6, 1, 1);
-
-        checkBox = new QCheckBox(tab_2);
-        checkBox->setObjectName("checkBox");
-
-        gridLayout_6->addWidget(checkBox, 4, 6, 1, 1);
-
-        label_22 = new QLabel(tab_2);
-        label_22->setObjectName("label_22");
-        label_22->setMinimumSize(QSize(10, 10));
-        label_22->setMaximumSize(QSize(16, 16777215));
-
-        gridLayout_6->addWidget(label_22, 3, 1, 1, 1);
-
-        stepXspinBox = new QDoubleSpinBox(tab_2);
-        stepXspinBox->setObjectName("stepXspinBox");
-        stepXspinBox->setDecimals(3);
-        stepXspinBox->setValue(1.550000000000000);
-
-        gridLayout_6->addWidget(stepXspinBox, 1, 2, 1, 1);
-
-        pauseButton = new QPushButton(tab_2);
-        pauseButton->setObjectName("pauseButton");
-        pauseButton->setEnabled(true);
-        pauseButton->setCheckable(true);
-        pauseButton->setFlat(false);
-
-        gridLayout_6->addWidget(pauseButton, 5, 6, 1, 1);
-
-        orientationButton = new QPushButton(tab_2);
-        orientationButton->setObjectName("orientationButton");
-        orientationButton->setEnabled(true);
-        orientationButton->setFlat(false);
-
-        gridLayout_6->addWidget(orientationButton, 4, 2, 1, 1);
-
-        label_15 = new QLabel(tab_2);
-        label_15->setObjectName("label_15");
-        label_15->setMaximumSize(QSize(16, 16777215));
-
-        gridLayout_6->addWidget(label_15, 2, 5, 1, 1);
-
-        verticalSpacer = new QSpacerItem(20, 64, QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-        gridLayout_6->addItem(verticalSpacer, 7, 0, 1, 1);
-
-        label_23 = new QLabel(tab_2);
-        label_23->setObjectName("label_23");
-        label_23->setMaximumSize(QSize(16, 16777215));
-
-        gridLayout_6->addWidget(label_23, 3, 5, 1, 1);
-
-        label_10 = new QLabel(tab_2);
-        label_10->setObjectName("label_10");
-
-        gridLayout_6->addWidget(label_10, 1, 0, 1, 1);
-
-        progressBar = new QProgressBar(tab_2);
-        progressBar->setObjectName("progressBar");
-        progressBar->setMinimumSize(QSize(550, 0));
-        progressBar->setValue(24);
-
-        gridLayout_6->addWidget(progressBar, 6, 0, 1, 2);
-
-        numXspinBox = new QSpinBox(tab_2);
-        numXspinBox->setObjectName("numXspinBox");
-        numXspinBox->setMaximum(100);
-        numXspinBox->setValue(15);
-
-        gridLayout_6->addWidget(numXspinBox, 2, 2, 1, 1);
-
-        label_21 = new QLabel(tab_2);
-        label_21->setObjectName("label_21");
-
-        gridLayout_6->addWidget(label_21, 3, 0, 1, 1);
-
-        BXspinBox = new QSpinBox(tab_2);
-        BXspinBox->setObjectName("BXspinBox");
-        sizePolicy.setHeightForWidth(BXspinBox->sizePolicy().hasHeightForWidth());
-        BXspinBox->setSizePolicy(sizePolicy);
-        BXspinBox->setMinimum(0);
-        BXspinBox->setMaximum(400000);
-
-        gridLayout_6->addWidget(BXspinBox, 0, 2, 1, 1);
-
-        label_5 = new QLabel(tab_2);
-        label_5->setObjectName("label_5");
-        label_5->setMinimumSize(QSize(10, 10));
-        label_5->setMaximumSize(QSize(16, 16777215));
-
-        gridLayout_6->addWidget(label_5, 0, 1, 1, 1);
-
-        measureBButton = new QPushButton(tab_2);
-        measureBButton->setObjectName("measureBButton");
-
-        gridLayout_6->addWidget(measureBButton, 0, 0, 1, 1);
-
         tabWidget->addTab(tab_2, QString());
         BXspinBox->raise();
         label_10->raise();
@@ -683,11 +683,11 @@ public:
         label_15->raise();
         label_14->raise();
         label_12->raise();
-        progressBar->raise();
         orientationButton->raise();
         scanPushButton->raise();
         checkBox->raise();
         measureBButton->raise();
+        progressBar->raise();
 
         formLayout->setWidget(1, QFormLayout::FieldRole, tabWidget);
 
@@ -744,11 +744,22 @@ public:
         tableUpPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\320\264\320\275\321\217\321\202\321\214", nullptr));
         label_20->setText(QCoreApplication::translate("MainWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainWindow", "\320\240\321\203\321\207\320\275\320\276\320\271", nullptr));
-        label_8->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
-        label_14->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
-        label_11->setText(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\210\320\260\320\263\320\276\320\262", nullptr));
         scanPushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\321\207\320\260\321\202\321\214", nullptr));
+        label_11->setText(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\210\320\260\320\263\320\276\320\262", nullptr));
         label_9->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
+        checkBox->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\276\321\205\320\276\320\264 \320\277\320\276 3 \321\201\321\202\320\276\320\273\320\261\321\206\320\260\320\274", nullptr));
+        label_14->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
+        label_15->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
+        label_22->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
+        label_10->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263", nullptr));
+        measureBButton->setText(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213  \321\202.\320\222", nullptr));
+        orientationButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\200\320\270\320\265\320\275\321\202\320\260\321\206\320\270\321\217", nullptr));
+        label_5->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
+        label_8->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
+        pauseButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\260\321\203\320\267\320\260", nullptr));
+        label_12->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
+        label_21->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263 \320\274\321\203\320\273\321\214\321\202\320\270\320\277\320\273\320\270\320\272\320\260\321\206\320\270\320\270", nullptr));
+        label_23->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
         groupBox_5->setTitle(QCoreApplication::translate("MainWindow", "\320\237\320\265\321\200\320\265\321\205\320\276\320\264 \320\275\320\260 \320\275\321\203\320\266\320\275\321\213\320\271 \321\215\320\273\320\265\320\274\320\265\320\275\321\202", nullptr));
         label_17->setText(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\273\320\261\320\265\321\206", nullptr));
         label_18->setText(QCoreApplication::translate("MainWindow", "\320\240\321\217\320\264", nullptr));
@@ -757,17 +768,6 @@ public:
         measurePushButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\265\320\275\320\270\320\265", nullptr));
         saveMeasureButton->setText(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214", nullptr));
         continueFromButton->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214 \320\276\320\261\321\205\320\276\320\264 \321\201 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\320\260", nullptr));
-        label_12->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
-        checkBox->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\276\321\205\320\276\320\264 \320\277\320\276 3 \321\201\321\202\320\276\320\273\320\261\321\206\320\260\320\274", nullptr));
-        label_22->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
-        pauseButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\260\321\203\320\267\320\260", nullptr));
-        orientationButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\200\320\270\320\265\320\275\321\202\320\260\321\206\320\270\321\217", nullptr));
-        label_15->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
-        label_23->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
-        label_10->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263", nullptr));
-        label_21->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263 \320\274\321\203\320\273\321\214\321\202\320\270\320\277\320\273\320\270\320\272\320\260\321\206\320\270\320\270", nullptr));
-        label_5->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
-        measureBButton->setText(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213  \321\202.\320\222", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
     } // retranslateUi
 

@@ -40,6 +40,7 @@ void Worker::autoOpenPorts() {
     for (int i=0; i < list.length(); i++) {
         qDebug() << "cycle" << i << "  port " << list[i%3];
         //сперва окрываем порт планара
+
         if (!map.contains(serialPortA5)) {
             qDebug() << i << " planar condition";
             tmp_flag = openPort(serialPortA5, list[i%3], QSerialPort::Baud115200);
@@ -91,7 +92,7 @@ bool Worker::checkPlanarCOM() {
         qDebug()<<localAnswer;
         if (localAnswer.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
             qDebug() << "Planar : " << true;
-            return true;
+            return true;//just writing smth down while being watched from my back. and once again i've been followed
         }
     }
     return false;
@@ -118,15 +119,23 @@ bool Worker::checkKeithlyCOM() {
 
 bool Worker::checkLightCOM() {
     try {
-        lastAnswer = "";
+        int delay = 0;
+        QString localAns = "";
         QByteArray package = "1101/n";
-        serialPortLight->write(package);
-        serialPortLight->flush();
         emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
-        while (serialPortLight->waitForReadyRead(ANSWER_DELAY)) lastAnswer.append(serialPortLight->readAll());
-        if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
-        qDebug() <<"light response: " << lastAnswer;
-        if (lastAnswer.contains("C3B2A1") || lastAnswer.contains("A1B2C3")) return true;
+        while (delay<1000){
+            delay+=100;
+            serialPortLight->write(package);
+            serialPortLight->flush();
+            while (serialPortLight->waitForReadyRead(delay)) localAns.append(serialPortLight->readAll());
+            qDebug() <<"light response: " << localAns << "  delay :" <<delay;
+            if (localAns.contains("C3B2A1")) {
+                LightOff();
+                return true;
+            }
+
+        }
+        if (localAns.contains("C3B2A1")) return true;
     } catch (QSerialPort::SerialPortError error) {
         qDebug() << error;
     }
@@ -172,6 +181,7 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
     DotsY.clear();
     lastIndex = (numberX + 1) * numberY * 3;
     qDebug() << "Your commercial could be here. Call us now 1-300-  " << rowSlide; //vertical gap between columns of rows
+
 
 
 //    double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
@@ -482,7 +492,7 @@ void Worker::Keithly1VSet(QSerialPort *serialPort) {
 }
 
 void Worker::LightOn() {
-    emit sendPackageSignal(serialPortLight, "1101\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPortLight, "1111\n", NO_ANSWER_DELAY);
 }
 
 void Worker::LightOff() {

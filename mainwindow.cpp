@@ -109,9 +109,9 @@ void MainWindow::openPortResult(QString port, QString portName, bool result) {
         QMessageBox::warning(this, "Ошибка", "Не удалось подключиться к порту " + port);
     } else {
         QMessageBox::information(this, "Сообщение", "Выбранный порт: " + port + " для " + portName);
-        if (portName.compare("Planar")) ui->portComboBox->setCurrentText(port);
-        else if (portName.compare("Keithley")) ui->keithlyPortComboBox->setCurrentText(port);
-        else if (portName.compare("Light")) ui->lightPortComboBox->setCurrentText(port);
+        if (!portName.compare("Planar")) ui->portComboBox->setCurrentText(port);
+        else if (!portName.compare("Keithley")) ui->keithlyPortComboBox->setCurrentText(port);
+        else if (!portName.compare("Light")) ui->lightPortComboBox->setCurrentText(port);
     }
 }
 
@@ -173,7 +173,7 @@ void MainWindow::measurePushButton_on() {
 
 void MainWindow::lightPushButton_on() {
     if (ui->lightPushButton->text() == "Включить") {
-        emit lightControllerSignal("1101\n");
+        emit lightControllerSignal("1111\n");
         ui->lightPushButton->setText("Выключить");
     } else {
         emit lightControllerSignal("0001\n");
@@ -286,6 +286,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
 
         QFileDialog directory;
         dir_name = directory.getSaveFileName(this,"Choose directory and name");
+        ui->addressLabel->setText(dir_name);
         emit autoWalkSignal(true, dir_name);
     }
     else {
@@ -334,6 +335,7 @@ void MainWindow::orientationButton_clicked()
 void MainWindow::autoPortButton_clicked()
 {
     emit autoOpenPortsSignal();
+    ui->openPortPushButton->setText("Закрыть");
 }
 
 
