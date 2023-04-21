@@ -55,7 +55,7 @@ void Worker::autoOpenPorts() {
 
         //порт кейтли
         if (!map.contains(serialPortKeithly)) {
-            qDebug()<<i<<" keithley condition";
+            qDebug() << i << " keithley condition";
             tmp_flag = openPort(serialPortKeithly, list[i%3], QSerialPort::Baud57600);
             if (tmp_flag && checkKeithlyCOM()) {
                 map.insert(serialPortKeithly, list[i%3]);
@@ -68,7 +68,7 @@ void Worker::autoOpenPorts() {
         //порт ардуины/диода
 
         if (!map.contains(serialPortLight)) {
-            qDebug()<<i<<" light condition";
+            qDebug() << i << " light condition";
             tmp_flag = openPort(serialPortLight, list[i%3], QSerialPort::Baud9600);
             if (tmp_flag && checkLightCOM()) {
                 qDebug()<<"inside light";
@@ -128,7 +128,7 @@ bool Worker::checkLightCOM() {
             serialPortLight->write(package);
             serialPortLight->flush();
             while (serialPortLight->waitForReadyRead(delay)) localAns.append(serialPortLight->readAll());
-            qDebug() <<"light response: " << localAns << "  delay :" <<delay;
+            qDebug() << "light response: " << localAns << "  delay :" <<delay;
             if (localAns.contains("C3B2A1")) {
                 LightOff();
                 return true;
@@ -173,16 +173,14 @@ void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay)
 }
 
 void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, double numberX,
-                           double numberY, double colSlide, double rowSlide, bool all_three) {
+                           double numberY, double colSlide, double rowSlide, bool all_three,
+                           int upLeft, int upRight, int downLeft, int downRight) {
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     //numberX необходимо привести к фактическому параметру
     DotsX.clear();
     DotsY.clear();
     lastIndex = (numberX + 1) * numberY * 3;
-    qDebug() << "Your commercial could be here. Call us now 1-300-  " << rowSlide; //vertical gap between columns of rows
-
-
 
 //    double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
 //    double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
@@ -204,6 +202,12 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
 //        }
 //    }
 
+    three_columns = all_three;
+    upLeft_offset = upLeft;
+    upRight_offset = upRight;
+    downLeft_offset = downLeft;
+    downRight_offset = downRight;
+
     double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
     double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
     double SinAlpha = tgAlpha * CosAlpha;
@@ -223,8 +227,7 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
         }
     }
 
-    if(all_three) {//все три столбца измеряем
-
+    if (all_three) {//все три столбца измеряем
         //сперва левый столбец
         for (int j = 0; j < numberY; j++) {
             for (int i = -2-numberX; i < -1 ; i++) {
@@ -234,12 +237,30 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
         }
         //потом правый столбец
         for (int j = 0; j < numberY; j++) {
-            for (int i = 15; i < numberX*2+1; i++) {
+            for (int i = numberX; i < numberX*2+1; i++) {
                 if (i % 2 == 0) DotsX.append(BX + StepxX * i + StepyX * j  - slideX); else DotsX.append(BX + StepxX * i + StepyX * j - StepyX * K - slideX);
                 if (i % 2 == 0) DotsY.append(BY + StepxY * i + StepyY * j); else DotsY.append(BY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
+
+        //заполним индексы обрезанных элементов
+        //нижний левый угол
+        gap[0] = (numberX+1) * numberY;
+        gap[1] = gap[0] + (numberX+1) * downLeft - 1;
+        //верний левый угол --
+        gap[2] = (numberX+1) * numberY * 2 - 1;
+        gap[3] = gap[2] - (numberX+1) * upLeft + 1;
+        //нижний правый угол
+        gap[4] = (numberX+1) * numberY * 2;
+        gap[5] = gap[4] + (numberX+1) * downRight - 1;
+        //верний правый угол --
+        gap[6] = (numberX+1) * numberY * 3 - 1;
+        gap[7] = gap[6] - (numberX+1) * upLeft + 1;
     }
+}
+
+bool Worker::checkIndex(int i) {
+    return ((i >= gap[0] && i <= gap[1]) || (i <= gap[2] && i >= gap[3]) || (i >= gap[4] && i <= gap[5]) || (i <= gap[6] && i >= gap[7]));
 }
 
 void Worker::autoWalk(bool allNew, QString dir_cur) {
@@ -257,6 +278,11 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
         QTextStream output(&file);
         while (currentIndex < lastIndex)
         {
+            //если индекс попал на срез, то пропускаем
+            if (checkIndex(currentIndex)) {
+                currentIndex++;
+                continue;
+            }
             //опустить стол
             emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
             //перевод координат в массив байтов для передачи станку

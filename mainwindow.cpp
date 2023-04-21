@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(1);
     ui->progressBar->setValue(0);
@@ -27,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->scanPushButton, &QPushButton::clicked, this, &MainWindow::scanPushButton_clicked);
     connect(ui->measurePushButton, &QPushButton::clicked, this, &MainWindow::measurePushButton_on);
     connect(ui->lightPushButton, &QPushButton::clicked, this, &MainWindow::lightPushButton_on);
-    //
+
     connect(ui->goToButton, &QPushButton::clicked, this, &MainWindow::goToButton_clicked);
     connect(ui->continueFromButton, &QPushButton::clicked, this, &MainWindow::continueFromButton_clicked);
     connect(ui->saveMeasureButton, &QPushButton::clicked, this, &MainWindow::saveMeasureButton_clicked);
@@ -314,6 +313,12 @@ void MainWindow::orientationButton_clicked()
     double rowSlide = (double)ui->stepRowSpinBox->value();
     bool all_three = ui->checkBox->isChecked();
 
+    //die offset due to cirle border cut
+    int upLeft = ui->upLeftSpinBox->value();
+    int upRight = ui->upRightSpinBox->value();
+    int downLeft = ui->downLeftSpinBox->value();
+    int downRight = ui->downRightSpinBox->value();
+
     //создаем модель таблицы для отображения(впоследствие можно сократить до N рядов)
     model = new QStandardItemModel(numberX * numberY * (all_three ? 3 : 1), 8, this);
     model->setHeaderData(0, Qt::Horizontal, "Столбец");
@@ -327,7 +332,7 @@ void MainWindow::orientationButton_clicked()
     ui->tableView->setModel(model);
 
 
-    emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three);
+    emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three, upLeft, upRight, downLeft, downRight);
 
 }
 

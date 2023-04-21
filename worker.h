@@ -27,16 +27,24 @@ private:
     QSerialPort *serialPortLight;
     QByteArray lastAnswer;
     QMutex* mutex;
-
+    QList<int> gap;
     QList<double> DotsX;
     QList<double> DotsY;
     QString dir = "С:\temp\1.csv";
 
     volatile bool pause = false;
     bool overwrite = false;
+    bool three_columns = false;
     int currentIndex = 0;
     int pauseIndex = 0;
     int lastIndex = 0;
+    int upLeft_offset = 0;
+    int upRight_offset = 0;
+    int downLeft_offset = 0;
+    int downRight_offset = 0;
+
+
+
     double ForwardCurrent = 0.0;
     double DarkCurrent10mV = 0.0;
     double DarkCurrent1V = 0.0;
@@ -54,6 +62,7 @@ private:
     bool checkPlanarCOM();
     bool checkKeithlyCOM();
     bool checkLightCOM();
+    bool checkIndex(int);
 
 signals:
     void sendPackageSignal(QSerialPort * , QByteArray, int);
@@ -68,7 +77,7 @@ signals:
 public slots:
     void measureElement();
     void sendPackage(QSerialPort * , QByteArray, int);
-    void scanningPlate(double, double, double, double, double, double, double, double, bool);
+    void scanningPlate(double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void tableController(QByteArray);
     void lightController(QByteArray);
     void openPorts(QString, QString, QString);

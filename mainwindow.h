@@ -35,7 +35,7 @@ private:
 
 
 signals:
-    void scanningPlateSignal(double, double, double, double, double, double, double, double, bool);
+    void scanningPlateSignal(double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void measureSignal();
     void tableControllerSignal(QByteArray);
     void lightControllerSignal(QByteArray);
