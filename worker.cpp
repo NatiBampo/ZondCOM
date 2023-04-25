@@ -38,16 +38,12 @@ void Worker::autoOpenPorts() {
     QHash<QSerialPort *, QString> map;
     bool tmp_flag;
     for (int i=0; i < list.length(); i++) {
-        qDebug() << "cycle" << i << "  port " << list[i%3];
         //сперва окрываем порт планара
-
         if (!map.contains(serialPortA5)) {
-            qDebug() << i << " planar condition";
             tmp_flag = openPort(serialPortA5, list[i%3], QSerialPort::Baud115200);
             if (tmp_flag && checkPlanarCOM()) {
                 map.insert(serialPortA5, list[i%3]);
                 emit openPortResultSignal(list[i%3], "Planar", tmp_flag);
-                qDebug() << "serialPortA5 is now open with :" << list[i%3];
                 continue;
             }
             if (serialPortA5->isOpen())serialPortA5->close();
@@ -55,12 +51,10 @@ void Worker::autoOpenPorts() {
 
         //порт кейтли
         if (!map.contains(serialPortKeithly)) {
-            qDebug() << i << " keithley condition";
             tmp_flag = openPort(serialPortKeithly, list[i%3], QSerialPort::Baud57600);
             if (tmp_flag && checkKeithlyCOM()) {
                 map.insert(serialPortKeithly, list[i%3]);
                 emit openPortResultSignal(list[i%3], "Keithley", tmp_flag);
-                qDebug()<<"serialPortKeithly is now open with " << list[i%3];
                 continue;
             }
             if (serialPortKeithly->isOpen()) serialPortKeithly->close();
@@ -71,10 +65,8 @@ void Worker::autoOpenPorts() {
             qDebug() << i << " light condition";
             tmp_flag = openPort(serialPortLight, list[i%3], QSerialPort::Baud9600);
             if (tmp_flag && checkLightCOM()) {
-                qDebug()<<"inside light";
                 map.insert(serialPortLight, list[i%3]);
                 emit openPortResultSignal(list[i%3], "Light", tmp_flag);
-                qDebug()<<"portNameLight is now open with :" << list[i%3];
             } else {
                 if (serialPortLight->isOpen()) serialPortLight->close();
             }
@@ -91,8 +83,7 @@ bool Worker::checkPlanarCOM() {
     if (localAnswer != "") {
         qDebug()<<localAnswer;
         if (localAnswer.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
-            qDebug() << "Planar : " << true;
-            return true;//just writing smth down while being watched from my back. and once again i've been followed
+            return true;
         }
     }
     return false;
@@ -106,13 +97,9 @@ bool Worker::checkKeithlyCOM() {
         ForwardCurrent = KeithlyGet(serialPortKeithly);
         QString responce = QString(lastAnswer);
         //emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
-        qDebug() << lastAnswer;
         if (responce.contains(QRegularExpression(R"(\d+A,)"))) return true;//\d+.\d+[+-]\d+A,
-    } catch (QSerialPort::SerialPortError error) {
-        qDebug() << "error with Keithley COM port" << error;
-    } catch (const char* error_message) {
-        qDebug() << error_message;
     }
+    catch (const char* error){}
 
     return false;
 }
@@ -128,7 +115,6 @@ bool Worker::checkLightCOM() {
             serialPortLight->write(package);
             serialPortLight->flush();
             while (serialPortLight->waitForReadyRead(delay)) localAns.append(serialPortLight->readAll());
-            qDebug() << "light response: " << localAns << "  delay :" <<delay;
             if (localAns.contains("C3B2A1")) {
                 LightOff();
                 return true;
@@ -180,7 +166,7 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
     //numberX необходимо привести к фактическому параметру
     DotsX.clear();
     DotsY.clear();
-    lastIndex = (numberX + 1) * numberY * 3;
+    //lastIndex = (numberX + 1) * numberY * 3;
 
 //    double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
 //    double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
@@ -242,21 +228,23 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
                 if (i % 2 == 0) DotsY.append(BY + StepxY * i + StepyY * j); else DotsY.append(BY + StepxY * i + StepyY * j - StepyY * K);
             }
         }
-
-        //заполним индексы обрезанных элементов
-        //нижний левый угол
-        gap[0] = (numberX+1) * numberY;
-        gap[1] = gap[0] + (numberX+1) * downLeft - 1;
-        //верний левый угол --
-        gap[2] = (numberX+1) * numberY * 2 - 1;
-        gap[3] = gap[2] - (numberX+1) * upLeft + 1;
-        //нижний правый угол
-        gap[4] = (numberX+1) * numberY * 2;
-        gap[5] = gap[4] + (numberX+1) * downRight - 1;
-        //верний правый угол --
-        gap[6] = (numberX+1) * numberY * 3 - 1;
-        gap[7] = gap[6] - (numberX+1) * upLeft + 1;
     }
+
+    lastIndex = DotsX.length() - 1;
+    //заполним индексы обрезанных элементов
+    //нижний левый угол
+    gap.append((numberX+1) * numberY);
+    gap.append(gap[0] + (numberX+1) * downLeft - 1);
+    //верний левый угол --
+    gap.append((numberX+1) * numberY * 2 - 1);
+    gap.append(gap[2] - (numberX+1) * upLeft + 1);
+    //нижний правый угол
+    gap.append((numberX+1) * numberY * 2);
+    gap.append(gap[4] + (numberX+1) * downRight - 1);
+    //верний правый угол --
+    gap.append((numberX+1) * numberY * 3 - 1);
+    gap.append(gap[6] - (numberX+1) * upLeft + 1);
+
 }
 
 bool Worker::checkIndex(int i) {
@@ -266,7 +254,7 @@ bool Worker::checkIndex(int i) {
 void Worker::autoWalk(bool allNew, QString dir_cur) {
 
     dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
-    emit sendProgressBarRangeSignal(currentIndex, lastIndex);
+    if (allNew) emit sendProgressBarRangeSignal(currentIndex, lastIndex);
     int i = 0;
     //спросить начать обход или продолжить?
     Worker::copyUpToIndex(currentIndex);
@@ -308,7 +296,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
             if (pause){
                 mutex->unlock();
                 while (true) {
-                    QThread::msleep(100);
+                    QThread::msleep(10);
                     mutex->lock();
                     if (!pause) {
                         break;

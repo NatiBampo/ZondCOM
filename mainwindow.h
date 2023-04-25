@@ -71,7 +71,7 @@ private slots:
     void pauseButton_clicked(bool);
     void goToButton_clicked();
     void saveMeasureButton_clicked();
-    void continueFromButton_clicked();
+    void continueFromButton_clicked(bool);
     void orientationButton_clicked();
     void scanPushButton_clicked(bool checked);
     void autoPortButton_clicked();

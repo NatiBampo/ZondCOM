@@ -205,11 +205,11 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
       31,    1,  337,    2, 0x08,   66 /* Private */,
       32,    0,  340,    2, 0x08,   68 /* Private */,
       33,    0,  341,    2, 0x08,   69 /* Private */,
-      34,    0,  342,    2, 0x08,   70 /* Private */,
-      35,    0,  343,    2, 0x08,   71 /* Private */,
-      36,    1,  344,    2, 0x08,   72 /* Private */,
-      38,    0,  347,    2, 0x08,   74 /* Private */,
-      39,    0,  348,    2, 0x08,   75 /* Private */,
+      34,    1,  342,    2, 0x08,   70 /* Private */,
+      35,    0,  345,    2, 0x08,   72 /* Private */,
+      36,    1,  346,    2, 0x08,   73 /* Private */,
+      38,    0,  349,    2, 0x08,   75 /* Private */,
+      39,    0,  350,    2, 0x08,   76 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Bool, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
@@ -246,7 +246,7 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::Bool,    2,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,    2,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Bool,   37,
     QMetaType::Void,
@@ -367,6 +367,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'continueFromButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         // method 'orientationButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'scanPushButton_clicked'
@@ -418,7 +419,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 29: _t->pauseButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
         case 30: _t->goToButton_clicked(); break;
         case 31: _t->saveMeasureButton_clicked(); break;
-        case 32: _t->continueFromButton_clicked(); break;
+        case 32: _t->continueFromButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
         case 33: _t->orientationButton_clicked(); break;
         case 34: _t->scanPushButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
         case 35: _t->autoPortButton_clicked(); break;

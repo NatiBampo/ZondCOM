@@ -219,6 +219,7 @@ void MainWindow::setProgressBarValue(int val) {
 void MainWindow::setProgressBarRange(int minVal, int maxVal) {
     ui->progressBar->setMinimum(minVal);
     ui->progressBar->setMaximum(maxVal);
+    finalIndex = maxVal;
 }
 
 
@@ -230,8 +231,6 @@ void MainWindow::pauseButton_clicked(bool checked)
 
     } else {
         ui->pauseButton->setText("Пауза");
-        //worker->continueWalk(currentIndex);
-        //emit sendContinueWalkSignal(0);
     }
     mutex.lock();
     //в перспективе добавить вспомогателный поток или выходить из цикла обхода пластины вместо ожидания даже при паузе
@@ -266,15 +265,26 @@ void MainWindow::saveMeasureButton_clicked()
 }
 
 
-void MainWindow::continueFromButton_clicked()
+void MainWindow::continueFromButton_clicked(bool checked)
 {
-    if (!ui->scanPushButton->isChecked()){
-        ui->pauseButton->setText("Пауза");
-        mutex.lock();
-        worker->setIndex(getUIIndex());
-        mutex.unlock();
-        emit autoWalkSignal(false, dir_name);
+    if(!ui->scanPushButton->isChecked()){
+        if (checked){
+            ui->pauseButton->setText("Пауза");
+            ui->continueFromButton->setText("Завершить обход");
+            mutex.lock();
+            worker->stopWalk();
+            mutex.unlock();
+            emit autoWalkSignal(false, dir_name);
+        }
+        else {
+            ui->continueFromButton->setText("Продолжить обход с элемента");
+        }
     }
+    else {
+        ui->continueFromButton->setChecked(false);
+        ui->continueFromButton->setText("Продолжить обход с элемента");
+    }
+
 }
 
 
@@ -320,7 +330,11 @@ void MainWindow::orientationButton_clicked()
     int downRight = ui->downRightSpinBox->value();
 
     //создаем модель таблицы для отображения(впоследствие можно сократить до N рядов)
-    model = new QStandardItemModel(numberX * numberY * (all_three ? 3 : 1), 8, this);
+    int numRows = numberX * numberY;
+    if (all_three) {
+        numRows += numberX * (numberY*2 - upLeft - upRight - downLeft - downRight) ;
+    }
+    model = new QStandardItemModel(numRows, 8, this);
     model->setHeaderData(0, Qt::Horizontal, "Столбец");
     model->setHeaderData(1, Qt::Horizontal, "Ряд");
     model->setHeaderData(2, Qt::Horizontal, "Элемент");
