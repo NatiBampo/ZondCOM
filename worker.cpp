@@ -264,7 +264,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
     //если обход с начала, то переписать файл, иначе добавить
     if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
         QTextStream output(&file);
-        while (currentIndex < lastIndex)
+        while (currentIndex <= lastIndex)
         {
             //если индекс попал на срез, то пропускаем
             if (checkIndex(currentIndex)) {

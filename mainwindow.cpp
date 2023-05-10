@@ -330,7 +330,7 @@ void MainWindow::orientationButton_clicked()
     int downRight = ui->downRightSpinBox->value();
 
     //создаем модель таблицы для отображения(впоследствие можно сократить до N рядов)
-    int numRows = numberX * numberY;
+    int numRows = (numberX+1) * numberY;
     if (all_three) {
         numRows += numberX * (numberY*2 - upLeft - upRight - downLeft - downRight) ;
     }
