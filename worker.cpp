@@ -8,14 +8,18 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
+
 Worker::Worker(QMutex* mtxp)
 {
     this->mutex = mtxp;
     connect(this, &Worker::sendPackageSignal, this, &Worker::sendPackage);
+
 }
 
 Worker::~Worker() {
-
+    delete serialPortA5;
+    delete serialPortKeithly;
+    delete serialPortLight;
 }
 
 void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight) {
@@ -141,12 +145,10 @@ bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate
 }
 
 void Worker::closePorts() {
+    QString result;
     if (serialPortA5->isOpen()) serialPortA5->close();
     if (serialPortKeithly->isOpen()) serialPortKeithly->close();
     if (serialPortLight->isOpen()) serialPortLight->close();
-    delete serialPortA5;
-    delete serialPortKeithly;
-    delete serialPortLight;
 }
 
 void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay) {

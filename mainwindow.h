@@ -7,6 +7,7 @@
 #include <QStandardItemModel>
 #include <QSqlDatabase>
 #include <QMutex>
+#include <stats.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,13 +24,16 @@ public:
 private:
     Ui::MainWindow *ui;
     Worker *worker;
+    Stats *stats;
     QStandardItemModel *model;
     QThread workerThread;
+    QThread statsThread;
     QMutex mutex;
     QString dir_name;
     int currentIndex = 0;
     int finalIndex = 0;
     void createWorkerThread();
+    void createStatsThread();
     void addElement(int, int, double);
     int getUIIndex();
 
@@ -47,6 +51,7 @@ signals:
     void autoWalkSignal(bool, QString);
     void autoOpenPortsSignal();
     void getBCoordinatesSignal();
+    void showChartsSignal(QString);
 
 private slots:
     void openPortPushButton_on();
@@ -76,5 +81,6 @@ private slots:
     void scanPushButton_clicked(bool checked);
     void autoPortButton_clicked();
     void measureBButton_clicked();
+    void on_chartsButton_clicked();
 };
 #endif // MAINWINDOW_H

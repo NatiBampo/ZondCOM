@@ -4,6 +4,9 @@
 #include <QMessageBox>
 #include <QThread>
 #include <QFileDialog>
+#include <QtCharts>
+
+//using namespace QtCharts;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -43,6 +46,10 @@ MainWindow::MainWindow(QWidget *parent)
         ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
+
+    createStatsThread();
+    statsThread.quit();
+    statsThread.terminate();
 }
 
 
@@ -99,6 +106,11 @@ void MainWindow::openPortPushButton_on() {
     } else {
         emit closePortsSignal();
         ui->openPortPushButton->setText("Открыть");
+
+        QMessageBox::information(this, "Сообщение", "COM порты закрыты");
+        ui->portComboBox->setCurrentText("Планар");
+        ui->keithlyPortComboBox->setCurrentText("Keithley");
+        ui->lightPortComboBox->setCurrentText("Диод");
     }
 }
 
@@ -363,7 +375,23 @@ void MainWindow::measureBButton_clicked()
     emit getBCoordinatesSignal();
 }
 
-void MainWindow::setBCoords(int x, int y) {
+void MainWindow::setBCoords(int x, int y)
+{
     ui->BXspinBox->setValue(x);
     ui->BYspinBox->setValue(y);
 }
+
+void  MainWindow::createStatsThread()
+{
+    stats = new Stats();
+    stats->moveToThread(&statsThread);
+    statsThread.start();
+    connect(this, &MainWindow::showChartsSignal, stats, &Stats::showCharts);
+}
+
+
+void MainWindow::on_chartsButton_clicked()
+{
+    emit showChartsSignal(dir_name);
+}
+
