@@ -82,5 +82,8 @@ private slots:
     void autoPortButton_clicked();
     void measureBButton_clicked();
     void on_chartsButton_clicked();
+
+    void showMessageBox(QString, QString);
+
 };
 #endif // MAINWINDOW_H

@@ -96,6 +96,7 @@ void MainWindow::createWorkerThread() {
     //сигнал паузы
 
     connect(worker, &Worker::sendBCoordsSignal, this, &MainWindow::setBCoords);
+    connect(worker, &Worker::sendMessageBox, this, &MainWindow::showMessageBox);
 }
 
 
@@ -394,4 +395,10 @@ void MainWindow::on_chartsButton_clicked()
 {
     emit showChartsSignal(dir_name);
 }
+
+void MainWindow::showMessageBox(QString msg_type, QString msg)
+{
+    QMessageBox::information(this, msg_type, msg);
+}
+
 

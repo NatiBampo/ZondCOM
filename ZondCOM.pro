@@ -11,17 +11,20 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 SOURCES += \
+    keithley.cpp \
     main.cpp \
     mainwindow.cpp \
     stats.cpp \
     worker.cpp
 
 HEADERS += \
+    keithley.h \
     mainwindow.h \
     stats.h \
     worker.h
 
 FORMS += \
+    keithley.ui \
     mainwindow.ui \
     stats.ui
 
