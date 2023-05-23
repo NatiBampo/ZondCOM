@@ -48,6 +48,8 @@ private:
     int downLeft_offset = 0;
     int downRight_offset = 0;
 
+    int delay = 800;
+
     double localCurrent = 0.0;
     double ForwardCurrent = 0.0;
     double DarkCurrent10mV = 0.0;
@@ -109,6 +111,8 @@ public slots:
     void readData_light();
     void handleError_light(QSerialPort::SerialPortError);
     void autoWalk2(bool, QString);
+
+    void changeDelay(int);
 };
 
 #endif // WORKER_H

@@ -462,7 +462,7 @@ void Worker::MeasureDie2()
     Keithly05VSet2();//300
     ForwardCurrent = KeithlyGet2();
     Keithly10mVSet2();
-    QThread::msleep(800);
+    QThread::msleep(delay);
     DarkCurrent10mV = KeithlyGet2();//800
     Keithly1VSet2();
     DarkCurrent1V = KeithlyGet2();//600
@@ -634,3 +634,6 @@ void Worker::measureElement2() {
 }
 
 
+void Worker::changeDelaySignal(int d){
+    delay = d;
+}

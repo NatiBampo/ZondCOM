@@ -36,6 +36,7 @@ private:
     void createStatsThread();
     void addElement(int, int, double);
     int getUIIndex();
+    int delay = 800;
 
 
 signals:
@@ -52,6 +53,7 @@ signals:
     void autoOpenPortsSignal();
     void getBCoordinatesSignal();
     void showChartsSignal(QString);
+    void changeDelaySignal(int);
 
 private slots:
     void openPortPushButton_on();

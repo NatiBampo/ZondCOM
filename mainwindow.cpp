@@ -86,6 +86,8 @@ void MainWindow::createWorkerThread() {
     //connect(this, &MainWindow::pauseStatus, this, &Worker::pauseStatusSignal);
     connect(this, &MainWindow::getBCoordinatesSignal, worker, &Worker::getBCoordinates);
 
+    connect(this, &MainWindow::changeDelaySignal, worker, &Worker::changeDelay);
+
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
     connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
@@ -171,6 +173,10 @@ void MainWindow::rightPushButton_on() {
 
 
 void MainWindow::measurePushButton_on() {
+    if (delay != ui->delaySpinBox->value()){
+        delay = ui->delaySpinBox->value();
+        emit changeDelaySignal(delay);
+    }
     emit measureSignal();
 }
 
@@ -235,6 +241,10 @@ void MainWindow::pauseButton_clicked(bool checked)
 
 
     } else {
+        if (delay != ui->delaySpinBox->value()){
+            delay = ui->delaySpinBox->value();
+            emit changeDelaySignal(delay);
+        }
         ui->pauseButton->setText("Пауза");
     }
     mutex.lock();
@@ -265,6 +275,10 @@ void MainWindow::goToButton_clicked()
 void MainWindow::saveMeasureButton_clicked()
 {
     if (!ui->scanPushButton->isChecked()) {
+        if (delay != ui->delaySpinBox->value()){
+            delay = ui->delaySpinBox->value();
+            emit changeDelaySignal(delay);
+        }
         emit saveMeasureSignal(getUIIndex());
     }
 }
@@ -301,6 +315,10 @@ void MainWindow::scanPushButton_clicked(bool checked)
         QFileDialog directory;
         dir_name = directory.getSaveFileName(this,"Choose directory and name");
         ui->addressLabel->setText(dir_name);
+        if (delay != ui->delaySpinBox->value()){
+            delay = ui->delaySpinBox->value();
+            emit changeDelaySignal(delay);
+        }
         emit autoWalkSignal(true, dir_name);
     }
     else {
