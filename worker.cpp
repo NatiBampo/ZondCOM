@@ -8,14 +8,12 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <ctime>
+#include <QMessageBox>
 
 
 Worker::Worker(QMutex* mtxp)
 {
     this->mutex = mtxp;
-    connect(this, &Worker::sendPackageSignal, this, &Worker::sendPackage);
-    //connect()
-
 }
 
 Worker::~Worker() {
@@ -24,56 +22,62 @@ Worker::~Worker() {
     delete serialPortLight;
 }
 
+
 void Worker::connectPorts()
 {
     connect(serialPortA5, &QSerialPort::errorOccurred, this, &Worker::handleError_planar);
     connect(serialPortA5, &QSerialPort::readyRead, this, &Worker::readData_planar);
 
-//    connect(serialPortKeithly, &QSerialPort::errorOccurred, this, &Worker::handleError_keithley);
-//    connect(serialPortKeithly, &QSerialPort::readyRead, this, &Worker::readData_keithley);
+    connect(serialPortKeithly, &QSerialPort::errorOccurred, this, &Worker::handleError_keithley);
+    connect(serialPortKeithly, &QSerialPort::readyRead, this, &Worker::readData_keithley);
 
-//    connect(serialPortLight, &QSerialPort::errorOccurred, this, &Worker::handleError_light);
-//    connect(serialPortLight, &QSerialPort::readyRead, this, &Worker::readData_light);
+    connect(serialPortLight, &QSerialPort::errorOccurred, this, &Worker::handleError_light);
+    connect(serialPortLight, &QSerialPort::readyRead, this, &Worker::readData_light);
     //connect(serialPortA5, &Worker::getData, this, &Worker::writeData);
 
 }
+
 
 void Worker::writeData_planar(const QByteArray& data)
 {
     serialPortA5->write(data);
 }
 
+
 void Worker::readData_planar()
 {
     const QByteArray data = serialPortA5->readAll();
-    //m_console->putData(data);
-    //считывание
+    planarResponce = data;
 }
+
 
 void Worker::handleError_planar(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError) {
         //QMessageBox::critical(this, tr("Critical Error"), serialPortA5->errorString());
+        emit sendMessageBox("critical", serialPortA5->errorString());
         closePorts();
     }
 }
+
 
 void Worker::writeData_keithley(const QByteArray& data)
 {
     serialPortA5->write(data);
 }
 
+
 void Worker::readData_keithley()
 {
     const QByteArray data = serialPortKeithly->readAll();
-    //m_console->putData(data);
-    //считывание
+    keithleyResponce = data;
 }
+
 
 void Worker::handleError_keithley(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError) {
-        //QMessageBox::critical(this, tr("Critical Error"), serialPortKeithly->errorString());
+        emit sendMessageBox("critical", serialPortKeithly->errorString());
         closePorts();
     }
 }
@@ -84,17 +88,18 @@ void Worker::writeData_light(const QByteArray& data)
     serialPortLight->write(data);
 }
 
+
 void Worker::readData_light()
 {
     const QByteArray data = serialPortLight->readAll();
-    //m_console->putData(data);
-    //считывание
+    lightResponce = data;
 }
+
 
 void Worker::handleError_light(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError) {
-        //QMessageBox::critical(this, tr("Critical Error"), serialPortLight->errorString());
+        emit sendMessageBox("critical", serialPortLight->errorString());
         closePorts();
     }
 }
@@ -110,6 +115,7 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
 
     connectPorts();
 }
+
 
 void Worker::autoOpenPorts() {
     serialPortA5 = new QSerialPort();
@@ -158,28 +164,28 @@ void Worker::autoOpenPorts() {
     }
 }
 
-bool Worker::checkPlanarCOM() {
-    QString localAnswer = "";
-    serialPortA5->write("State\r\n");
-    serialPortA5->flush();
-    while (serialPortA5->waitForReadyRead(ANSWER_DELAY)) localAnswer.append(serialPortA5->readAll());
 
-    if (localAnswer != "") {
-        qDebug()<<localAnswer;
-        if (localAnswer.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
+bool Worker::checkPlanarCOM() {
+    writeData_planar("State\r\n");
+    readData_planar();
+    QString responce = QString(planarResponce);
+    if (responce != "") {
+        qDebug() << responce;
+        if (responce.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
             return true;
         }
     }
     return false;
 }
 
+
 bool Worker::checkKeithlyCOM() {
     try {
-        KeithlyZeroCorrection(serialPortKeithly);
+        KeithlyZeroCorrection2();
         //emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
-        Keithly05VSet(serialPortKeithly);
-        ForwardCurrent = KeithlyGet(serialPortKeithly);
-        QString responce = QString(lastAnswer);
+        Keithly05VSet2();
+        ForwardCurrent = KeithlyGet2();
+        QString responce = QString(keithleyResponce);
         //emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
         if (responce.contains(QRegularExpression(R"(\d+A,)"))) return true;//\d+.\d+[+-]\d+A,
     }
@@ -188,29 +194,20 @@ bool Worker::checkKeithlyCOM() {
     return false;
 }
 
+
 bool Worker::checkLightCOM() {
     try {
-        int delay = 0;
-        QString localAns = "";
-        QByteArray package = "1101/n";
-        emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
-        while (delay<1000){
-            delay+=100;
-            serialPortLight->write(package);
-            serialPortLight->flush();
-            while (serialPortLight->waitForReadyRead(delay)) localAns.append(serialPortLight->readAll());
-            if (localAns.contains("C3B2A1")) {
-                LightOff();
-                return true;
-            }
-
+        LightOn2();
+        if (lightResponce.contains("C3B2A1")) {
+            LightOff2();
+            return true;
         }
-        if (localAns.contains("C3B2A1")) return true;
     } catch (QSerialPort::SerialPortError error) {
         qDebug() << error;
     }
     return false;
 }
+
 
 bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate) {
     port->setPortName(portName);
@@ -224,6 +221,7 @@ bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate
     return port->open(QSerialPort::ReadWrite);
 }
 
+
 void Worker::closePorts() {
     QString result;
     if (serialPortA5->isOpen()) serialPortA5->close();
@@ -231,24 +229,16 @@ void Worker::closePorts() {
     if (serialPortLight->isOpen()) serialPortLight->close();
 }
 
+
 void Worker::closePort(QSerialPort* port)
 {
     if (port->isOpen())
         port->close();
-    emit ("Disconnected");
 }
 
-void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay) {
-    lastAnswer = "";
-    serialPort->write(package);
-    serialPort->flush();
-    emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
-    while (serialPort->waitForReadyRead(delay)) lastAnswer.append(serialPort->readAll());
-    if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
-}
 
 void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, double numberX,
-                           double numberY, double colSlide, double rowSlide, bool all_three,
+                           double numberY, double colSlide, bool all_three,
                            int upLeft, int upRight, int downLeft, int downRight) {
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
@@ -336,108 +326,21 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
 
 }
 
+
 bool Worker::checkIndex(int i) {
     return ((i >= gap[0] && i <= gap[1]) || (i <= gap[2] && i >= gap[3]) || (i >= gap[4] && i <= gap[5]) || (i <= gap[6] && i >= gap[7]));
 }
 
 
-void Worker::autoWalk(bool allNew, QString dir_cur) {
-
-    dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
-    if (allNew) emit sendProgressBarRangeSignal(currentIndex, lastIndex);
-    int i = 0;
-    //спросить начать обход или продолжить?
-    Worker::copyUpToIndex(currentIndex);
-    QFile file(dir);
-    QString dir1 = file.fileName();
-    //qDebug() << "Если 0, то строки идентичны  : " << QString::compare(dir1, dir_cur, Qt::CaseInsensitive);
-    //если обход с начала, то переписать файл, иначе добавить
-    if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
-        QTextStream output(&file);
-
-        int start = clock();
-
-        while (currentIndex <= lastIndex)
-        {
-            //если индекс попал на срез, то пропускаем
-            if (checkIndex(currentIndex)) {
-                currentIndex++;
-                continue;
-            }
-            //опустить стол
-            emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
-            //перевод координат в массив байтов для передачи станку
-            i = currentIndex;
-            Worker::goToElement(i);
-//            Worker::MeasureDie(serialPortA5, serialPortKeithly);
-//            QThread::msleep(500);
-//            //запускаем единичное измерение
-//            //запись в файл строки с измерениями токов
-//            QString res = QString::number(i, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
-//                    QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
-//            output << res;
-//            output.flush();
-
-            //отправляем данные на таблицу
-//            emit sendAddTableSignal(i, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
-//            emit sendMessageBox("Измерения", res);
-//            emit sendProgressBarValueSignal(i);
-//            currentIndex++;
-
-            //проверка нажатия Паузы
-//            int tmp = 0;
-
-//            mutex->lock();
-//            if (pause){
-//                mutex->unlock();
-//                while (true) {
-//                    QThread::msleep(10);
-//                    mutex->lock();
-//                    if (!pause) {
-//                        break;
-//                    }
-//                    else if (tmp%100==0){
-//                        qDebug()<<"pause is going  another 10s   tmp : " << tmp/100;
-//                    }
-//                    mutex->unlock();
-//                    tmp++;
-//                }
-//            }
-//            mutex->unlock();
-
-        }
-        file.close();
-
-
-
-        emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
-        int end = clock();
-        int t = (end - start) / CLOCKS_PER_SEC;
-        emit sendMessageBox("Измерения", QString::number(t));
-    }
-}
-
-void Worker::measureElement() {
-    int start = clock();
-
-    MeasureDie(serialPortA5, serialPortKeithly);
-
-    int end = clock();
-    int t = (end - start) / CLOCKS_PER_SEC;
-    emit sendMessageBox("Измерения", QString::number(t));
-
-}
-
-
 void Worker::goToElement(int index) {
     //опустить стол
-    emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
+    writeData_planar("Table DN\r\n");
     //перевод координат в массив байтов для передачи станку
     QByteArray x = QByteArray::number((int)DotsX[index]);
     QByteArray y = QByteArray::number((int)DotsY[index]);
-    emit sendPackageSignal(serialPortA5, "Set " + x + " " + y + '\r' + '\n', ANSWER_DELAY);
-    //далее обход существующих измерений для копирования всех значений, кроме измеренных на элемент
+    writeData_planar("Set " + x + " " + y + '\r' + '\n');
 }
+
 
 void Worker::copyUpToIndex(int index) {
     //функция копирует файл до нужного индекса и заменяет собой файл источник
@@ -468,11 +371,16 @@ void Worker::copyUpToIndex(int index) {
     QFile::rename(dir_tmp, dir);
 }
 
+
 void Worker::pauseWalk() {
-    //поменять статус паузы
+//    //поменять статус паузы
     pause = !pause;
     pauseIndex = currentIndex;
-}
+//    emit sendMessageBox("information", "информация");
+//    emit sendMessageBox("warning", "внимание");
+//    emit sendMessageBox("critical", "караул");
+ }
+
 
 void Worker::setIndex(int index) {
     //обновить индекс для обхода с нового элемента
@@ -480,15 +388,17 @@ void Worker::setIndex(int index) {
     currentIndex = index;
 }
 
+
 void Worker::stopWalk() {
     pause = false;
     currentIndex = lastIndex;//DotsX.count()
 }
 
+
 void Worker::saveMeasure(int index) {
     //функция копирует файл до нужного индекса и заменяет собой файл источник
-    Worker::goToElement(index);
-    MeasureDie(serialPortA5, serialPortKeithly);
+    goToElement(index);
+    MeasureDie2();
     dir = dir.endsWith(".csv") ? dir : dir + ".csv";
     QString dir_tmp = dir.remove(dir.indexOf(".csv"), dir.length() - dir.indexOf(".csv")) + "tmp.csv";
     QFile dest (dir_tmp);
@@ -518,151 +428,209 @@ void Worker::saveMeasure(int index) {
         source.remove();
         QFile::rename(dir_tmp, dir);
     }
-    emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
+    writeData_planar("Table DN\r\n");
 }
 
+
 void Worker::tableController(QByteArray message) {
-    emit sendPackageSignal(serialPortA5, message, ANSWER_DELAY);
+    writeData_planar(message);
 }
+
 
 void Worker::getBCoordinates() {
     int x = 0;
     int y = 0;
-    QByteArray package = "State\r\n";
-    QString localAnswer = "";
-    serialPortA5->write(package);
-    serialPortA5->flush();
-    emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")) + " ");
-
-    while (serialPortA5->waitForReadyRead(ANSWER_DELAY)) localAnswer.append(serialPortA5->readAll());
-    if (localAnswer.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
-        x = localAnswer.split(" ")[2].toInt();
-        y = localAnswer.split(" ")[3].toInt();
+    writeData_planar("State\r\n");
+    readData_planar();
+    QString responce = QString(planarResponce);
+    if (responce.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
+        x = responce.split(" ")[2].toInt();
+        y = responce.split(" ")[3].toInt();
         emit sendBCoordsSignal(x, y);
-        //if (localAnswer != "") emit sendLogSignal("Bx = " + x + "  By = " + y); не работает
     }
 }
-void Worker::lightController(QByteArray message) {
-    emit sendPackageSignal(serialPortLight, message, NO_ANSWER_DELAY);
+
+void Worker::lightController(QByteArray msg) {
+    writeData_light(msg);
 }
 
-void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly) {
-    KeithlyZeroCorrection(serialPortKeithly);
-    emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
-    Keithly05VSet(serialPortKeithly);//300
-    ForwardCurrent = KeithlyGet(serialPortKeithly);
-    Keithly10mVSet(serialPortKeithly);
+void Worker::MeasureDie2()
+{
+    KeithlyZeroCorrection2();
+    writeData_planar("Table UP\r\n");
+    QThread::msleep(1000);
+    Keithly05VSet2();//300
+    ForwardCurrent = KeithlyGet2();
+    Keithly10mVSet2();
     QThread::msleep(800);
-    DarkCurrent10mV = KeithlyGet(serialPortKeithly);//800
-    Keithly1VSet(serialPortKeithly);
-    DarkCurrent1V = KeithlyGet(serialPortKeithly);//600
-    LightOn();
-    Keithly10mVSet(serialPortKeithly);
-    emit sendPackageSignal(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
-    QThread::msleep(200);
-    LightCurrent = KeithlyGet(serialPortKeithly);
-    emit sendPackageSignal(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
-//    emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
-//                        QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
-    LightOff();
-}
-
-void Worker::KeithlyZeroCorrection(QSerialPort *serialPort) {
-    emit sendPackageSignal(serialPort, "*RST\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SYST:ZCH ON\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "CURR:RANG 2e-9\n", NO_ANSWER_DELAY);
+    DarkCurrent10mV = KeithlyGet2();//800
+    Keithly1VSet2();
+    DarkCurrent1V = KeithlyGet2();//600
+    LightOn2();
+    Keithly10mVSet2();
+    writeData_keithley("CURR:RANG 2e-6\n");
     QThread::msleep(400);
-    emit sendPackageSignal(serialPort, "INIT\n", NO_ANSWER_DELAY);
-    QThread::msleep(400);
-    emit sendPackageSignal(serialPort, "SYST:ZCOR:STAT OFF\n", NO_ANSWER_DELAY);
-    QThread::msleep(400);
-    emit sendPackageSignal(serialPort, "SYST:ZCOR:ACQ\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SYST:ZCH OFF\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SYST:ZCOR ON\n", NO_ANSWER_DELAY);
+    LightCurrent = KeithlyGet2();
+    writeData_keithley("*RST\n");
+    LightOff2();
 }
 
 
-void Worker::Keithly05VSet(QSerialPort *serialPort) {
-    emit sendPackageSignal(serialPort, "CURR:RANG 2e-3\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT:RANG 1\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT " + QByteArray::number(0.6) + '\n', NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT:ILIM 1e-3\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
+void Worker::KeithlyZeroCorrection2()
+{
+    writeData_keithley("*RST\n");
+    writeData_keithley("SYST:ZCH ON\n");
+    writeData_keithley("CURR:RANG 2e-9\n");
+    QThread::msleep(400);
+    writeData_keithley("INIT\n");
+    QThread::msleep(400);
+    writeData_keithley("SYST:ZCOR:STAT OFF\n");
+    QThread::msleep(400);
+    writeData_keithley("SYST:ZCOR:ACQ\n");
+    writeData_keithley("SYST:ZCH OFF\n");
+    writeData_keithley("SYST:ZCOR ON\n");
+}
+
+
+void Worker::Keithly05VSet2()
+{
+    writeData_keithley("CURR:RANG 2e-3\n");
+    writeData_keithley("SOUR:VOLT:RANG 1\n");
+    writeData_keithley("SOUR:VOLT " + QByteArray::number(0.6) + '\n');
+    writeData_keithley("SOUR:VOLT:ILIM 1e-3\n");
+    writeData_keithley("SOUR:VOLT:STAT ON\n");
     QThread::msleep(300);
 }
 
-double Worker::KeithlyGet(QSerialPort *serialPort) {
-    emit sendPackageSignal(serialPort, "READ?\n", ANSWER_DELAY);
-    QByteArray byteArray = lastAnswer;
-    byteArray = byteArray.remove(byteArray.indexOf("A"), byteArray.length() - byteArray.indexOf("A"));
-    return byteArray.toDouble();
+
+void Worker::Keithly10mVSet2()
+{
+    writeData_keithley( "CURR:RANG 2e-10\n");
+    writeData_keithley("SOUR:VOLT:STAT OFF\n");
+    writeData_keithley("SOUR:VOLT -10e-3\n");
+    writeData_keithley("SOUR:VOLT:STAT ON\n");
 }
 
-void Worker::Keithly10mVSet(QSerialPort *serialPort) {
-    emit sendPackageSignal(serialPort, "CURR:RANG 2e-10\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT -10e-3\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
-}
 
-void Worker::Keithly1VSet(QSerialPort *serialPort) {
-    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT -1\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
+void Worker::Keithly1VSet2()
+{
+    writeData_keithley("SOUR:VOLT:STAT OFF\n");
+    writeData_keithley("SOUR:VOLT -1\n");
+    writeData_keithley("SOUR:VOLT:STAT ON\n");
     QThread::msleep(600);
 }
 
-void Worker::LightOn() {
-    emit sendPackageSignal(serialPortLight, "1111\n", NO_ANSWER_DELAY);
-}
 
-void Worker::LightOff() {
-    emit sendPackageSignal(serialPortLight, "0001\n", NO_ANSWER_DELAY);
-}
-
-
-
-void Worker::MeasureDie2(QSerialPort * port1, QSerialPort * port2)
+double Worker::KeithlyGet2()
 {
-
-}
-
-void Worker::KeithlyZeroCorrection2(QSerialPort * port)
-{
-
-}
-
-void Worker::Keithly05VSet2(QSerialPort * port)
-{
-
-}
-
-double Worker::KeithlyGet2(QSerialPort * port)
-{
-
-}
-
-void Worker::Keithly10mVSet2(QSerialPort * port)
-{
-
-}
-
-void Worker::Keithly1VSet2(QSerialPort * port)
-{
-
+    keithleyResponce = keithleyResponce.remove(keithleyResponce.indexOf("A"), keithleyResponce.length() - keithleyResponce.indexOf("A"));
+    return keithleyResponce.toDouble();
 }
 
 void Worker::LightOn2()
 {
-
+    writeData_light("1111\n");
+    readData_light();
 }
+
 
 void Worker::LightOff2()
 {
-
+    writeData_light("0001\n");
+    readData_light();
 }
 
 
+void Worker::autoWalk2(bool allNew, QString dir_cur) {
 
+    dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
+    if (allNew) emit sendProgressBarRangeSignal(currentIndex, lastIndex);
+    int i = 0;
+    //спросить начать обход или продолжить?
+    Worker::copyUpToIndex(currentIndex);
+    QFile file(dir);
+    QString dir1 = file.fileName();
+    //qDebug() << "Если 0, то строки идентичны  : " << QString::compare(dir1, dir_cur, Qt::CaseInsensitive);
+    //если обход с начала, то переписать файл, иначе добавить
+    if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append)) {
+        QTextStream output(&file);
+
+        int start = clock();
+
+        while (currentIndex <= lastIndex)
+        {
+            //если индекс попал на срез, то пропускаем
+            if (checkIndex(currentIndex)) {
+                currentIndex++;
+                continue;
+            }
+            //опустить стол
+            writeData_planar("Table DN\r\n");
+            //перевод координат в массив байтов для передачи станку
+            i = currentIndex;
+            goToElement(i);
+            MeasureDie2();
+            QThread::msleep(500);
+            //запускаем единичное измерение
+            //запись в файл строки с измерениями токов
+            QString res = QString::number(i, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+                    QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
+            output << res;
+            output.flush();
+
+            //отправляем данные на таблицу
+            emit sendAddTableSignal(i, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
+            emit sendProgressBarValueSignal(i);
+            currentIndex++;
+
+            //проверка нажатия Паузы
+            int tmp = 0;
+
+            mutex->lock();
+            if (pause){
+                mutex->unlock();
+                while (true) {
+                    QThread::msleep(10);
+                    mutex->lock();
+                    if (!pause) {
+                        break;
+                    }
+                    else if (tmp%100==0){
+                        qDebug()<<"pause is going  another 10s   tmp : " << tmp/100;
+                    }
+                    mutex->unlock();
+                    tmp++;
+                }
+            }
+            mutex->unlock();
+
+        }
+        file.close();
+
+        writeData_planar("Table DN\r\n");
+        int end = clock();
+        int t = (end - start) / CLOCKS_PER_SEC;
+        int s = t - t / 60;
+        t /= 60;
+        int m = t - t / 60;
+        t /= 60;
+        int h = t - t / 24;
+        //int d = t - h;
+
+        emit sendMessageBox("Обход закончен", "Прошло времени: " + QString::number(h) + " часов, " +  QString::number(m) + " минут, " + QString::number(s) + " секунд.");
+    }
+}
+
+
+void Worker::measureElement2() {
+    int start = clock();
+
+    MeasureDie2();
+
+    int end = clock();
+    int t = (end - start);
+    emit sendMessageBox("Information", QString::number(t));
+
+}
 
 

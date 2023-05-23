@@ -47,11 +47,10 @@ MainWindow::MainWindow(QWidget *parent)
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
 
-    createStatsThread();
-    statsThread.quit();
-    statsThread.terminate();
+    //createStatsThread();
+    //statsThread.quit();
+    //statsThread.terminate();
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -68,7 +67,7 @@ void MainWindow::createWorkerThread() {
     workerThread.start();
 
     connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::scanningPlate);
-    connect(this, &MainWindow::measureSignal, worker, &Worker::measureElement);
+    connect(this, &MainWindow::measureSignal, worker, &Worker::measureElement2);
     connect(this, &MainWindow::openPortsSignal, worker, &Worker::openPorts);
     connect(this, &MainWindow::autoOpenPortsSignal, worker, &Worker::autoOpenPorts);
     connect(this, &MainWindow::tableControllerSignal, worker, &Worker::tableController);
@@ -83,7 +82,7 @@ void MainWindow::createWorkerThread() {
     //сохрание элемента в строке
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
     //начать обход
-    connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
+    connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk2);
     //connect(this, &MainWindow::pauseStatus, this, &Worker::pauseStatusSignal);
     connect(this, &MainWindow::getBCoordinatesSignal, worker, &Worker::getBCoordinates);
 
@@ -107,11 +106,10 @@ void MainWindow::openPortPushButton_on() {
     } else {
         emit closePortsSignal();
         ui->openPortPushButton->setText("Открыть");
-
-        QMessageBox::information(this, "Сообщение", "COM порты закрыты");
         ui->portComboBox->setCurrentText("Планар");
         ui->keithlyPortComboBox->setCurrentText("Keithley");
         ui->lightPortComboBox->setCurrentText("Диод");
+        QMessageBox::information(this, "Сообщение", "COM порты закрыты");
     }
 }
 
@@ -143,37 +141,31 @@ void MainWindow::coordsPushButton_on() {
 
 
 void MainWindow::tableUpPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Table UP\r\n", 1000);
     emit tableControllerSignal("Table UP\r\n");
 }
 
 
 void MainWindow::tableDownPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Table DN\r\n", 1000);
     emit tableControllerSignal("Table DN\r\n");
 }
 
 
 void MainWindow::forwardPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Move 0 100\r\n", 1000);
     emit tableControllerSignal("Move 0 100\r\n");
 }
 
 
 void MainWindow::backwardPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Move 0 -100\r\n", 1000);
     emit tableControllerSignal("Move 0 -100\r\n");
 }
 
 
 void MainWindow::leftPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Move -100 0\r\n", 1000);
     emit tableControllerSignal("Move -100 0\r\n");
 }
 
 
 void MainWindow::rightPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Move 100 0\r\n", 1000);
     emit tableControllerSignal("Move 100 0\r\n");
 }
 
@@ -333,7 +325,7 @@ void MainWindow::orientationButton_clicked()
     double numberY = (double)ui->numYspinBox->value();
     //сдвиг меж столбцов и рядов
     double colSlide = (double)ui->stepColSpinBox->value();
-    double rowSlide = (double)ui->stepRowSpinBox->value();
+    //double rowSlide = (double)ui->stepRowSpinBox->value();
     bool all_three = ui->checkBox->isChecked();
 
     //die offset due to cirle border cut
@@ -359,7 +351,7 @@ void MainWindow::orientationButton_clicked()
     ui->tableView->setModel(model);
 
 
-    emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three, upLeft, upRight, downLeft, downRight);
+    emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, all_three, upLeft, upRight, downLeft, downRight);
 
 }
 
@@ -398,7 +390,15 @@ void MainWindow::on_chartsButton_clicked()
 
 void MainWindow::showMessageBox(QString msg_type, QString msg)
 {
-    QMessageBox::information(this, msg_type, msg);
+    if (msg_type == "information"){
+        QMessageBox::information(this, "Информация", msg);
+    } else if (msg_type == "critical") {
+        QMessageBox::critical(this, "Ошибка", msg);
+    } else if (msg_type == "warning") {
+        QMessageBox::warning(this, "Предупреждение", msg);
+    } else {
+        QMessageBox::information(this, msg_type, msg);
+    }
 }
 
 
