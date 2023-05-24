@@ -634,6 +634,6 @@ void Worker::measureElement2() {
 }
 
 
-void Worker::changeDelaySignal(int d){
+void Worker::changeDelay(int d){
     delay = d;
 }

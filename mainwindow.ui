@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>692</height>
+    <height>779</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1028,7 +1028,7 @@
            </widget>
           </item>
           <item row="6" column="3">
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="delaySpinBox">
             <property name="maximum">
              <number>5000</number>
             </property>
@@ -1093,7 +1093,7 @@
          <zorder>checkBox</zorder>
          <zorder>chartsButton</zorder>
          <zorder>horizontalSpacer_3</zorder>
-         <zorder>spinBox</zorder>
+         <zorder>delaySpinBox</zorder>
          <zorder>label_29</zorder>
          <zorder>label_30</zorder>
         </widget>
@@ -1109,7 +1109,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
