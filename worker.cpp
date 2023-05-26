@@ -23,9 +23,9 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
-    if (portNameA5 != "None"){emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));}
-    if (portNameKeithly != "None"){emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));}
-    if (portNameLight != "None"){emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));}
+    if (portNameA5 != "Планар"){emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));}
+    if (portNameKeithly != "Keithley"){emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));}
+    if (portNameLight != "Диод"){emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));}
 
     serialPortA5->flush();
     serialPortKeithly->flush();
