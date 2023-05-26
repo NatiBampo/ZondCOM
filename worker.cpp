@@ -23,9 +23,10 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
-    emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));
-    emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));
-    emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));
+    if (portNameA5 != "None"){emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));}
+    if (portNameKeithly != "None"){emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));}
+    if (portNameLight != "None"){emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));}
+
     serialPortA5->flush();
     serialPortKeithly->flush();
     serialPortLight->flush();
@@ -326,11 +327,13 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
 
 void Worker::measureElement() {
     int start = clock();
+    qDebug << start;
     MeasureDie(serialPortA5, serialPortKeithly);
     int end = clock();
     int t = (end - start);
+    qDebug << end;
     qDebug() << t << " milli seconds ";
-    QThread::msleep(500);
+    //QThread::msleep(500);
 }
 
 
@@ -461,7 +464,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
     DarkCurrent10mV = KeithlyGet(serialPortKeithly);
     Keithly1VSet(serialPortKeithly);
     DarkCurrent1V = KeithlyGet(serialPortKeithly);
-    LightOn();
+    //LightOn();
     Keithly10mVSet(serialPortKeithly);
     emit sendPackageSignal(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
     QThread::msleep(400);
@@ -469,7 +472,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
     emit sendPackageSignal(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
 //    emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
 //                        QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
-    LightOff();
+    //LightOff();
 }
 
 void Worker::KeithlyZeroCorrection(QSerialPort *serialPort) {

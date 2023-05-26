@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QThread>
 #include <QFileDialog>
+#include <ctime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -166,7 +167,9 @@ void MainWindow::rightPushButton_on() {
 
 
 void MainWindow::measurePushButton_on() {
+    qDebug << clock();
     emit measureSignal();
+    qDebug << clock();
 }
 
 
