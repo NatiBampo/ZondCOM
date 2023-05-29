@@ -63,7 +63,7 @@ void Worker::handleError_planar(QSerialPort::SerialPortError error)
 
 void Worker::writeData_keithley(const QByteArray& data)
 {
-    serialPortA5->write(data);
+    serialPortKeithly->write(data);
 }
 
 
