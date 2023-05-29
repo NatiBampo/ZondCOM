@@ -76,7 +76,7 @@ private:
 
 signals:
     void sendPackageSignal(QSerialPort * , QByteArray, int);
-    void sendPackageSignal2(QSerialPort * , QByteArray);
+    void sendPackageSignal2(QSerialPort * , QByteArray, int);
     void sendLogSignal(QByteArray);
     void sendProgressBarValueSignal(int);
     void sendProgressBarRangeSignal(int, int);
@@ -88,7 +88,7 @@ signals:
 public slots:
     void measureElement();
     void sendPackage(QSerialPort * , QByteArray, int);
-    void sendPackage2(QSerialPort * , QByteArray);
+    void sendPackage2(QSerialPort * , QByteArray, int);
     void scanningPlate(double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void tableController(QByteArray);
     void lightController(QByteArray);
