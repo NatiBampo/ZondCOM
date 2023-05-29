@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>692</height>
+    <height>841</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -382,7 +382,17 @@
             </property>
             <layout class="QGridLayout" name="gridLayout_8">
              <item row="2" column="1">
-              <widget class="QSpinBox" name="DC10mVspinBox"/>
+              <widget class="QSpinBox" name="DC10mVspinBox">
+               <property name="maximum">
+                <number>5000</number>
+               </property>
+               <property name="singleStep">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>800</number>
+               </property>
+              </widget>
              </item>
              <item row="2" column="0">
               <widget class="QLabel" name="DC10mVLabel">
@@ -399,7 +409,17 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QSpinBox" name="zeroSpinBox"/>
+              <widget class="QSpinBox" name="zeroSpinBox">
+               <property name="maximum">
+                <number>5000</number>
+               </property>
+               <property name="singleStep">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>400</number>
+               </property>
+              </widget>
              </item>
              <item row="4" column="0">
               <widget class="QLabel" name="photoLabel">
@@ -409,7 +429,17 @@
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="QSpinBox" name="DC1VspinBox"/>
+              <widget class="QSpinBox" name="DC1VspinBox">
+               <property name="maximum">
+                <number>5000</number>
+               </property>
+               <property name="singleStep">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>600</number>
+               </property>
+              </widget>
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="zeroLabel">
@@ -419,7 +449,17 @@
               </widget>
              </item>
              <item row="4" column="1">
-              <widget class="QSpinBox" name="PhotoSpinBox"/>
+              <widget class="QSpinBox" name="PhotoSpinBox">
+               <property name="maximum">
+                <number>5000</number>
+               </property>
+               <property name="singleStep">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>400</number>
+               </property>
+              </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="FClabel">
@@ -429,7 +469,17 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QSpinBox" name="FCspinBox"/>
+              <widget class="QSpinBox" name="FCspinBox">
+               <property name="maximum">
+                <number>5000</number>
+               </property>
+               <property name="singleStep">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>300</number>
+               </property>
+              </widget>
              </item>
              <item row="5" column="0">
               <widget class="QPushButton" name="measure2pushButton">
@@ -1096,7 +1146,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

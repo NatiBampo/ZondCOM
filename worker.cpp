@@ -474,13 +474,13 @@ void Worker::getBCoordinates() {
 
 
 void Worker::lightController(QByteArray message) {
-    emit sendPackageSignal(serialPortLight, message, NO_ANSWER_DELAY);
+    emit sendPackageSignal2(serialPortLight, message, NO_ANSWER_DELAY);
 }
 
 
 void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly) {
     KeithlyZeroCorrection(serialPortKeithly);
-    emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
+    //emit sendPackageSignal2(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
     Keithly05VSet(serialPortKeithly);
     ForwardCurrent = KeithlyGet(serialPortKeithly);
     Keithly10mVSet(serialPortKeithly);
