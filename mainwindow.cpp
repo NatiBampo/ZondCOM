@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->orientationButton, &QPushButton::clicked, this, &MainWindow::orientationButton_clicked);
     connect(ui->autoPortButton, &QPushButton::clicked, this, &MainWindow::autoPortButton_clicked);
     connect(ui->measureBButton, &QPushButton::clicked, this, &MainWindow::measureBButton_clicked);
+    connect(ui->measure2pushButton, &QPushButton::clicked, this, &MainWindow::on_measure2pushButton_clicked);
 
     createWorkerThread();
 
@@ -167,7 +168,7 @@ void MainWindow::rightPushButton_on() {
 
 void MainWindow::measurePushButton_on() {
     qDebug() << clock();
-    int i = ui->zeroSpinBox->value();
+    updateDelays();
     emit measureSignal();
 }
 
@@ -298,6 +299,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
         QFileDialog directory;
         dir_name = directory.getSaveFileName(this,"Choose directory and name");
         ui->addressLabel->setText(dir_name);
+        updateDelays();
         emit autoWalkSignal(true, dir_name);
     }
     else {
@@ -369,7 +371,7 @@ void MainWindow::setBCoords(int x, int y) {
     ui->BYspinBox->setValue(y);
 }
 
-void MainWindow::getDelays(){
+void MainWindow::updateDelays(){
     mutex.lock();
     delays[0] = ui->zeroSpinBox->value();
     delays[1] = ui->FCspinBox->value();
@@ -379,3 +381,10 @@ void MainWindow::getDelays(){
     mutex.unlock();
     emit setDelaySignal(&delays);
 }
+
+void MainWindow::on_measure2pushButton_clicked()
+{
+    updateDelays();
+    emit measureSignal();
+}
+

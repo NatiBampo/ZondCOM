@@ -90,12 +90,13 @@ public:
     QLabel *DC10mVLabel;
     QLabel *DC1Vlabel;
     QSpinBox *zeroSpinBox;
+    QLabel *photoLabel;
     QSpinBox *DC1VspinBox;
     QLabel *zeroLabel;
+    QSpinBox *PhotoSpinBox;
     QLabel *FClabel;
     QSpinBox *FCspinBox;
-    QLabel *photoLabel;
-    QSpinBox *PhotoSpinBox;
+    QPushButton *measure2pushButton;
     QGroupBox *groupBox_4;
     QGridLayout *gridLayout_7;
     QPushButton *lightPushButton;
@@ -416,6 +417,11 @@ public:
 
         gridLayout_8->addWidget(zeroSpinBox, 0, 1, 1, 1);
 
+        photoLabel = new QLabel(groupBox_6);
+        photoLabel->setObjectName("photoLabel");
+
+        gridLayout_8->addWidget(photoLabel, 4, 0, 1, 1);
+
         DC1VspinBox = new QSpinBox(groupBox_6);
         DC1VspinBox->setObjectName("DC1VspinBox");
 
@@ -425,6 +431,11 @@ public:
         zeroLabel->setObjectName("zeroLabel");
 
         gridLayout_8->addWidget(zeroLabel, 0, 0, 1, 1);
+
+        PhotoSpinBox = new QSpinBox(groupBox_6);
+        PhotoSpinBox->setObjectName("PhotoSpinBox");
+
+        gridLayout_8->addWidget(PhotoSpinBox, 4, 1, 1, 1);
 
         FClabel = new QLabel(groupBox_6);
         FClabel->setObjectName("FClabel");
@@ -436,15 +447,10 @@ public:
 
         gridLayout_8->addWidget(FCspinBox, 1, 1, 1, 1);
 
-        photoLabel = new QLabel(groupBox_6);
-        photoLabel->setObjectName("photoLabel");
+        measure2pushButton = new QPushButton(groupBox_6);
+        measure2pushButton->setObjectName("measure2pushButton");
 
-        gridLayout_8->addWidget(photoLabel, 4, 0, 1, 1);
-
-        PhotoSpinBox = new QSpinBox(groupBox_6);
-        PhotoSpinBox->setObjectName("PhotoSpinBox");
-
-        gridLayout_8->addWidget(PhotoSpinBox, 4, 1, 1, 1);
+        gridLayout_8->addWidget(measure2pushButton, 5, 0, 1, 1);
 
 
         gridLayout_3->addWidget(groupBox_6, 10, 0, 1, 1);
@@ -889,9 +895,10 @@ public:
         groupBox_6->setTitle(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\270", nullptr));
         DC10mVLabel->setText(QCoreApplication::translate("MainWindow", "DC10mV", nullptr));
         DC1Vlabel->setText(QCoreApplication::translate("MainWindow", "DC1V", nullptr));
+        photoLabel->setText(QCoreApplication::translate("MainWindow", "Photo", nullptr));
         zeroLabel->setText(QCoreApplication::translate("MainWindow", "zero 3X ", nullptr));
         FClabel->setText(QCoreApplication::translate("MainWindow", "FC", nullptr));
-        photoLabel->setText(QCoreApplication::translate("MainWindow", "Photo", nullptr));
+        measure2pushButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\265\320\275\320\270\320\265", nullptr));
         groupBox_4->setTitle(QCoreApplication::translate("MainWindow", "\320\236\321\201\320\262\320\265\321\211\320\265\320\275\320\270\320\265", nullptr));
         lightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\272\320\273\321\216\321\207\320\270\321\202\321\214", nullptr));
         statePushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\276\321\217\320\275\320\270\320\265", nullptr));

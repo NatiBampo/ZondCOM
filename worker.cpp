@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QSerialPortInfo>
-#include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <ctime>
 
@@ -13,6 +12,7 @@ Worker::Worker(QMutex* mtxp)
 {
     this->mutex = mtxp;
     connect(this, &Worker::sendPackageSignal, this, &Worker::sendPackage);
+    connect(this, &Worker::sendPackageSignal2, this, &Worker::sendPackage2);
 }
 
 Worker::~Worker() {
@@ -87,7 +87,7 @@ bool Worker::checkPlanarCOM() {
 
     if (localAnswer != "") {
         qDebug()<<localAnswer;
-        if (localAnswer.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
+        if (localAnswer.contains(stateReg)) {
             return true;
         }
     }
@@ -97,12 +97,10 @@ bool Worker::checkPlanarCOM() {
 bool Worker::checkKeithlyCOM() {
     try {
         KeithlyZeroCorrection(serialPortKeithly);
-        //emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
         Keithly05VSet(serialPortKeithly);
         ForwardCurrent = KeithlyGet(serialPortKeithly);
         QString responce = QString(lastAnswer);
-        //emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
-        if (responce.contains(QRegularExpression(R"(\d+A,)"))) return true;//\d+.\d+[+-]\d+A,
+        if (responce.contains(keithleyReg)) return true;//\d+.\d+[+-]\d+A,
     }
     catch (const char* error){}
 
@@ -161,6 +159,12 @@ void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay)
     emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
     while (serialPort->waitForReadyRead(delay)) lastAnswer.append(serialPort->readAll());
     if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
+}
+
+void Worker::sendPackage2(QSerialPort *serialPort, QByteArray package) {
+    serialPort->write(package);
+    serialPort->flush();
+    emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
 }
 
 void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, double numberX,
@@ -285,14 +289,12 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
             Worker::MeasureDie(serialPortA5, serialPortKeithly);
             //запускаем единичное измерение
             //запись в файл строки с измерениями токов
-            QString str = QString::number(i, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
-                    QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
-            output << str;
+            output << QString::number(i, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+                      QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
             output.flush();
 
             //отправляем данные на таблицу
             emit sendAddTableSignal(i, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
-            emit sendLogSignal(str.toUtf8());
             emit sendProgressBarValueSignal(i);
             currentIndex++;
 
@@ -443,11 +445,10 @@ void Worker::getBCoordinates() {
     emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")) + " ");
 
     while (serialPortA5->waitForReadyRead(ANSWER_DELAY)) localAnswer.append(serialPortA5->readAll());
-    if (localAnswer.contains(QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)"))) {
+    if (localAnswer.contains(stateReg)) {
         x = localAnswer.split(" ")[2].toInt();
         y = localAnswer.split(" ")[3].toInt();
         emit sendBCoordsSignal(x, y);
-        //if (localAnswer != "") emit sendLogSignal("Bx = " + x + "  By = " + y); не работает
     }
 }
 void Worker::lightController(QByteArray message) {
@@ -470,8 +471,8 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
     QThread::msleep(photoDelay);//400//200
     LightCurrent = KeithlyGet(serialPortKeithly);
     emit sendPackageSignal(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
-//    emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
-//                        QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
+    emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+                        QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
     //LightOff();
 }
 
@@ -516,7 +517,7 @@ void Worker::Keithly1VSet(QSerialPort *serialPort) {
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT -1\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
-    QThread::msleep(600);//600
+    QThread::msleep(DC1VDelay);//600
 }
 
 void Worker::LightOn() {

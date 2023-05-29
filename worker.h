@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QSqlQuery>
 #include <QMutex>
+#include <QRegularExpression>
 
 
 #define ANSWER_DELAY 1000
@@ -32,6 +33,9 @@ private:
     QList<double> DotsY;
     QString dir = "С:\temp\1.csv";
 
+    QRegularExpression stateReg = QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)");//QRegularExpression
+    QRegularExpression keithleyReg = QRegularExpression(R"(\d+A,)");
+
     volatile bool pause = false;
     bool overwrite = false;
     bool three_columns = false;
@@ -54,6 +58,7 @@ private:
     double DarkCurrent10mV = 0.0;
     double DarkCurrent1V = 0.0;
     double LightCurrent = 0.0;
+
     bool openPort(QSerialPort *, QString, QSerialPort::BaudRate);
     void MeasureDie(QSerialPort *, QSerialPort *);
     void KeithlyZeroCorrection(QSerialPort *);
@@ -71,6 +76,7 @@ private:
 
 signals:
     void sendPackageSignal(QSerialPort * , QByteArray, int);
+    void sendPackageSignal2(QSerialPort * , QByteArray);
     void sendLogSignal(QByteArray);
     void sendProgressBarValueSignal(int);
     void sendProgressBarRangeSignal(int, int);
@@ -82,6 +88,7 @@ signals:
 public slots:
     void measureElement();
     void sendPackage(QSerialPort * , QByteArray, int);
+    void sendPackage2(QSerialPort * , QByteArray);
     void scanningPlate(double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void tableController(QByteArray);
     void lightController(QByteArray);

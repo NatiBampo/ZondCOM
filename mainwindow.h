@@ -33,7 +33,7 @@ private:
     void addElement(int, int, double);
     int getUIIndex();
     QList<int> delays;
-    void getDelays();
+    void updateDelays();
 
 
 signals:
@@ -79,5 +79,6 @@ private slots:
     void scanPushButton_clicked(bool checked);
     void autoPortButton_clicked();
     void measureBButton_clicked();
+    void on_measure2pushButton_clicked();
 };
 #endif // MAINWINDOW_H
