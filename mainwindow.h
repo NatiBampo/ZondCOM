@@ -32,6 +32,8 @@ private:
     void createWorkerThread();
     void addElement(int, int, double);
     int getUIIndex();
+    QList<int> delays;
+    void getDelays();
 
 
 signals:
@@ -47,6 +49,7 @@ signals:
     void autoWalkSignal(bool, QString);
     void autoOpenPortsSignal();
     void getBCoordinatesSignal();
+    void setDelaySignal(QList<int>*);
 
 private slots:
     void openPortPushButton_on();

@@ -262,109 +262,13 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
           <string>Ручной</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="6" column="0">
-           <widget class="QGroupBox" name="groupBox_3">
-            <property name="title">
-             <string>Управление столом</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_4">
-             <item row="2" column="1">
-              <widget class="QPushButton" name="backwardPushButton">
-               <property name="text">
-                <string>Назад</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="rightPushButton">
-               <property name="text">
-                <string>Вправо</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QPushButton" name="leftPushButton">
-               <property name="text">
-                <string>Влево</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QPushButton" name="forwardPushButton">
-               <property name="text">
-                <string>Вперед</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QGroupBox" name="groupBox">
-            <property name="title">
-             <string>Координаты</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="yLineEdit"/>
-             </item>
-             <item row="2" column="0" colspan="2">
-              <widget class="QPushButton" name="coordsPushButton">
-               <property name="text">
-                <string>Отправить</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="xLineEdit"/>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_2">
-               <property name="text">
-                <string>X:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>Y:</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QGroupBox" name="groupBox_4">
-            <property name="title">
-             <string>Освещение</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_7">
-             <item row="0" column="0">
-              <widget class="QPushButton" name="lightPushButton">
-               <property name="text">
-                <string>Включить</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QPushButton" name="statePushButton">
-            <property name="text">
-             <string>Состояние</string>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0">
            <widget class="QGroupBox" name="groupBox_2">
             <property name="title">
@@ -388,15 +292,170 @@
             </layout>
            </widget>
           </item>
-          <item row="7" column="0">
+          <item row="12" column="0" colspan="2">
+           <widget class="QListWidget" name="logsListWidget"/>
+          </item>
+          <item row="6" column="1">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Координаты</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Y:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="yLineEdit"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>X:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="2">
+              <widget class="QPushButton" name="coordsPushButton">
+               <property name="text">
+                <string>Отправить</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="xLineEdit"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QGroupBox" name="groupBox_3">
+            <property name="title">
+             <string>Управление столом</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="1" column="2">
+              <widget class="QPushButton" name="rightPushButton">
+               <property name="text">
+                <string>Вправо</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="backwardPushButton">
+               <property name="text">
+                <string>Назад</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QPushButton" name="leftPushButton">
+               <property name="text">
+                <string>Влево</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QPushButton" name="forwardPushButton">
+               <property name="text">
+                <string>Вперед</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="11" column="0">
            <widget class="QLabel" name="label_20">
             <property name="text">
              <string>Журнал</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="0" colspan="2">
-           <widget class="QListWidget" name="logsListWidget"/>
+          <item row="10" column="0">
+           <widget class="QGroupBox" name="groupBox_6">
+            <property name="title">
+             <string>Задержки</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_8">
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="DC10mVspinBox"/>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="DC10mVLabel">
+               <property name="text">
+                <string>DC10mV</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="DC1Vlabel">
+               <property name="text">
+                <string>DC1V</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="zeroSpinBox"/>
+             </item>
+             <item row="3" column="1">
+              <widget class="QSpinBox" name="DC1VspinBox"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="zeroLabel">
+               <property name="text">
+                <string>zero 3X </string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="FClabel">
+               <property name="text">
+                <string>FC</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="FCspinBox"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="photoLabel">
+               <property name="text">
+                <string>Photo</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="PhotoSpinBox"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QGroupBox" name="groupBox_4">
+            <property name="title">
+             <string>Освещение</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_7">
+             <item row="1" column="0">
+              <widget class="QPushButton" name="lightPushButton">
+               <property name="text">
+                <string>Включить</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QPushButton" name="statePushButton">
+               <property name="text">
+                <string>Состояние</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>

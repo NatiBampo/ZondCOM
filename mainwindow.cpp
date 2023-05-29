@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
+    delays.append({400, 400, 800, 600, 400});
 }
 
 
@@ -81,11 +82,13 @@ void MainWindow::createWorkerThread() {
     //connect(this, &MainWindow::pauseStatus, this, &Worker::pauseStatusSignal);
     connect(this, &MainWindow::getBCoordinatesSignal, worker, &Worker::getBCoordinates);
 
+    connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
+
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
     connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
     connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
-    //сигнал для вывода последних измерений на форму
+    //сигнал для вывода последних измерений на форму&
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
     //сигнал паузы
 
@@ -143,33 +146,29 @@ void MainWindow::tableDownPushButton_on() {
 
 
 void MainWindow::forwardPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Move 0 100\r\n", 1000);
     emit tableControllerSignal("Move 0 100\r\n");
 }
 
 
 void MainWindow::backwardPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Move 0 -100\r\n", 1000);
     emit tableControllerSignal("Move 0 -100\r\n");
 }
 
 
 void MainWindow::leftPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Move -100 0\r\n", 1000);
     emit tableControllerSignal("Move -100 0\r\n");
 }
 
 
 void MainWindow::rightPushButton_on() {
-    //emit sendPackageSignal(serialPortA5, "Move 100 0\r\n", 1000);
     emit tableControllerSignal("Move 100 0\r\n");
 }
 
 
 void MainWindow::measurePushButton_on() {
-    qDebug << clock();
+    qDebug() << clock();
+    int i = ui->zeroSpinBox->value();
     emit measureSignal();
-    qDebug << clock();
 }
 
 
@@ -348,9 +347,7 @@ void MainWindow::orientationButton_clicked()
     model->setHeaderData(7, Qt::Horizontal, "№");
     ui->tableView->setModel(model);
 
-
     emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three, upLeft, upRight, downLeft, downRight);
-
 }
 
 
@@ -366,7 +363,19 @@ void MainWindow::measureBButton_clicked()
     emit getBCoordinatesSignal();
 }
 
+
 void MainWindow::setBCoords(int x, int y) {
     ui->BXspinBox->setValue(x);
     ui->BYspinBox->setValue(y);
+}
+
+void MainWindow::getDelays(){
+    mutex.lock();
+    delays[0] = ui->zeroSpinBox->value();
+    delays[1] = ui->FCspinBox->value();
+    delays[2] = ui->DC10mVspinBox->value();
+    delays[3] = ui->DC1VspinBox->value();
+    delays[4] = ui->PhotoSpinBox->value();
+    mutex.unlock();
+    emit setDelaySignal(&delays);
 }

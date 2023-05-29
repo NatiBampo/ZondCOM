@@ -285,13 +285,14 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
             Worker::MeasureDie(serialPortA5, serialPortKeithly);
             //запускаем единичное измерение
             //запись в файл строки с измерениями токов
-            output << QString::number(i, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
-                      QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
+            QString str = QString::number(i, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+                    QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
+            output << str;
             output.flush();
 
             //отправляем данные на таблицу
             emit sendAddTableSignal(i, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
-
+            emit sendLogSignal(str.toUtf8());
             emit sendProgressBarValueSignal(i);
             currentIndex++;
 
@@ -327,11 +328,10 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
 
 void Worker::measureElement() {
     int start = clock();
-    qDebug << start;
     MeasureDie(serialPortA5, serialPortKeithly);
     int end = clock();
     int t = (end - start);
-    qDebug << end;
+    qDebug() << end;
     qDebug() << t << " milli seconds ";
     //QThread::msleep(500);
 }
@@ -460,14 +460,14 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
     Keithly05VSet(serialPortKeithly);
     ForwardCurrent = KeithlyGet(serialPortKeithly);
     Keithly10mVSet(serialPortKeithly);
-    QThread::msleep(800);//800
+    QThread::msleep(DC10mVDelay);//800
     DarkCurrent10mV = KeithlyGet(serialPortKeithly);
     Keithly1VSet(serialPortKeithly);
     DarkCurrent1V = KeithlyGet(serialPortKeithly);
     //LightOn();
     Keithly10mVSet(serialPortKeithly);
     emit sendPackageSignal(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
-    QThread::msleep(400);
+    QThread::msleep(photoDelay);//400//200
     LightCurrent = KeithlyGet(serialPortKeithly);
     emit sendPackageSignal(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
 //    emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
@@ -479,11 +479,11 @@ void Worker::KeithlyZeroCorrection(QSerialPort *serialPort) {
     emit sendPackageSignal(serialPort, "*RST\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SYST:ZCH ON\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "CURR:RANG 2e-9\n", NO_ANSWER_DELAY);
-    QThread::msleep(400);//400
+    QThread::msleep(zeroDelay);//400
     emit sendPackageSignal(serialPort, "INIT\n", NO_ANSWER_DELAY);
-    QThread::msleep(400);
+    QThread::msleep(zeroDelay);
     emit sendPackageSignal(serialPort, "SYST:ZCOR:STAT OFF\n", NO_ANSWER_DELAY);
-    QThread::msleep(400);
+    QThread::msleep(zeroDelay);
     emit sendPackageSignal(serialPort, "SYST:ZCOR:ACQ\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SYST:ZCH OFF\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SYST:ZCOR ON\n", NO_ANSWER_DELAY);
@@ -495,7 +495,7 @@ void Worker::Keithly05VSet(QSerialPort *serialPort) {
     emit sendPackageSignal(serialPort, "SOUR:VOLT " + QByteArray::number(0.6) + '\n', NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:ILIM 1e-3\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
-    QThread::msleep(400);//400
+    QThread::msleep(FCdelay);//400
 }
 
 double Worker::KeithlyGet(QSerialPort *serialPort) {
@@ -528,7 +528,15 @@ void Worker::LightOff() {
 }
 
 
-
+void Worker::setDelay(QList<int> *delays) {
+    mutex->lock();
+    zeroDelay = delays->at(0);
+    FCdelay = delays->at(1);
+    DC10mVDelay = delays->at(2);
+    DC1VDelay = delays->at(3);
+    photoDelay = delays->at(4);
+    mutex->unlock();
+}
 
 
 

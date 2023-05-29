@@ -43,6 +43,11 @@ private:
     int downLeft_offset = 0;
     int downRight_offset = 0;
 
+    int zeroDelay = 400;
+    int FCdelay = 400;
+    int DC10mVDelay = 800;
+    int DC1VDelay = 600;
+    int photoDelay = 400;
 
 
     double ForwardCurrent = 0.0;
@@ -88,6 +93,7 @@ public slots:
     void autoWalk(bool, QString);
     void autoOpenPorts();
     void getBCoordinates();
+    void setDelay(QList<int> *);
 };
 
 #endif // WORKER_H

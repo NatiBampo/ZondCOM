@@ -9,6 +9,7 @@
 #include <memory>
 #include "../worker.h"
 #include <QtCore/qmetatype.h>
+#include <QtCore/QList>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'worker.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
@@ -26,7 +27,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_Worker_t {
-    uint offsetsAndSizes[48];
+    uint offsetsAndSizes[52];
     char stringdata0[7];
     char stringdata1[18];
     char stringdata2[1];
@@ -51,6 +52,8 @@ struct qt_meta_stringdata_Worker_t {
     char stringdata21[9];
     char stringdata22[14];
     char stringdata23[16];
+    char stringdata24[9];
+    char stringdata25[12];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_Worker_t::offsetsAndSizes) + ofs), len 
@@ -79,7 +82,9 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
         QT_MOC_LITERAL(296, 11),  // "saveMeasure"
         QT_MOC_LITERAL(308, 8),  // "autoWalk"
         QT_MOC_LITERAL(317, 13),  // "autoOpenPorts"
-        QT_MOC_LITERAL(331, 15)   // "getBCoordinates"
+        QT_MOC_LITERAL(331, 15),  // "getBCoordinates"
+        QT_MOC_LITERAL(347, 8),  // "setDelay"
+        QT_MOC_LITERAL(356, 11)   // "QList<int>*"
     },
     "Worker",
     "sendPackageSignal",
@@ -104,7 +109,9 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
     "saveMeasure",
     "autoWalk",
     "autoOpenPorts",
-    "getBCoordinates"
+    "getBCoordinates",
+    "setDelay",
+    "QList<int>*"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -115,7 +122,7 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      21,   14, // methods
+      22,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -123,29 +130,30 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
        8,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    3,  140,    2, 0x06,    1 /* Public */,
-       4,    1,  147,    2, 0x06,    5 /* Public */,
-       5,    1,  150,    2, 0x06,    7 /* Public */,
-       6,    2,  153,    2, 0x06,    9 /* Public */,
-       7,    3,  158,    2, 0x06,   12 /* Public */,
-       8,    5,  165,    2, 0x06,   16 /* Public */,
-       9,    2,  176,    2, 0x06,   22 /* Public */,
-      10,    2,  181,    2, 0x06,   25 /* Public */,
+       1,    3,  146,    2, 0x06,    1 /* Public */,
+       4,    1,  153,    2, 0x06,    5 /* Public */,
+       5,    1,  156,    2, 0x06,    7 /* Public */,
+       6,    2,  159,    2, 0x06,    9 /* Public */,
+       7,    3,  164,    2, 0x06,   12 /* Public */,
+       8,    5,  171,    2, 0x06,   16 /* Public */,
+       9,    2,  182,    2, 0x06,   22 /* Public */,
+      10,    2,  187,    2, 0x06,   25 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      11,    0,  186,    2, 0x0a,   28 /* Public */,
-      12,    3,  187,    2, 0x0a,   29 /* Public */,
-      13,   13,  194,    2, 0x0a,   33 /* Public */,
-      14,    1,  221,    2, 0x0a,   47 /* Public */,
-      15,    1,  224,    2, 0x0a,   49 /* Public */,
-      16,    3,  227,    2, 0x0a,   51 /* Public */,
-      17,    0,  234,    2, 0x0a,   55 /* Public */,
-      18,    0,  235,    2, 0x0a,   56 /* Public */,
-      19,    1,  236,    2, 0x0a,   57 /* Public */,
-      20,    1,  239,    2, 0x0a,   59 /* Public */,
-      21,    2,  242,    2, 0x0a,   61 /* Public */,
-      22,    0,  247,    2, 0x0a,   64 /* Public */,
-      23,    0,  248,    2, 0x0a,   65 /* Public */,
+      11,    0,  192,    2, 0x0a,   28 /* Public */,
+      12,    3,  193,    2, 0x0a,   29 /* Public */,
+      13,   13,  200,    2, 0x0a,   33 /* Public */,
+      14,    1,  227,    2, 0x0a,   47 /* Public */,
+      15,    1,  230,    2, 0x0a,   49 /* Public */,
+      16,    3,  233,    2, 0x0a,   51 /* Public */,
+      17,    0,  240,    2, 0x0a,   55 /* Public */,
+      18,    0,  241,    2, 0x0a,   56 /* Public */,
+      19,    1,  242,    2, 0x0a,   57 /* Public */,
+      20,    1,  245,    2, 0x0a,   59 /* Public */,
+      21,    2,  248,    2, 0x0a,   61 /* Public */,
+      22,    0,  253,    2, 0x0a,   64 /* Public */,
+      23,    0,  254,    2, 0x0a,   65 /* Public */,
+      24,    1,  255,    2, 0x0a,   66 /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::QByteArray, QMetaType::Int,    2,    2,    2,
@@ -171,6 +179,7 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
     QMetaType::Void, QMetaType::Bool, QMetaType::QString,    2,    2,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 25,    2,
 
        0        // eod
 };
@@ -269,7 +278,10 @@ Q_CONSTINIT const QMetaObject Worker::staticMetaObject = { {
         // method 'autoOpenPorts'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'getBCoordinates'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'setDelay'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QList<int> *, std::false_type>
     >,
     nullptr
 } };
@@ -301,6 +313,7 @@ void Worker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 18: _t->autoWalk((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
         case 19: _t->autoOpenPorts(); break;
         case 20: _t->getBCoordinates(); break;
+        case 21: _t->setDelay((*reinterpret_cast< std::add_pointer_t<QList<int>*>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -401,13 +414,13 @@ int Worker::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 21)
+        if (_id < 22)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 21;
+        _id -= 22;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 21)
+        if (_id < 22)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 21;
+        _id -= 22;
     }
     return _id;
 }
