@@ -49,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     delays.append({400, 400, 800, 600, 400});
 
+    initializeShortKeys();
+
     QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME);
     int bx = (int) settings.value(POINT_B_X, 0).toInt();
     int by = (int) settings.value(POINT_B_Y, 0).toInt();
@@ -106,19 +108,19 @@ void MainWindow::createWorkerThread() {
 
 void MainWindow::initializeShortKeys(){
     keyUp = new QShortcut(this);
-    keyUp -> setKey(Qt::UpArrow);
+    keyUp -> setKey(Qt::Key_Up);//Qt::CTRL +
     connect(keyUp, SIGNAL(activated()), this, SLOT(forwardPushButton_on()));
 
     keyDown = new QShortcut(this);
-    keyDown -> setKey(Qt::DownArrow);
+    keyDown -> setKey(Qt::Key_Down);
     connect(keyDown, SIGNAL(activated()), this, SLOT(backwardPushButton_on()));
 
     keyLeft = new QShortcut(this);
-    keyLeft -> setKey(Qt::LeftArrow);
+    keyLeft -> setKey(Qt::Key_Left);
     connect(keyLeft, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
 
     keyRight = new QShortcut(this);
-    keyRight -> setKey(Qt::RightArrow);
+    keyRight -> setKey(Qt::Key_Right);
     connect(keyRight, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
 
 }
@@ -428,24 +430,3 @@ void MainWindow::measure2pushButton_clicked()
     updateDelays();
     emit measureSignal();
 }
-
-//void MainWindow::slotShortcutUp()
-//{
-
-//}
-
-//void MainWindow::slotShortcutDown()
-//{
-
-//}
-
-//void MainWindow::slotShortcutLeft()
-//{
-
-//}
-
-//void MainWindow::slotShortcutRight()
-//{
-
-//}
-

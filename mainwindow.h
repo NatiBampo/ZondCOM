@@ -97,10 +97,5 @@ private slots:
     void autoPortButton_clicked();
     void measureBButton_clicked();
     void measure2pushButton_clicked();
-//    void slotShortcutUp();
-//    void slotShortcutDown();
-//    void slotShortcutLeft();
-//    void slotShortcutRight();
-
 };
 #endif // MAINWINDOW_H
