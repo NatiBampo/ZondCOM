@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->orientationButton, &QPushButton::clicked, this, &MainWindow::orientationButton_clicked);
     connect(ui->autoPortButton, &QPushButton::clicked, this, &MainWindow::autoPortButton_clicked);
     connect(ui->measureBButton, &QPushButton::clicked, this, &MainWindow::measureBButton_clicked);
+    connect(ui->measure2pushButton, &QPushButton::clicked, this, &MainWindow::measure2pushButton_clicked);
 
     createWorkerThread();
 
@@ -46,6 +47,14 @@ MainWindow::MainWindow(QWidget *parent)
         ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
+
+    delays.append({400, 400, 800, 600, 400});
+
+    initializeShortKeys();
+
+    QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME);
+    int bx = (int) settings.value(POINT_B_X, 0).toInt();
+    int by = (int) settings.value(POINT_B_Y, 0).toInt();
 
     //createStatsThread();
     //statsThread.quit();
@@ -61,7 +70,8 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::createWorkerThread() {
+void MainWindow::createWorkerThread()
+{
     worker = new Worker(&mutex);
     worker->moveToThread(&workerThread);
     workerThread.start();
@@ -86,7 +96,7 @@ void MainWindow::createWorkerThread() {
     //connect(this, &MainWindow::pauseStatus, this, &Worker::pauseStatusSignal);
     connect(this, &MainWindow::getBCoordinatesSignal, worker, &Worker::getBCoordinates);
 
-    connect(this, &MainWindow::changeDelaySignal, worker, &Worker::changeDelay);
+    connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
 
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
@@ -101,7 +111,29 @@ void MainWindow::createWorkerThread() {
 }
 
 
-void MainWindow::openPortPushButton_on() {
+void MainWindow::initializeShortKeys()
+{
+    keyUp = new QShortcut(this);
+    keyUp -> setKey(Qt::Key_Up);//Qt::CTRL +
+    connect(keyUp, SIGNAL(activated()), this, SLOT(forwardPushButton_on()));
+
+    keyDown = new QShortcut(this);
+    keyDown -> setKey(Qt::Key_Down);
+    connect(keyDown, SIGNAL(activated()), this, SLOT(backwardPushButton_on()));
+
+    keyLeft = new QShortcut(this);
+    keyLeft -> setKey(Qt::Key_Left);
+    connect(keyLeft, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
+
+    keyRight = new QShortcut(this);
+    keyRight -> setKey(Qt::Key_Right);
+    connect(keyRight, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
+
+}
+
+
+void MainWindow::openPortPushButton_on()
+{
     if (ui->openPortPushButton->text() == "Открыть") {
         emit openPortsSignal(ui->portComboBox->currentText(), ui->keithlyPortComboBox->currentText(), ui->lightPortComboBox->currentText());
         ui->openPortPushButton->setText("Закрыть");
@@ -116,7 +148,8 @@ void MainWindow::openPortPushButton_on() {
 }
 
 
-void MainWindow::openPortResult(QString port, QString portName, bool result) {
+void MainWindow::openPortResult(QString port, QString portName, bool result)
+{
     if (!result) {
         QMessageBox::warning(this, "Ошибка", "Не удалось подключиться к порту " + port);
     } else {
@@ -128,13 +161,15 @@ void MainWindow::openPortResult(QString port, QString portName, bool result) {
 }
 
 
-void MainWindow::statePushButton_on() {
+void MainWindow::statePushButton_on()
+{
     //emit sendPackageSignal(serialPortA5, "State\r\n", 1000);
     emit tableControllerSignal("State\r\n");
 }
 
 
-void MainWindow::coordsPushButton_on() {
+void MainWindow::coordsPushButton_on()
+{
     QByteArray x = ui->xLineEdit->text().toUtf8();
     QByteArray y = ui->yLineEdit->text().toUtf8();
     //emit sendPackageSignal(serialPortA5, "Set " + x + " " + y + '\r' + '\n', 1000);
@@ -142,46 +177,54 @@ void MainWindow::coordsPushButton_on() {
 }
 
 
-void MainWindow::tableUpPushButton_on() {
+void MainWindow::tableUpPushButton_on()
+{
     emit tableControllerSignal("Table UP\r\n");
 }
 
 
-void MainWindow::tableDownPushButton_on() {
+void MainWindow::tableDownPushButton_on()
+{
     emit tableControllerSignal("Table DN\r\n");
 }
 
 
-void MainWindow::forwardPushButton_on() {
+void MainWindow::forwardPushButton_on()
+{
     emit tableControllerSignal("Move 0 100\r\n");
 }
 
 
-void MainWindow::backwardPushButton_on() {
+void MainWindow::backwardPushButton_on()
+{
     emit tableControllerSignal("Move 0 -100\r\n");
 }
 
 
-void MainWindow::leftPushButton_on() {
+void MainWindow::leftPushButton_on()
+{
     emit tableControllerSignal("Move -100 0\r\n");
 }
 
 
-void MainWindow::rightPushButton_on() {
+void MainWindow::rightPushButton_on()
+{
+    qDebug() << clock();
+    updateDelays();
+    syncSettings();
     emit tableControllerSignal("Move 100 0\r\n");
 }
 
 
-void MainWindow::measurePushButton_on() {
-    if (delay != ui->delaySpinBox->value()){
-        delay = ui->delaySpinBox->value();
-        emit changeDelaySignal(delay);
-    }
+void MainWindow::measurePushButton_on()
+{
+    updateDelays();
     emit measureSignal();
 }
 
 
-void MainWindow::lightPushButton_on() {
+void MainWindow::lightPushButton_on()
+{
     if (ui->lightPushButton->text() == "Включить") {
         emit lightControllerSignal("1111\n");
         ui->lightPushButton->setText("Выключить");
@@ -193,7 +236,8 @@ void MainWindow::lightPushButton_on() {
 
 
 //функция записи последних измерений в таблицу
-void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V, double LC) {
+void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V, double LC)
+{
     currentIndex = index;
     int rowCount = ui->numYspinBox->value();
     int colCount = ui->numXspinBox->value() + 1;
@@ -210,24 +254,28 @@ void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V,
 
 
 //записываем ячейку таблицы на форму
-void MainWindow::addElement(int row, int element, double value) {
+void MainWindow::addElement(int row, int element, double value)
+{
     QModelIndex index;
     index = model->index(row, element);
     model->setData(index, value);
 }
 
 
-void MainWindow::writeLog(QByteArray log) {
+void MainWindow::writeLog(QByteArray log)
+{
     ui->logsListWidget->addItem(log);
 }
 
 
-void MainWindow::setProgressBarValue(int val) {
+void MainWindow::setProgressBarValue(int val)
+{
     ui->progressBar->setValue(val);
 }
 
 
-void MainWindow::setProgressBarRange(int minVal, int maxVal) {
+void MainWindow::setProgressBarRange(int minVal, int maxVal)
+{
     ui->progressBar->setMinimum(minVal);
     ui->progressBar->setMaximum(maxVal);
     finalIndex = maxVal;
@@ -236,15 +284,12 @@ void MainWindow::setProgressBarRange(int minVal, int maxVal) {
 
 void MainWindow::pauseButton_clicked(bool checked)
 {
-    if (checked){
+    if (checked)
+    {
         ui->pauseButton->setText("Продолжить");
-
-
-    } else {
-        if (delay != ui->delaySpinBox->value()){
-            delay = ui->delaySpinBox->value();
-            emit changeDelaySignal(delay);
-        }
+    } else
+    {
+        updateDelays();
         ui->pauseButton->setText("Пауза");
     }
     mutex.lock();
@@ -275,10 +320,7 @@ void MainWindow::goToButton_clicked()
 void MainWindow::saveMeasureButton_clicked()
 {
     if (!ui->scanPushButton->isChecked()) {
-        if (delay != ui->delaySpinBox->value()){
-            delay = ui->delaySpinBox->value();
-            emit changeDelaySignal(delay);
-        }
+        updateDelays();
         emit saveMeasureSignal(getUIIndex());
     }
 }
@@ -315,10 +357,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
         QFileDialog directory;
         dir_name = directory.getSaveFileName(this,"Choose directory and name");
         ui->addressLabel->setText(dir_name);
-        if (delay != ui->delaySpinBox->value()){
-            delay = ui->delaySpinBox->value();
-            emit changeDelaySignal(delay);
-        }
+        updateDelays();
         emit autoWalkSignal(true, dir_name);
     }
     else {
@@ -370,7 +409,7 @@ void MainWindow::orientationButton_clicked()
 
 
     emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, all_three, upLeft, upRight, downLeft, downRight);
-
+    syncSettings();
 }
 
 
@@ -419,4 +458,34 @@ void MainWindow::showMessageBox(QString msg_type, QString msg)
     }
 }
 
+
+void MainWindow::updateDelays()
+{
+    delays[0] = ui->zeroSpinBox->value();
+    delays[1] = ui->FCSpinBox->value();
+    delays[2] = ui->DC10spinBox->value();
+    delays[3] = ui->DC1VSpinBox->value();
+    delays[4] = ui->lightSpinBox->value();
+    emit setDelaySignal(&delays);
+}
+
+
+void MainWindow::syncSettings()
+{
+    QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME);
+    int BX = ui->BXspinBox->value();
+    int BY = ui->BYspinBox->value();
+
+    if(BX != 0 || BY != 0){
+        settings.setValue(POINT_B_X, BX);
+        settings.setValue(POINT_B_Y, BY);
+    }
+    settings.sync();
+}
+
+void MainWindow::measure2pushButton_clicked()
+{
+    updateDelays();
+    emit measureSignal();
+}
 

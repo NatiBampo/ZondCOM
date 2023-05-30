@@ -16,7 +16,8 @@ Worker::Worker(QMutex* mtxp)
     this->mutex = mtxp;
 }
 
-Worker::~Worker() {
+Worker::~Worker()
+{
     delete serialPortA5;
     delete serialPortKeithly;
     delete serialPortLight;
@@ -105,7 +106,8 @@ void Worker::handleError_light(QSerialPort::SerialPortError error)
 }
 
 
-void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight) {
+void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight)
+{
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
@@ -117,7 +119,8 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
 }
 
 
-void Worker::autoOpenPorts() {
+void Worker::autoOpenPorts()
+{
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
@@ -165,7 +168,8 @@ void Worker::autoOpenPorts() {
 }
 
 
-bool Worker::checkPlanarCOM() {
+bool Worker::checkPlanarCOM()
+{
     writeData_planar("State\r\n");
     readData_planar();
     QString responce = QString(planarResponce);
@@ -179,7 +183,8 @@ bool Worker::checkPlanarCOM() {
 }
 
 
-bool Worker::checkKeithlyCOM() {
+bool Worker::checkKeithlyCOM()
+{
     try {
         KeithlyZeroCorrection2();
         //emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
@@ -195,7 +200,8 @@ bool Worker::checkKeithlyCOM() {
 }
 
 
-bool Worker::checkLightCOM() {
+bool Worker::checkLightCOM()
+{
     try {
         LightOn2();
         if (lightResponce.contains("C3B2A1")) {
@@ -209,7 +215,8 @@ bool Worker::checkLightCOM() {
 }
 
 
-bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate) {
+bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate)
+{
     port->setPortName(portName);
     port->setBaudRate(baudRate);
     port->setDataBits(QSerialPort::DataBits::Data8);
@@ -222,7 +229,8 @@ bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate
 }
 
 
-void Worker::closePorts() {
+void Worker::closePorts()
+{
     QString result;
     if (serialPortA5->isOpen()) serialPortA5->close();
     if (serialPortKeithly->isOpen()) serialPortKeithly->close();
@@ -239,7 +247,8 @@ void Worker::closePort(QSerialPort* port)
 
 void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, double numberX,
                            double numberY, double colSlide, bool all_three,
-                           int upLeft, int upRight, int downLeft, int downRight) {
+                           int upLeft, int upRight, int downLeft, int downRight)
+{
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     //numberX необходимо привести к фактическому параметру
@@ -327,12 +336,14 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
 }
 
 
-bool Worker::checkIndex(int i) {
+bool Worker::checkIndex(int i)
+{
     return ((i >= gap[0] && i <= gap[1]) || (i <= gap[2] && i >= gap[3]) || (i >= gap[4] && i <= gap[5]) || (i <= gap[6] && i >= gap[7]));
 }
 
 
-void Worker::goToElement(int index) {
+void Worker::goToElement(int index)
+{
     //опустить стол
     writeData_planar("Table DN\r\n");
     //перевод координат в массив байтов для передачи станку
@@ -342,7 +353,8 @@ void Worker::goToElement(int index) {
 }
 
 
-void Worker::copyUpToIndex(int index) {
+void Worker::copyUpToIndex(int index)
+{
     //функция копирует файл до нужного индекса и заменяет собой файл источник
     if (index==0){
         return;
@@ -372,7 +384,8 @@ void Worker::copyUpToIndex(int index) {
 }
 
 
-void Worker::pauseWalk() {
+void Worker::pauseWalk()
+{
 //    //поменять статус паузы
     pause = !pause;
     pauseIndex = currentIndex;
@@ -382,20 +395,23 @@ void Worker::pauseWalk() {
  }
 
 
-void Worker::setIndex(int index) {
+void Worker::setIndex(int index)
+{
     //обновить индекс для обхода с нового элемента
     pauseIndex = currentIndex;
     currentIndex = index;
 }
 
 
-void Worker::stopWalk() {
+void Worker::stopWalk()
+{
     pause = false;
     currentIndex = lastIndex;//DotsX.count()
 }
 
 
-void Worker::saveMeasure(int index) {
+void Worker::saveMeasure(int index)
+{
     //функция копирует файл до нужного индекса и заменяет собой файл источник
     goToElement(index);
     MeasureDie2();
@@ -432,12 +448,14 @@ void Worker::saveMeasure(int index) {
 }
 
 
-void Worker::tableController(QByteArray message) {
+void Worker::tableController(QByteArray message)
+{
     writeData_planar(message);
 }
 
 
-void Worker::getBCoordinates() {
+void Worker::getBCoordinates()
+{
     int x = 0;
     int y = 0;
     writeData_planar("State\r\n");
@@ -450,29 +468,54 @@ void Worker::getBCoordinates() {
     }
 }
 
-void Worker::lightController(QByteArray msg) {
+void Worker::lightController(QByteArray msg)
+{
     writeData_light(msg);
 }
 
 void Worker::MeasureDie2()
 {
+    int start = clock();
     KeithlyZeroCorrection2();
-    writeData_planar("Table UP\r\n");
-    QThread::msleep(1000);
+    int stopZero = clock();
+    qDebug() << "zerocor estimated: " << QString::number(zeroDelay*3) <<" . real :" << QString::number(stopZero-start);
+
+//    writeData_planar("Table UP\r\n");
+//    QThread::msleep(1000);
+
     Keithly05VSet2();//300
     ForwardCurrent = KeithlyGet2();
+    int stopGet05 = clock();
+    qDebug() << "set FC estimated: " << QString::number(FCdelay) <<" . real :" << QString::number(stopGet05 - stopZero);
+
     Keithly10mVSet2();
-    QThread::msleep(delay);
+    QThread::msleep(DC10mVDelay);
     DarkCurrent10mV = KeithlyGet2();//800
+    int stopGetDC10mV = clock();
+    qDebug() << "set DC 10mV estimated: "<< QString::number(DC10mVDelay) << " . real :" << QString::number(stopGetDC10mV - stopGet05);
+
     Keithly1VSet2();
     DarkCurrent1V = KeithlyGet2();//600
-    LightOn2();
+    int stopGetDC1V = clock();
+    qDebug() << "set DC 1V estimated: "<< QString::number(DC1VDelay) << " . real :" << QString::number(stopGetDC1V - stopGetDC10mV);
+
+//    LightOn2();
+
     Keithly10mVSet2();
     writeData_keithley("CURR:RANG 2e-6\n");
-    QThread::msleep(400);
+    QThread::msleep(lightDelay);
     LightCurrent = KeithlyGet2();
+    int stopGetLightCurrent = clock();
+    qDebug() << "set Light current estimated: "<< QString::number(lightDelay) << " . real :" << QString::number(stopGetLightCurrent - stopGetDC1V);
     writeData_keithley("*RST\n");
-    LightOff2();
+
+    emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+                        QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
+
+    //LightOff2();
+
+    int stop = clock();
+    qDebug() << "Total time estimated: "<< QString::number(zeroDelay*3 + FCdelay + DC10mVDelay + DC1VDelay + lightDelay) << " . real :" << QString::number(stop-start);
 }
 
 
@@ -481,11 +524,11 @@ void Worker::KeithlyZeroCorrection2()
     writeData_keithley("*RST\n");
     writeData_keithley("SYST:ZCH ON\n");
     writeData_keithley("CURR:RANG 2e-9\n");
-    QThread::msleep(400);
+    QThread::msleep(zeroDelay);//400
     writeData_keithley("INIT\n");
-    QThread::msleep(400);
+    QThread::msleep(zeroDelay);//400
     writeData_keithley("SYST:ZCOR:STAT OFF\n");
-    QThread::msleep(400);
+    QThread::msleep(zeroDelay);//400
     writeData_keithley("SYST:ZCOR:ACQ\n");
     writeData_keithley("SYST:ZCH OFF\n");
     writeData_keithley("SYST:ZCOR ON\n");
@@ -499,7 +542,7 @@ void Worker::Keithly05VSet2()
     writeData_keithley("SOUR:VOLT " + QByteArray::number(0.6) + '\n');
     writeData_keithley("SOUR:VOLT:ILIM 1e-3\n");
     writeData_keithley("SOUR:VOLT:STAT ON\n");
-    QThread::msleep(300);
+    QThread::msleep(FCdelay);//300
 }
 
 
@@ -517,7 +560,7 @@ void Worker::Keithly1VSet2()
     writeData_keithley("SOUR:VOLT:STAT OFF\n");
     writeData_keithley("SOUR:VOLT -1\n");
     writeData_keithley("SOUR:VOLT:STAT ON\n");
-    QThread::msleep(600);
+    QThread::msleep(DC1VDelay);//600
 }
 
 
@@ -537,11 +580,12 @@ void Worker::LightOn2()
 void Worker::LightOff2()
 {
     writeData_light("0001\n");
-    readData_light();
+    //readData_light();
 }
 
 
-void Worker::autoWalk2(bool allNew, QString dir_cur) {
+void Worker::autoWalk2(bool allNew, QString dir_cur)
+{
 
     dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
     if (allNew) emit sendProgressBarRangeSignal(currentIndex, lastIndex);
@@ -622,7 +666,8 @@ void Worker::autoWalk2(bool allNew, QString dir_cur) {
 }
 
 
-void Worker::measureElement2() {
+void Worker::measureElement2()
+{
     int start = clock();
 
     MeasureDie2();
@@ -634,6 +679,12 @@ void Worker::measureElement2() {
 }
 
 
-void Worker::changeDelay(int d){
-    delay = d;
+void Worker::setDelay(QList<int> * delays)
+{
+    zeroDelay = delays->at(0);
+    FCdelay = delays->at(1);
+    DC10mVDelay = delays->at(2);
+    DC1VDelay = delays->at(3);
+    lightDelay = delays->at(4);
+
 }

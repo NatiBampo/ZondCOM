@@ -48,7 +48,11 @@ private:
     int downLeft_offset = 0;
     int downRight_offset = 0;
 
-    int delay = 800;
+    int zeroDelay = 400;
+    int FCdelay = 300;
+    int DC10mVDelay = 800;
+    int DC1VDelay = 600;
+    int lightDelay = 400;
 
     double localCurrent = 0.0;
     double ForwardCurrent = 0.0;
@@ -111,8 +115,7 @@ public slots:
     void readData_light();
     void handleError_light(QSerialPort::SerialPortError);
     void autoWalk2(bool, QString);
-
-    void changeDelay(int);
+    void setDelay(QList<int> *);
 };
 
 #endif // WORKER_H

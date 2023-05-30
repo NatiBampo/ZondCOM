@@ -289,13 +289,16 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
           <string>Ручной</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_3">
+          <item row="9" column="0" colspan="2">
+           <widget class="QListWidget" name="logsListWidget"/>
+          </item>
           <item row="6" column="0">
            <widget class="QGroupBox" name="groupBox_3">
             <property name="title">
@@ -369,6 +372,13 @@
             </layout>
            </widget>
           </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QPushButton" name="statePushButton">
+            <property name="text">
+             <string>Состояние</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="1">
            <widget class="QGroupBox" name="groupBox_4">
             <property name="title">
@@ -383,13 +393,6 @@
               </widget>
              </item>
             </layout>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QPushButton" name="statePushButton">
-            <property name="text">
-             <string>Состояние</string>
-            </property>
            </widget>
           </item>
           <item row="3" column="0">
@@ -415,15 +418,78 @@
             </layout>
            </widget>
           </item>
-          <item row="7" column="0">
+          <item row="8" column="0">
            <widget class="QLabel" name="label_20">
             <property name="text">
              <string>Журнал</string>
             </property>
            </widget>
           </item>
-          <item row="8" column="0" colspan="2">
-           <widget class="QListWidget" name="logsListWidget"/>
+          <item row="7" column="0">
+           <widget class="QGroupBox" name="groupBox_6">
+            <property name="title">
+             <string>Задержки</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_8">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_31">
+               <property name="text">
+                <string>zero</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="zeroSpinBox"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_32">
+               <property name="text">
+                <string>FC</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="FCSpinBox"/>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_33">
+               <property name="text">
+                <string>DC10mV</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSpinBox" name="DC10spinBox"/>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_34">
+               <property name="text">
+                <string>DC1V</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QSpinBox" name="DC1VSpinBox"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_35">
+               <property name="text">
+                <string>Light</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="lightSpinBox"/>
+             </item>
+             <item row="5" column="1">
+              <widget class="QPushButton" name="measure2pushButton">
+               <property name="text">
+                <string>Измерение</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -1109,7 +1175,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
