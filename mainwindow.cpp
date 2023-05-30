@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <ctime>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -35,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->orientationButton, &QPushButton::clicked, this, &MainWindow::orientationButton_clicked);
     connect(ui->autoPortButton, &QPushButton::clicked, this, &MainWindow::autoPortButton_clicked);
     connect(ui->measureBButton, &QPushButton::clicked, this, &MainWindow::measureBButton_clicked);
-    connect(ui->measure2pushButton, &QPushButton::clicked, this, &MainWindow::on_measure2pushButton_clicked);
+    connect(ui->measure2pushButton, &QPushButton::clicked, this, &MainWindow::measure2pushButton_clicked);
 
     createWorkerThread();
 
@@ -45,7 +46,14 @@ MainWindow::MainWindow(QWidget *parent)
         ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
+
     delays.append({400, 400, 800, 600, 400});
+
+    QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME);
+    int bx = (int) settings.value(POINT_B_X, 0).toInt();
+    int by = (int) settings.value(POINT_B_Y, 0).toInt();
+    ui->BXspinBox->setValue(bx);
+    ui->BYspinBox->setValue(by);
 }
 
 
@@ -60,7 +68,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::createWorkerThread() {
     worker = new Worker(&mutex);
-    worker->moveToThread(&workerThread);
+    worker -> moveToThread(&workerThread);
     workerThread.start();
 
     connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::scanningPlate);
@@ -96,7 +104,24 @@ void MainWindow::createWorkerThread() {
     connect(worker, &Worker::sendBCoordsSignal, this, &MainWindow::setBCoords);
 }
 
+void MainWindow::initializeShortKeys(){
+    keyUp = new QShortcut(this);
+    keyUp -> setKey(Qt::UpArrow);
+    connect(keyUp, SIGNAL(activated()), this, SLOT(forwardPushButton_on()));
 
+    keyDown = new QShortcut(this);
+    keyDown -> setKey(Qt::DownArrow);
+    connect(keyDown, SIGNAL(activated()), this, SLOT(backwardPushButton_on()));
+
+    keyLeft = new QShortcut(this);
+    keyLeft -> setKey(Qt::LeftArrow);
+    connect(keyLeft, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
+
+    keyRight = new QShortcut(this);
+    keyRight -> setKey(Qt::RightArrow);
+    connect(keyRight, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
+
+}
 void MainWindow::openPortPushButton_on() {
     if (ui->openPortPushButton->text() == "Открыть") {
         emit openPortsSignal(ui->portComboBox->currentText(), ui->keithlyPortComboBox->currentText(), ui->lightPortComboBox->currentText());
@@ -169,6 +194,7 @@ void MainWindow::rightPushButton_on() {
 void MainWindow::measurePushButton_on() {
     qDebug() << clock();
     updateDelays();
+    syncSettings();
     emit measureSignal();
 }
 
@@ -350,6 +376,7 @@ void MainWindow::orientationButton_clicked()
     ui->tableView->setModel(model);
 
     emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, rowSlide, all_three, upLeft, upRight, downLeft, downRight);
+    syncSettings();
 }
 
 
@@ -369,6 +396,7 @@ void MainWindow::measureBButton_clicked()
 void MainWindow::setBCoords(int x, int y) {
     ui->BXspinBox->setValue(x);
     ui->BYspinBox->setValue(y);
+    syncSettings();
 }
 
 void MainWindow::updateDelays(){
@@ -382,9 +410,42 @@ void MainWindow::updateDelays(){
     emit setDelaySignal(&delays);
 }
 
-void MainWindow::on_measure2pushButton_clicked()
+void MainWindow::syncSettings()
+{
+    QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME);
+    int BX = ui->BXspinBox->value();
+    int BY = ui->BYspinBox->value();
+
+    if(BX != 0 || BY != 0){
+        settings.setValue(POINT_B_X, BX);
+        settings.setValue(POINT_B_Y, BY);
+    }
+    settings.sync();
+}
+
+void MainWindow::measure2pushButton_clicked()
 {
     updateDelays();
     emit measureSignal();
 }
+
+//void MainWindow::slotShortcutUp()
+//{
+
+//}
+
+//void MainWindow::slotShortcutDown()
+//{
+
+//}
+
+//void MainWindow::slotShortcutLeft()
+//{
+
+//}
+
+//void MainWindow::slotShortcutRight()
+//{
+
+//}
 

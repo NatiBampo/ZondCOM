@@ -479,24 +479,41 @@ void Worker::lightController(QByteArray message) {
 
 
 void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly) {
+    int start = clock();
     KeithlyZeroCorrection(serialPortKeithly);
+    int stopZero = clock();
+    qDebug() << "zerocor estimated: " << QString::number(zeroDelay*3) <<" . real :" << QString::number(stopZero-start);
     //emit sendPackageSignal2(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
+
     Keithly05VSet(serialPortKeithly);
     ForwardCurrent = KeithlyGet(serialPortKeithly);
+    int stopGet05 = clock();
+    qDebug() << "set FC estimated: " << QString::number(FCdelay) <<" . real :" << QString::number(stopGet05 - stopZero);
+
     Keithly10mVSet(serialPortKeithly);
     QThread::msleep(DC10mVDelay);//800
     DarkCurrent10mV = KeithlyGet(serialPortKeithly);
+    int stopGetDC10mV = clock();
+    qDebug() << "set DC 10mV estimated: "<< QString::number(DC10mVDelay) << " . real :" << QString::number(stopGetDC10mV - stopGet05);
+
     Keithly1VSet(serialPortKeithly);
     DarkCurrent1V = KeithlyGet(serialPortKeithly);
+    int stopGetDC1V = clock();
+    qDebug() << "set DC 1V estimated: "<< QString::number(DC1VDelay) << " . real :" << QString::number(stopGetDC1V - stopGetDC10mV);
     //LightOn();
     Keithly10mVSet(serialPortKeithly);
     emit sendPackageSignal2(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
     QThread::msleep(photoDelay);//400//200
     LightCurrent = KeithlyGet(serialPortKeithly);
+    int stopGetLightCurrent = clock();
+    qDebug() << "set Light current estimated: "<< QString::number(photoDelay) << " . real :" << QString::number(stopGetLightCurrent - stopGetDC1V);
+
     emit sendPackageSignal2(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
     emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                         QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
     //LightOff();
+    int stop = clock();
+    qDebug() << "Total time estimated: "<< QString::number(zeroDelay*3 + FCdelay + DC10mVDelay + DC1VDelay + photoDelay) << " . real :" << QString::number(stop-start);
 }
 
 

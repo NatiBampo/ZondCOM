@@ -7,6 +7,16 @@
 #include <QStandardItemModel>
 #include <QSqlDatabase>
 #include <QMutex>
+#include <QSettings>
+#include <QShortcut>
+
+
+#define ORGANIZATION_NAME "ZOO"
+#define ORGANIZATION_DOMAIN "www.ZOO.ru"
+#define APPLICATION_NAME "QSettings Program"
+
+#define POINT_B_X "point_B_x"
+#define POINT_B_Y "point_B_y"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,14 +37,21 @@ private:
     QThread workerThread;
     QMutex mutex;
     QString dir_name;
+    QList<int> delays;
+    QShortcut *keyUp;
+    QShortcut *keyDown;
+    QShortcut *keyLeft;
+    QShortcut *keyRight;
     int currentIndex = 0;
     int finalIndex = 0;
+
+
     void createWorkerThread();
     void addElement(int, int, double);
     int getUIIndex();
-    QList<int> delays;
     void updateDelays();
-
+    void syncSettings();
+    void initializeShortKeys();
 
 signals:
     void scanningPlateSignal(double, double, double, double, double, double, double, double, bool, int, int, int, int);
@@ -79,6 +96,11 @@ private slots:
     void scanPushButton_clicked(bool checked);
     void autoPortButton_clicked();
     void measureBButton_clicked();
-    void on_measure2pushButton_clicked();
+    void measure2pushButton_clicked();
+//    void slotShortcutUp();
+//    void slotShortcutDown();
+//    void slotShortcutLeft();
+//    void slotShortcutRight();
+
 };
 #endif // MAINWINDOW_H

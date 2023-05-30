@@ -165,7 +165,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1200, 692);
+        MainWindow->resize(1200, 841);
         MainWindow->setMaximumSize(QSize(1200, 1000));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
@@ -399,6 +399,9 @@ public:
         gridLayout_8->setObjectName("gridLayout_8");
         DC10mVspinBox = new QSpinBox(groupBox_6);
         DC10mVspinBox->setObjectName("DC10mVspinBox");
+        DC10mVspinBox->setMaximum(5000);
+        DC10mVspinBox->setSingleStep(100);
+        DC10mVspinBox->setValue(800);
 
         gridLayout_8->addWidget(DC10mVspinBox, 2, 1, 1, 1);
 
@@ -414,6 +417,9 @@ public:
 
         zeroSpinBox = new QSpinBox(groupBox_6);
         zeroSpinBox->setObjectName("zeroSpinBox");
+        zeroSpinBox->setMaximum(5000);
+        zeroSpinBox->setSingleStep(100);
+        zeroSpinBox->setValue(400);
 
         gridLayout_8->addWidget(zeroSpinBox, 0, 1, 1, 1);
 
@@ -424,6 +430,9 @@ public:
 
         DC1VspinBox = new QSpinBox(groupBox_6);
         DC1VspinBox->setObjectName("DC1VspinBox");
+        DC1VspinBox->setMaximum(5000);
+        DC1VspinBox->setSingleStep(100);
+        DC1VspinBox->setValue(600);
 
         gridLayout_8->addWidget(DC1VspinBox, 3, 1, 1, 1);
 
@@ -434,6 +443,9 @@ public:
 
         PhotoSpinBox = new QSpinBox(groupBox_6);
         PhotoSpinBox->setObjectName("PhotoSpinBox");
+        PhotoSpinBox->setMaximum(5000);
+        PhotoSpinBox->setSingleStep(100);
+        PhotoSpinBox->setValue(400);
 
         gridLayout_8->addWidget(PhotoSpinBox, 4, 1, 1, 1);
 
@@ -444,6 +456,9 @@ public:
 
         FCspinBox = new QSpinBox(groupBox_6);
         FCspinBox->setObjectName("FCspinBox");
+        FCspinBox->setMaximum(5000);
+        FCspinBox->setSingleStep(100);
+        FCspinBox->setValue(300);
 
         gridLayout_8->addWidget(FCspinBox, 1, 1, 1, 1);
 
@@ -849,7 +864,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1200, 22));
+        menubar->setGeometry(QRect(0, 0, 1200, 26));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
