@@ -31,6 +31,9 @@ void Worker::connectPorts()
 
     connect(serialPortKeithly, &QSerialPort::errorOccurred, this, &Worker::handleError_keithley);
     connect(serialPortKeithly, &QSerialPort::readyRead, this, &Worker::readData_keithley);
+    connect(&m_timer, &QTimer::timeout, this, &Worker::handleTimeout_Keithley);
+
+//    m_timer.start(5000);
 
     connect(serialPortLight, &QSerialPort::errorOccurred, this, &Worker::handleError_light);
     connect(serialPortLight, &QSerialPort::readyRead, this, &Worker::readData_light);
@@ -72,6 +75,8 @@ void Worker::readData_keithley()
 {
     const QByteArray data = serialPortKeithly->readAll();
     keithleyResponce = data;
+//    if (!m_timer.isActive())
+//            m_timer.start(5000);
 }
 
 
@@ -83,6 +88,13 @@ void Worker::handleError_keithley(QSerialPort::SerialPortError error)
     }
 }
 
+
+void Worker::handleTimeout_Keithley()
+{
+    if (!keithleyResponce.isEmpty()) {
+        qDebug() << "i'm in handle";
+    }
+}
 
 void Worker::writeData_light(const QByteArray& data)
 {
@@ -468,10 +480,12 @@ void Worker::getBCoordinates()
     }
 }
 
+
 void Worker::lightController(QByteArray msg)
 {
     writeData_light(msg);
 }
+
 
 void Worker::MeasureDie2()
 {

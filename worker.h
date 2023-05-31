@@ -7,6 +7,7 @@
 #include <QSqlQuery>
 #include <QMutex>
 #include <keithley.h>
+#include <QTimer>
 
 
 #define ANSWER_DELAY 1000
@@ -31,7 +32,9 @@ private:
     QByteArray lightResponce;
     QByteArray planarResponce;
 
+    QTimer m_timer;
     QMutex* mutex;
+
     QList<int> gap;
     QList<double> DotsX;
     QList<double> DotsY;
@@ -116,6 +119,7 @@ public slots:
     void handleError_light(QSerialPort::SerialPortError);
     void autoWalk2(bool, QString);
     void setDelay(QList<int> *);
+    void handleTimeout_Keithley();
 };
 
 #endif // WORKER_H
