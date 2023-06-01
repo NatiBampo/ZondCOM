@@ -72,7 +72,8 @@ void Worker::handleError_planar(QSerialPort::SerialPortError error)
 
 void Worker::writeData_keithley(const QByteArray& data)
 {
-    serialPortKeithly->write(data);
+//    serialPortKeithly->write(data);
+    writeWin(data);
 }
 
 
@@ -711,7 +712,7 @@ void Worker::setDelay(QList<int> * delays)
 
 void Worker::initPort9()
 {
-    LPCTSTR sPortName = L"COM9";
+    LPCTSTR sPortName = L"\\\\.\\COM9";
 
     hSerial = CreateFile(sPortName, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -758,8 +759,6 @@ void Worker::readWin()
 
 void Worker::writeWin(const QByteArray src)
 {
-
-
     //char data[] = "Hello from C++";  // строка для передачи
     char *dst;
     qstrcpy(dst, src);  // строка для передачи
@@ -767,5 +766,6 @@ void Worker::writeWin(const QByteArray src)
     DWORD dwBytesWritten;    // тут будет количество собственно переданных байт
 
     BOOL iRet = WriteFile(hSerial, dst, dwSize, &dwBytesWritten, NULL);
-    qDebug() << dwSize << " Bytes in string. " << dwBytesWritten << " Bytes sended. ";
+//    qDebug() << dwSize << " Bytes in string. " << dwBytesWritten << " Bytes sended. ";
 }
+
