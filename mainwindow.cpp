@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QtCharts>
 
+
 //using namespace QtCharts;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -425,11 +426,13 @@ void MainWindow::measureBButton_clicked()
     emit getBCoordinatesSignal();
 }
 
+
 void MainWindow::setBCoords(int x, int y)
 {
     ui->BXspinBox->setValue(x);
     ui->BYspinBox->setValue(y);
 }
+
 
 void  MainWindow::createStatsThread()
 {
@@ -444,6 +447,7 @@ void MainWindow::on_chartsButton_clicked()
 {
     emit showChartsSignal(dir_name);
 }
+
 
 void MainWindow::showMessageBox(QString msg_type, QString msg)
 {
@@ -483,9 +487,9 @@ void MainWindow::syncSettings()
     settings.sync();
 }
 
+
 void MainWindow::measure2pushButton_clicked()
 {
     updateDelays();
     emit measureSignal();
 }
-

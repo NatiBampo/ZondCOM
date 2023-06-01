@@ -9,11 +9,16 @@
 #include <QRegularExpressionMatch>
 #include <ctime>
 #include <QMessageBox>
+#include <windows.h>
+
+
+HANDLE hSerial;
 
 
 Worker::Worker(QMutex* mtxp)
 {
     this->mutex = mtxp;
+    initPort9();
 }
 
 Worker::~Worker()
@@ -701,4 +706,66 @@ void Worker::setDelay(QList<int> * delays)
     DC1VDelay = delays->at(3);
     lightDelay = delays->at(4);
 
+}
+
+
+void Worker::initPort9()
+{
+    LPCTSTR sPortName = L"COM9";
+
+    hSerial = CreateFile(sPortName, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+    if (hSerial == INVALID_HANDLE_VALUE)
+    {
+        if (GetLastError() == ERROR_FILE_NOT_FOUND)
+        {
+            qDebug() << "serial port does not exist.\n";
+        }
+        qDebug()<< "some other error occurred.\n";
+    }
+
+    DCB dcbSerialParams = { 0 };
+    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
+    if (!GetCommState(hSerial, &dcbSerialParams))
+    {
+        qDebug() << "getting state error\n";
+    }
+
+    dcbSerialParams.BaudRate = CBR_9600;
+    dcbSerialParams.ByteSize = 8;
+    dcbSerialParams.StopBits = ONESTOPBIT;
+    dcbSerialParams.Parity = NOPARITY;
+    if (!SetCommState(hSerial, &dcbSerialParams))
+    {
+        qDebug() << "error setting serial port state\n";
+    }
+}
+
+
+void Worker::readWin()
+{
+    DWORD iSize;
+    char sReceivedChar;
+    while (true)
+    {
+        BOOL ret = ReadFile(hSerial, &sReceivedChar, 1, &iSize, 0);  // получаем 1 байт
+        if (iSize > 0)
+            // если что-то принято, выводим
+            qDebug() << sReceivedChar;
+    }
+}
+
+
+void Worker::writeWin(const QByteArray src)
+{
+
+
+    //char data[] = "Hello from C++";  // строка для передачи
+    char *dst;
+    qstrcpy(dst, src);  // строка для передачи
+    DWORD dwSize = sizeof(dst);   // размер этой строки
+    DWORD dwBytesWritten;    // тут будет количество собственно переданных байт
+
+    BOOL iRet = WriteFile(hSerial, dst, dwSize, &dwBytesWritten, NULL);
+    qDebug() << dwSize << " Bytes in string. " << dwBytesWritten << " Bytes sended. ";
 }

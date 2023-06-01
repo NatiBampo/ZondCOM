@@ -30,9 +30,11 @@ void Keithley::openSerialPort(QString name)
     m_serial->setFlowControl(QSerialPort::NoFlowControl);
 
 
-    if (m_serial->open(QIODevice::ReadWrite)) {
+    if (m_serial->open(QIODevice::ReadWrite))
+    {
         //showStatusMessage
-    } else {
+    } else
+    {
         QMessageBox::critical(this, tr("Error"), m_serial->errorString());
     }
 }

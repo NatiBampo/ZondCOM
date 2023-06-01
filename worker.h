@@ -83,8 +83,10 @@ private:
     void LightOn2();
     void LightOff2();
 
-
     void closePort(QSerialPort*);
+    void initPort9();
+    void readWin();
+    void writeWin(const QByteArray);
 
 signals:
 
