@@ -18,7 +18,7 @@ HANDLE hSerial;
 Worker::Worker(QMutex* mtxp)
 {
     this->mutex = mtxp;
-    initPort9();
+    //initPort9();
 }
 
 Worker::~Worker()
@@ -36,13 +36,15 @@ void Worker::connectPorts()
 
     connect(serialPortKeithly, &QSerialPort::errorOccurred, this, &Worker::handleError_keithley);
     connect(serialPortKeithly, &QSerialPort::readyRead, this, &Worker::readData_keithley);
-    connect(&m_timer, &QTimer::timeout, this, &Worker::handleTimeout_Keithley);
 
 //    m_timer.start(5000);
 
     connect(serialPortLight, &QSerialPort::errorOccurred, this, &Worker::handleError_light);
     connect(serialPortLight, &QSerialPort::readyRead, this, &Worker::readData_light);
     //connect(serialPortA5, &Worker::getData, this, &Worker::writeData);
+    m_timer.setSingleShot(true);
+    connect(serialPortKeithly, &QSerialPort::bytesWritten, this, &Worker::handleBytesWritten);
+    connect(&m_timer, &QTimer::timeout, this, &Worker::handleTimeout);
 
 }
 
@@ -70,9 +72,52 @@ void Worker::handleError_planar(QSerialPort::SerialPortError error)
 }
 
 
+//
+void Worker::write(const QByteArray &writeData)//, QSerialPort* m_serialPort
+{
+    m_writeData = writeData;
+
+    const qint64 bytesWritten = serialPortKeithly->write(writeData);
+
+    if (bytesWritten == -1) {
+        qDebug() << QObject::tr("Failed to write the data to port %1, error: %2")
+                    .arg(serialPortKeithly->portName())
+                    .arg(serialPortKeithly->errorString());;
+
+    } else if (bytesWritten != m_writeData.size()) {
+        qDebug() << QObject::tr("Failed to write all the data to port %1, error: %2")
+                            .arg(serialPortKeithly->portName())
+                            .arg(serialPortKeithly->errorString());
+    }
+
+    m_timer.start(10);
+    //readData_keithley();
+}
+
+void Worker::handleBytesWritten(qint64 bytes)
+{
+    m_bytesWritten += bytes;
+    if (m_bytesWritten == m_writeData.size()) {
+        m_bytesWritten = 0;
+        qDebug() << QObject::tr("Data successfully sent to port %1")
+                            .arg(serialPortKeithly->portName());
+    }
+}
+
+void Worker::handleTimeout()
+{
+    qDebug() << QObject::tr("Operation timed out for port %1, error: %2")
+                        .arg(serialPortKeithly->portName())
+                        .arg(serialPortKeithly->errorString());
+}
+
+
 void Worker::writeData_keithley(const QByteArray& data)
 {
-    serialPortKeithly->write(data);
+//    writeWin(data);
+    //serialPortKeithly->write(data);
+    write(data);
+    //QThread::msleep(100);
 }
 
 
@@ -90,14 +135,6 @@ void Worker::handleError_keithley(QSerialPort::SerialPortError error)
     if (error == QSerialPort::ResourceError) {
         emit sendMessageBox("critical", serialPortKeithly->errorString());
         closePorts();
-    }
-}
-
-
-void Worker::handleTimeout_Keithley()
-{
-    if (!keithleyResponce.isEmpty()) {
-        qDebug() << "i'm in handle";
     }
 }
 
@@ -128,9 +165,9 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
-    emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));
+    //emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));
     emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));
-    emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));
+    //emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));
 
     connectPorts();
 }
@@ -543,11 +580,11 @@ void Worker::KeithlyZeroCorrection2()
     writeData_keithley("*RST\n");
     writeData_keithley("SYST:ZCH ON\n");
     writeData_keithley("CURR:RANG 2e-9\n");
-    QThread::msleep(zeroDelay);//400
+    QThread::msleep(zeroDelay);                 //400
     writeData_keithley("INIT\n");
-    QThread::msleep(zeroDelay);//400
+    QThread::msleep(zeroDelay);                 //400
     writeData_keithley("SYST:ZCOR:STAT OFF\n");
-    QThread::msleep(zeroDelay);//400
+    QThread::msleep(zeroDelay);                 //400
     writeData_keithley("SYST:ZCOR:ACQ\n");
     writeData_keithley("SYST:ZCH OFF\n");
     writeData_keithley("SYST:ZCOR ON\n");
@@ -567,7 +604,7 @@ void Worker::Keithly05VSet2()
 
 void Worker::Keithly10mVSet2()
 {
-    writeData_keithley( "CURR:RANG 2e-10\n");
+    writeData_keithley("CURR:RANG 2e-10\n");
     writeData_keithley("SOUR:VOLT:STAT OFF\n");
     writeData_keithley("SOUR:VOLT -10e-3\n");
     writeData_keithley("SOUR:VOLT:STAT ON\n");
@@ -588,6 +625,7 @@ double Worker::KeithlyGet2()
     keithleyResponce = keithleyResponce.remove(keithleyResponce.indexOf("A"), keithleyResponce.length() - keithleyResponce.indexOf("A"));
     return keithleyResponce.toDouble();
 }
+
 
 void Worker::LightOn2()
 {
@@ -709,63 +747,63 @@ void Worker::setDelay(QList<int> * delays)
 }
 
 
-void Worker::initPort9()
-{
-    LPCTSTR sPortName = L"COM9";
+//void Worker::initPort9()
+//{
+//    LPCTSTR sPortName = L"\\\\.\\COM7";
 
-    hSerial = CreateFile(sPortName, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+//    hSerial = CreateFile(sPortName, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-    if (hSerial == INVALID_HANDLE_VALUE)
-    {
-        if (GetLastError() == ERROR_FILE_NOT_FOUND)
-        {
-            qDebug() << "serial port does not exist.\n";
-        }
-        qDebug()<< "some other error occurred.\n";
-    }
+//    if (hSerial == INVALID_HANDLE_VALUE)
+//    {
+//        if (GetLastError() == ERROR_FILE_NOT_FOUND)
+//        {
+//            qDebug() << "serial port does not exist.\n";
+//        }
+//        qDebug()<< "some other error occurred.\n";
+//    }
 
-    DCB dcbSerialParams = { 0 };
-    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
-    if (!GetCommState(hSerial, &dcbSerialParams))
-    {
-        qDebug() << "getting state error\n";
-    }
+//    DCB dcbSerialParams = { 0 };
+//    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
+//    if (!GetCommState(hSerial, &dcbSerialParams))
+//    {
+//        qDebug() << "getting state error\n";
+//    }
 
-    dcbSerialParams.BaudRate = CBR_9600;
-    dcbSerialParams.ByteSize = 8;
-    dcbSerialParams.StopBits = ONESTOPBIT;
-    dcbSerialParams.Parity = NOPARITY;
-    if (!SetCommState(hSerial, &dcbSerialParams))
-    {
-        qDebug() << "error setting serial port state\n";
-    }
-}
-
-
-void Worker::readWin()
-{
-    DWORD iSize;
-    char sReceivedChar;
-    while (true)
-    {
-        BOOL ret = ReadFile(hSerial, &sReceivedChar, 1, &iSize, 0);  // получаем 1 байт
-        if (iSize > 0)
-            // если что-то принято, выводим
-            qDebug() << sReceivedChar;
-    }
-}
+//    dcbSerialParams.BaudRate = CBR_9600;
+//    dcbSerialParams.ByteSize = 8;
+//    dcbSerialParams.StopBits = ONESTOPBIT;
+//    dcbSerialParams.Parity = NOPARITY;
+//    if (!SetCommState(hSerial, &dcbSerialParams))
+//    {
+//        qDebug() << "error setting serial port state\n";
+//    }
+//}
 
 
-void Worker::writeWin(const QByteArray src)
-{
+//void Worker::readWin()
+//{
+//    DWORD iSize;
+//    char sReceivedChar;
+//    while (true)
+//    {
+//        BOOL ret = ReadFile(hSerial, &sReceivedChar, 1, &iSize, 0);  // получаем 1 байт
+//        if (iSize > 0)
+//            // если что-то принято, выводим
+//            qDebug() << sReceivedChar;
+//    }
+//}
 
 
-    //char data[] = "Hello from C++";  // строка для передачи
-    char *dst;
-    qstrcpy(dst, src);  // строка для передачи
-    DWORD dwSize = sizeof(dst);   // размер этой строки
-    DWORD dwBytesWritten;    // тут будет количество собственно переданных байт
+//void Worker::writeWin(const QByteArray src)
+//{
 
-    BOOL iRet = WriteFile(hSerial, dst, dwSize, &dwBytesWritten, NULL);
-    qDebug() << dwSize << " Bytes in string. " << dwBytesWritten << " Bytes sended. ";
-}
+
+//    //char data[] = "Hello from C++";  // строка для передачи
+//    char *dst;
+//    qstrcpy(dst, src);  // строка для передачи
+//    DWORD dwSize = sizeof(dst);   // размер этой строки
+//    DWORD dwBytesWritten;    // тут будет количество собственно переданных байт
+
+//    BOOL iRet = WriteFile(hSerial, dst, dwSize, &dwBytesWritten, NULL);
+//    qDebug() << dwSize << " Bytes in string. " << dwBytesWritten << " Bytes sended. ";
+//}

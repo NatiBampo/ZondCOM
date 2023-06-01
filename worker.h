@@ -8,6 +8,7 @@
 #include <QMutex>
 #include <keithley.h>
 #include <QTimer>
+#include <QTextStream>
 
 
 #define ANSWER_DELAY 1000
@@ -31,6 +32,9 @@ private:
     QByteArray keithleyResponce;
     QByteArray lightResponce;
     QByteArray planarResponce;
+
+    QByteArray m_writeData;
+    qint64 m_bytesWritten = 0;
 
     QTimer m_timer;
     QMutex* mutex;
@@ -84,9 +88,11 @@ private:
     void LightOff2();
 
     void closePort(QSerialPort*);
-    void initPort9();
-    void readWin();
-    void writeWin(const QByteArray);
+//    void initPort9();
+//    void readWin();
+//    void writeWin(const QByteArray);
+
+    void write(const QByteArray &);
 
 signals:
 
@@ -121,7 +127,10 @@ public slots:
     void handleError_light(QSerialPort::SerialPortError);
     void autoWalk2(bool, QString);
     void setDelay(QList<int> *);
-    void handleTimeout_Keithley();
+    void handleTimeout();
+
+    void handleBytesWritten(qint64 bytes);
+
 };
 
 #endif // WORKER_H
