@@ -9,7 +9,7 @@
 #include <QRegularExpression>
 
 
-#define ANSWER_DELAY 1000
+#define ANSWER_DELAY 200
 #define NO_ANSWER_DELAY 10
 
 class Worker : public QObject

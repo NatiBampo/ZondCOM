@@ -28,9 +28,9 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
     if (portNameKeithly != "Keithley"){emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));}
     if (portNameLight != "Диод"){emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));}
 
-    serialPortA5->flush();
-    serialPortKeithly->flush();
-    serialPortLight->flush();
+//    serialPortA5->flush();
+//    serialPortKeithly->flush();
+//    serialPortLight->flush();
 }
 
 
@@ -164,16 +164,16 @@ void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay)
     lastAnswer = "";
     serialPort->write(package);
     serialPort->flush();
-    emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
+    //emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
     while (serialPort->waitForReadyRead(delay)) lastAnswer.append(serialPort->readAll());
-    if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
+    //if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
 }
 
 
 void Worker::sendPackage2(QSerialPort *serialPort, QByteArray package, int delay) {
     serialPort->write(package);
     serialPort->flush();
-    emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
+    //emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
 }
 
 
