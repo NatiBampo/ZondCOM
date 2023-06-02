@@ -90,7 +90,7 @@ void Worker::write(const QByteArray &writeData)//, QSerialPort* m_serialPort
                             .arg(serialPortKeithly->errorString());
     }
 
-    m_timer.start(10);
+    //m_timer.start(10);
     //readData_keithley();
 }
 
@@ -117,12 +117,17 @@ void Worker::writeData_keithley(const QByteArray& data)
 //    writeWin(data);
     //serialPortKeithly->write(data);
     write(data);
+    //counter++;
+    //readData_keithley();
+
     //QThread::msleep(100);
 }
 
 
 void Worker::readData_keithley()
 {
+    serialPortKeithly->bytesAvailable();
+    QThread::msleep(1);
     const QByteArray data = serialPortKeithly->readAll();
     keithleyResponce = data;
 //    if (!m_timer.isActive())
@@ -137,6 +142,7 @@ void Worker::handleError_keithley(QSerialPort::SerialPortError error)
         closePorts();
     }
 }
+
 
 void Worker::writeData_light(const QByteArray& data)
 {
@@ -531,6 +537,7 @@ void Worker::lightController(QByteArray msg)
 
 void Worker::MeasureDie2()
 {
+    counter = 0;
     int start = clock();
     KeithlyZeroCorrection2();
     int stopZero = clock();
@@ -565,8 +572,8 @@ void Worker::MeasureDie2()
     qDebug() << "set Light current estimated: "<< QString::number(lightDelay) << " . real :" << QString::number(stopGetLightCurrent - stopGetDC1V);
     writeData_keithley("*RST\n");
 
-    emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
-                        QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
+    emit sendLogSignal((QString::number(ForwardCurrent, 'E', 11) + ", " + QString::number(DarkCurrent10mV, 'E', 11) + ", " +
+                        QString::number(DarkCurrent1V, 'E', 11) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 11)).toUtf8());
 
     //LightOff2();
 
@@ -622,6 +629,8 @@ void Worker::Keithly1VSet2()
 
 double Worker::KeithlyGet2()
 {
+    writeData_keithley("READ?\n");
+    readData_keithley();
     keithleyResponce = keithleyResponce.remove(keithleyResponce.indexOf("A"), keithleyResponce.length() - keithleyResponce.indexOf("A"));
     return keithleyResponce.toDouble();
 }
@@ -732,7 +741,6 @@ void Worker::measureElement2()
     int end = clock();
     int t = (end - start);
     emit sendMessageBox("Information", QString::number(t));
-
 }
 
 

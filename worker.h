@@ -61,6 +61,9 @@ private:
     int DC1VDelay = 600;
     int lightDelay = 400;
 
+    //counter for measuareDie
+    int counter = 0;
+
     double localCurrent = 0.0;
     double ForwardCurrent = 0.0;
     double DarkCurrent10mV = 0.0;
