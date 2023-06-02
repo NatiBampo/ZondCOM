@@ -346,7 +346,7 @@ void Worker::measureElement() {
     MeasureDie(serialPortA5, serialPortKeithly);
     int end = clock();
     int t = (end - start);
-    qDebug() << end;
+    //qDebug() << end;
     qDebug() << t << " milli seconds ";
     //QThread::msleep(500);
 }
@@ -481,63 +481,66 @@ void Worker::lightController(QByteArray message) {
 void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly) {
     int start = clock();
     KeithlyZeroCorrection(serialPortKeithly);
-    int stopZero = clock();
-    qDebug() << "zerocor estimated: " << QString::number(zeroDelay*3) <<" . real :" << QString::number(stopZero-start);
-    //emit sendPackageSignal2(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
+    //int stopZero = clock();
+    //qDebug() << "zerocor estimated: " << QString::number(zeroDelay*3) <<" . real :" << QString::number(stopZero-start);
+    emit sendPackageSignal2(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
 
     Keithly05VSet(serialPortKeithly);
     ForwardCurrent = KeithlyGet(serialPortKeithly);
-    int stopGet05 = clock();
-    qDebug() << "set FC estimated: " << QString::number(FCdelay) <<" . real :" << QString::number(stopGet05 - stopZero);
+    //int stopGet05 = clock();
+    //qDebug() << "set FC estimated: " << QString::number(FCdelay) <<" . real :" << QString::number(stopGet05 - stopZero);
 
     Keithly10mVSet(serialPortKeithly);
     QThread::msleep(DC10mVDelay);//800
     DarkCurrent10mV = KeithlyGet(serialPortKeithly);
-    int stopGetDC10mV = clock();
-    qDebug() << "set DC 10mV estimated: "<< QString::number(DC10mVDelay) << " . real :" << QString::number(stopGetDC10mV - stopGet05);
+    //int stopGetDC10mV = clock();
+    //qDebug() << "set DC 10mV estimated: "<< QString::number(DC10mVDelay) << " . real :" << QString::number(stopGetDC10mV - stopGet05);
 
     Keithly1VSet(serialPortKeithly);
     DarkCurrent1V = KeithlyGet(serialPortKeithly);
-    int stopGetDC1V = clock();
-    qDebug() << "set DC 1V estimated: "<< QString::number(DC1VDelay) << " . real :" << QString::number(stopGetDC1V - stopGetDC10mV);
-    //LightOn();
+    //int stopGetDC1V = clock();
+    //qDebug() << "set DC 1V estimated: "<< QString::number(DC1VDelay) << " . real :" << QString::number(stopGetDC1V - stopGetDC10mV);
+
+    LightOn();
+
     Keithly10mVSet(serialPortKeithly);
     emit sendPackageSignal2(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
     QThread::msleep(photoDelay);//400//200
     LightCurrent = KeithlyGet(serialPortKeithly);
-    int stopGetLightCurrent = clock();
-    qDebug() << "set Light current estimated: "<< QString::number(photoDelay) << " . real :" << QString::number(stopGetLightCurrent - stopGetDC1V);
+    //int stopGetLightCurrent = clock();
+    //qDebug() << "set Light current estimated: "<< QString::number(photoDelay) << " . real :" << QString::number(stopGetLightCurrent - stopGetDC1V);
 
     emit sendPackageSignal2(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
     emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                         QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
-    //LightOff();
+    LightOff();
+
     int stop = clock();
     qDebug() << "Total time estimated: "<< QString::number(zeroDelay*3 + FCdelay + DC10mVDelay + DC1VDelay + photoDelay) << " . real :" << QString::number(stop-start);
 }
 
 
 void Worker::KeithlyZeroCorrection(QSerialPort *serialPort) {
-    emit sendPackageSignal2(serialPort, "*RST\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SYST:ZCH ON\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "CURR:RANG 2e-9\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "*RST\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SYST:ZCH ON\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "CURR:RANG 2e-9\n", NO_ANSWER_DELAY);
     QThread::msleep(zeroDelay);//400
-    emit sendPackageSignal2(serialPort, "INIT\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "INIT\n", NO_ANSWER_DELAY);
     QThread::msleep(zeroDelay);
-    emit sendPackageSignal2(serialPort, "SYST:ZCOR:STAT OFF\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SYST:ZCOR:STAT OFF\n", NO_ANSWER_DELAY);
     QThread::msleep(zeroDelay);
-    emit sendPackageSignal2(serialPort, "SYST:ZCOR:ACQ\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SYST:ZCH OFF\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SYST:ZCOR ON\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SYST:ZCOR:ACQ\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SYST:ZCH OFF\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SYST:ZCOR ON\n", NO_ANSWER_DELAY);
 }
 
 
 void Worker::Keithly05VSet(QSerialPort *serialPort) {
-    emit sendPackageSignal2(serialPort, "CURR:RANG 2e-3\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT:RANG 1\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT " + QByteArray::number(0.6) + '\n', NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT:ILIM 1e-3\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "CURR:RANG 2e-3\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT:RANG 1\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT " + QByteArray::number(0.6) + '\n', NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT:ILIM 1e-3\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
     QThread::msleep(FCdelay);//400
 }
 
@@ -551,17 +554,17 @@ double Worker::KeithlyGet(QSerialPort *serialPort) {
 
 
 void Worker::Keithly10mVSet(QSerialPort *serialPort) {
-    emit sendPackageSignal2(serialPort, "CURR:RANG 2e-10\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT -1e-2\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "CURR:RANG 2e-10\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT -1e-2\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
 }
 
 
 void Worker::Keithly1VSet(QSerialPort *serialPort) {
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT -1\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal2(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT -1\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
     QThread::msleep(DC1VDelay);//600
 }
 

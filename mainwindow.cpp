@@ -408,6 +408,7 @@ void MainWindow::updateDelays(){
     delays[2] = ui->DC10mVspinBox->value();
     delays[3] = ui->DC1VspinBox->value();
     delays[4] = ui->PhotoSpinBox->value();
+   // delays[5] = ui->ansdelaySpinBox->value();
     mutex.unlock();
     emit setDelaySignal(&delays);
 }
