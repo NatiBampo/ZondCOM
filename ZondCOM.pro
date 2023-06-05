@@ -13,10 +13,12 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    serialwin.cpp \
     worker.cpp
 
 HEADERS += \
     mainwindow.h \
+    serialwin.h \
     worker.h
 
 FORMS += \

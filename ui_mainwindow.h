@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 6.4.2
+** Created by: Qt User Interface Compiler version 6.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -87,16 +87,18 @@ public:
     QGroupBox *groupBox_6;
     QGridLayout *gridLayout_8;
     QSpinBox *DC10mVspinBox;
-    QLabel *DC10mVLabel;
-    QLabel *DC1Vlabel;
-    QSpinBox *zeroSpinBox;
-    QLabel *photoLabel;
-    QSpinBox *DC1VspinBox;
     QLabel *zeroLabel;
-    QSpinBox *PhotoSpinBox;
     QLabel *FClabel;
-    QSpinBox *FCspinBox;
+    QLabel *DC1Vlabel;
     QPushButton *measure2pushButton;
+    QLabel *DC10mVLabel;
+    QSpinBox *zeroSpinBox;
+    QSpinBox *DC1VspinBox;
+    QSpinBox *FCspinBox;
+    QSpinBox *PhotoSpinBox;
+    QLabel *photoLabel;
+    QLabel *label_29;
+    QSpinBox *ansdelaySpinBox;
     QGroupBox *groupBox_4;
     QGridLayout *gridLayout_7;
     QPushButton *lightPushButton;
@@ -165,7 +167,12 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1200, 841);
+        MainWindow->resize(1200, 873);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
+        MainWindow->setSizePolicy(sizePolicy);
         MainWindow->setMaximumSize(QSize(1200, 1000));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
@@ -239,25 +246,25 @@ public:
 
         portComboBox = new QComboBox(centralwidget);
         portComboBox->setObjectName("portComboBox");
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
-        portComboBox->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
+        portComboBox->setSizePolicy(sizePolicy1);
 
         horizontalLayout->addWidget(portComboBox);
 
         keithlyPortComboBox = new QComboBox(centralwidget);
         keithlyPortComboBox->setObjectName("keithlyPortComboBox");
-        sizePolicy.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
-        keithlyPortComboBox->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
+        keithlyPortComboBox->setSizePolicy(sizePolicy1);
 
         horizontalLayout->addWidget(keithlyPortComboBox);
 
         lightPortComboBox = new QComboBox(centralwidget);
         lightPortComboBox->setObjectName("lightPortComboBox");
-        sizePolicy.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
-        lightPortComboBox->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
+        lightPortComboBox->setSizePolicy(sizePolicy1);
 
         horizontalLayout->addWidget(lightPortComboBox);
 
@@ -405,15 +412,30 @@ public:
 
         gridLayout_8->addWidget(DC10mVspinBox, 2, 1, 1, 1);
 
-        DC10mVLabel = new QLabel(groupBox_6);
-        DC10mVLabel->setObjectName("DC10mVLabel");
+        zeroLabel = new QLabel(groupBox_6);
+        zeroLabel->setObjectName("zeroLabel");
 
-        gridLayout_8->addWidget(DC10mVLabel, 2, 0, 1, 1);
+        gridLayout_8->addWidget(zeroLabel, 0, 0, 1, 1);
+
+        FClabel = new QLabel(groupBox_6);
+        FClabel->setObjectName("FClabel");
+
+        gridLayout_8->addWidget(FClabel, 1, 0, 1, 1);
 
         DC1Vlabel = new QLabel(groupBox_6);
         DC1Vlabel->setObjectName("DC1Vlabel");
 
         gridLayout_8->addWidget(DC1Vlabel, 3, 0, 1, 1);
+
+        measure2pushButton = new QPushButton(groupBox_6);
+        measure2pushButton->setObjectName("measure2pushButton");
+
+        gridLayout_8->addWidget(measure2pushButton, 7, 0, 1, 1);
+
+        DC10mVLabel = new QLabel(groupBox_6);
+        DC10mVLabel->setObjectName("DC10mVLabel");
+
+        gridLayout_8->addWidget(DC10mVLabel, 2, 0, 1, 1);
 
         zeroSpinBox = new QSpinBox(groupBox_6);
         zeroSpinBox->setObjectName("zeroSpinBox");
@@ -423,11 +445,6 @@ public:
 
         gridLayout_8->addWidget(zeroSpinBox, 0, 1, 1, 1);
 
-        photoLabel = new QLabel(groupBox_6);
-        photoLabel->setObjectName("photoLabel");
-
-        gridLayout_8->addWidget(photoLabel, 4, 0, 1, 1);
-
         DC1VspinBox = new QSpinBox(groupBox_6);
         DC1VspinBox->setObjectName("DC1VspinBox");
         DC1VspinBox->setMaximum(5000);
@@ -435,24 +452,6 @@ public:
         DC1VspinBox->setValue(600);
 
         gridLayout_8->addWidget(DC1VspinBox, 3, 1, 1, 1);
-
-        zeroLabel = new QLabel(groupBox_6);
-        zeroLabel->setObjectName("zeroLabel");
-
-        gridLayout_8->addWidget(zeroLabel, 0, 0, 1, 1);
-
-        PhotoSpinBox = new QSpinBox(groupBox_6);
-        PhotoSpinBox->setObjectName("PhotoSpinBox");
-        PhotoSpinBox->setMaximum(5000);
-        PhotoSpinBox->setSingleStep(100);
-        PhotoSpinBox->setValue(400);
-
-        gridLayout_8->addWidget(PhotoSpinBox, 4, 1, 1, 1);
-
-        FClabel = new QLabel(groupBox_6);
-        FClabel->setObjectName("FClabel");
-
-        gridLayout_8->addWidget(FClabel, 1, 0, 1, 1);
 
         FCspinBox = new QSpinBox(groupBox_6);
         FCspinBox->setObjectName("FCspinBox");
@@ -462,10 +461,31 @@ public:
 
         gridLayout_8->addWidget(FCspinBox, 1, 1, 1, 1);
 
-        measure2pushButton = new QPushButton(groupBox_6);
-        measure2pushButton->setObjectName("measure2pushButton");
+        PhotoSpinBox = new QSpinBox(groupBox_6);
+        PhotoSpinBox->setObjectName("PhotoSpinBox");
+        PhotoSpinBox->setMaximum(5000);
+        PhotoSpinBox->setSingleStep(100);
+        PhotoSpinBox->setValue(400);
 
-        gridLayout_8->addWidget(measure2pushButton, 5, 0, 1, 1);
+        gridLayout_8->addWidget(PhotoSpinBox, 4, 1, 1, 1);
+
+        photoLabel = new QLabel(groupBox_6);
+        photoLabel->setObjectName("photoLabel");
+
+        gridLayout_8->addWidget(photoLabel, 4, 0, 1, 1);
+
+        label_29 = new QLabel(groupBox_6);
+        label_29->setObjectName("label_29");
+
+        gridLayout_8->addWidget(label_29, 5, 0, 1, 1);
+
+        ansdelaySpinBox = new QSpinBox(groupBox_6);
+        ansdelaySpinBox->setObjectName("ansdelaySpinBox");
+        ansdelaySpinBox->setMaximum(5000);
+        ansdelaySpinBox->setSingleStep(100);
+        ansdelaySpinBox->setValue(1000);
+
+        gridLayout_8->addWidget(ansdelaySpinBox, 5, 1, 1, 1);
 
 
         gridLayout_3->addWidget(groupBox_6, 10, 0, 1, 1);
@@ -557,8 +577,8 @@ public:
 
         BYspinBox = new QSpinBox(tab_2);
         BYspinBox->setObjectName("BYspinBox");
-        sizePolicy.setHeightForWidth(BYspinBox->sizePolicy().hasHeightForWidth());
-        BYspinBox->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(BYspinBox->sizePolicy().hasHeightForWidth());
+        BYspinBox->setSizePolicy(sizePolicy1);
         BYspinBox->setMinimum(0);
         BYspinBox->setMaximum(400000);
 
@@ -573,8 +593,8 @@ public:
 
         BXspinBox = new QSpinBox(tab_2);
         BXspinBox->setObjectName("BXspinBox");
-        sizePolicy.setHeightForWidth(BXspinBox->sizePolicy().hasHeightForWidth());
-        BXspinBox->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(BXspinBox->sizePolicy().hasHeightForWidth());
+        BXspinBox->setSizePolicy(sizePolicy1);
         BXspinBox->setMinimum(0);
         BXspinBox->setMaximum(400000);
 
@@ -872,7 +892,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
         orientationButton->setDefault(false);
 
 
@@ -908,12 +928,13 @@ public:
         forwardPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\277\320\265\321\200\320\265\320\264", nullptr));
         label_20->setText(QCoreApplication::translate("MainWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", nullptr));
         groupBox_6->setTitle(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\270", nullptr));
-        DC10mVLabel->setText(QCoreApplication::translate("MainWindow", "DC10mV", nullptr));
-        DC1Vlabel->setText(QCoreApplication::translate("MainWindow", "DC1V", nullptr));
-        photoLabel->setText(QCoreApplication::translate("MainWindow", "Photo", nullptr));
         zeroLabel->setText(QCoreApplication::translate("MainWindow", "zero 3X ", nullptr));
         FClabel->setText(QCoreApplication::translate("MainWindow", "FC", nullptr));
+        DC1Vlabel->setText(QCoreApplication::translate("MainWindow", "DC1V", nullptr));
         measure2pushButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\265\320\275\320\270\320\265", nullptr));
+        DC10mVLabel->setText(QCoreApplication::translate("MainWindow", "DC10mV", nullptr));
+        photoLabel->setText(QCoreApplication::translate("MainWindow", "Photo", nullptr));
+        label_29->setText(QCoreApplication::translate("MainWindow", "Answer Delay", nullptr));
         groupBox_4->setTitle(QCoreApplication::translate("MainWindow", "\320\236\321\201\320\262\320\265\321\211\320\265\320\275\320\270\320\265", nullptr));
         lightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\272\320\273\321\216\321\207\320\270\321\202\321\214", nullptr));
         statePushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\276\321\217\320\275\320\270\320\265", nullptr));

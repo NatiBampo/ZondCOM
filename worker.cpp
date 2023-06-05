@@ -548,6 +548,7 @@ void Worker::Keithly05VSet(QSerialPort *serialPort) {
 double Worker::KeithlyGet(QSerialPort *serialPort) {
     emit sendPackageSignal(serialPort, "READ?\n", ANSWER_DELAY);
     QByteArray byteArray = lastAnswer;
+    qDebug() << strlen(lastAnswer);
     byteArray = byteArray.remove(byteArray.indexOf("A"), byteArray.length() - byteArray.indexOf("A"));
     return byteArray.toDouble();
 }
