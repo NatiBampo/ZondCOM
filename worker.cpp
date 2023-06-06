@@ -12,7 +12,6 @@ Worker::Worker(QMutex* mtxp)
 {
     this->mutex = mtxp;
     connect(this, &Worker::sendPackageSignal, this, &Worker::sendPackage);
-    connect(this, &Worker::sendPackageSignal2, this, &Worker::sendPackage2);
 }
 
 Worker::~Worker() {
@@ -21,11 +20,19 @@ Worker::~Worker() {
 
 
 void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight) {
+
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
+    QString str1 = "\\\\.\\" + portNameKeithly;
+    QByteArray ba = str1.toLocal8Bit();
+    const char *c_str2 = ba.data();
+    int k_result = kSerialWin->initCOM(c_str2);
+
     serialPortLight = new QSerialPort();
+
     if (portNameA5 != "Планар"){emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));}
-    if (portNameKeithly != "Keithley"){emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));}
+    if (portNameKeithly != "Keithley"){emit openPortResultSignal(portNameKeithly,"Keithley", (bool) k_result);}
+                                                                 //openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));}
     if (portNameLight != "Диод"){emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));}
 
 //    serialPortA5->flush();
@@ -161,19 +168,19 @@ void Worker::closePorts() {
 
 
 void Worker::sendPackage(QSerialPort *serialPort, QByteArray package, int delay) {
-    lastAnswer = "";
-    serialPort->write(package);
-    serialPort->flush();
-    //emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
-    while (serialPort->waitForReadyRead(delay)) lastAnswer.append(serialPort->readAll());
-    //if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
-}
-
-
-void Worker::sendPackage2(QSerialPort *serialPort, QByteArray package, int delay) {
-    serialPort->write(package);
-    serialPort->flush();
-    //emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
+    if (serialPort == serialPortKeithly)
+    {
+        kSerialWin->writeCOM(package);
+    }
+    else
+    {
+        lastAnswer = "";
+        serialPort->write(package);
+        serialPort->flush();
+        //emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
+        while (serialPort->waitForReadyRead(delay)) lastAnswer.append(serialPort->readAll());
+        //if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
+    }
 }
 
 
@@ -474,7 +481,7 @@ void Worker::getBCoordinates() {
 
 
 void Worker::lightController(QByteArray message) {
-    emit sendPackageSignal2(serialPortLight, message, NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPortLight, message, NO_ANSWER_DELAY);
 }
 
 
@@ -483,7 +490,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
     KeithlyZeroCorrection(serialPortKeithly);
     //int stopZero = clock();
     //qDebug() << "zerocor estimated: " << QString::number(zeroDelay*3) <<" . real :" << QString::number(stopZero-start);
-    emit sendPackageSignal2(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
+    //emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
 
     Keithly05VSet(serialPortKeithly);
     ForwardCurrent = KeithlyGet(serialPortKeithly);
@@ -501,19 +508,19 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
     //int stopGetDC1V = clock();
     //qDebug() << "set DC 1V estimated: "<< QString::number(DC1VDelay) << " . real :" << QString::number(stopGetDC1V - stopGetDC10mV);
 
-    LightOn();
+    //LightOn();
 
     Keithly10mVSet(serialPortKeithly);
-    emit sendPackageSignal2(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
     QThread::msleep(photoDelay);//400//200
     LightCurrent = KeithlyGet(serialPortKeithly);
     //int stopGetLightCurrent = clock();
     //qDebug() << "set Light current estimated: "<< QString::number(photoDelay) << " . real :" << QString::number(stopGetLightCurrent - stopGetDC1V);
 
-    emit sendPackageSignal2(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
     emit sendLogSignal((QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                         QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
-    LightOff();
+    //LightOff();
 
     int stop = clock();
     qDebug() << "Total time estimated: "<< QString::number(zeroDelay*3 + FCdelay + DC10mVDelay + DC1VDelay + photoDelay) << " . real :" << QString::number(stop-start);
@@ -547,8 +554,10 @@ void Worker::Keithly05VSet(QSerialPort *serialPort) {
 
 double Worker::KeithlyGet(QSerialPort *serialPort) {
     emit sendPackageSignal(serialPort, "READ?\n", ANSWER_DELAY);
-    QByteArray byteArray = lastAnswer;
-    qDebug() << strlen(lastAnswer);
+    char * str = kSerialWin->readCOM(50, ansDelay);
+//    QByteArray byteArray = lastAnswer;
+//    qDebug() << strlen(lastAnswer);
+    QString byteArray = QString::fromLocal8Bit(str);
     byteArray = byteArray.remove(byteArray.indexOf("A"), byteArray.length() - byteArray.indexOf("A"));
     return byteArray.toDouble();
 }
@@ -571,12 +580,12 @@ void Worker::Keithly1VSet(QSerialPort *serialPort) {
 
 
 void Worker::LightOn() {
-    emit sendPackageSignal2(serialPortLight, "1111\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPortLight, "1111\n", NO_ANSWER_DELAY);
 }
 
 
 void Worker::LightOff() {
-    emit sendPackageSignal2(serialPortLight, "0001\n", NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPortLight, "0001\n", NO_ANSWER_DELAY);
 }
 
 
@@ -587,6 +596,7 @@ void Worker::setDelay(QList<int> *delays) {
     DC10mVDelay = delays->at(2);
     DC1VDelay = delays->at(3);
     photoDelay = delays->at(4);
+    ansDelay = delays->at(5);
     mutex->unlock();
 }
 

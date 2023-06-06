@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
 
-    delays.append({400, 400, 800, 600, 400});
+    delays.append({400, 400, 800, 600, 400, 400});
 
     initializeShortKeys();
 
@@ -106,6 +106,7 @@ void MainWindow::createWorkerThread() {
     connect(worker, &Worker::sendBCoordsSignal, this, &MainWindow::setBCoords);
 }
 
+
 void MainWindow::initializeShortKeys(){
     keyUp = new QShortcut(this);
     keyUp -> setKey(Qt::Key_Up);//Qt::CTRL +
@@ -124,6 +125,8 @@ void MainWindow::initializeShortKeys(){
     connect(keyRight, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
 
 }
+
+
 void MainWindow::openPortPushButton_on() {
     if (ui->openPortPushButton->text() == "Открыть") {
         emit openPortsSignal(ui->portComboBox->currentText(), ui->keithlyPortComboBox->currentText(), ui->lightPortComboBox->currentText());
@@ -401,6 +404,7 @@ void MainWindow::setBCoords(int x, int y) {
     syncSettings();
 }
 
+
 void MainWindow::updateDelays(){
     mutex.lock();
     delays[0] = ui->zeroSpinBox->value();
@@ -408,10 +412,11 @@ void MainWindow::updateDelays(){
     delays[2] = ui->DC10mVspinBox->value();
     delays[3] = ui->DC1VspinBox->value();
     delays[4] = ui->PhotoSpinBox->value();
-   // delays[5] = ui->ansdelaySpinBox->value();
+    delays[5] = ui->ansdelaySpinBox->value();
     mutex.unlock();
     emit setDelaySignal(&delays);
 }
+
 
 void MainWindow::syncSettings()
 {
@@ -425,6 +430,7 @@ void MainWindow::syncSettings()
     }
     settings.sync();
 }
+
 
 void MainWindow::measure2pushButton_clicked()
 {

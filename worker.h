@@ -7,6 +7,7 @@
 #include <QSqlQuery>
 #include <QMutex>
 #include <QRegularExpression>
+#include <serialwin.h>
 
 
 #define ANSWER_DELAY 400
@@ -33,8 +34,10 @@ private:
     QList<double> DotsY;
     QString dir = "С:\temp\1.csv";
 
-    QRegularExpression stateReg = QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)");//QRegularExpression
+    QRegularExpression stateReg = QRegularExpression(R"(< \d+ \d+ \d+ \d+\r\n)");
     QRegularExpression keithleyReg = QRegularExpression(R"(\d+A,)");
+
+    SerialWin *kSerialWin = new SerialWin();
 
     volatile bool pause = false;
     bool overwrite = false;
@@ -52,7 +55,7 @@ private:
     int DC10mVDelay = 800;
     int DC1VDelay = 600;
     int photoDelay = 400;
-
+    int ansDelay = 400;
 
     double ForwardCurrent = 0.0;
     double DarkCurrent10mV = 0.0;
@@ -76,7 +79,6 @@ private:
 
 signals:
     void sendPackageSignal(QSerialPort * , QByteArray, int);
-    void sendPackageSignal2(QSerialPort * , QByteArray, int);
     void sendLogSignal(QByteArray);
     void sendProgressBarValueSignal(int);
     void sendProgressBarRangeSignal(int, int);
@@ -88,7 +90,6 @@ signals:
 public slots:
     void measureElement();
     void sendPackage(QSerialPort * , QByteArray, int);
-    void sendPackage2(QSerialPort * , QByteArray, int);
     void scanningPlate(double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void tableController(QByteArray);
     void lightController(QByteArray);
