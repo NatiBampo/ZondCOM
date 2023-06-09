@@ -10,8 +10,8 @@ SerialWin::SerialWin()
 
 }
 
-
-int SerialWin::initCOM(const char* port)
+//port_type 0 Keithley, 1 Zond, 2 light
+int SerialWin::initCOM(const char* port, int baud)
 {
 
 //    char* port = "\\\\.\\9"; // + portNumber;
@@ -43,7 +43,10 @@ int SerialWin::initCOM(const char* port)
         //std::cout << "getting state error\n";
         return -2;
     }
-    dcbSerialParams.BaudRate = CBR_57600;
+
+//    dcbSerialParams.BaudRate = CBR_57600;
+    dcbSerialParams.BaudRate = baud;
+
     dcbSerialParams.ByteSize = 8;
     dcbSerialParams.StopBits = ONESTOPBIT;
     dcbSerialParams.Parity = NOPARITY;
@@ -71,7 +74,7 @@ int SerialWin::initCOM(const char* port)
 
 char* SerialWin::readCOM(const int size, const int delay)
 {
-    QThread::msleep(delay);
+    Sleep(delay);
     DWORD iSize = 0;
     char * sReceivedChar = new char[size];
     BOOL ret = ReadFile(hSerial, sReceivedChar, size, &iSize, 0);

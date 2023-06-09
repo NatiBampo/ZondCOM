@@ -8,6 +8,7 @@
 #include <QMutex>
 #include <QRegularExpression>
 #include <serialwin.h>
+//#include "WINCOM.h"
 
 
 #define ANSWER_DELAY 400
@@ -38,6 +39,10 @@ private:
     QRegularExpression keithleyReg = QRegularExpression(R"(\d+A,)");
 
     SerialWin *kSerialWin = new SerialWin();
+    SerialWin *pSerial = new SerialWin();
+    SerialWin *lSerial = new SerialWin();
+
+    enum Agent {Keithley, Planar, Light};
 
     volatile bool pause = false;
     bool overwrite = false;
@@ -63,12 +68,12 @@ private:
     double LightCurrent = 0.0;
 
     bool openPort(QSerialPort *, QString, QSerialPort::BaudRate);
-    void MeasureDie(QSerialPort *, QSerialPort *);
-    void KeithlyZeroCorrection(QSerialPort *);
-    void Keithly05VSet(QSerialPort *);
-    double KeithlyGet(QSerialPort *);
-    void Keithly10mVSet(QSerialPort *);
-    void Keithly1VSet(QSerialPort *);
+    void MeasureDie(Agent, Agent);
+    void KeithlyZeroCorrection(Agent);
+    void Keithly05VSet(Agent);
+    double KeithlyGet(Agent);
+    void Keithly10mVSet(Agent);
+    void Keithly1VSet(Agent);
     void LightOn();
     void LightOff();
     void copyUpToIndex(int);
@@ -77,8 +82,10 @@ private:
     bool checkLightCOM();
     bool checkIndex(int);
 
+    QString planarState();
+
 signals:
-    void sendPackageSignal(QSerialPort * , QByteArray, int);
+    void sendPackageSignal(Agent, QByteArray, int);
     void sendLogSignal(QByteArray);
     void sendProgressBarValueSignal(int);
     void sendProgressBarRangeSignal(int, int);
@@ -89,7 +96,7 @@ signals:
 
 public slots:
     void measureElement();
-    void sendPackage(QSerialPort * , QByteArray, int);
+    void sendPackage(Agent, QByteArray, int);
     void scanningPlate(double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void tableController(QByteArray);
     void lightController(QByteArray);

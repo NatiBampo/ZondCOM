@@ -483,7 +483,7 @@ public:
         ansdelaySpinBox->setObjectName("ansdelaySpinBox");
         ansdelaySpinBox->setMaximum(5000);
         ansdelaySpinBox->setSingleStep(100);
-        ansdelaySpinBox->setValue(1000);
+        ansdelaySpinBox->setValue(400);
 
         gridLayout_8->addWidget(ansdelaySpinBox, 5, 1, 1, 1);
 
@@ -892,7 +892,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
         orientationButton->setDefault(false);
 
 

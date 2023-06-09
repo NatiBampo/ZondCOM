@@ -2,6 +2,10 @@ QT       += core gui
 QT += serialport
 QT += sql
 
+LIBS += "C:\qt\qt6_proj\wincom mingw\winCOM.lib"
+
+INCLUDEPATH += "C:\qt\qt6_proj\wincom mingw"
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
