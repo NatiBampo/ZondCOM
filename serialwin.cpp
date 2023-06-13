@@ -68,6 +68,8 @@ int SerialWin::initCOM(const char* port, int baud)
         return -4;
     }
 
+    opened = true;
+
     return 1;
 }
 
@@ -99,4 +101,8 @@ void SerialWin::closeCOM()
 }
 
 
+bool SerialWin::isOpen()
+{
+    return opened;
+}
 

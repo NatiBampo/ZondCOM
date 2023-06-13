@@ -86,10 +86,6 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
         int l_result = lSerial->initCOM(("\\\\.\\" + portNameLight).toLocal8Bit().data(), 9600);
         emit openPortResultSignal(portNameLight, "Light", l_result > 0 ? true : false);
     }
-
-//    serialPortA5->flush();
-//    serialPortKeithly->flush();
-//    serialPortLight->flush();
 }
 
 
@@ -107,18 +103,19 @@ bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate
 
 
 void Worker::closePorts() {
-//    if (serialPortA5->isOpen()) serialPortA5->close();
-//    if (serialPortKeithly->isOpen()) serialPortKeithly->close();
-//    if (serialPortLight->isOpen()) serialPortLight->close();
-    kSerialWin->closeCOM();
-    pSerial->closeCOM();
-    lSerial->closeCOM();
+/*
+    if (serialPortA5->isOpen()) serialPortA5->close();
+    if (serialPortKeithly->isOpen()) serialPortKeithly->close();
+    if (serialPortLight->isOpen()) serialPortLight->close();
 
+        delete serialPortA5;
+        delete serialPortKeithly;
+        delete serialPortLight;
+*/
+    if (kSerialWin->isOpen()) kSerialWin->closeCOM();
+    if (pSerial->isOpen()) pSerial->closeCOM();
+    if (lSerial->isOpen()) lSerial->closeCOM();
 
-//    delete kSerialWin;
-//    delete serialPortA5;
-//    delete serialPortKeithly;
-//    delete serialPortLight;
 }
 
 

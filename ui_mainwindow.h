@@ -62,6 +62,8 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QLabel *addressHeaderLabel;
     QLabel *addressLabel;
+    QLabel *label_30;
+    QLineEdit *lineEdit;
     QTabWidget *tabWidget;
     QWidget *tab;
     QGridLayout *gridLayout_3;
@@ -303,6 +305,16 @@ public:
 
 
         verticalLayout_3->addLayout(horizontalLayout_3);
+
+        label_30 = new QLabel(centralwidget);
+        label_30->setObjectName("label_30");
+
+        verticalLayout_3->addWidget(label_30);
+
+        lineEdit = new QLineEdit(centralwidget);
+        lineEdit->setObjectName("lineEdit");
+
+        verticalLayout_3->addWidget(lineEdit);
 
 
         formLayout->setLayout(0, QFormLayout::FieldRole, verticalLayout_3);
@@ -914,6 +926,7 @@ public:
         openPortPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));
         addressHeaderLabel->setText(QCoreApplication::translate("MainWindow", "\320\220\320\264\321\200\320\265\321\201 \321\204\320\260\320\271\320\273\320\260: ", nullptr));
         addressLabel->setText(QCoreApplication::translate("MainWindow", "\320\241:\\temp\\1.csv", nullptr));
+        label_30->setText(QCoreApplication::translate("MainWindow", "\320\235\320\276\320\274\320\265\321\200 \320\277\320\273\320\260\321\201\321\202\320\270\320\275\321\213", nullptr));
         groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\273", nullptr));
         tableDownPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\320\277\321\203\321\201\321\202\320\270\321\202\321\214", nullptr));
         tableUpPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\320\264\320\275\321\217\321\202\321\214", nullptr));
