@@ -89,7 +89,8 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
 }
 
 
-bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate) {
+bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate)
+{
     port->setPortName(portName);
     port->setBaudRate(baudRate);
     port->setDataBits(QSerialPort::DataBits::Data8);
@@ -102,7 +103,8 @@ bool Worker::openPort(QSerialPort *port, QString portName, QSerialPort::BaudRate
 }
 
 
-void Worker::closePorts() {
+void Worker::closePorts()
+{
 /*
     if (serialPortA5->isOpen()) serialPortA5->close();
     if (serialPortKeithly->isOpen()) serialPortKeithly->close();
@@ -119,7 +121,8 @@ void Worker::closePorts() {
 }
 
 
-void Worker::autoOpenPorts() {
+void Worker::autoOpenPorts()
+{
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
     serialPortLight = new QSerialPort();
@@ -167,7 +170,8 @@ void Worker::autoOpenPorts() {
 }
 
 
-bool Worker::checkPlanarCOM() {
+bool Worker::checkPlanarCOM()
+{
     /*
     QString localAnswer = "";
     serialPortA5->write("State\r\n");
@@ -191,7 +195,8 @@ bool Worker::checkPlanarCOM() {
 }
 
 
-bool Worker::checkKeithlyCOM() {
+bool Worker::checkKeithlyCOM()
+{
     try {
         KeithlyZeroCorrection(Agent::Keithley);
         Keithly05VSet(Agent::Keithley);
@@ -204,7 +209,8 @@ bool Worker::checkKeithlyCOM() {
 }
 
 
-bool Worker::checkLightCOM() {
+bool Worker::checkLightCOM()
+{
     try {
         LightOn();
         char * str = lSerial->readCOM(15, 500);
@@ -222,7 +228,8 @@ bool Worker::checkLightCOM() {
 
 void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, double numberX,
                            double numberY, double colSlide, double rowSlide, bool all_three,
-                           int upLeft, int upRight, int downLeft, int downRight) {
+                           int upLeft, int upRight, int downLeft, int downRight)
+{
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     //numberX необходимо привести к фактическому параметру
@@ -314,12 +321,14 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
 }
 
 
-bool Worker::checkIndex(int i) {
+bool Worker::checkIndex(int i)
+{
     return ((i >= gap[0] && i <= gap[1]) || (i <= gap[2] && i >= gap[3]) || (i >= gap[4] && i <= gap[5]) || (i <= gap[6] && i >= gap[7]));
 }
 
 
-void Worker::autoWalk(bool allNew, QString dir_cur) {
+void Worker::autoWalk(bool allNew, QString dir_cur)
+{
 
     dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
     if (allNew) emit sendProgressBarRangeSignal(currentIndex, lastIndex);
@@ -389,7 +398,8 @@ void Worker::autoWalk(bool allNew, QString dir_cur) {
 }
 
 
-void Worker::measureElement() {
+void Worker::measureElement()
+{
     int start = clock();
 //    MeasureDie(serialPortA5, serialPortKeithly);
     MeasureDie(Agent::Planar, Agent::Keithley);
@@ -401,7 +411,8 @@ void Worker::measureElement() {
 }
 
 
-void Worker::goToElement(int index) {
+void Worker::goToElement(int index)
+{
     //опустить стол
     //emit sendPackageSignal(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
     emit sendPackageSignal(Agent::Planar, "Table DN\r\n", ANSWER_DELAY);
@@ -414,7 +425,8 @@ void Worker::goToElement(int index) {
 }
 
 
-void Worker::copyUpToIndex(int index) {
+void Worker::copyUpToIndex(int index)
+{
     //функция копирует файл до нужного индекса и заменяет собой файл источник
     if (index==0){
         return;
@@ -444,27 +456,31 @@ void Worker::copyUpToIndex(int index) {
 }
 
 
-void Worker::pauseWalk() {
+void Worker::pauseWalk()
+{
     //поменять статус паузы
     pause = !pause;
     pauseIndex = currentIndex;
 }
 
 
-void Worker::setIndex(int index) {
+void Worker::setIndex(int index)
+{
     //обновить индекс для обхода с нового элемента
     pauseIndex = currentIndex;
     currentIndex = index;
 }
 
 
-void Worker::stopWalk() {
+void Worker::stopWalk()
+{
     pause = false;
     currentIndex = lastIndex;//DotsX.count()
 }
 
 
-void Worker::saveMeasure(int index) {
+void Worker::saveMeasure(int index)
+{
     //функция копирует файл до нужного индекса и заменяет собой файл источник
     Worker::goToElement(index);
 //    MeasureDie(serialPortA5, serialPortKeithly);
@@ -503,7 +519,8 @@ void Worker::saveMeasure(int index) {
 }
 
 
-void Worker::tableController(QByteArray message) {
+void Worker::tableController(QByteArray message)
+{
     emit sendPackageSignal(Agent::Planar, message, ANSWER_DELAY);//serialPortA5
 
 }
@@ -529,12 +546,14 @@ void Worker::getBCoordinates() {
 }
 
 
-void Worker::lightController(QByteArray message) {
+void Worker::lightController(QByteArray message)
+{
     emit sendPackageSignal(Agent::Light, message, NO_ANSWER_DELAY);//serialPortLight
 }
 
 
-void Worker::MeasureDie(Agent serialPortA5, Agent serialPortKeithly) {//(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly)
+void Worker::MeasureDie(Agent serialPortA5, Agent serialPortKeithly) //(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly)
+{
     int start = clock();
     KeithlyZeroCorrection(serialPortKeithly);
     //int stopZero = clock();
@@ -576,7 +595,9 @@ void Worker::MeasureDie(Agent serialPortA5, Agent serialPortKeithly) {//(QSerial
 }
 
 
-void Worker::KeithlyZeroCorrection(Agent serialPort) {//QSerialPort *serialPort
+void Worker::KeithlyZeroCorrection(Agent serialPort)
+//QSerialPort *serialPort
+{
     emit sendPackageSignal(serialPort, "*RST\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SYST:ZCH ON\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "CURR:RANG 2e-9\n", NO_ANSWER_DELAY);
@@ -602,7 +623,8 @@ void Worker::Keithly05VSet(Agent serialPort) //QSerialPort *serialPort
 }
 
 
-double Worker::KeithlyGet(Agent serialPort) {
+double Worker::KeithlyGet(Agent serialPort)
+{
     emit sendPackageSignal(serialPort, "READ?\n", ANSWER_DELAY);
     //char * str = readCOM(50, ansDelay);
     char * str = kSerialWin->readCOM(50, ansDelay);
@@ -612,7 +634,8 @@ double Worker::KeithlyGet(Agent serialPort) {
 }
 
 
-void Worker::Keithly10mVSet(Agent serialPort) {
+void Worker::Keithly10mVSet(Agent serialPort)
+{
     emit sendPackageSignal(serialPort, "CURR:RANG 2e-10\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT -1e-2\n", NO_ANSWER_DELAY);
@@ -620,7 +643,8 @@ void Worker::Keithly10mVSet(Agent serialPort) {
 }
 
 
-void Worker::Keithly1VSet(Agent serialPort) {
+void Worker::Keithly1VSet(Agent serialPort)
+{
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT -1\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
@@ -628,17 +652,20 @@ void Worker::Keithly1VSet(Agent serialPort) {
 }
 
 
-void Worker::LightOn() {
+void Worker::LightOn()
+{
     lightController("1111\n");
 }
 
 
-void Worker::LightOff() {
+void Worker::LightOff()
+{
     lightController("0001\n");
 }
 
 
-void Worker::setDelay(QList<int> *delays) {
+void Worker::setDelay(QList<int> *delays)
+{
     mutex->lock();
     zeroDelay = delays->at(0);
     FCdelay = delays->at(1);

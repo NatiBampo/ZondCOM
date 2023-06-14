@@ -1,10 +1,10 @@
 QT       += core gui
 QT += serialport
 QT += sql
+QT += charts
 
-LIBS += "C:\qt\qt6_proj\wincom mingw\winCOM.lib"
-
-INCLUDEPATH += "C:\qt\qt6_proj\wincom mingw"
+#LIBS += "C:\qt\qt6_proj\wincom mingw\winCOM.lib"
+#INCLUDEPATH += "C:\qt\qt6_proj\wincom mingw"
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,15 +18,18 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     serialwin.cpp \
+    stats.cpp \
     worker.cpp
 
 HEADERS += \
     mainwindow.h \
     serialwin.h \
+    stats.h \
     worker.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    stats.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

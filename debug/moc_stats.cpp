@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'stats.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.3)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'stats.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.3. It"
+#error "This file was generated using the moc from 6.4.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -26,14 +26,13 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_Stats_t {
-    uint offsetsAndSizes[14];
+    uint offsetsAndSizes[12];
     char stringdata0[6];
     char stringdata1[11];
     char stringdata2[1];
-    char stringdata3[4];
+    char stringdata3[8];
     char stringdata4[8];
-    char stringdata5[15];
-    char stringdata6[11];
+    char stringdata5[11];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_Stats_t::offsetsAndSizes) + ofs), len 
@@ -42,17 +41,15 @@ Q_CONSTINIT static const qt_meta_stringdata_Stats_t qt_meta_stringdata_Stats = {
         QT_MOC_LITERAL(0, 5),  // "Stats"
         QT_MOC_LITERAL(6, 10),  // "showCharts"
         QT_MOC_LITERAL(17, 0),  // ""
-        QT_MOC_LITERAL(18, 3),  // "dir"
-        QT_MOC_LITERAL(22, 7),  // "getData"
-        QT_MOC_LITERAL(30, 14),  // "getFrequancies"
-        QT_MOC_LITERAL(45, 10)   // "drawCharts"
+        QT_MOC_LITERAL(18, 7),  // "getData"
+        QT_MOC_LITERAL(26, 7),  // "getFreq"
+        QT_MOC_LITERAL(34, 10)   // "drawCharts"
     },
     "Stats",
     "showCharts",
     "",
-    "dir",
     "getData",
-    "getFrequancies",
+    "getFreq",
     "drawCharts"
 };
 #undef QT_MOC_LITERAL
@@ -73,13 +70,13 @@ Q_CONSTINIT static const uint qt_meta_data_Stats[] = {
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
        1,    1,   38,    2, 0x0a,    1 /* Public */,
-       4,    0,   41,    2, 0x0a,    3 /* Public */,
-       5,    0,   42,    2, 0x0a,    4 /* Public */,
-       6,    0,   43,    2, 0x0a,    5 /* Public */,
+       3,    1,   41,    2, 0x0a,    3 /* Public */,
+       4,    0,   44,    2, 0x0a,    5 /* Public */,
+       5,    0,   45,    2, 0x0a,    6 /* Public */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QString,    3,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -100,7 +97,8 @@ Q_CONSTINIT const QMetaObject Stats::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'getData'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'getFrequancies'
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'getFreq'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'drawCharts'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
@@ -115,8 +113,8 @@ void Stats::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         (void)_t;
         switch (_id) {
         case 0: _t->showCharts((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 1: _t->getData(); break;
-        case 2: _t->getFrequancies(); break;
+        case 1: _t->getData((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 2: _t->getFreq(); break;
         case 3: _t->drawCharts(); break;
         default: ;
         }
