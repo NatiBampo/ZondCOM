@@ -11,7 +11,7 @@
 #include <QTextStream>
 
 
-#define ANSWER_DELAY 1000
+#define ANSWER_DELAY 400
 #define NO_ANSWER_DELAY 10
 
 class Worker : public QObject
@@ -81,14 +81,14 @@ private:
     void writeData_planar(const QByteArray&);
     void writeData_keithley(const QByteArray&);
     void writeData_light(const QByteArray&);
-    void MeasureDie2();
-    void KeithlyZeroCorrection2();
-    void Keithly05VSet2();
-    double KeithlyGet2();
-    void Keithly10mVSet2();
-    void Keithly1VSet2();
-    void LightOn2();
-    void LightOff2();
+    void MeasureDie(QSerialPort *, QSerialPort *);
+    void KeithlyZeroCorrection(QSerialPort *);
+    void Keithly05VSet(QSerialPort *);
+    double KeithlyGet(QSerialPort *);
+    void Keithly10mVSet(QSerialPort *);
+    void Keithly1VSet(QSerialPort *);
+    void LightOn();
+    void LightOff();
 
     void closePort(QSerialPort*);
 //    void initPort9();
@@ -96,6 +96,8 @@ private:
 //    void writeWin(const QByteArray);
 
     void write(const QByteArray &);
+
+    void sendPackage(QSerialPort*, QByteArray, int);
 
 signals:
 
@@ -108,6 +110,7 @@ signals:
     void sendBCoordsSignal(int, int);
     void getKeithleyData();
     void sendMessageBox(QString, QString);
+    //void sendPackageSignal(QSerialPort*, QByteArray, int);
 
 public slots:
     void measureElement2();
@@ -133,6 +136,7 @@ public slots:
     void handleTimeout();
 
     void handleBytesWritten(qint64 bytes);
+
 
 };
 
