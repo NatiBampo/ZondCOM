@@ -61,6 +61,7 @@ private:
     int DC1VDelay = 600;
     int photoDelay = 400;
     int ansDelay = 400;
+    double FCvolt = 0.6;
 
     double ForwardCurrent = 0.0;
     double DarkCurrent10mV = 0.0;

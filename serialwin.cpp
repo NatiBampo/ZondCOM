@@ -98,11 +98,42 @@ void SerialWin::writeCOM(const char *data)
 void SerialWin::closeCOM()
 {
     CloseHandle(hSerial);
+    opened = false;
 }
 
 
 bool SerialWin::isOpen()
 {
-    return opened;
+    if (isWin) return opened;
+    return serialPort->isOpen();
 }
 
+
+bool SerialWin::openQtPort(QSerialPort *port, QString portName, QSerialPort::BaudRate baudRate)
+{
+    port->setPortName(portName);
+    port->setBaudRate(baudRate);
+    port->setDataBits(QSerialPort::DataBits::Data8);
+    port->setStopBits(QSerialPort::StopBits::OneStop);
+    port->setParity(QSerialPort::Parity::NoParity);
+    port->setFlowControl(QSerialPort::NoFlowControl);
+
+    //emit openPortResultSignal(portName, port->open(QSerialPort::ReadWrite));
+    return port->open(QSerialPort::ReadWrite);
+}
+
+
+bool SerialWin::closeQtPort()
+{
+    if (serialPort->isOpen()) serialPort->close();
+}
+
+void SerialWin::sendPackage(QByteArray package, int delay)
+{
+    answer = "";
+    serialPort->write(package);
+    serialPort->flush();
+    //emit sendLogSignal(package.remove(package.indexOf("\\"), package.length() - package.indexOf("\\")));
+    while (serialPort->waitForReadyRead(delay)) answer.append(serialPort->readAll());
+    //if (lastAnswer != "") emit sendLogSignal(lastAnswer.remove(lastAnswer.indexOf("\\"), lastAnswer.length() - lastAnswer.indexOf("\\")));
+}

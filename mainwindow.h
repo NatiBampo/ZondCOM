@@ -4,11 +4,15 @@
 #include <QMainWindow>
 #include <QThread>
 #include <worker.h>
+#include <stats.h>
 #include <QStandardItemModel>
-#include <QSqlDatabase>
+#include <QItemSelectionModel>
+#include <QModelIndex>
+//#include <QSqlDatabase>
 #include <QMutex>
 #include <QSettings>
 #include <QShortcut>
+
 
 
 #define ORGANIZATION_NAME "ZOO"
@@ -33,6 +37,7 @@ public:
 private:
     Ui::MainWindow *ui;
     Worker *worker;
+    Stats *stats = new Stats();
     QStandardItemModel *model;
     QThread workerThread;
     QMutex mutex;
@@ -96,6 +101,6 @@ private slots:
     void scanPushButton_clicked(bool checked);
     void autoPortButton_clicked();
     void measureBButton_clicked();
-    void measure2pushButton_clicked();
+    void openFilePushButton_clicked();
 };
 #endif // MAINWINDOW_H

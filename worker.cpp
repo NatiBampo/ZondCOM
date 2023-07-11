@@ -9,7 +9,6 @@
 #include <ctime>
 
 
-
 Worker::Worker(QMutex* mtxp)
 {
     this->mutex = mtxp;
@@ -71,6 +70,7 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
     if (portNameLight != "Диод"){emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));}
     */
 
+    /*
     if (portNameA5 != "Планар")
     {
         int p_result = pSerial->initCOM(("\\\\.\\" + portNameA5).toLocal8Bit().data(), 115200);
@@ -85,6 +85,18 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
     {
         int l_result = lSerial->initCOM(("\\\\.\\" + portNameLight).toLocal8Bit().data(), 9600);
         emit openPortResultSignal(portNameLight, "Light", l_result > 0 ? true : false);
+    }
+    */
+
+
+    serialPortA5 = new QSerialPort();
+    serialPortLight = new QSerialPort();
+    if (portNameA5 != "Планар"){emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));}
+    if (portNameLight != "Диод"){emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));}
+    if (portNameKeithly != "Keithley")
+    {
+        int k_result = kSerialWin->initCOM(("\\\\.\\" + portNameKeithly).toLocal8Bit().data(), 57600);
+        emit openPortResultSignal(portNameKeithly,"Keithley", k_result > 0 ? true : false);
     }
 }
 
@@ -114,9 +126,15 @@ void Worker::closePorts()
         delete serialPortKeithly;
         delete serialPortLight;
 */
-    if (kSerialWin->isOpen()) kSerialWin->closeCOM();
+
+    /*if (kSerialWin->isOpen()) kSerialWin->closeCOM();
     if (pSerial->isOpen()) pSerial->closeCOM();
     if (lSerial->isOpen()) lSerial->closeCOM();
+    */
+
+    if (serialPortA5->isOpen()) serialPortA5->close();
+    if (serialPortLight->isOpen()) serialPortLight->close();
+    if (kSerialWin->isOpen()) kSerialWin->closeCOM();
 
 }
 
@@ -186,12 +204,35 @@ bool Worker::checkPlanarCOM()
     }
     */
 
-    try {
+    /*try {
         return planarState().contains(stateReg);
     } catch (...){
         qDebug()<<"Port is not open or not responding";
     }
+    return false;*/
+    if (serialPortA5->isOpen()) {
+        QString localAnswer = "";
+        serialPortA5->write("State\r\n");
+        serialPortA5->flush();
+        while (serialPortA5->waitForReadyRead(ANSWER_DELAY)) localAnswer.append(serialPortA5->readAll());
+
+        if (localAnswer != "") {
+            qDebug()<<localAnswer;
+            if (localAnswer.contains(stateReg)) {
+                return true;
+            }
+        }
+    }
+    else
+    {
+        try {
+                return planarState().contains(stateReg);
+            } catch (...){
+                qDebug()<<"Port is not open or not responding";
+            }
+    }
     return false;
+
 }
 
 
@@ -350,6 +391,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur)
                 continue;
             }
             //опустить стол
+            //if (serialPortKeithly)
             tableController("Table DN\r\n");
             //перевод координат в массив байтов для передачи станку
             i = currentIndex;
@@ -521,15 +563,14 @@ void Worker::saveMeasure(int index)
 
 void Worker::tableController(QByteArray message)
 {
-    emit sendPackageSignal(Agent::Planar, message, ANSWER_DELAY);//serialPortA5
-
+    if (kSerialWin->isOpen()) emit sendPackageSignal(Agent::Planar, message, ANSWER_DELAY);//serialPortA5
 }
 
 
 QString Worker::planarState()
 {
     tableController("State\r\n");
-    char * str = pSerial->readCOM(50, ansDelay);
+    char * str = pSerial->readCOM(50, 1000);
     return QString::fromLocal8Bit(str);
 }
 
@@ -616,7 +657,7 @@ void Worker::Keithly05VSet(Agent serialPort) //QSerialPort *serialPort
 {
     emit sendPackageSignal(serialPort, "CURR:RANG 2e-3\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:RANG 1\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT " + QByteArray::number(0.6) + '\n', NO_ANSWER_DELAY);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT " + QByteArray::number(FCvolt) + '\n', NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:ILIM 1e-3\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
     QThread::msleep(FCdelay);//400
@@ -673,12 +714,6 @@ void Worker::setDelay(QList<int> *delays)
     DC1VDelay = delays->at(3);
     photoDelay = delays->at(4);
     ansDelay = delays->at(5);
+    FCvolt = ((double)delays->at(6)) / 1000;
     mutex->unlock();
 }
-
-
-
-
-
-
-

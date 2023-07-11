@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.3)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -13,7 +13,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.3. It"
+#error "This file was generated using the moc from 6.4.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -118,7 +118,7 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
         QT_MOC_LITERAL(721, 7),  // "checked"
         QT_MOC_LITERAL(729, 22),  // "autoPortButton_clicked"
         QT_MOC_LITERAL(752, 22),  // "measureBButton_clicked"
-        QT_MOC_LITERAL(775, 26)   // "measure2pushButton_clicked"
+        QT_MOC_LITERAL(775, 26)   // "openFilePushButton_clicked"
     },
     "MainWindow",
     "scanningPlateSignal",
@@ -162,7 +162,7 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "checked",
     "autoPortButton_clicked",
     "measureBButton_clicked",
-    "measure2pushButton_clicked"
+    "openFilePushButton_clicked"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -394,7 +394,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'measureBButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'measure2pushButton_clicked'
+        // method 'openFilePushButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -444,7 +444,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 35: _t->scanPushButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
         case 36: _t->autoPortButton_clicked(); break;
         case 37: _t->measureBButton_clicked(); break;
-        case 38: _t->measure2pushButton_clicked(); break;
+        case 38: _t->openFilePushButton_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

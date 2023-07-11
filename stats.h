@@ -1,7 +1,8 @@
-#ifndef STATS_H
+ #ifndef STATS_H
 #define STATS_H
 
 #include <QMainWindow>
+#include <windows.h>
 
 namespace Ui {
 class Stats;
@@ -14,6 +15,7 @@ class Stats : public QMainWindow
 public:
     explicit Stats(QWidget *parent = nullptr);
     ~Stats();
+    void showCharts(QString);
 
 private:
     Ui::Stats *ui;
@@ -24,16 +26,18 @@ private:
     QList<double> currMin = {max_d, max_d, max_d, max_d};
     QList<double> currMax = {min_d, min_d, min_d, min_d};
     QList<QList<double>> currValue = {{}, {}, {}, {}};
-    QList<QList<double>> currFreq = {{}, {}, {}, {}};
+    QList<QList<int>> currFreq = {{}, {}, {}, {}};
+    QList<int> currFreqMax = {0, 0, 0, 0};
     QList<QList<double>> currRang = {{}, {}, {}, {}};
-    QList<double> interval;
+    QList<double> step;
 
-
-public slots:
-    void showCharts(QString);
     void getData(QString);
     void getFreq();
     void drawCharts();
+
+
+public slots:
+
 };
 
 #endif // STATS_H
