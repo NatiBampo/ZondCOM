@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->leftPushButton, &QPushButton::clicked, this, &MainWindow::leftPushButton_on);
     connect(ui->rightPushButton, &QPushButton::clicked, this, &MainWindow::rightPushButton_on);
     connect(ui->scanPushButton, &QPushButton::clicked, this, &MainWindow::scanPushButton_clicked);
-    connect(ui->measurePushButton, &QPushButton::clicked, this, &MainWindow::measurePushButton_on);
+    //connect(ui->measurePushButton, &QPushButton::clicked, this, &MainWindow::measurePushButton_on);
     connect(ui->lightPushButton, &QPushButton::clicked, this, &MainWindow::lightPushButton_on);
 
     connect(ui->goToButton, &QPushButton::clicked, this, &MainWindow::goToButton_clicked);
@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
 
-    delays.append({400, 400, 800, 600, 400});
+    delays.append({400, 400, 800, 600, 400, 600, 1000});
 
     initializeShortKeys();
 
@@ -93,10 +93,10 @@ void MainWindow::createWorkerThread()
     //сохрание элемента в строке
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
     //начать обход
-    connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk2);
+    connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
     //connect(this, &MainWindow::pauseStatus, this, &Worker::pauseStatusSignal);
     connect(this, &MainWindow::getBCoordinatesSignal, worker, &Worker::getBCoordinates);
-
+    connect(this, &MainWindow::getCurrentCoordsSignal, worker, &Worker::getCurrentCoords);
     connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
 
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
@@ -108,27 +108,28 @@ void MainWindow::createWorkerThread()
     //сигнал паузы
 
     connect(worker, &Worker::sendBCoordsSignal, this, &MainWindow::setBCoords);
+    connect(worker, &Worker::sendCurrentCoordsSignal, this, &MainWindow::setBCoords);
     connect(worker, &Worker::sendMessageBox, this, &MainWindow::showMessageBox);
 }
 
 
 void MainWindow::initializeShortKeys()
 {
-    keyUp = new QShortcut(this);
-    keyUp -> setKey(Qt::Key_Up);//Qt::CTRL +
-    connect(keyUp, SIGNAL(activated()), this, SLOT(forwardPushButton_on()));
+//    keyUp = new QShortcut(this);
+//    keyUp -> setKey(Qt::Key_Up);//Qt::CTRL +
+//    connect(keyUp, SIGNAL(activated()), this, SLOT(forwardPushButton_on()));
 
-    keyDown = new QShortcut(this);
-    keyDown -> setKey(Qt::Key_Down);
-    connect(keyDown, SIGNAL(activated()), this, SLOT(backwardPushButton_on()));
+//    keyDown = new QShortcut(this);
+//    keyDown -> setKey(Qt::Key_Down);
+//    connect(keyDown, SIGNAL(activated()), this, SLOT(backwardPushButton_on()));
 
-    keyLeft = new QShortcut(this);
-    keyLeft -> setKey(Qt::Key_Left);
-    connect(keyLeft, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
+//    keyLeft = new QShortcut(this);
+//    keyLeft -> setKey(Qt::Key_Left);
+//    connect(keyLeft, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
 
-    keyRight = new QShortcut(this);
-    keyRight -> setKey(Qt::Key_Right);
-    connect(keyRight, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
+//    keyRight = new QShortcut(this);
+//    keyRight -> setKey(Qt::Key_Right);
+//    connect(keyRight, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
 
 }
 
@@ -165,7 +166,7 @@ void MainWindow::openPortResult(QString port, QString portName, bool result)
 void MainWindow::statePushButton_on()
 {
     //emit sendPackageSignal(serialPortA5, "State\r\n", 1000);
-    emit tableControllerSignal("State\r\n");
+    emit getCurrentCoordsSignal();
 }
 
 
@@ -431,8 +432,17 @@ void MainWindow::setBCoords(int x, int y)
 {
     ui->BXspinBox->setValue(x);
     ui->BYspinBox->setValue(y);
+
+    ui->AXspinBox->setValue(0);
+    ui->AYspinBox->setValue(0);
 }
 
+
+void MainWindow::setCurrentCoords(int x, int y)
+{
+    ui->xLineEdit->setText(QString::number(x));
+    ui->yLineEdit->setText(QString::number(y));
+}
 
 void  MainWindow::createStatsThread()
 {
@@ -470,6 +480,8 @@ void MainWindow::updateDelays()
     delays[2] = ui->DC10spinBox->value();
     delays[3] = ui->DC1VSpinBox->value();
     delays[4] = ui->lightSpinBox->value();
+    delays[5] = (int) (ui->voltageSpinBox->value() * 1000);
+    delays[6] = ui->planarSpinBox->value();
     emit setDelaySignal(&delays);
 }
 

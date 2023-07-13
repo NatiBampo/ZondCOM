@@ -60,6 +60,8 @@ private:
     int DC10mVDelay = 800;
     int DC1VDelay = 600;
     int lightDelay = 400;
+    int planarDelay = 1000;
+    double FCVoltage = 0.6;
 
     //counter for measuareDie
     int counter = 0;
@@ -77,10 +79,6 @@ private:
     bool checkLightCOM();
     bool checkIndex(int);
 
-    void connectPorts();
-    void writeData_planar(const QByteArray&);
-    void writeData_keithley(const QByteArray&);
-    void writeData_light(const QByteArray&);
     void MeasureDie(QSerialPort *, QSerialPort *);
     void KeithlyZeroCorrection(QSerialPort *);
     void Keithly05VSet(QSerialPort *);
@@ -91,13 +89,7 @@ private:
     void LightOff();
 
     void closePort(QSerialPort*);
-//    void initPort9();
-//    void readWin();
-//    void writeWin(const QByteArray);
-
-    void write(const QByteArray &);
-
-    void sendPackage(QSerialPort*, QByteArray, int);
+    //void sendPackage(QSerialPort*, QByteArray, int);
 
 signals:
 
@@ -110,7 +102,8 @@ signals:
     void sendBCoordsSignal(int, int);
     void getKeithleyData();
     void sendMessageBox(QString, QString);
-    //void sendPackageSignal(QSerialPort*, QByteArray, int);
+    void sendCurrentCoordsSignal(int, int);
+    void sendPackageSignal(QSerialPort*, QByteArray, int);
 
 public slots:
     void measureElement2();
@@ -124,20 +117,11 @@ public slots:
     void saveMeasure(int);
     void autoOpenPorts();
     void getBCoordinates();
+    void getCurrentCoords();
 
-    void readData_planar();
-    void handleError_planar(QSerialPort::SerialPortError);
-    void readData_keithley();
-    void handleError_keithley(QSerialPort::SerialPortError);
-    void readData_light();
-    void handleError_light(QSerialPort::SerialPortError);
-    void autoWalk2(bool, QString);
+    void autoWalk(bool, QString);
     void setDelay(QList<int> *);
-    void handleTimeout();
-
-    void handleBytesWritten(qint64 bytes);
-
-
+    void sendPackage(QSerialPort*, QByteArray, int);
 };
 
 #endif // WORKER_H

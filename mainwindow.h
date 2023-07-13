@@ -73,6 +73,7 @@ signals:
     void getBCoordinatesSignal();
     void showChartsSignal(QString);
     void setDelaySignal(QList<int>*);
+    void getCurrentCoordsSignal();
 
 private slots:
     void openPortPushButton_on();
@@ -93,7 +94,7 @@ private slots:
     void openPortResult(QString, QString, bool);
     void addRowToTable(int, double, double, double, double);
     void setBCoords(int, int);
-
+    void setCurrentCoords(int, int);
     void pauseButton_clicked(bool);
     void goToButton_clicked();
     void saveMeasureButton_clicked();
