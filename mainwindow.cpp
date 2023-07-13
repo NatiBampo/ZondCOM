@@ -115,21 +115,31 @@ void MainWindow::createWorkerThread()
 
 void MainWindow::initializeShortKeys()
 {
-//    keyUp = new QShortcut(this);
-//    keyUp -> setKey(Qt::Key_Up);//Qt::CTRL +
-//    connect(keyUp, SIGNAL(activated()), this, SLOT(forwardPushButton_on()));
+    // запустить по желанию измеряющего
+    keyUp  = new QShortcut(this);
+    keyUp -> setKey(Qt::Key_Q);
+    connect(keyUp, SIGNAL(activated()), this, SLOT(tableUpPushButton_on()));
 
-//    keyDown = new QShortcut(this);
-//    keyDown -> setKey(Qt::Key_Down);
-//    connect(keyDown, SIGNAL(activated()), this, SLOT(backwardPushButton_on()));
 
-//    keyLeft = new QShortcut(this);
-//    keyLeft -> setKey(Qt::Key_Left);
-//    connect(keyLeft, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
+    keyDown = new QShortcut(this);
+    keyDown -> setKey(Qt::Key_E);
+    connect(keyDown, SIGNAL(activated()), this, SLOT(tableDownPushButton_on()));
 
-//    keyRight = new QShortcut(this);
-//    keyRight -> setKey(Qt::Key_Right);
-//    connect(keyRight, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
+    keyNorth = new QShortcut(this);
+    keyNorth -> setKey(Qt::Key_W);//Qt::CTRL +
+    connect(keyNorth, SIGNAL(activated()), this, SLOT(forwardPushButton_on()));
+
+    keySouth = new QShortcut(this);
+    keySouth -> setKey(Qt::Key_S);
+    connect(keySouth, SIGNAL(activated()), this, SLOT(backwardPushButton_on()));
+
+    keyWest = new QShortcut(this);
+    keyWest -> setKey(Qt::Key_A);
+    connect(keyWest, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
+
+    keyEast = new QShortcut(this);
+    keyEast -> setKey(Qt::Key_D);
+    connect(keyEast, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
 
 }
 
@@ -145,6 +155,10 @@ void MainWindow::openPortPushButton_on()
         ui->portComboBox->setCurrentText("Планар");
         ui->keithlyPortComboBox->setCurrentText("Keithley");
         ui->lightPortComboBox->setCurrentText("Диод");
+
+        ui->measureBButton->setEnabled(false);
+        ui->pauseButton->setEnabled(false);
+        ui->scanPushButton->setEnabled(false);
         QMessageBox::information(this, "Сообщение", "COM порты закрыты");
     }
 }
@@ -155,11 +169,34 @@ void MainWindow::openPortResult(QString port, QString portName, bool result)
     if (!result) {
         QMessageBox::warning(this, "Ошибка", "Не удалось подключиться к порту " + port);
     } else {
-        QMessageBox::information(this, "Сообщение", "Выбранный порт: " + port + " для " + portName);
-        if (!portName.compare("Planar")) ui->portComboBox->setCurrentText(port);
-        else if (!portName.compare("Keithley")) ui->keithlyPortComboBox->setCurrentText(port);
-        else if (!portName.compare("Light")) ui->lightPortComboBox->setCurrentText(port);
+        //QMessageBox::information(this, "Сообщение", "Выбранный порт: " + port + " для " + portName);
+        if (!portName.compare("Planar"))
+        {
+            ui->portComboBox->setCurrentText(port);
+            portResult[0] = true;
+        }
+        else if (!portName.compare("Keithley"))
+        {
+            ui->keithlyPortComboBox->setCurrentText(port);
+            portResult[1] = true;
+        }
+        else if (!portName.compare("Light"))
+        {
+            ui->lightPortComboBox->setCurrentText(port);
+            portResult[2] = true;
+        }
     }
+    bool res = true;
+    for (int i = 0; i < portResult.length(); i++)
+    {
+        if (!portResult.at(i)) res = false;
+    }
+    ui->measureBButton->setEnabled(res);
+
+    if (res) QMessageBox::information(this, "Сообщение", "Выбранный порты:\n"
+                                      + ui->portComboBox->currentText() + " для Планара"
+                                      + ui->keithlyPortComboBox->currentText() + " для Кейтли"
+                                      + ui->lightPortComboBox->currentText() + " для Диода");
 }
 
 
@@ -211,9 +248,6 @@ void MainWindow::leftPushButton_on()
 
 void MainWindow::rightPushButton_on()
 {
-    qDebug() << clock();
-    updateDelays();
-    syncSettings();
     emit tableControllerSignal("Move 100 0\r\n");
 }
 
@@ -252,6 +286,12 @@ void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V,
     addElement(index, 5, DC1V);//темновой ток при 1В
     addElement(index, 6, LC);//фототок
     addElement(index, 7, index);//индекс
+
+    //focusing on the last row
+    QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
+    QModelIndex i = ui->tableView->model()->index(index, 0);
+    ui->tableView->selectionModel()->select(i, flags);
+
 }
 
 
@@ -376,6 +416,8 @@ void MainWindow::scanPushButton_clicked(bool checked)
 
 void MainWindow::orientationButton_clicked()
 {
+    double AX = (double)ui->AXspinBox->value();
+    double AY = (double)ui->AYspinBox->value();
     double BX = (double)ui->BXspinBox->value();
     double BY = (double)ui->BYspinBox->value();
     double stepX = (double)ui->stepXspinBox->value();
@@ -410,7 +452,11 @@ void MainWindow::orientationButton_clicked()
     ui->tableView->setModel(model);
 
 
-    emit scanningPlateSignal(BX, BY, stepX, stepY, numberX, numberY, colSlide, all_three, upLeft, upRight, downLeft, downRight);
+    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, numberX, numberY, colSlide, all_three, upLeft, upRight, downLeft, downRight);
+
+    ui->pauseButton->setEnabled(true);
+    ui->scanPushButton->setEnabled(true);
+
     syncSettings();
 }
 
@@ -482,6 +528,7 @@ void MainWindow::updateDelays()
     delays[4] = ui->lightSpinBox->value();
     delays[5] = (int) (ui->voltageSpinBox->value() * 1000);
     delays[6] = ui->planarSpinBox->value();
+
     emit setDelaySignal(&delays);
 }
 

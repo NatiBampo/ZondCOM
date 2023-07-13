@@ -173,7 +173,7 @@ void Worker::closePort(QSerialPort* port)
 }
 
 
-void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, double numberX,
+void Worker::scanningPlate(double AX, double AY,double BX, double BY, double stepX, double stepY, double numberX,
                            double numberY, double colSlide, bool all_three,
                            int upLeft, int upRight, int downLeft, int downRight)
 {
@@ -189,6 +189,28 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
     downLeft_offset = downLeft;
     downRight_offset = downRight;
 
+    /* original version works for only referencial B coords
+    double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
+    double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
+    double SinAlpha = tgAlpha * CosAlpha;
+    double X3 = (BX - AX) * CosAlpha * CosAlpha + (BY - AY) * SinAlpha * CosAlpha + AX;
+    double Y3 = (BY - AY) * CosAlpha * CosAlpha - (BX - AX) * SinAlpha * CosAlpha + AY;
+    double StepxX = (X3 - AX) / (numberX - 1);
+    double StepxY = (Y3 - AY) / (numberX - 1);
+    double StepyX = (BX - X3) / (numberY - 1);
+    double StepyY = (BY - Y3) / (numberY - 1);
+    double K = 1.75 / 2.805;
+
+    QList<double> DotsX;
+    QList<double> DotsY;
+    for (int j = 0; j < numberY; j++) {
+        for (int i = -1; i < numberX; i++) {
+            if (i % 2 == 0) DotsX.append(AX + StepxX * i + StepyX * j); else DotsX.append(AX + StepxX * i + StepyX * j - StepyX * K);
+            if (i % 2 == 0) DotsY.append(AY + StepxY * i + StepyY * j); else DotsY.append(AY + StepxY * i + StepyY * j - StepyY * K);
+        }
+    }
+    */
+    /* working solution for only referential B coords, excludes local A & B coords
     double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
     double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
     double SinAlpha = tgAlpha * CosAlpha;
@@ -198,11 +220,30 @@ void Worker::scanningPlate(double BX, double BY, double stepX, double stepY, dou
     double StepxY = (Y3 - BY) / (numberX - 1);
     double StepyX = -X3 / (numberY - 1);
     double StepyY = -Y3 / (numberY - 1);
+    */
+
+
+    double tgAlpha = ((numberY - 1) * stepY) / ((numberX - 1) * stepX);
+    double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
+    double SinAlpha = tgAlpha * CosAlpha;
+    BX = -(AX - BX);
+    BY = -(AY - BY);
+    emit sendMessageBox("B coords", "X: " + QString::number(BX) + "\nY: " + QString::number(BY));
+    emit sendBCoordsSignal(BX, BY);
+
+    double X3 = -BX * CosAlpha * CosAlpha - BY * SinAlpha * CosAlpha + BX;
+    double Y3 = -BY * CosAlpha * CosAlpha + BX * SinAlpha * CosAlpha + BY;
+    double StepxX = (X3 - BX) / (numberX - 1);
+    double StepxY = (Y3 - BY) / (numberX - 1);
+    double StepyX = -X3 / (numberY - 1);
+    double StepyY = -Y3 / (numberY - 1);
     double K = 1.75 / 2.805;
     double slideX = (colSlide - (numberX+1) * stepX) * 1000;
 
-    for (int j = 0; j < numberY; j++) {
-        for (int i = -1; i < numberX; i++) {
+    for (int j = 0; j < numberY; j++)
+    {
+        for (int i = -1; i < numberX; i++)
+        {
             if (i % 2 == 0) DotsX.append(BX + StepxX * i + StepyX * j); else DotsX.append(BX + StepxX * i + StepyX * j - StepyX * K);
             if (i % 2 == 0) DotsY.append(BY + StepxY * i + StepyY * j); else DotsY.append(BY + StepxY * i + StepyY * j - StepyY * K);
         }
@@ -560,8 +601,8 @@ void Worker::measureElement2()
 
     int end = clock();
     int t = (end - start);
-    emit sendMessageBox("Последнее измерение: ", QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
-                        QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)); //QString::number(t));
+    emit sendMessageBox("Последнее измерение: ", "FC: " + QString::number(ForwardCurrent, 'E', 4) + ", \nDC10mV: " + QString::number(DarkCurrent10mV, 'E', 4) + ", \nDC1V: " +
+                        QString::number(DarkCurrent1V, 'E', 4) + ", \nLC10mV: " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + "\nВремя: " + QString::number(t / CLOCKS_PER_SEC)); //QString::number(t));
 }
 
 

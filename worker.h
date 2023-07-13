@@ -107,7 +107,7 @@ signals:
 
 public slots:
     void measureElement2();
-    void scanningPlate(double, double, double, double, double, double, double, bool, int, int, int, int);
+    void scanningPlate(double, double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void tableController(QByteArray);
     void lightController(QByteArray);
     void openPorts(QString, QString, QString);

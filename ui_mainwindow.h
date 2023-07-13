@@ -169,7 +169,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1200, 871);
+        MainWindow->resize(1200, 893);
         QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -421,14 +421,16 @@ public:
 
         groupBox_5 = new QGroupBox(tab);
         groupBox_5->setObjectName("groupBox_5");
-        groupBox_5->setMinimumSize(QSize(650, 200));
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(groupBox_5->sizePolicy().hasHeightForWidth());
+        groupBox_5->setSizePolicy(sizePolicy1);
+        groupBox_5->setMinimumSize(QSize(320, 200));
         groupBox_5->setMaximumSize(QSize(700, 16777215));
         label_17 = new QLabel(groupBox_5);
         label_17->setObjectName("label_17");
         label_17->setGeometry(QRect(0, 20, 71, 60));
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(label_17->sizePolicy().hasHeightForWidth());
         label_17->setSizePolicy(sizePolicy1);
         label_17->setMinimumSize(QSize(40, 60));
@@ -452,7 +454,9 @@ public:
         label_19->setMargin(6);
         columnSpinBox = new QSpinBox(groupBox_5);
         columnSpinBox->setObjectName("columnSpinBox");
-        columnSpinBox->setGeometry(QRect(70, 40, 71, 20));
+        columnSpinBox->setGeometry(QRect(70, 40, 71, 22));
+        sizePolicy1.setHeightForWidth(columnSpinBox->sizePolicy().hasHeightForWidth());
+        columnSpinBox->setSizePolicy(sizePolicy1);
         columnSpinBox->setMinimumSize(QSize(20, 20));
         columnSpinBox->setMinimum(1);
         columnSpinBox->setMaximum(3);
@@ -594,7 +598,7 @@ public:
 
         pauseButton = new QPushButton(tab_2);
         pauseButton->setObjectName("pauseButton");
-        pauseButton->setEnabled(true);
+        pauseButton->setEnabled(false);
         pauseButton->setCheckable(true);
         pauseButton->setFlat(false);
 
@@ -705,6 +709,7 @@ public:
 
         scanPushButton = new QPushButton(tab_2);
         scanPushButton->setObjectName("scanPushButton");
+        scanPushButton->setEnabled(false);
         scanPushButton->setCheckable(true);
 
         gridLayout_6->addWidget(scanPushButton, 8, 3, 1, 1);
@@ -761,6 +766,8 @@ public:
 
         measureBButton = new QPushButton(tab_2);
         measureBButton->setObjectName("measureBButton");
+        measureBButton->setEnabled(false);
+        measureBButton->setFlat(false);
 
         gridLayout_6->addWidget(measureBButton, 7, 7, 1, 1);
 
@@ -924,8 +931,9 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
         orientationButton->setDefault(false);
+        measureBButton->setDefault(false);
 
 
         QMetaObject::connectSlotsByName(MainWindow);

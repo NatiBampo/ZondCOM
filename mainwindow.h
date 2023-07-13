@@ -41,10 +41,13 @@ private:
     QMutex mutex;
     QString dir_name;
     QList<int> delays;
+    QList<bool> portResult = {false, false, false};
     QShortcut *keyUp;
     QShortcut *keyDown;
-    QShortcut *keyLeft;
-    QShortcut *keyRight;
+    QShortcut *keyNorth;
+    QShortcut *keySouth;
+    QShortcut *keyEast;
+    QShortcut *keyWest;
 
     int currentIndex = 0;
     int finalIndex = 0;
@@ -52,14 +55,13 @@ private:
     void createStatsThread();
     void addElement(int, int, double);
     int getUIIndex();
-    int delay = 800;
     void updateDelays();
     void syncSettings();
     void initializeShortKeys();
 
 
 signals:
-    void scanningPlateSignal(double, double, double, double, double, double, double, bool, int, int, int, int);
+    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void measureSignal();
     void tableControllerSignal(QByteArray);
     void lightControllerSignal(QByteArray);
