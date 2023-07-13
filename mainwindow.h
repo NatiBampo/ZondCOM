@@ -48,7 +48,7 @@ private:
     QShortcut *keySouth;
     QShortcut *keyEast;
     QShortcut *keyWest;
-
+    QShortcut *keyLight;
     int currentIndex = 0;
     int finalIndex = 0;
     void createWorkerThread();
@@ -58,6 +58,7 @@ private:
     void updateDelays();
     void syncSettings();
     void initializeShortKeys();
+//    void showMessageBox(QString, QString);
 
 
 signals:
@@ -76,6 +77,7 @@ signals:
     void showChartsSignal(QString);
     void setDelaySignal(QList<int>*);
     void getCurrentCoordsSignal();
+    void measureFCSignal();
 
 private slots:
     void openPortPushButton_on();
@@ -109,5 +111,6 @@ private slots:
     void measure2pushButton_clicked();
     void showMessageBox(QString, QString);
 
+    void on_FCMeasureButton_clicked();
 };
 #endif // MAINWINDOW_H

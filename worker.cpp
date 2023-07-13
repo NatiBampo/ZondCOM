@@ -228,7 +228,7 @@ void Worker::scanningPlate(double AX, double AY,double BX, double BY, double ste
     double SinAlpha = tgAlpha * CosAlpha;
     BX = -(AX - BX);
     BY = -(AY - BY);
-    emit sendMessageBox("B coords", "X: " + QString::number(BX) + "\nY: " + QString::number(BY));
+    //emit sendMessageBox("B coords", "X: " + QString::number(BX) + " Y: " + QString::number(BY));
     emit sendBCoordsSignal(BX, BY);
 
     double X3 = -BX * CosAlpha * CosAlpha - BY * SinAlpha * CosAlpha + BX;
@@ -474,7 +474,8 @@ void Worker::KeithlyZeroCorrection(QSerialPort *serialPort) {
 void Worker::Keithly05VSet(QSerialPort *serialPort) {
     emit sendPackageSignal(serialPort, "CURR:RANG 2e-3\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:RANG 1\n", NO_ANSWER_DELAY);
-    emit sendPackageSignal(serialPort, "SOUR:VOLT " + QByteArray::number(((double) FCVoltage)/1000) + '\n', NO_ANSWER_DELAY);
+    QByteArray tmp = QByteArray::number(((double)FCVoltage) / 1000);
+    emit sendPackageSignal(serialPort, "SOUR:VOLT " + tmp + '\n', NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:ILIM 1e-3\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
     QThread::msleep(FCdelay);
@@ -593,7 +594,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur)
 }
 
 
-void Worker::measureElement2()
+void Worker::measureElement()
 {
     int start = clock();
 
@@ -602,7 +603,18 @@ void Worker::measureElement2()
     int end = clock();
     int t = (end - start);
     emit sendMessageBox("Последнее измерение: ", "FC: " + QString::number(ForwardCurrent, 'E', 4) + ", \nDC10mV: " + QString::number(DarkCurrent10mV, 'E', 4) + ", \nDC1V: " +
-                        QString::number(DarkCurrent1V, 'E', 4) + ", \nLC10mV: " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + "\nВремя: " + QString::number(t / CLOCKS_PER_SEC)); //QString::number(t));
+                        QString::number(DarkCurrent1V, 'E', 4) + ", \nLC10mV: " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + "\n\nВремя: " + QString::number(t / CLOCKS_PER_SEC) + "сек"); //QString::number(t));
+}
+
+
+void Worker::measureFC()
+{
+    KeithlyZeroCorrection(serialPortKeithly);
+    emit sendPackageSignal(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
+    Keithly05VSet(serialPortKeithly);
+    ForwardCurrent = KeithlyGet(serialPortKeithly);
+
+    emit sendMessageBox("Прямой ток измерение: ", "Voltage : " + QByteArray::number(((double)FCVoltage) / 1000) + " V : " + QString::number(ForwardCurrent, 'E', 4));
 }
 
 
@@ -613,6 +625,6 @@ void Worker::setDelay(QList<int> * delays)
     DC10mVDelay = delays->at(2);
     DC1VDelay = delays->at(3);
     lightDelay = delays->at(4);
-    FCVoltage = ((double) delays->at(5)) / 1000;
+    FCVoltage =  delays->at(5);
     planarDelay = delays->at(6);
 }

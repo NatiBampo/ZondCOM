@@ -48,45 +48,6 @@ public:
     QTabWidget *tabWidget;
     QWidget *tab;
     QGridLayout *gridLayout_3;
-    QGroupBox *groupBox_3;
-    QGridLayout *gridLayout_4;
-    QPushButton *backwardPushButton;
-    QPushButton *rightPushButton;
-    QPushButton *leftPushButton;
-    QPushButton *forwardPushButton;
-    QLabel *label_20;
-    QGroupBox *groupBox_6;
-    QGridLayout *gridLayout_8;
-    QSpinBox *DC1VSpinBox;
-    QSpinBox *DC10spinBox;
-    QSpinBox *zeroSpinBox;
-    QSpinBox *FCSpinBox;
-    QLabel *label_37;
-    QLabel *label_31;
-    QSpinBox *lightSpinBox;
-    QDoubleSpinBox *voltageSpinBox;
-    QLabel *label_32;
-    QLabel *label_34;
-    QLabel *label_35;
-    QLabel *label_33;
-    QLabel *label_38;
-    QSpinBox *planarSpinBox;
-    QListWidget *logsListWidget;
-    QGroupBox *groupBox_4;
-    QGridLayout *gridLayout_7;
-    QPushButton *lightPushButton;
-    QGroupBox *groupBox;
-    QGridLayout *gridLayout;
-    QPushButton *coordsPushButton;
-    QLineEdit *yLineEdit;
-    QLineEdit *xLineEdit;
-    QLabel *label_2;
-    QLabel *label_3;
-    QPushButton *statePushButton;
-    QGroupBox *groupBox_2;
-    QGridLayout *gridLayout_2;
-    QPushButton *tableDownPushButton;
-    QPushButton *tableUpPushButton;
     QGroupBox *groupBox_5;
     QLabel *label_17;
     QLabel *label_18;
@@ -99,6 +60,41 @@ public:
     QPushButton *saveMeasureButton;
     QPushButton *continueFromButton;
     QPushButton *measure2pushButton;
+    QPushButton *FCMeasureButton;
+    QGroupBox *groupBox;
+    QGridLayout *gridLayout;
+    QLineEdit *yLineEdit;
+    QLineEdit *xLineEdit;
+    QLabel *label_2;
+    QLabel *label_3;
+    QPushButton *statePushButton;
+    QPushButton *coordsPushButton;
+    QGroupBox *groupBox_6;
+    QGridLayout *gridLayout_8;
+    QSpinBox *voltageSpinBox;
+    QSpinBox *planarSpinBox;
+    QSpinBox *zeroSpinBox;
+    QLabel *label_38;
+    QLabel *label_32;
+    QSpinBox *DC10spinBox;
+    QSpinBox *FCSpinBox;
+    QSpinBox *lightSpinBox;
+    QLabel *label_35;
+    QLabel *label_33;
+    QLabel *label_31;
+    QLabel *label_37;
+    QSpinBox *DC1VSpinBox;
+    QLabel *label_34;
+    QSpacerItem *verticalSpacer_2;
+    QGroupBox *groupBox_3;
+    QGridLayout *gridLayout_4;
+    QPushButton *tableDownPushButton;
+    QPushButton *tableUpPushButton;
+    QPushButton *forwardPushButton;
+    QPushButton *lightPushButton;
+    QPushButton *leftPushButton;
+    QPushButton *rightPushButton;
+    QPushButton *backwardPushButton;
     QWidget *tab_2;
     QGridLayout *gridLayout_6;
     QLabel *label_10;
@@ -162,6 +158,8 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QLabel *addressHeaderLabel;
     QLabel *addressLabel;
+    QListWidget *logsListWidget;
+    QLabel *label_20;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -213,220 +211,22 @@ public:
         formLayout->setContentsMargins(0, 0, 0, -1);
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName("tabWidget");
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
+        tabWidget->setSizePolicy(sizePolicy1);
+        tabWidget->setMinimumSize(QSize(0, 450));
         tabWidget->setMaximumSize(QSize(600, 16777215));
         tab = new QWidget();
         tab->setObjectName("tab");
         gridLayout_3 = new QGridLayout(tab);
         gridLayout_3->setObjectName("gridLayout_3");
-        groupBox_3 = new QGroupBox(tab);
-        groupBox_3->setObjectName("groupBox_3");
-        gridLayout_4 = new QGridLayout(groupBox_3);
-        gridLayout_4->setObjectName("gridLayout_4");
-        backwardPushButton = new QPushButton(groupBox_3);
-        backwardPushButton->setObjectName("backwardPushButton");
-
-        gridLayout_4->addWidget(backwardPushButton, 2, 1, 1, 1);
-
-        rightPushButton = new QPushButton(groupBox_3);
-        rightPushButton->setObjectName("rightPushButton");
-
-        gridLayout_4->addWidget(rightPushButton, 1, 2, 1, 1);
-
-        leftPushButton = new QPushButton(groupBox_3);
-        leftPushButton->setObjectName("leftPushButton");
-
-        gridLayout_4->addWidget(leftPushButton, 1, 0, 1, 1);
-
-        forwardPushButton = new QPushButton(groupBox_3);
-        forwardPushButton->setObjectName("forwardPushButton");
-
-        gridLayout_4->addWidget(forwardPushButton, 0, 1, 1, 1);
-
-
-        gridLayout_3->addWidget(groupBox_3, 6, 0, 1, 1);
-
-        label_20 = new QLabel(tab);
-        label_20->setObjectName("label_20");
-
-        gridLayout_3->addWidget(label_20, 8, 0, 1, 1);
-
-        groupBox_6 = new QGroupBox(tab);
-        groupBox_6->setObjectName("groupBox_6");
-        gridLayout_8 = new QGridLayout(groupBox_6);
-        gridLayout_8->setObjectName("gridLayout_8");
-        DC1VSpinBox = new QSpinBox(groupBox_6);
-        DC1VSpinBox->setObjectName("DC1VSpinBox");
-        DC1VSpinBox->setMaximum(5000);
-        DC1VSpinBox->setSingleStep(100);
-        DC1VSpinBox->setValue(600);
-
-        gridLayout_8->addWidget(DC1VSpinBox, 3, 1, 1, 1);
-
-        DC10spinBox = new QSpinBox(groupBox_6);
-        DC10spinBox->setObjectName("DC10spinBox");
-        DC10spinBox->setMaximum(5000);
-        DC10spinBox->setSingleStep(100);
-        DC10spinBox->setValue(800);
-
-        gridLayout_8->addWidget(DC10spinBox, 2, 1, 1, 1);
-
-        zeroSpinBox = new QSpinBox(groupBox_6);
-        zeroSpinBox->setObjectName("zeroSpinBox");
-        zeroSpinBox->setMaximum(5000);
-        zeroSpinBox->setSingleStep(100);
-        zeroSpinBox->setValue(400);
-
-        gridLayout_8->addWidget(zeroSpinBox, 0, 1, 1, 1);
-
-        FCSpinBox = new QSpinBox(groupBox_6);
-        FCSpinBox->setObjectName("FCSpinBox");
-        FCSpinBox->setMaximum(5000);
-        FCSpinBox->setSingleStep(100);
-        FCSpinBox->setValue(300);
-
-        gridLayout_8->addWidget(FCSpinBox, 1, 1, 1, 1);
-
-        label_37 = new QLabel(groupBox_6);
-        label_37->setObjectName("label_37");
-
-        gridLayout_8->addWidget(label_37, 6, 0, 1, 1);
-
-        label_31 = new QLabel(groupBox_6);
-        label_31->setObjectName("label_31");
-
-        gridLayout_8->addWidget(label_31, 0, 0, 1, 1);
-
-        lightSpinBox = new QSpinBox(groupBox_6);
-        lightSpinBox->setObjectName("lightSpinBox");
-        lightSpinBox->setMaximum(5000);
-        lightSpinBox->setSingleStep(100);
-        lightSpinBox->setValue(400);
-
-        gridLayout_8->addWidget(lightSpinBox, 4, 1, 1, 1);
-
-        voltageSpinBox = new QDoubleSpinBox(groupBox_6);
-        voltageSpinBox->setObjectName("voltageSpinBox");
-        voltageSpinBox->setMaximum(3.000000000000000);
-        voltageSpinBox->setSingleStep(0.050000000000000);
-        voltageSpinBox->setValue(0.600000000000000);
-
-        gridLayout_8->addWidget(voltageSpinBox, 6, 1, 1, 1);
-
-        label_32 = new QLabel(groupBox_6);
-        label_32->setObjectName("label_32");
-
-        gridLayout_8->addWidget(label_32, 1, 0, 1, 1);
-
-        label_34 = new QLabel(groupBox_6);
-        label_34->setObjectName("label_34");
-
-        gridLayout_8->addWidget(label_34, 3, 0, 1, 1);
-
-        label_35 = new QLabel(groupBox_6);
-        label_35->setObjectName("label_35");
-
-        gridLayout_8->addWidget(label_35, 4, 0, 1, 1);
-
-        label_33 = new QLabel(groupBox_6);
-        label_33->setObjectName("label_33");
-
-        gridLayout_8->addWidget(label_33, 2, 0, 1, 1);
-
-        label_38 = new QLabel(groupBox_6);
-        label_38->setObjectName("label_38");
-
-        gridLayout_8->addWidget(label_38, 5, 0, 1, 1);
-
-        planarSpinBox = new QSpinBox(groupBox_6);
-        planarSpinBox->setObjectName("planarSpinBox");
-        planarSpinBox->setMaximum(5000);
-        planarSpinBox->setSingleStep(100);
-        planarSpinBox->setValue(1000);
-
-        gridLayout_8->addWidget(planarSpinBox, 5, 1, 1, 1);
-
-
-        gridLayout_3->addWidget(groupBox_6, 7, 0, 1, 1);
-
-        logsListWidget = new QListWidget(tab);
-        logsListWidget->setObjectName("logsListWidget");
-
-        gridLayout_3->addWidget(logsListWidget, 9, 0, 1, 2);
-
-        groupBox_4 = new QGroupBox(tab);
-        groupBox_4->setObjectName("groupBox_4");
-        gridLayout_7 = new QGridLayout(groupBox_4);
-        gridLayout_7->setObjectName("gridLayout_7");
-        lightPushButton = new QPushButton(groupBox_4);
-        lightPushButton->setObjectName("lightPushButton");
-
-        gridLayout_7->addWidget(lightPushButton, 0, 0, 1, 1);
-
-
-        gridLayout_3->addWidget(groupBox_4, 3, 1, 1, 1);
-
-        groupBox = new QGroupBox(tab);
-        groupBox->setObjectName("groupBox");
-        gridLayout = new QGridLayout(groupBox);
-        gridLayout->setObjectName("gridLayout");
-        coordsPushButton = new QPushButton(groupBox);
-        coordsPushButton->setObjectName("coordsPushButton");
-
-        gridLayout->addWidget(coordsPushButton, 2, 0, 1, 2);
-
-        yLineEdit = new QLineEdit(groupBox);
-        yLineEdit->setObjectName("yLineEdit");
-
-        gridLayout->addWidget(yLineEdit, 1, 1, 1, 1);
-
-        xLineEdit = new QLineEdit(groupBox);
-        xLineEdit->setObjectName("xLineEdit");
-
-        gridLayout->addWidget(xLineEdit, 0, 1, 1, 1);
-
-        label_2 = new QLabel(groupBox);
-        label_2->setObjectName("label_2");
-
-        gridLayout->addWidget(label_2, 0, 0, 1, 1);
-
-        label_3 = new QLabel(groupBox);
-        label_3->setObjectName("label_3");
-
-        gridLayout->addWidget(label_3, 1, 0, 1, 1);
-
-        statePushButton = new QPushButton(groupBox);
-        statePushButton->setObjectName("statePushButton");
-
-        gridLayout->addWidget(statePushButton, 3, 0, 1, 2);
-
-
-        gridLayout_3->addWidget(groupBox, 6, 1, 1, 1);
-
-        groupBox_2 = new QGroupBox(tab);
-        groupBox_2->setObjectName("groupBox_2");
-        gridLayout_2 = new QGridLayout(groupBox_2);
-        gridLayout_2->setObjectName("gridLayout_2");
-        tableDownPushButton = new QPushButton(groupBox_2);
-        tableDownPushButton->setObjectName("tableDownPushButton");
-
-        gridLayout_2->addWidget(tableDownPushButton, 1, 0, 1, 1);
-
-        tableUpPushButton = new QPushButton(groupBox_2);
-        tableUpPushButton->setObjectName("tableUpPushButton");
-
-        gridLayout_2->addWidget(tableUpPushButton, 0, 0, 1, 1);
-
-
-        gridLayout_3->addWidget(groupBox_2, 3, 0, 1, 1);
-
         groupBox_5 = new QGroupBox(tab);
         groupBox_5->setObjectName("groupBox_5");
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(groupBox_5->sizePolicy().hasHeightForWidth());
         groupBox_5->setSizePolicy(sizePolicy1);
-        groupBox_5->setMinimumSize(QSize(320, 200));
+        groupBox_5->setMinimumSize(QSize(280, 200));
         groupBox_5->setMaximumSize(QSize(700, 16777215));
         label_17 = new QLabel(groupBox_5);
         label_17->setObjectName("label_17");
@@ -479,19 +279,214 @@ public:
         label_36->setGeometry(QRect(10, 120, 49, 16));
         goToButton = new QPushButton(groupBox_5);
         goToButton->setObjectName("goToButton");
+        goToButton->setEnabled(false);
         goToButton->setGeometry(QRect(160, 40, 141, 24));
         saveMeasureButton = new QPushButton(groupBox_5);
         saveMeasureButton->setObjectName("saveMeasureButton");
         saveMeasureButton->setGeometry(QRect(160, 80, 141, 24));
         continueFromButton = new QPushButton(groupBox_5);
         continueFromButton->setObjectName("continueFromButton");
-        continueFromButton->setGeometry(QRect(20, 160, 291, 24));
+        continueFromButton->setEnabled(false);
+        continueFromButton->setGeometry(QRect(120, 190, 191, 24));
         continueFromButton->setCheckable(true);
         measure2pushButton = new QPushButton(groupBox_5);
         measure2pushButton->setObjectName("measure2pushButton");
+        measure2pushButton->setEnabled(false);
         measure2pushButton->setGeometry(QRect(160, 120, 141, 24));
+        FCMeasureButton = new QPushButton(groupBox_5);
+        FCMeasureButton->setObjectName("FCMeasureButton");
+        FCMeasureButton->setGeometry(QRect(160, 160, 141, 24));
 
-        gridLayout_3->addWidget(groupBox_5, 7, 1, 1, 1);
+        gridLayout_3->addWidget(groupBox_5, 6, 1, 1, 1);
+
+        groupBox = new QGroupBox(tab);
+        groupBox->setObjectName("groupBox");
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy2.setHorizontalStretch(28);
+        sizePolicy2.setVerticalStretch(150);
+        sizePolicy2.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
+        groupBox->setSizePolicy(sizePolicy2);
+        gridLayout = new QGridLayout(groupBox);
+        gridLayout->setObjectName("gridLayout");
+        yLineEdit = new QLineEdit(groupBox);
+        yLineEdit->setObjectName("yLineEdit");
+
+        gridLayout->addWidget(yLineEdit, 1, 1, 1, 1);
+
+        xLineEdit = new QLineEdit(groupBox);
+        xLineEdit->setObjectName("xLineEdit");
+
+        gridLayout->addWidget(xLineEdit, 0, 1, 1, 1);
+
+        label_2 = new QLabel(groupBox);
+        label_2->setObjectName("label_2");
+
+        gridLayout->addWidget(label_2, 0, 0, 1, 1);
+
+        label_3 = new QLabel(groupBox);
+        label_3->setObjectName("label_3");
+
+        gridLayout->addWidget(label_3, 1, 0, 1, 1);
+
+        statePushButton = new QPushButton(groupBox);
+        statePushButton->setObjectName("statePushButton");
+
+        gridLayout->addWidget(statePushButton, 3, 1, 1, 1);
+
+        coordsPushButton = new QPushButton(groupBox);
+        coordsPushButton->setObjectName("coordsPushButton");
+
+        gridLayout->addWidget(coordsPushButton, 2, 1, 1, 1);
+
+
+        gridLayout_3->addWidget(groupBox, 5, 1, 1, 1);
+
+        groupBox_6 = new QGroupBox(tab);
+        groupBox_6->setObjectName("groupBox_6");
+        gridLayout_8 = new QGridLayout(groupBox_6);
+        gridLayout_8->setObjectName("gridLayout_8");
+        voltageSpinBox = new QSpinBox(groupBox_6);
+        voltageSpinBox->setObjectName("voltageSpinBox");
+        voltageSpinBox->setMaximum(1500);
+        voltageSpinBox->setSingleStep(50);
+        voltageSpinBox->setValue(600);
+
+        gridLayout_8->addWidget(voltageSpinBox, 7, 1, 1, 1);
+
+        planarSpinBox = new QSpinBox(groupBox_6);
+        planarSpinBox->setObjectName("planarSpinBox");
+        planarSpinBox->setMaximum(5000);
+        planarSpinBox->setSingleStep(100);
+        planarSpinBox->setValue(1000);
+
+        gridLayout_8->addWidget(planarSpinBox, 5, 1, 1, 1);
+
+        zeroSpinBox = new QSpinBox(groupBox_6);
+        zeroSpinBox->setObjectName("zeroSpinBox");
+        zeroSpinBox->setMaximum(5000);
+        zeroSpinBox->setSingleStep(100);
+        zeroSpinBox->setValue(400);
+
+        gridLayout_8->addWidget(zeroSpinBox, 0, 1, 1, 1);
+
+        label_38 = new QLabel(groupBox_6);
+        label_38->setObjectName("label_38");
+
+        gridLayout_8->addWidget(label_38, 5, 0, 1, 1);
+
+        label_32 = new QLabel(groupBox_6);
+        label_32->setObjectName("label_32");
+
+        gridLayout_8->addWidget(label_32, 1, 0, 1, 1);
+
+        DC10spinBox = new QSpinBox(groupBox_6);
+        DC10spinBox->setObjectName("DC10spinBox");
+        DC10spinBox->setMaximum(5000);
+        DC10spinBox->setSingleStep(100);
+        DC10spinBox->setValue(800);
+
+        gridLayout_8->addWidget(DC10spinBox, 2, 1, 1, 1);
+
+        FCSpinBox = new QSpinBox(groupBox_6);
+        FCSpinBox->setObjectName("FCSpinBox");
+        FCSpinBox->setMaximum(5000);
+        FCSpinBox->setSingleStep(100);
+        FCSpinBox->setValue(300);
+
+        gridLayout_8->addWidget(FCSpinBox, 1, 1, 1, 1);
+
+        lightSpinBox = new QSpinBox(groupBox_6);
+        lightSpinBox->setObjectName("lightSpinBox");
+        lightSpinBox->setMaximum(5000);
+        lightSpinBox->setSingleStep(100);
+        lightSpinBox->setValue(400);
+
+        gridLayout_8->addWidget(lightSpinBox, 4, 1, 1, 1);
+
+        label_35 = new QLabel(groupBox_6);
+        label_35->setObjectName("label_35");
+
+        gridLayout_8->addWidget(label_35, 4, 0, 1, 1);
+
+        label_33 = new QLabel(groupBox_6);
+        label_33->setObjectName("label_33");
+
+        gridLayout_8->addWidget(label_33, 2, 0, 1, 1);
+
+        label_31 = new QLabel(groupBox_6);
+        label_31->setObjectName("label_31");
+
+        gridLayout_8->addWidget(label_31, 0, 0, 1, 1);
+
+        label_37 = new QLabel(groupBox_6);
+        label_37->setObjectName("label_37");
+
+        gridLayout_8->addWidget(label_37, 7, 0, 1, 1);
+
+        DC1VSpinBox = new QSpinBox(groupBox_6);
+        DC1VSpinBox->setObjectName("DC1VSpinBox");
+        DC1VSpinBox->setMaximum(5000);
+        DC1VSpinBox->setSingleStep(100);
+        DC1VSpinBox->setValue(600);
+
+        gridLayout_8->addWidget(DC1VSpinBox, 3, 1, 1, 1);
+
+        label_34 = new QLabel(groupBox_6);
+        label_34->setObjectName("label_34");
+
+        gridLayout_8->addWidget(label_34, 3, 0, 1, 1);
+
+        verticalSpacer_2 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        gridLayout_8->addItem(verticalSpacer_2, 6, 0, 1, 1);
+
+
+        gridLayout_3->addWidget(groupBox_6, 6, 0, 1, 1);
+
+        groupBox_3 = new QGroupBox(tab);
+        groupBox_3->setObjectName("groupBox_3");
+        sizePolicy1.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
+        groupBox_3->setSizePolicy(sizePolicy1);
+        groupBox_3->setMinimumSize(QSize(250, 150));
+        gridLayout_4 = new QGridLayout(groupBox_3);
+        gridLayout_4->setObjectName("gridLayout_4");
+        tableDownPushButton = new QPushButton(groupBox_3);
+        tableDownPushButton->setObjectName("tableDownPushButton");
+
+        gridLayout_4->addWidget(tableDownPushButton, 0, 2, 1, 1);
+
+        tableUpPushButton = new QPushButton(groupBox_3);
+        tableUpPushButton->setObjectName("tableUpPushButton");
+
+        gridLayout_4->addWidget(tableUpPushButton, 0, 0, 1, 1);
+
+        forwardPushButton = new QPushButton(groupBox_3);
+        forwardPushButton->setObjectName("forwardPushButton");
+
+        gridLayout_4->addWidget(forwardPushButton, 1, 1, 1, 1);
+
+        lightPushButton = new QPushButton(groupBox_3);
+        lightPushButton->setObjectName("lightPushButton");
+
+        gridLayout_4->addWidget(lightPushButton, 0, 1, 1, 1);
+
+        leftPushButton = new QPushButton(groupBox_3);
+        leftPushButton->setObjectName("leftPushButton");
+
+        gridLayout_4->addWidget(leftPushButton, 2, 0, 1, 1);
+
+        rightPushButton = new QPushButton(groupBox_3);
+        rightPushButton->setObjectName("rightPushButton");
+
+        gridLayout_4->addWidget(rightPushButton, 2, 2, 1, 1);
+
+        backwardPushButton = new QPushButton(groupBox_3);
+        backwardPushButton->setObjectName("backwardPushButton");
+
+        gridLayout_4->addWidget(backwardPushButton, 3, 1, 1, 1);
+
+
+        gridLayout_3->addWidget(groupBox_3, 5, 0, 1, 1);
 
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
@@ -612,11 +607,11 @@ public:
 
         BXspinBox = new QSpinBox(tab_2);
         BXspinBox->setObjectName("BXspinBox");
-        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(BXspinBox->sizePolicy().hasHeightForWidth());
-        BXspinBox->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(BXspinBox->sizePolicy().hasHeightForWidth());
+        BXspinBox->setSizePolicy(sizePolicy3);
         BXspinBox->setMinimum(0);
         BXspinBox->setMaximum(500000);
 
@@ -636,8 +631,8 @@ public:
 
         BYspinBox = new QSpinBox(tab_2);
         BYspinBox->setObjectName("BYspinBox");
-        sizePolicy2.setHeightForWidth(BYspinBox->sizePolicy().hasHeightForWidth());
-        BYspinBox->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(BYspinBox->sizePolicy().hasHeightForWidth());
+        BYspinBox->setSizePolicy(sizePolicy3);
         BYspinBox->setMinimum(0);
         BYspinBox->setMaximum(500000);
 
@@ -727,6 +722,7 @@ public:
 
         chartsButton = new QPushButton(tab_2);
         chartsButton->setObjectName("chartsButton");
+        chartsButton->setEnabled(true);
 
         gridLayout_6->addWidget(chartsButton, 10, 3, 1, 1);
 
@@ -859,22 +855,22 @@ public:
 
         portComboBox = new QComboBox(centralwidget);
         portComboBox->setObjectName("portComboBox");
-        sizePolicy2.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
-        portComboBox->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
+        portComboBox->setSizePolicy(sizePolicy3);
 
         horizontalLayout->addWidget(portComboBox);
 
         keithlyPortComboBox = new QComboBox(centralwidget);
         keithlyPortComboBox->setObjectName("keithlyPortComboBox");
-        sizePolicy2.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
-        keithlyPortComboBox->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
+        keithlyPortComboBox->setSizePolicy(sizePolicy3);
 
         horizontalLayout->addWidget(keithlyPortComboBox);
 
         lightPortComboBox = new QComboBox(centralwidget);
         lightPortComboBox->setObjectName("lightPortComboBox");
-        sizePolicy2.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
-        lightPortComboBox->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
+        lightPortComboBox->setSizePolicy(sizePolicy3);
 
         horizontalLayout->addWidget(lightPortComboBox);
 
@@ -917,6 +913,21 @@ public:
 
         formLayout->setLayout(0, QFormLayout::FieldRole, verticalLayout_3);
 
+        logsListWidget = new QListWidget(centralwidget);
+        logsListWidget->setObjectName("logsListWidget");
+        QSizePolicy sizePolicy4(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(logsListWidget->sizePolicy().hasHeightForWidth());
+        logsListWidget->setSizePolicy(sizePolicy4);
+
+        formLayout->setWidget(3, QFormLayout::FieldRole, logsListWidget);
+
+        label_20 = new QLabel(centralwidget);
+        label_20->setObjectName("label_20");
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, label_20);
+
 
         gridLayout_5->addLayout(formLayout, 0, 0, 6, 1);
 
@@ -931,7 +942,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
         orientationButton->setDefault(false);
         measureBButton->setDefault(false);
 
@@ -943,30 +954,6 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        groupBox_3->setTitle(QCoreApplication::translate("MainWindow", "\320\243\320\277\321\200\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \321\201\321\202\320\276\320\273\320\276\320\274", nullptr));
-        backwardPushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\320\267\320\260\320\264", nullptr));
-        rightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\277\321\200\320\260\320\262\320\276", nullptr));
-        leftPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\273\320\265\320\262\320\276", nullptr));
-        forwardPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\277\320\265\321\200\320\265\320\264", nullptr));
-        label_20->setText(QCoreApplication::translate("MainWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", nullptr));
-        groupBox_6->setTitle(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\270 \320\270 \320\275\320\260\320\277\321\200\321\217\320\266\320\265\320\275\320\270\320\265", nullptr));
-        label_37->setText(QCoreApplication::translate("MainWindow", "Forward Voltage", nullptr));
-        label_31->setText(QCoreApplication::translate("MainWindow", "zero", nullptr));
-        label_32->setText(QCoreApplication::translate("MainWindow", "FC", nullptr));
-        label_34->setText(QCoreApplication::translate("MainWindow", "DC1V", nullptr));
-        label_35->setText(QCoreApplication::translate("MainWindow", "Light", nullptr));
-        label_33->setText(QCoreApplication::translate("MainWindow", "DC10mV", nullptr));
-        label_38->setText(QCoreApplication::translate("MainWindow", "Planar", nullptr));
-        groupBox_4->setTitle(QCoreApplication::translate("MainWindow", "\320\236\321\201\320\262\320\265\321\211\320\265\320\275\320\270\320\265", nullptr));
-        lightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\272\320\273\321\216\321\207\320\270\321\202\321\214", nullptr));
-        groupBox->setTitle(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213", nullptr));
-        coordsPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\320\277\321\200\320\260\320\262\320\270\321\202\321\214", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
-        statePushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\276\321\217\320\275\320\270\320\265", nullptr));
-        groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\273", nullptr));
-        tableDownPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\320\277\321\203\321\201\321\202\320\270\321\202\321\214", nullptr));
-        tableUpPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\320\264\320\275\321\217\321\202\321\214", nullptr));
         groupBox_5->setTitle(QCoreApplication::translate("MainWindow", "\320\237\320\265\321\200\320\265\321\205\320\276\320\264 \320\275\320\260 \320\275\321\203\320\266\320\275\321\213\320\271 \321\215\320\273\320\265\320\274\320\265\320\275\321\202", nullptr));
         label_17->setText(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\273\320\261\320\265\321\206", nullptr));
         label_18->setText(QCoreApplication::translate("MainWindow", "\320\240\321\217\320\264", nullptr));
@@ -976,6 +963,28 @@ public:
         saveMeasureButton->setText(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\277\320\270\321\201\320\260\321\202\321\214", nullptr));
         continueFromButton->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214 \320\276\320\261\321\205\320\276\320\264 \321\201 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\320\260", nullptr));
         measure2pushButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\265\320\275\320\270\320\265", nullptr));
+        FCMeasureButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\270\321\202\321\214 FC", nullptr));
+        groupBox->setTitle(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
+        statePushButton->setText(QCoreApplication::translate("MainWindow", "\320\242\320\265\320\272\321\203\321\211\320\270\320\265 \320\272\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213", nullptr));
+        coordsPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\265\321\200\320\265\321\201\321\202\320\260\320\262\320\270\321\202\321\214", nullptr));
+        groupBox_6->setTitle(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\270 \320\270 \320\275\320\260\320\277\321\200\321\217\320\266\320\265\320\275\320\270\320\265", nullptr));
+        label_38->setText(QCoreApplication::translate("MainWindow", "Planar", nullptr));
+        label_32->setText(QCoreApplication::translate("MainWindow", "FC", nullptr));
+        label_35->setText(QCoreApplication::translate("MainWindow", "Light", nullptr));
+        label_33->setText(QCoreApplication::translate("MainWindow", "DC10mV", nullptr));
+        label_31->setText(QCoreApplication::translate("MainWindow", "zero", nullptr));
+        label_37->setText(QCoreApplication::translate("MainWindow", "Forward Voltage", nullptr));
+        label_34->setText(QCoreApplication::translate("MainWindow", "DC1V", nullptr));
+        groupBox_3->setTitle(QCoreApplication::translate("MainWindow", "\320\243\320\277\321\200\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \321\201\321\202\320\276\320\273\320\276\320\274", nullptr));
+        tableDownPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\320\277\321\203\321\201\321\202\320\270\321\202\321\214", nullptr));
+        tableUpPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\320\264\320\275\321\217\321\202\321\214", nullptr));
+        forwardPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\277\320\265\321\200\320\265\320\264", nullptr));
+        lightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264 \320\222\320\272\320\273", nullptr));
+        leftPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\273\320\265\320\262\320\276", nullptr));
+        rightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\277\321\200\320\260\320\262\320\276", nullptr));
+        backwardPushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\320\267\320\260\320\264", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainWindow", "\320\240\321\203\321\207\320\275\320\276\320\271", nullptr));
         label_10->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263", nullptr));
         label_21->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263 \320\274\321\203\320\273\321\214\321\202\320\270\320\277\320\273\320\270\320\272\320\260\321\206\320\270\320\270", nullptr));
@@ -1016,6 +1025,7 @@ public:
         openPortPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));
         addressHeaderLabel->setText(QCoreApplication::translate("MainWindow", "\320\220\320\264\321\200\320\265\321\201 \321\204\320\260\320\271\320\273\320\260: ", nullptr));
         addressLabel->setText(QCoreApplication::translate("MainWindow", "\320\241:\\temp\\1.csv", nullptr));
+        label_20->setText(QCoreApplication::translate("MainWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", nullptr));
     } // retranslateUi
 
 };

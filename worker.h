@@ -61,7 +61,7 @@ private:
     int DC1VDelay = 600;
     int lightDelay = 400;
     int planarDelay = 1000;
-    double FCVoltage = 0.6;
+    int FCVoltage = 600;
 
     //counter for measuareDie
     int counter = 0;
@@ -106,7 +106,7 @@ signals:
     void sendPackageSignal(QSerialPort*, QByteArray, int);
 
 public slots:
-    void measureElement2();
+    void measureElement();
     void scanningPlate(double, double, double, double, double, double, double, double, double, bool, int, int, int, int);
     void tableController(QByteArray);
     void lightController(QByteArray);
@@ -122,6 +122,7 @@ public slots:
     void autoWalk(bool, QString);
     void setDelay(QList<int> *);
     void sendPackage(QSerialPort*, QByteArray, int);
+    void measureFC();
 };
 
 #endif // WORKER_H
