@@ -17,7 +17,15 @@
 #define APPLICATION_NAME "QSettings Program"
 
 #define POINT_B_X "point_B_x"
-#define POINT_B_Y "point_B_y"
+#define POINT_B_Y "point_B_x"
+
+#define ZERO_D "zero_d"
+#define FC_D "fc_d"
+#define DC10mV_D "dc10mV_d"
+#define DC1V_D "dc1V_d"
+#define LIGHT_D "light_d"
+#define PLANAR_D "planar_d"
+#define FC_V "fc_v"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

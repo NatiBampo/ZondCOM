@@ -582,11 +582,11 @@ void Worker::autoWalk(bool allNew, QString dir_cur)
         tableController("Table DN\r\n");
         int end = clock();
         int t = (end - start) / CLOCKS_PER_SEC;
-        int s = t - t / 60;
+        int s = t % 60;
         t /= 60;
-        int m = t - t / 60;
+        int m = t % 60;
         t /= 60;
-        int h = t - t / 24;
+        int h = t % 24;
         //int d = t - h;
 
         emit sendMessageBox("Обход закончен", "Прошло времени: " + QString::number(h) + " часов, " +  QString::number(m) + " минут, " + QString::number(s) + " секунд.");

@@ -58,6 +58,13 @@ MainWindow::MainWindow(QWidget *parent)
     int by = (int) settings.value(POINT_B_Y, 0).toInt();
     ui->BXspinBox->setValue(bx);
     ui->BYspinBox->setValue(by);
+    ui->zeroSpinBox->setValue((int) settings.value(ZERO_D, 0).toInt());
+    ui->FCSpinBox->setValue((int) settings.value(FC_D, 0).toInt());
+    ui->DC10spinBox->setValue((int) settings.value(DC10mV_D, 0).toInt());
+    ui->DC1VSpinBox->setValue((int) settings.value(DC1V_D, 0).toInt());
+    ui->lightSpinBox->setValue((int) settings.value(LIGHT_D, 0).toInt());
+    ui->planarSpinBox->setValue((int) settings.value(PLANAR_D, 0).toInt());
+    ui->voltageSpinBox->setValue((int) settings.value(FC_V, 0).toInt());
 
     //createStatsThread();
     //statsThread.quit();
@@ -570,6 +577,14 @@ void MainWindow::syncSettings()
         settings.setValue(POINT_B_X, BX);
         settings.setValue(POINT_B_Y, BY);
     }
+    settings.setValue(ZERO_D, ui->zeroSpinBox->value());
+    settings.setValue(FC_D, ui->FCSpinBox->value());
+    settings.setValue(DC10mV_D, ui->DC10spinBox->value());
+    settings.setValue(DC1V_D, ui->DC1VSpinBox->value());
+    settings.setValue(LIGHT_D, ui->lightSpinBox->value());
+    settings.setValue(PLANAR_D, ui->planarSpinBox->value());
+    settings.setValue(FC_V, ui->voltageSpinBox->value());
+
     settings.sync();
 }
 
