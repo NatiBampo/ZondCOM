@@ -82,7 +82,6 @@ public:
     QSpinBox *ansdelaySpinBox;
     QLabel *FClabel;
     QSpinBox *DC1VspinBox;
-    QDoubleSpinBox *FCVoltageSpinBox;
     QSpinBox *zeroSpinBox;
     QLabel *label_33;
     QLabel *DC1Vlabel;
@@ -91,6 +90,7 @@ public:
     QLabel *photoLabel;
     QLabel *zeroLabel;
     QSpinBox *DC10mVspinBox;
+    QSpinBox *FCVoltageSpinBox;
     QGroupBox *groupBox;
     QGridLayout *gridLayout;
     QPushButton *statePushButton;
@@ -405,15 +405,6 @@ public:
 
         gridLayout_8->addWidget(DC1VspinBox, 3, 1, 1, 1);
 
-        FCVoltageSpinBox = new QDoubleSpinBox(groupBox_6);
-        FCVoltageSpinBox->setObjectName("FCVoltageSpinBox");
-        FCVoltageSpinBox->setMinimum(0.050000000000000);
-        FCVoltageSpinBox->setMaximum(2.000000000000000);
-        FCVoltageSpinBox->setSingleStep(0.050000000000000);
-        FCVoltageSpinBox->setValue(0.600000000000000);
-
-        gridLayout_8->addWidget(FCVoltageSpinBox, 6, 1, 1, 1);
-
         zeroSpinBox = new QSpinBox(groupBox_6);
         zeroSpinBox->setObjectName("zeroSpinBox");
         zeroSpinBox->setMaximum(5000);
@@ -462,6 +453,14 @@ public:
         DC10mVspinBox->setValue(800);
 
         gridLayout_8->addWidget(DC10mVspinBox, 2, 1, 1, 1);
+
+        FCVoltageSpinBox = new QSpinBox(groupBox_6);
+        FCVoltageSpinBox->setObjectName("FCVoltageSpinBox");
+        FCVoltageSpinBox->setMaximum(5000);
+        FCVoltageSpinBox->setSingleStep(50);
+        FCVoltageSpinBox->setValue(600);
+
+        gridLayout_8->addWidget(FCVoltageSpinBox, 6, 1, 1, 1);
 
 
         gridLayout_3->addWidget(groupBox_6, 10, 0, 1, 1);

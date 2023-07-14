@@ -70,7 +70,7 @@ struct qt_meta_stringdata_MainWindow_t {
     char stringdata39[8];
     char stringdata40[23];
     char stringdata41[23];
-    char stringdata42[30];
+    char stringdata42[27];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MainWindow_t::offsetsAndSizes) + ofs), len 
@@ -118,7 +118,7 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
         QT_MOC_LITERAL(721, 7),  // "checked"
         QT_MOC_LITERAL(729, 22),  // "autoPortButton_clicked"
         QT_MOC_LITERAL(752, 22),  // "measureBButton_clicked"
-        QT_MOC_LITERAL(775, 29)   // "on_measure2pushButton_clicked"
+        QT_MOC_LITERAL(775, 26)   // "openFilePushButton_clicked"
     },
     "MainWindow",
     "scanningPlateSignal",
@@ -162,7 +162,7 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "checked",
     "autoPortButton_clicked",
     "measureBButton_clicked",
-    "on_measure2pushButton_clicked"
+    "openFilePushButton_clicked"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -394,7 +394,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'measureBButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_measure2pushButton_clicked'
+        // method 'openFilePushButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -444,7 +444,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 35: _t->scanPushButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
         case 36: _t->autoPortButton_clicked(); break;
         case 37: _t->measureBButton_clicked(); break;
-        case 38: _t->on_measure2pushButton_clicked(); break;
+        case 38: _t->openFilePushButton_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
