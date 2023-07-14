@@ -525,9 +525,9 @@ void MainWindow::on_chartsButton_clicked()
 {
     //emit showChartsSignal(dir_name);
 
-    /*QFileDialog directory;
+    QFileDialog directory;
     QString stats_dir = directory.getSaveFileName(this,"Выберите данные для построенния графика");
-    stats->showCharts(stats_dir);*/
+    stats->showCharts(stats_dir);
 
 }
 

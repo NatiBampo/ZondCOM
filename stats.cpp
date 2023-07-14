@@ -2,14 +2,14 @@
 #include "ui_stats.h"
 #include <QtCharts>
 
+using namespace std;
+
+
 Stats::Stats(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Stats)
 {
     ui->setupUi(this);
-
-
-
 }
 
 Stats::~Stats()
@@ -27,6 +27,14 @@ void Stats::showCharts(QString dir)
 
 void Stats::getData(QString dir)
 {
+    for (int i = 0; i < 4; i++)
+    {
+        vector<double> v1, v2, v3;
+        currValue.push_back(v1);
+        currFreq.push_back(v2);
+        currRang.push_back(v3);
+    }
+
     QFile source(dir);
     if (source.open(QIODevice::ReadOnly))
     {
@@ -37,10 +45,11 @@ void Stats::getData(QString dir)
         {
 
             arr = output.readLine().split(", ");
-            currValue[0].append(arr[1].toDouble());
-            currValue[1].append(arr[2].toDouble());
-            currValue[2].append(arr[3].toDouble());
-            currValue[3].append(arr[4].toDouble());
+
+            currValue[0].push_back(arr[1].toDouble());
+            currValue[1].push_back(arr[2].toDouble());
+            currValue[2].push_back(arr[3].toDouble());
+            currValue[3].push_back(arr[4].toDouble());
 
 //            if (arr[1].endsWith("9.9000E+37"))
 //
@@ -48,8 +57,8 @@ void Stats::getData(QString dir)
             {
                 if ((k < 1 && currValue[k][i] > -1 && currValue[k][i] < 0) || (k > 0 && currValue[k][i] > 0 && currValue[k][i] < 1))
                 {
-                    currMax[k] = std::max(currMax[k], currValue[k][i]);
-                    currMin[k] = std::min(currMin[k], currValue[k][i]);
+                    currMax[k] = maxDouble(currMax[k], currValue[k][i]);
+                    currMin[k] = minDouble(currMin[k], currValue[k][i]);
                 }
             }
 //            }
@@ -65,8 +74,8 @@ void Stats::getData(QString dir)
             //initiate ranges with zero
             for (int t = 0; t < n; t++)
             {
-                currFreq[i].append(0);
-                currRang[i].append(currMin[i] + t * step[i]);
+                currFreq[i].push_back(0);
+                currRang[i].push_back(currMin[i] + t * step[i]);
             }
         }
     }
@@ -74,7 +83,7 @@ void Stats::getData(QString dir)
 
 void Stats::getFreq()
 {
-    for (int i = 0; i < currValue[0].length(); i++)
+    for (int i = 0; i < (int) currValue[0].size(); i++)
     {
         for(int j = 0; j < 4; j++)
         {
@@ -93,7 +102,7 @@ void Stats::getFreq()
             else
             {
                 currFreq[j][k] += 1;
-                currFreqMax[j] = std::max(currFreqMax[j], currFreq[j][k]);
+                currFreqMax[j] = maxDouble(currFreqMax[j], currFreq[j][k]);
             }
         }
     }
@@ -183,7 +192,7 @@ void Stats::drawCharts()
 }
 
 
-QString getE(double number)
+QString Stats::getE(double number)
 {
     int c = 0;
     while (number < 1)
@@ -193,4 +202,18 @@ QString getE(double number)
     }
     //double
     return QString::number(number/ qPow(10, c));
+}
+
+
+double Stats::maxDouble(double x1, double x2)
+{
+    if (x1 < x2) return x2;
+    return x1;
+}
+
+
+double Stats::minDouble(double x1, double x2)
+{
+    if (x1 < x2) return x2;
+    return x1;
 }
