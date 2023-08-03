@@ -44,9 +44,12 @@ private:
     QList<double> DotsY;
     QString dir = "С:\temp\1.csv";
 
-    volatile bool pause = false;
+    volatile bool paused = false;
+    volatile bool stopped = false;
     bool overwrite = false;
-    bool three_columns = false;
+    bool centerDie = false;
+    bool leftDie = false;
+    bool rightDie = false;
     int currentIndex = 0;
     int pauseIndex = 0;
     int lastIndex = 0;
@@ -89,6 +92,7 @@ private:
     void LightOff();
 
     void closePort(QSerialPort*);
+    bool allPortsOpen();
     //void sendPackage(QSerialPort*, QByteArray, int);
 
 signals:
@@ -104,10 +108,12 @@ signals:
     void sendMessageBox(QString, QString);
     void sendCurrentCoordsSignal(int, int);
     void sendPackageSignal(QSerialPort*, QByteArray, int);
+    void sendPackageSignalRead(QSerialPort*, QByteArray, int);
+    void sendEndWalkSignal();
 
 public slots:
     void measureElement();
-    void scanningPlate(double, double, double, double, double, double, double, double, double, bool, int, int, int, int);
+    void scanningPlate(double, double, double, double, double, double, double, double, double, bool, int, int, int, int, int, int, bool, bool);
     void tableController(QByteArray);
     void lightController(QByteArray);
     void openPorts(QString, QString, QString);
@@ -116,12 +122,12 @@ public slots:
     void goToElement(int);
     void saveMeasure(int);
     void autoOpenPorts();
-    void getBCoordinates();
-    void getCurrentCoords();
+    bool getCurrentCoords(int);
 
-    void autoWalk(bool, QString);
+    void autoWalk(bool, QString, int);
     void setDelay(QList<int> *);
     void sendPackage(QSerialPort*, QByteArray, int);
+    void sendPackageRead(QSerialPort*, QByteArray, int);
     void measureFC();
 };
 

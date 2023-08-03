@@ -17,7 +17,7 @@
 #define APPLICATION_NAME "QSettings Program"
 
 #define POINT_B_X "point_B_x"
-#define POINT_B_Y "point_B_x"
+#define POINT_B_Y "point_B_y"
 
 #define ZERO_D "zero_d"
 #define FC_D "fc_d"
@@ -57,8 +57,13 @@ private:
     QShortcut *keyEast;
     QShortcut *keyWest;
     QShortcut *keyLight;
-    int currentIndex = 0;
-    int finalIndex = 0;
+
+    //die parameters
+    int numX, numY, upLeft, upRight, downLeft, downRight, downCenter, upCenter;
+
+    //table length and index
+    int numRows, number;
+
     void createWorkerThread();
     void createStatsThread();
     void addElement(int, int, double);
@@ -66,11 +71,14 @@ private:
     void updateDelays();
     void syncSettings();
     void initializeShortKeys();
+    void activateShortKeys();
+    void deactivateShortKeys();
+
 //    void showMessageBox(QString, QString);
 
 
 signals:
-    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, bool, int, int, int, int);
+    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, bool, int, int, int, int, int, int, bool, bool);
     void measureSignal();
     void tableControllerSignal(QByteArray);
     void lightControllerSignal(QByteArray);
@@ -79,15 +87,14 @@ signals:
     void goToElementSignal(int);
     void sendPauseCommandSignal();
     void saveMeasureSignal(int);
-    void autoWalkSignal(bool, QString);
+    void autoWalkSignal(bool, QString, int);
     void autoOpenPortsSignal();
-    void getBCoordinatesSignal();
     void showChartsSignal(QString);
     void setDelaySignal(QList<int>*);
-    void getCurrentCoordsSignal();
+    void getCurrentCoordsSignal(int);
     void measureFCSignal();
 
-private slots:
+public slots:
     void openPortPushButton_on();
     void coordsPushButton_on();
     void tableUpPushButton_on();
@@ -118,7 +125,9 @@ private slots:
     void on_chartsButton_clicked();
     void measure2pushButton_clicked();
     void showMessageBox(QString, QString);
-
+    void sendEndWalk();
     void on_FCMeasureButton_clicked();
+private slots:
+    void on_hotKeysCheckBox_stateChanged(int arg1);
 };
 #endif // MAINWINDOW_H
