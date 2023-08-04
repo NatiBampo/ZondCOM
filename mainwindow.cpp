@@ -40,6 +40,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->measureBButton, &QPushButton::clicked, this, &MainWindow::measureBButton_clicked);
     connect(ui->measure2pushButton, &QPushButton::clicked, this, &MainWindow::measure2pushButton_clicked);
     connect(ui->FCMeasureButton, &QPushButton::clicked, this, &MainWindow::on_FCMeasureButton_clicked);
+
+    //connect(ui->newDirPushButton, &QPushButton::clicked, this, &MainWindow::on_newDirPushButton_clicked);
+    //connect(ui->loadFilePushButton, &QPushButton::clicked, this, &MainWindow::on_loadFilePushButton_clicked);
+
     createWorkerThread();
 
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
@@ -105,6 +109,7 @@ void MainWindow::createWorkerThread()
     connect(this, &MainWindow::getCurrentCoordsSignal, worker, &Worker::getCurrentCoords);
     connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
     connect(this, &MainWindow::measureFCSignal, worker, &Worker::measureFC);
+    connect(this, &MainWindow::openCsvFileSignal, worker, &Worker::openCsvFile);
 
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
@@ -179,6 +184,11 @@ void MainWindow::openPortPushButton_on()
         ui->openPortPushButton->setText("Закрыть");
     } else
     {
+        if (ui->scanPushButton->isChecked() || ui->continueFromButton->isChecked())
+        {
+            showMessageBox("warning", "Нельзя закрыть порт во время обхода пластины");
+            return;
+        }
         emit closePortsSignal();
         ui->openPortPushButton->setText("Открыть");
         ui->portComboBox->setCurrentText("Планар");
@@ -432,6 +442,8 @@ void MainWindow::continueFromButton_clicked(bool checked)
         if (checked)
         {
             ui->pauseButton->setText("Пауза");
+            ui->pauseButton->setEnabled(true);
+            ui->scanPushButton->setEnabled(false);
             ui->continueFromButton->setText("Завершить обход");
             mutex.lock();
             worker->stopWalk();
@@ -441,6 +453,8 @@ void MainWindow::continueFromButton_clicked(bool checked)
         else
         {
             ui->continueFromButton->setText("Продолжить обход с элемента");
+            ui->pauseButton->setEnabled(false);
+            ui->scanPushButton->setEnabled(true);
         }
     }
     else
@@ -466,6 +480,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
         else
         {
             ui->pauseButton->setEnabled(true);
+            ui->continueFromButton->setEnabled(false);
             ui->scanPushButton->setText("Завершить обход");
             ui->addressLabel->setText(dir_name);
             updateDelays();
@@ -475,6 +490,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
     else
     {
         ui->pauseButton->setEnabled(false);
+        ui->continueFromButton->setEnabled(true);
         ui->scanPushButton->setText("Начать");
         ui->pauseButton->setChecked(false);
         ui->pauseButton->setText("Пауза");
@@ -493,16 +509,30 @@ void MainWindow::orientationButton_clicked()
     double BY = (double)ui->BYspinBox->value();
     double stepX = (double)ui->stepXspinBox->value();
     double stepY = (double)ui->stepYspinBox->value();
-    numX = ui->numXspinBox->value();
-    numY = ui->numYspinBox->value();
+
     //сдвиг меж столбцов и рядов
     double colSlide = (double)ui->stepColSpinBox->value();
     //double rowSlide = (double)ui->stepRowSpinBox->value();
 
-    //
-    bool centerColumn = ui->centerCheckBox->isChecked();
-    bool leftColumn = ui->leftCheckBox->isChecked();
-    bool rightColumn = ui->rightCheckBox->isChecked();
+    initializeModel();
+
+    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, (double) numX, (double) numY, colSlide, centerColumn, upLeft, upRight, downLeft, downRight, upCenter, downCenter, leftColumn, rightColumn);
+    updateDelays();
+
+    ui->scanPushButton->setEnabled(true);
+    ui->goToButton->setEnabled(true);
+    syncSettings();
+}
+
+
+void MainWindow::initializeModel()
+{
+    numX = ui->numXspinBox->value();
+    numY = ui->numYspinBox->value();
+
+    centerColumn = ui->centerCheckBox->isChecked();
+    leftColumn = ui->leftCheckBox->isChecked();
+    rightColumn = ui->rightCheckBox->isChecked();
 
     //die offset due to cirle border cut
     upLeft = ui->upLeftSpinBox->value();
@@ -512,18 +542,11 @@ void MainWindow::orientationButton_clicked()
     downCenter = ui->downCenterOffspinBox->value();
     upCenter = ui->centerUpOffSpinBox->value();
 
-    if ((upLeft + downLeft) > 30 || (downRight + upRight) > 30 || (downCenter + upCenter) > 30)
+    if (((upLeft + downLeft) > (numX+1)*numY) || ((downRight + upRight) > (numX+1)*numY) || ((downCenter + upCenter) > (numX+1)*numY))
     {
         showMessageBox("warning", "Не допустимое значение отступов");
         return;
     }
-
-    //создаем модель таблицы для отображения(впоследствие можно сократить до N рядов)
-    /*int numRows = (numberX+1) * numberY + 1;
-    if (rightColumn)
-    {
-        numRows += (numberX+1) * (numberY*2 - upLeft - upRight - downLeft - downRight) ;
-    }*/
 
     //количество измерений(рядов в таблице)
     numRows = ((int) rightColumn) * (numX + 1) * (numY - downRight - upRight);
@@ -541,12 +564,6 @@ void MainWindow::orientationButton_clicked()
     model->setHeaderData(7, Qt::Horizontal, "PhotoCur");
 
     ui->tableView->setModel(model);
-
-    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, (double) numX, (double) numY, colSlide, centerColumn, upLeft, upRight, downLeft, downRight, upCenter, downCenter, leftColumn, rightColumn);
-    updateDelays();
-    ui->scanPushButton->setEnabled(true);
-    ui->goToButton->setEnabled(true);
-    syncSettings();
 }
 
 
@@ -596,7 +613,6 @@ void MainWindow::on_chartsButton_clicked()
     QFileDialog directory;
     QString stats_dir = directory.getSaveFileName(this,"Выберите данные для построенния графика");
     stats->showCharts(stats_dir);
-
 }
 
 
@@ -692,3 +708,37 @@ void MainWindow::on_hotKeysCheckBox_stateChanged(int arg1)
     }
 }
 
+
+void MainWindow::on_newDirPushButton_clicked()
+{
+    QFileDialog directory;
+    dir_name = directory.getSaveFileName(this,"Choose directory and name");
+    if (dir_name != "")
+    {
+        ui->scanPushButton->setChecked(false);
+        ui->addressLabel->setText(dir_name);
+        updateDelays();
+    }
+}
+
+
+void MainWindow::on_loadFilePushButton_clicked()
+{
+    if (ui->scanPushButton->isChecked() || ui->continueFromButton->isChecked())
+    {
+        showMessageBox("warning", "Нельзя открыть файл во время обхода");
+        return;
+    }
+
+    QFileDialog directory;
+    dir_name = directory.getSaveFileName(this,"Choose directory and name");
+    if (dir_name != "")
+    {
+        ui->scanPushButton->setChecked(false);
+        ui->addressLabel->setText(dir_name);
+        updateDelays();
+        initializeModel();
+
+        emit openCsvFileSignal(dir_name);
+    }
+}

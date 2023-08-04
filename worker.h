@@ -129,6 +129,7 @@ public slots:
     void sendPackage(QSerialPort*, QByteArray, int);
     void sendPackageRead(QSerialPort*, QByteArray, int);
     void measureFC();
+    void openCsvFile(QString dir);
 };
 
 #endif // WORKER_H

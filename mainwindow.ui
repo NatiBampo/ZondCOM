@@ -78,7 +78,7 @@
          <number>75</number>
         </attribute>
         <attribute name="verticalHeaderVisible">
-         <bool>true</bool>
+         <bool>false</bool>
         </attribute>
         <attribute name="verticalHeaderMinimumSectionSize">
          <number>24</number>
@@ -108,7 +108,7 @@
        <number>0</number>
       </property>
       <item row="0" column="1">
-       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0">
+       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0">
         <property name="spacing">
          <number>2</number>
         </property>
@@ -240,6 +240,22 @@
          </layout>
         </item>
         <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QLabel" name="addressHeaderLabel">
@@ -285,6 +301,44 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="newDirPushButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Новый</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="loadFilePushButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Загрузить</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -327,7 +381,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -576,7 +630,7 @@
              </property>
              <property name="geometry">
               <rect>
-               <x>60</x>
+               <x>90</x>
                <y>200</y>
                <width>191</width>
                <height>24</height>
@@ -859,17 +913,17 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="forwardPushButton">
-               <property name="text">
-                <string>Вперед</string>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0">
               <widget class="QPushButton" name="tableUpPushButton">
                <property name="text">
                 <string>Поднять</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QPushButton" name="leftPushButton">
+               <property name="text">
+                <string>Влево</string>
                </property>
               </widget>
              </item>
@@ -880,17 +934,17 @@
                </property>
               </widget>
              </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="forwardPushButton">
+               <property name="text">
+                <string>Вперед</string>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="2">
               <widget class="QPushButton" name="tableDownPushButton">
                <property name="text">
                 <string>Опустить</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QPushButton" name="leftPushButton">
-               <property name="text">
-                <string>Влево</string>
                </property>
               </widget>
              </item>
@@ -902,22 +956,22 @@
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="QSpinBox" name="stepSpinBox"/>
+              <widget class="QSpinBox" name="stepSpinBox">
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="value">
+                <number>100</number>
+               </property>
+              </widget>
              </item>
             </layout>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="hotKeysCheckBox">
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Горячие клавиши</string>
-            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -936,6 +990,19 @@
               <width>20</width>
               <height>20</height>
              </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="hotKeysCheckBox">
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Горячие клавиши</string>
             </property>
            </widget>
           </item>
@@ -1147,7 +1214,7 @@
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
-                <height>300</height>
+                <height>270</height>
                </size>
               </property>
              </spacer>
@@ -1237,9 +1304,15 @@
           </item>
           <item row="0" column="8">
            <widget class="QLabel" name="label_39">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>20</width>
               <height>0</height>
              </size>
             </property>
@@ -1285,7 +1358,7 @@
            <widget class="QLabel" name="label_23">
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>20</width>
               <height>0</height>
              </size>
             </property>
@@ -1306,7 +1379,7 @@
              <bool>false</bool>
             </property>
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -1314,7 +1387,7 @@
             <property name="minimumSize">
              <size>
               <width>100</width>
-              <height>0</height>
+              <height>24</height>
              </size>
             </property>
             <property name="text">
@@ -1380,7 +1453,7 @@
            <widget class="QLabel" name="label_15">
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>20</width>
               <height>0</height>
              </size>
             </property>
@@ -1478,7 +1551,7 @@
            <widget class="QLabel" name="label_14">
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>20</width>
               <height>0</height>
              </size>
             </property>
@@ -1519,7 +1592,7 @@
            <widget class="QLabel" name="label_12">
             <property name="minimumSize">
              <size>
-              <width>30</width>
+              <width>20</width>
               <height>0</height>
              </size>
             </property>

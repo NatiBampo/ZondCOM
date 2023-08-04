@@ -60,6 +60,7 @@ private:
 
     //die parameters
     int numX, numY, upLeft, upRight, downLeft, downRight, downCenter, upCenter;
+    bool centerColumn, leftColumn, rightColumn;
 
     //table length and index
     int numRows, number;
@@ -73,7 +74,7 @@ private:
     void initializeShortKeys();
     void activateShortKeys();
     void deactivateShortKeys();
-
+    void initializeModel();
 //    void showMessageBox(QString, QString);
 
 
@@ -93,6 +94,7 @@ signals:
     void setDelaySignal(QList<int>*);
     void getCurrentCoordsSignal(int);
     void measureFCSignal();
+    void openCsvFileSignal(QString);
 
 public slots:
     void openPortPushButton_on();
@@ -127,7 +129,9 @@ public slots:
     void showMessageBox(QString, QString);
     void sendEndWalk();
     void on_FCMeasureButton_clicked();
-private slots:
+//private slots:
     void on_hotKeysCheckBox_stateChanged(int arg1);
+    void on_newDirPushButton_clicked();
+    void on_loadFilePushButton_clicked();
 };
 #endif // MAINWINDOW_H

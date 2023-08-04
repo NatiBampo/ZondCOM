@@ -27,7 +27,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_Worker_t {
-    uint offsetsAndSizes[66];
+    uint offsetsAndSizes[70];
     char stringdata0[7];
     char stringdata1[14];
     char stringdata2[1];
@@ -61,6 +61,8 @@ struct qt_meta_stringdata_Worker_t {
     char stringdata30[12];
     char stringdata31[16];
     char stringdata32[10];
+    char stringdata33[12];
+    char stringdata34[4];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_Worker_t::offsetsAndSizes) + ofs), len 
@@ -98,7 +100,9 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
         QT_MOC_LITERAL(440, 11),  // "QList<int>*"
         QT_MOC_LITERAL(452, 11),  // "sendPackage"
         QT_MOC_LITERAL(464, 15),  // "sendPackageRead"
-        QT_MOC_LITERAL(480, 9)   // "measureFC"
+        QT_MOC_LITERAL(480, 9),  // "measureFC"
+        QT_MOC_LITERAL(490, 11),  // "openCsvFile"
+        QT_MOC_LITERAL(502, 3)   // "dir"
     },
     "Worker",
     "sendLogSignal",
@@ -132,7 +136,9 @@ Q_CONSTINIT static const qt_meta_stringdata_Worker_t qt_meta_stringdata_Worker =
     "QList<int>*",
     "sendPackage",
     "sendPackageRead",
-    "measureFC"
+    "measureFC",
+    "openCsvFile",
+    "dir"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -143,7 +149,7 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      29,   14, // methods
+      30,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -151,37 +157,38 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
       13,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  188,    2, 0x06,    1 /* Public */,
-       3,    1,  191,    2, 0x06,    3 /* Public */,
-       4,    2,  194,    2, 0x06,    5 /* Public */,
-       5,    3,  199,    2, 0x06,    8 /* Public */,
-       6,    5,  206,    2, 0x06,   12 /* Public */,
-       7,    2,  217,    2, 0x06,   18 /* Public */,
-       8,    2,  222,    2, 0x06,   21 /* Public */,
-       9,    0,  227,    2, 0x06,   24 /* Public */,
-      10,    2,  228,    2, 0x06,   25 /* Public */,
-      11,    2,  233,    2, 0x06,   28 /* Public */,
-      12,    3,  238,    2, 0x06,   31 /* Public */,
-      14,    3,  245,    2, 0x06,   35 /* Public */,
-      15,    0,  252,    2, 0x06,   39 /* Public */,
+       1,    1,  194,    2, 0x06,    1 /* Public */,
+       3,    1,  197,    2, 0x06,    3 /* Public */,
+       4,    2,  200,    2, 0x06,    5 /* Public */,
+       5,    3,  205,    2, 0x06,    8 /* Public */,
+       6,    5,  212,    2, 0x06,   12 /* Public */,
+       7,    2,  223,    2, 0x06,   18 /* Public */,
+       8,    2,  228,    2, 0x06,   21 /* Public */,
+       9,    0,  233,    2, 0x06,   24 /* Public */,
+      10,    2,  234,    2, 0x06,   25 /* Public */,
+      11,    2,  239,    2, 0x06,   28 /* Public */,
+      12,    3,  244,    2, 0x06,   31 /* Public */,
+      14,    3,  251,    2, 0x06,   35 /* Public */,
+      15,    0,  258,    2, 0x06,   39 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      16,    0,  253,    2, 0x0a,   40 /* Public */,
-      17,   18,  254,    2, 0x0a,   41 /* Public */,
-      18,    1,  291,    2, 0x0a,   60 /* Public */,
-      19,    1,  294,    2, 0x0a,   62 /* Public */,
-      20,    3,  297,    2, 0x0a,   64 /* Public */,
-      21,    0,  304,    2, 0x0a,   68 /* Public */,
-      22,    0,  305,    2, 0x0a,   69 /* Public */,
-      23,    1,  306,    2, 0x0a,   70 /* Public */,
-      24,    1,  309,    2, 0x0a,   72 /* Public */,
-      25,    0,  312,    2, 0x0a,   74 /* Public */,
-      26,    1,  313,    2, 0x0a,   75 /* Public */,
-      27,    3,  316,    2, 0x0a,   77 /* Public */,
-      28,    1,  323,    2, 0x0a,   81 /* Public */,
-      30,    3,  326,    2, 0x0a,   83 /* Public */,
-      31,    3,  333,    2, 0x0a,   87 /* Public */,
-      32,    0,  340,    2, 0x0a,   91 /* Public */,
+      16,    0,  259,    2, 0x0a,   40 /* Public */,
+      17,   18,  260,    2, 0x0a,   41 /* Public */,
+      18,    1,  297,    2, 0x0a,   60 /* Public */,
+      19,    1,  300,    2, 0x0a,   62 /* Public */,
+      20,    3,  303,    2, 0x0a,   64 /* Public */,
+      21,    0,  310,    2, 0x0a,   68 /* Public */,
+      22,    0,  311,    2, 0x0a,   69 /* Public */,
+      23,    1,  312,    2, 0x0a,   70 /* Public */,
+      24,    1,  315,    2, 0x0a,   72 /* Public */,
+      25,    0,  318,    2, 0x0a,   74 /* Public */,
+      26,    1,  319,    2, 0x0a,   75 /* Public */,
+      27,    3,  322,    2, 0x0a,   77 /* Public */,
+      28,    1,  329,    2, 0x0a,   81 /* Public */,
+      30,    3,  332,    2, 0x0a,   83 /* Public */,
+      31,    3,  339,    2, 0x0a,   87 /* Public */,
+      32,    0,  346,    2, 0x0a,   91 /* Public */,
+      33,    1,  347,    2, 0x0a,   92 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QByteArray,    2,
@@ -215,6 +222,7 @@ Q_CONSTINIT static const uint qt_meta_data_Worker[] = {
     QMetaType::Void, 0x80000000 | 13, QMetaType::QByteArray, QMetaType::Int,    2,    2,    2,
     QMetaType::Void, 0x80000000 | 13, QMetaType::QByteArray, QMetaType::Int,    2,    2,    2,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,   34,
 
        0        // eod
 };
@@ -347,7 +355,10 @@ Q_CONSTINIT const QMetaObject Worker::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<QByteArray, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'measureFC'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'openCsvFile'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>
     >,
     nullptr
 } };
@@ -388,6 +399,7 @@ void Worker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         case 26: _t->sendPackage((*reinterpret_cast< std::add_pointer_t<QSerialPort*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
         case 27: _t->sendPackageRead((*reinterpret_cast< std::add_pointer_t<QSerialPort*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
         case 28: _t->measureFC(); break;
+        case 29: _t->openCsvFile((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -537,13 +549,13 @@ int Worker::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 29)
+        if (_id < 30)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 29;
+        _id -= 30;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 29)
+        if (_id < 30)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 29;
+        _id -= 30;
     }
     return _id;
 }

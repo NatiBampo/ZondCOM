@@ -10,6 +10,7 @@
 #include <ctime>
 #include <QMessageBox>
 #include <windows.h>
+#include <typeinfo>
 
 
 HANDLE hSerial;
@@ -379,19 +380,14 @@ void Worker::copyUpToIndex(int index)
     QFile source (dir);
     if (dest.open(QIODevice::ReadWrite) && source.open(QIODevice::ReadWrite))
     {
-        QTextStream output(&source);
-        QTextStream input(&dest);
-        int i = 0;
-        for (; i < index; ++i)
+        QTextStream input(&source);
+        QTextStream output(&dest);
+        QString line = input.readLine();
+        for (int i = 0; i < index && !line.isNull(); ++i)
         {
-            if (output.atEnd())
-            {
-                input << QString::number(i, 'D', 0) + ",,,,"  + '\n';
-            } else
-            {
-                input << output.readLine()<<'\n';
-            }
-            input.flush();
+            output << line <<'\n';
+            output.flush();
+            line = input.readLine();
         }
     }
 
@@ -399,6 +395,35 @@ void Worker::copyUpToIndex(int index)
     source.close();
     source.remove();
     QFile::rename(dir_tmp, dir);
+}
+
+
+void Worker::openCsvFile(QString open_dir)
+{
+    QFile file (open_dir);
+    QString line;
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        line = QString::fromUtf8(file.readLine());
+        currentIndex = 0;
+
+        while(!line.isNull() && currentIndex < 1440)
+        {
+            auto arr = line.split(", ");
+
+            currentIndex = arr[0].toInt();
+            ForwardCurrent = arr[1].toDouble();
+            DarkCurrent10mV = arr[2].toDouble();
+            DarkCurrent1V = arr[3].toDouble();
+            LightCurrent = arr[4].toDouble();
+
+            //отправляем данные на таблицу
+            emit sendAddTableSignal(currentIndex, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent);
+            line = QString::fromUtf8(file.readLine());
+        }
+    }
+    file.close();
+    //source.remove();
 }
 
 
@@ -419,7 +444,9 @@ void Worker::saveMeasure(int index)
 {
     //функция копирует файл до нужного индекса и заменяет собой файл источник
     goToElement(index);
+
     MeasureDie(serialPortA5, serialPortKeithly);
+
     dir = dir.endsWith(".csv") ? dir : dir + ".csv";
     QString dir_tmp = dir.remove(dir.indexOf(".csv"), dir.length() - dir.indexOf(".csv")) + "tmp.csv";
     QFile dest (dir_tmp);
@@ -427,25 +454,25 @@ void Worker::saveMeasure(int index)
 
     if (dest.open(QIODevice::ReadWrite) && source.open(QIODevice::ReadWrite))
     {
-        QTextStream output(&source);
-        QTextStream input(&dest);
+        QTextStream input(&source);
+        QTextStream output(&dest);
         int i = 0;
-        for (; !output.atEnd(); ++i)
+        for (; !input.atEnd(); ++i)
         {
             if (i==index)
             {
-                input << QString::number(i, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+                output << QString::number(i, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                           QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
             } else
             {
-                output << input.readLine() << '\n';
+                input << output.readLine() << '\n';
             }
-            output.flush();
+            input.flush();
         }
 
         if (index > i)
         {
-            input << QString::number(index, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
+            output << QString::number(index, 'D', 3) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                       QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
         }
         //копируем всё обратно и удаляем временный файл
@@ -632,7 +659,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex)
 
     //qDebug() << "Если 0, то строки идентичны  : " << QString::compare(dir1, dir_cur, Qt::CaseInsensitive);
     //если обход с начала, то переписать файл, иначе добавить
-    if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append))
+    if (file.open(QIODevice::ReadWrite)) //allNew ? QIODevice::ReadWrite : QIODevice::Append
     {
         QTextStream output(&file);
 
