@@ -9,6 +9,8 @@
 #include <keithley.h>
 #include <QTimer>
 #include <QTextStream>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 
 #define ANSWER_DELAY 400
@@ -52,11 +54,9 @@ private:
     bool rightDie = false;
     int currentIndex = 0;
     int pauseIndex = 0;
+    int gapIndex = 0;
     int lastIndex = 0;
-    int upLeft_offset = 0;
-    int upRight_offset = 0;
-    int downLeft_offset = 0;
-    int downRight_offset = 0;
+    int numX, numY;
 
     int zeroDelay = 400;
     int FCdelay = 300;
@@ -66,9 +66,6 @@ private:
     int planarDelay = 1000;
     int FCVoltage = 600;
 
-    //counter for measuareDie
-    int counter = 0;
-
     double localCurrent = 0.0;
     double ForwardCurrent = 0.0;
     double DarkCurrent10mV = 0.0;
@@ -76,7 +73,7 @@ private:
     double LightCurrent = 0.0;
 
     bool openPort(QSerialPort*, QString, QSerialPort::BaudRate);
-    void copyUpToIndex(int);
+    bool copyUpToIndex(int);
     bool checkPlanarCOM();
     bool checkKeithlyCOM();
     bool checkLightCOM();
@@ -94,7 +91,7 @@ private:
     void closePort(QSerialPort*);
     bool allPortsOpen();
     //void sendPackage(QSerialPort*, QByteArray, int);
-
+    void endLinePlanar();
 signals:
 
     void sendLogSignal(QByteArray);
@@ -130,6 +127,7 @@ public slots:
     void sendPackageRead(QSerialPort*, QByteArray, int);
     void measureFC();
     void openCsvFile(QString dir);
+    void copyUpSlot(int, QString);
 };
 
 #endif // WORKER_H

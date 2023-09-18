@@ -5,7 +5,9 @@
 #include <QThread>
 #include <QFileDialog>
 #include <QtCharts>
-
+#include <QDebug>
+#include "LoggingCategories.h"
+#include <QFile>
 
 //using namespace QtCharts;
 
@@ -14,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    qInfo(logInfo()) << "Start MainWindow";
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(1);
     ui->progressBar->setValue(0);
@@ -43,8 +46,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     //connect(ui->newDirPushButton, &QPushButton::clicked, this, &MainWindow::on_newDirPushButton_clicked);
     //connect(ui->loadFilePushButton, &QPushButton::clicked, this, &MainWindow::on_loadFilePushButton_clicked);
+    connect(ui->stopPushButton, &QPushButton::clicked, this, &MainWindow::stopPushButton_clicked);
+
+    //connect(ui->toAPushButton, &QPushButton::clicked, this, &MainWindow::on_toAPushButton_clicked);
+    //connect(ui->toBPushButton, &QPushButton::clicked, this, &MainWindow::on_toBPushButton_clicked);
+    //connect(ui->planarCMDButton, &QPushButton::clicked, this, &MainWindow::on_planarCMDButton_clicked);
 
     createWorkerThread();
+    createStatsThread();
 
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
     {
@@ -52,6 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
         ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
+
+    dir_name = "С:\temp\1.csv";
 
     delays.append({300, 300, 500, 500, 400, 400, 600});
 
@@ -71,22 +82,30 @@ MainWindow::MainWindow(QWidget *parent)
     ui->planarSpinBox->setValue((int) settings.value(PLANAR_D, 0).toInt());
     ui->voltageSpinBox->setValue((int) settings.value(FC_V, 0).toInt());
 
-    //createStatsThread();
+    readyCheck();
     //statsThread.quit();
     //statsThread.terminate();
+
+    //ui->resetPortsPushButton->setStyleSheet("background-image: url(:/images/image/resetPic.png); ");
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     emit closePortsSignal();
+    qInfo(logInfo()) << "Финишь worker";
     workerThread.quit();
     workerThread.terminate();
+
+    //statsThread.quit();
+    //statsThread.terminate();
+    qInfo(logInfo()) << "Finish MainWindow";
 }
 
 
 void MainWindow::createWorkerThread()
 {
+    qInfo(logInfo()) << "Старт Worker";
     worker = new Worker(&mutex);
     worker->moveToThread(&workerThread);
     workerThread.start();
@@ -233,23 +252,46 @@ void MainWindow::openPortResult(QString port, QString portName, bool result)
             portResult[2] = true;
         }
     }
-    bool res = true;
-    for (int i = 0; i < portResult.length(); i++)
-    {
-        if (!portResult.at(i)) res = false;
-    }
-    //block some buttons in case COMports not open
-    ui->measureBButton->setEnabled(res);
-    ui->orientationButton->setEnabled(res);
-    ui->measure2pushButton->setEnabled(res);
-    ui->continueFromButton->setEnabled(res);
-    ui->goToButton->setEnabled(res);
-    if (res) QMessageBox::information(this, "Сообщение", "Выбранные порты:\n"
+
+
+    if (portsReady()) QMessageBox::information(this, "Сообщение", "Выбранные порты:\n"
                                       + ui->portComboBox->currentText() + " для Планара\n"
                                       + ui->keithlyPortComboBox->currentText() + " для Кейтли\n"
                                       + ui->lightPortComboBox->currentText() + " для Диода\n");
 }
 
+bool MainWindow::portsReady()
+{
+    bool res = portResult[0] && portResult[1] && portResult[2];
+    ui->measureBButton->setEnabled(res);
+    ui->orientationButton->setEnabled(res);
+    ui->toAPushButton->setEnabled(res);
+    ui->toBPushButton->setEnabled(res);
+    ui->moveGroupBox->setEnabled(res);
+    ui->coordsGroupBox->setEnabled(res);
+
+    ui->FCMeasureButton->setEnabled(res);
+    ui->measure2pushButton->setEnabled(res);
+
+    return res;
+}
+
+bool MainWindow::readyCheck()
+{
+    bool res = portsReady() && orientation;
+    //block some buttons in case COMports not open
+
+    ui->goToGroupBox->setEnabled(res);
+    ui->goToButton->setEnabled(res);
+    ui->saveMeasureButton->setEnabled(res);
+    ui->FCMeasureButton->setEnabled(res);
+    ui->measure2pushButton->setEnabled(res);
+    ui->continueFromButton->setEnabled(res);
+    ui->scanPushButton->setEnabled(res);
+    ui->loadFilePushButton->setEnabled(res);
+    ui->stopPushButton->setEnabled(res);
+    return res;
+}
 
 void MainWindow::statePushButton_on()
 {
@@ -262,7 +304,6 @@ void MainWindow::coordsPushButton_on()
 {
     QByteArray x = ui->xLineEdit->text().toUtf8();
     QByteArray y = ui->yLineEdit->text().toUtf8();
-    //emit sendPackageSignal(serialPortA5, "Set " + x + " " + y + '\r' + '\n', 1000);
     emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n');
 }
 
@@ -281,7 +322,7 @@ void MainWindow::tableDownPushButton_on()
 
 void MainWindow::forwardPushButton_on()
 {
-    emit tableControllerSignal(("Move 0 " + QString::number(ui->stepSpinBox->value()) + "\r\n").toUtf8());//0 100
+    emit tableControllerSignal(("Move 0 -" + QString::number(ui->stepSpinBox->value()) + "\r\n").toUtf8());//0 100
 }
 
 
@@ -293,7 +334,7 @@ void MainWindow::backwardPushButton_on()
 
 void MainWindow::leftPushButton_on()
 {
-    emit tableControllerSignal(("Move " + QString::number(ui->stepSpinBox->value()) + " 0\r\n").toUtf8());//-100 0
+    emit tableControllerSignal(("Move -" +  QString::number(ui->stepSpinBox->value()) + " 0\r\n").toUtf8());//-100 0
 }
 
 
@@ -335,14 +376,14 @@ void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V,
     number = (column>1)? number - (upRight + downLeft) * (numX+1) : number;
     number = (column>2)? number - (upLeft + downCenter) * (numX+1) : number;
 
-    addElement(number, 0, index);//индекс
-    addElement(number, 1, column);//колонка
-    addElement(number, 2, row);//ряд //index % (numY * (numX+1)) / (numX+1) + 1
-    addElement(number, 3, element);//элемент // index % (numY * (numX+1)) % (numX+1) + 1
-    addElement(number, 4, FC);//прямой ток
-    addElement(number, 5, DC10mV);//темновой ток при 10мВ
-    addElement(number, 6, DC1V);//темновой ток при 1В
-    addElement(number, 7, LC);//фототок
+    addElement(number, 0, index);       //индекс
+    addElement(number, 1, column);      //колонка
+    addElement(number, 2, row);         //ряд //index % (numY * (numX+1)) / (numX+1) + 1
+    addElement(number, 3, element);     //элемент // index % (numY * (numX+1)) % (numX+1) + 1
+    addElement(number, 4, FC);          //прямой ток
+    addElement(number, 5, DC10mV);      //темновой ток при 10мВ
+    addElement(number, 6, DC1V);        //темновой ток при 1В
+    addElement(number, 7, LC);          //фототок
 
 
     //focusing on the last row
@@ -422,12 +463,13 @@ int MainWindow::getUIIndex()
 void MainWindow::goToButton_clicked()
 {
     emit goToElementSignal(getUIIndex());
+
 }
 
 
 void MainWindow::saveMeasureButton_clicked()
 {
-    if (!ui->scanPushButton->isChecked())
+    if (!busy)
     {
         updateDelays();
         emit saveMeasureSignal(getUIIndex());
@@ -437,67 +479,59 @@ void MainWindow::saveMeasureButton_clicked()
 
 void MainWindow::continueFromButton_clicked(bool checked)
 {
-    if(!ui->scanPushButton->isChecked())
+    updateDelays();
+    bool cond = true;
+    if (dir_name == "" || dir_name == "С:\temp\1.csv")
     {
-        if (checked)
+        QFileDialog directory;
+        QString dir = directory.getSaveFileName(this,"Choose directory and name");
+
+        if (dir != "")
         {
-            ui->pauseButton->setText("Пауза");
-            ui->pauseButton->setEnabled(true);
-            ui->scanPushButton->setEnabled(false);
-            ui->continueFromButton->setText("Завершить обход");
-            mutex.lock();
-            worker->stopWalk();
-            mutex.unlock();
-            emit autoWalkSignal(false, dir_name, getUIIndex());
-        }
-        else
-        {
-            ui->continueFromButton->setText("Продолжить обход с элемента");
-            ui->pauseButton->setEnabled(false);
-            ui->scanPushButton->setEnabled(true);
+            dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
+            cond = true;
         }
     }
     else
     {
-        ui->continueFromButton->setChecked(false);
-        ui->continueFromButton->setText("Продолжить обход с элемента");
+        cond = true;
     }
 
+    if(cond)
+    {
+        ui->pauseButton->setText("Пауза");
+        ui->pauseButton->setEnabled(true);
+
+        ui->scanPushButton->setEnabled(false);
+
+        emit autoWalkSignal(getUIIndex() <= gapIndex, dir_name, getUIIndex());
+
+        busy = true;
+        checkBusy();
+
+    }
+    ui->continueFromButton->setChecked(false);
 }
 
 
 void MainWindow::scanPushButton_clicked(bool checked)
 {
+    updateDelays();
+    QFileDialog directory;
+    QString dir = directory.getSaveFileName(this,"Choose directory and name");
+    if (dir != "")
+    {
+        dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
 
-    if (checked)
-    {
-        QFileDialog directory;
-        dir_name = directory.getSaveFileName(this,"Choose directory and name");
-        if (dir_name == "")
-        {
-            ui->scanPushButton->setChecked(false);
-        }
-        else
-        {
-            ui->pauseButton->setEnabled(true);
-            ui->continueFromButton->setEnabled(false);
-            ui->scanPushButton->setText("Завершить обход");
-            ui->addressLabel->setText(dir_name);
-            updateDelays();
-            emit autoWalkSignal(true, dir_name, 0);
-        }
+        ui->pauseButton->setEnabled(true);
+        ui->addressLabel->setText(dir_name);
+        updateDelays();
+        emit autoWalkSignal(true, dir_name, 0);
+
+        busy = true;
+        checkBusy();
     }
-    else
-    {
-        ui->pauseButton->setEnabled(false);
-        ui->continueFromButton->setEnabled(true);
-        ui->scanPushButton->setText("Начать");
-        ui->pauseButton->setChecked(false);
-        ui->pauseButton->setText("Пауза");
-        mutex.lock();
-        worker->stopWalk();
-        mutex.unlock();
-    }
+    ui->scanPushButton->setChecked(false);
 }
 
 
@@ -518,9 +552,8 @@ void MainWindow::orientationButton_clicked()
 
     emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, (double) numX, (double) numY, colSlide, centerColumn, upLeft, upRight, downLeft, downRight, upCenter, downCenter, leftColumn, rightColumn);
     updateDelays();
-
-    ui->scanPushButton->setEnabled(true);
-    ui->goToButton->setEnabled(true);
+    orientation = true;
+    readyCheck();
     syncSettings();
 }
 
@@ -587,7 +620,6 @@ void MainWindow::setBCoords(int x, int y)
 
     ui->AXspinBox->setValue(0);
     ui->AYspinBox->setValue(0);
-    syncSettings();
 }
 
 
@@ -599,9 +631,10 @@ void MainWindow::setCurrentCoords(int x, int y)
 
 void  MainWindow::createStatsThread()
 {
+    qInfo(logInfo()) << "создание Stats";
     stats = new Stats();
-    stats->moveToThread(&statsThread);
-    statsThread.start();
+    //stats->moveToThread(&statsThread);
+    //statsThread.start();
     connect(this, &MainWindow::showChartsSignal, stats, &Stats::showCharts);
 }
 
@@ -609,9 +642,9 @@ void  MainWindow::createStatsThread()
 void MainWindow::on_chartsButton_clicked()
 {
     //emit showChartsSignal(dir_name);
-
     QFileDialog directory;
     QString stats_dir = directory.getSaveFileName(this,"Выберите данные для построенния графика");
+    qInfo(logInfo()) << "Построение гистограммы из ->" << stats_dir;
     stats->showCharts(stats_dir);
 }
 
@@ -624,6 +657,7 @@ void MainWindow::showMessageBox(QString msg_type, QString msg)
     } else if (msg_type == "critical")
     {
         QMessageBox::critical(this, "Ошибка", msg);
+        qCritical(logCritical()) << "Critical Button";
     } else if (msg_type == "warning")
     {
         QMessageBox::warning(this, "Предупреждение", msg);
@@ -687,11 +721,9 @@ void MainWindow::on_FCMeasureButton_clicked()
 
 void MainWindow::sendEndWalk()
 {
-    ui->pauseButton->setEnabled(false);
-    ui->scanPushButton->setText("Начать");
-    ui->pauseButton->setChecked(false);
-    ui->pauseButton->setText("Пауза");
-    ui->scanPushButton->setChecked(false);
+    busy = false;
+    checkBusy();
+    writeCSV();
 }
 
 void MainWindow::on_hotKeysCheckBox_stateChanged(int arg1)
@@ -712,10 +744,10 @@ void MainWindow::on_hotKeysCheckBox_stateChanged(int arg1)
 void MainWindow::on_newDirPushButton_clicked()
 {
     QFileDialog directory;
-    dir_name = directory.getSaveFileName(this,"Choose directory and name");
-    if (dir_name != "")
+    QString dir = directory.getSaveFileName(this,"Choose directory and name");
+    if (dir != "")
     {
-        ui->scanPushButton->setChecked(false);
+        dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
         ui->addressLabel->setText(dir_name);
         updateDelays();
     }
@@ -724,21 +756,131 @@ void MainWindow::on_newDirPushButton_clicked()
 
 void MainWindow::on_loadFilePushButton_clicked()
 {
-    if (ui->scanPushButton->isChecked() || ui->continueFromButton->isChecked())
+    if (busy)//ui->scanPushButton->isChecked() || ui->continueFromButton->isChecked()
     {
         showMessageBox("warning", "Нельзя открыть файл во время обхода");
         return;
     }
-
-    QFileDialog directory;
-    dir_name = directory.getSaveFileName(this,"Choose directory and name");
-    if (dir_name != "")
+    else
     {
-        ui->scanPushButton->setChecked(false);
-        ui->addressLabel->setText(dir_name);
-        updateDelays();
-        initializeModel();
+        QFileDialog directory;
+        QString dir = directory.getOpenFileName(this,"Choose directory and name");
 
-        emit openCsvFileSignal(dir_name);
+        //dir_name = directory.getSaveFileName(this,"Choose directory and name");
+        if (dir != "")
+        {
+            dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
+            ui->scanPushButton->setChecked(false);
+            ui->addressLabel->setText(dir_name);
+
+            updateDelays();
+            initializeModel();
+
+            emit openCsvFileSignal(dir_name);
+            //showMessageBox("warning", "Проверьте ориентацию пластины");
+            //orientation = false;
+            readyCheck();
+        }
     }
 }
+
+void MainWindow::stopPushButton_clicked()
+{
+    mutex.lock();
+    worker->stopWalk();
+    mutex.unlock();
+
+    busy = false;
+    checkBusy();
+    writeCSV();
+}
+
+
+void MainWindow::on_toAPushButton_clicked()
+{
+    QByteArray x = ui->AXspinBox->text().toUtf8();
+    QByteArray y = ui->AYspinBox->text().toUtf8();
+    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n');
+}
+
+
+void MainWindow::on_toBPushButton_clicked()
+{
+    QByteArray x = ui->BXspinBox->text().toUtf8();
+    QByteArray y = ui->BYspinBox->text().toUtf8();
+    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n');
+
+}
+
+
+void MainWindow::checkBusy()
+{
+    ui->toAPushButton->setEnabled(!busy);
+    ui->toBPushButton->setEnabled(!busy);
+    ui->measureBButton->setEnabled(!busy);
+    ui->orientationButton->setEnabled(!busy);
+    ui->scanPushButton->setEnabled(!busy);
+
+    ui->continueFromButton->setEnabled(!busy);
+    ui->goToGroupBox->setEnabled(!busy);
+    ui->moveGroupBox->setEnabled(!busy);
+    ui->coordsGroupBox->setEnabled(!busy);
+
+    ui->pauseButton->setEnabled(busy);
+
+}
+
+void MainWindow::on_planarCMDButton_clicked()
+{
+    QString line = ui->queryLineEdit->text();
+    QByteArray cmd = line.toUtf8();
+    emit tableControllerSignal(cmd + '\r' + '\n');
+}
+
+
+void MainWindow::writeCSV()
+{
+    //QString dir = ui->addressLabel->text();
+    QFile file(dir_name);
+
+    QVariant cellData; //Сюда положим данные из ячейки
+    QModelIndex modelIndex;
+    QString line = "";
+    //    if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append))
+    if (file.open(QIODevice::ReadWrite))
+    {
+        QTextStream output(&file);
+        for (int row = 0; row < model->rowCount(); ++row)
+        {
+            //output << model->data(row) << '\n';
+            int column = 0;
+            for (; column < model->columnCount() - 1; ++column)
+            {
+                if (column > 0 && column<4 ) continue;
+                modelIndex = model->index( row, column, QModelIndex());
+                cellData = model->data(modelIndex);
+                line = column==0 ? QString::number(cellData.toInt()) : QString::number(cellData.toDouble());
+                output << line << ", ";
+            }
+            output << model->index(row, column).data().toString()<< "\n";
+        }
+    }
+}
+
+void MainWindow::on_resetPortsPushButton_clicked()
+{
+    emit closePortsSignal();
+
+    ui->portComboBox->clear();
+    ui->keithlyPortComboBox->clear();
+    ui->lightPortComboBox->clear();
+
+    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
+    {
+        ui->portComboBox->addItem(serialPortInfo.portName());
+        ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
+        ui->lightPortComboBox->addItem(serialPortInfo.portName());
+    }
+
+}
+

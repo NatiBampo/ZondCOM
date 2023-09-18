@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.2)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -13,7 +13,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.2. It"
+#error "This file was generated using the moc from 6.4.3. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -27,7 +27,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_MainWindow_t {
-    uint offsetsAndSizes[110];
+    uint offsetsAndSizes[122];
     char stringdata0[11];
     char stringdata1[20];
     char stringdata2[1];
@@ -47,42 +47,48 @@ struct qt_meta_stringdata_MainWindow_t {
     char stringdata16[23];
     char stringdata17[16];
     char stringdata18[18];
-    char stringdata19[22];
-    char stringdata20[20];
-    char stringdata21[21];
-    char stringdata22[23];
-    char stringdata23[21];
-    char stringdata24[22];
-    char stringdata25[18];
-    char stringdata26[19];
+    char stringdata19[11];
+    char stringdata20[22];
+    char stringdata21[20];
+    char stringdata22[21];
+    char stringdata23[23];
+    char stringdata24[21];
+    char stringdata25[22];
+    char stringdata26[18];
     char stringdata27[19];
-    char stringdata28[21];
-    char stringdata29[19];
-    char stringdata30[9];
-    char stringdata31[20];
+    char stringdata28[19];
+    char stringdata29[21];
+    char stringdata30[19];
+    char stringdata31[9];
     char stringdata32[20];
-    char stringdata33[15];
-    char stringdata34[14];
-    char stringdata35[11];
-    char stringdata36[17];
-    char stringdata37[20];
-    char stringdata38[19];
-    char stringdata39[26];
-    char stringdata40[27];
-    char stringdata41[26];
-    char stringdata42[23];
-    char stringdata43[8];
-    char stringdata44[23];
+    char stringdata33[20];
+    char stringdata34[15];
+    char stringdata35[14];
+    char stringdata36[11];
+    char stringdata37[17];
+    char stringdata38[20];
+    char stringdata39[19];
+    char stringdata40[26];
+    char stringdata41[27];
+    char stringdata42[26];
+    char stringdata43[23];
+    char stringdata44[8];
     char stringdata45[23];
-    char stringdata46[24];
-    char stringdata47[27];
-    char stringdata48[15];
-    char stringdata49[12];
-    char stringdata50[27];
-    char stringdata51[32];
-    char stringdata52[5];
-    char stringdata53[28];
-    char stringdata54[30];
+    char stringdata46[23];
+    char stringdata47[24];
+    char stringdata48[27];
+    char stringdata49[15];
+    char stringdata50[12];
+    char stringdata51[27];
+    char stringdata52[32];
+    char stringdata53[5];
+    char stringdata54[28];
+    char stringdata55[30];
+    char stringdata56[23];
+    char stringdata57[25];
+    char stringdata58[25];
+    char stringdata59[27];
+    char stringdata60[32];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MainWindow_t::offsetsAndSizes) + ofs), len 
@@ -107,42 +113,48 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
         QT_MOC_LITERAL(261, 22),  // "getCurrentCoordsSignal"
         QT_MOC_LITERAL(284, 15),  // "measureFCSignal"
         QT_MOC_LITERAL(300, 17),  // "openCsvFileSignal"
-        QT_MOC_LITERAL(318, 21),  // "openPortPushButton_on"
-        QT_MOC_LITERAL(340, 19),  // "coordsPushButton_on"
-        QT_MOC_LITERAL(360, 20),  // "tableUpPushButton_on"
-        QT_MOC_LITERAL(381, 22),  // "tableDownPushButton_on"
-        QT_MOC_LITERAL(404, 20),  // "forwardPushButton_on"
-        QT_MOC_LITERAL(425, 21),  // "backwardPushButton_on"
-        QT_MOC_LITERAL(447, 17),  // "leftPushButton_on"
-        QT_MOC_LITERAL(465, 18),  // "rightPushButton_on"
-        QT_MOC_LITERAL(484, 18),  // "statePushButton_on"
-        QT_MOC_LITERAL(503, 20),  // "measurePushButton_on"
-        QT_MOC_LITERAL(524, 18),  // "lightPushButton_on"
-        QT_MOC_LITERAL(543, 8),  // "writeLog"
-        QT_MOC_LITERAL(552, 19),  // "setProgressBarValue"
-        QT_MOC_LITERAL(572, 19),  // "setProgressBarRange"
-        QT_MOC_LITERAL(592, 14),  // "openPortResult"
-        QT_MOC_LITERAL(607, 13),  // "addRowToTable"
-        QT_MOC_LITERAL(621, 10),  // "setBCoords"
-        QT_MOC_LITERAL(632, 16),  // "setCurrentCoords"
-        QT_MOC_LITERAL(649, 19),  // "pauseButton_clicked"
-        QT_MOC_LITERAL(669, 18),  // "goToButton_clicked"
-        QT_MOC_LITERAL(688, 25),  // "saveMeasureButton_clicked"
-        QT_MOC_LITERAL(714, 26),  // "continueFromButton_clicked"
-        QT_MOC_LITERAL(741, 25),  // "orientationButton_clicked"
-        QT_MOC_LITERAL(767, 22),  // "scanPushButton_clicked"
-        QT_MOC_LITERAL(790, 7),  // "checked"
-        QT_MOC_LITERAL(798, 22),  // "autoPortButton_clicked"
-        QT_MOC_LITERAL(821, 22),  // "measureBButton_clicked"
-        QT_MOC_LITERAL(844, 23),  // "on_chartsButton_clicked"
-        QT_MOC_LITERAL(868, 26),  // "measure2pushButton_clicked"
-        QT_MOC_LITERAL(895, 14),  // "showMessageBox"
-        QT_MOC_LITERAL(910, 11),  // "sendEndWalk"
-        QT_MOC_LITERAL(922, 26),  // "on_FCMeasureButton_clicked"
-        QT_MOC_LITERAL(949, 31),  // "on_hotKeysCheckBox_stateChanged"
-        QT_MOC_LITERAL(981, 4),  // "arg1"
-        QT_MOC_LITERAL(986, 27),  // "on_newDirPushButton_clicked"
-        QT_MOC_LITERAL(1014, 29)   // "on_loadFilePushButton_clicked"
+        QT_MOC_LITERAL(318, 10),  // "copyUpSlot"
+        QT_MOC_LITERAL(329, 21),  // "openPortPushButton_on"
+        QT_MOC_LITERAL(351, 19),  // "coordsPushButton_on"
+        QT_MOC_LITERAL(371, 20),  // "tableUpPushButton_on"
+        QT_MOC_LITERAL(392, 22),  // "tableDownPushButton_on"
+        QT_MOC_LITERAL(415, 20),  // "forwardPushButton_on"
+        QT_MOC_LITERAL(436, 21),  // "backwardPushButton_on"
+        QT_MOC_LITERAL(458, 17),  // "leftPushButton_on"
+        QT_MOC_LITERAL(476, 18),  // "rightPushButton_on"
+        QT_MOC_LITERAL(495, 18),  // "statePushButton_on"
+        QT_MOC_LITERAL(514, 20),  // "measurePushButton_on"
+        QT_MOC_LITERAL(535, 18),  // "lightPushButton_on"
+        QT_MOC_LITERAL(554, 8),  // "writeLog"
+        QT_MOC_LITERAL(563, 19),  // "setProgressBarValue"
+        QT_MOC_LITERAL(583, 19),  // "setProgressBarRange"
+        QT_MOC_LITERAL(603, 14),  // "openPortResult"
+        QT_MOC_LITERAL(618, 13),  // "addRowToTable"
+        QT_MOC_LITERAL(632, 10),  // "setBCoords"
+        QT_MOC_LITERAL(643, 16),  // "setCurrentCoords"
+        QT_MOC_LITERAL(660, 19),  // "pauseButton_clicked"
+        QT_MOC_LITERAL(680, 18),  // "goToButton_clicked"
+        QT_MOC_LITERAL(699, 25),  // "saveMeasureButton_clicked"
+        QT_MOC_LITERAL(725, 26),  // "continueFromButton_clicked"
+        QT_MOC_LITERAL(752, 25),  // "orientationButton_clicked"
+        QT_MOC_LITERAL(778, 22),  // "scanPushButton_clicked"
+        QT_MOC_LITERAL(801, 7),  // "checked"
+        QT_MOC_LITERAL(809, 22),  // "autoPortButton_clicked"
+        QT_MOC_LITERAL(832, 22),  // "measureBButton_clicked"
+        QT_MOC_LITERAL(855, 23),  // "on_chartsButton_clicked"
+        QT_MOC_LITERAL(879, 26),  // "measure2pushButton_clicked"
+        QT_MOC_LITERAL(906, 14),  // "showMessageBox"
+        QT_MOC_LITERAL(921, 11),  // "sendEndWalk"
+        QT_MOC_LITERAL(933, 26),  // "on_FCMeasureButton_clicked"
+        QT_MOC_LITERAL(960, 31),  // "on_hotKeysCheckBox_stateChanged"
+        QT_MOC_LITERAL(992, 4),  // "arg1"
+        QT_MOC_LITERAL(997, 27),  // "on_newDirPushButton_clicked"
+        QT_MOC_LITERAL(1025, 29),  // "on_loadFilePushButton_clicked"
+        QT_MOC_LITERAL(1055, 22),  // "stopPushButton_clicked"
+        QT_MOC_LITERAL(1078, 24),  // "on_toAPushButton_clicked"
+        QT_MOC_LITERAL(1103, 24),  // "on_toBPushButton_clicked"
+        QT_MOC_LITERAL(1128, 26),  // "on_planarCMDButton_clicked"
+        QT_MOC_LITERAL(1155, 31)   // "on_resetPortsPushButton_clicked"
     },
     "MainWindow",
     "scanningPlateSignal",
@@ -163,6 +175,7 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "getCurrentCoordsSignal",
     "measureFCSignal",
     "openCsvFileSignal",
+    "copyUpSlot",
     "openPortPushButton_on",
     "coordsPushButton_on",
     "tableUpPushButton_on",
@@ -198,7 +211,12 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "on_hotKeysCheckBox_stateChanged",
     "arg1",
     "on_newDirPushButton_clicked",
-    "on_loadFilePushButton_clicked"
+    "on_loadFilePushButton_clicked",
+    "stopPushButton_clicked",
+    "on_toAPushButton_clicked",
+    "on_toBPushButton_clicked",
+    "on_planarCMDButton_clicked",
+    "on_resetPortsPushButton_clicked"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -209,66 +227,72 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      50,   14, // methods
+      56,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      16,       // signalCount
+      17,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,   18,  314,    2, 0x06,    1 /* Public */,
-       3,    0,  351,    2, 0x06,   20 /* Public */,
-       4,    1,  352,    2, 0x06,   21 /* Public */,
-       5,    1,  355,    2, 0x06,   23 /* Public */,
-       6,    3,  358,    2, 0x06,   25 /* Public */,
-       7,    0,  365,    2, 0x06,   29 /* Public */,
-       8,    1,  366,    2, 0x06,   30 /* Public */,
-       9,    0,  369,    2, 0x06,   32 /* Public */,
-      10,    1,  370,    2, 0x06,   33 /* Public */,
-      11,    3,  373,    2, 0x06,   35 /* Public */,
-      12,    0,  380,    2, 0x06,   39 /* Public */,
-      13,    1,  381,    2, 0x06,   40 /* Public */,
-      14,    1,  384,    2, 0x06,   42 /* Public */,
-      16,    1,  387,    2, 0x06,   44 /* Public */,
-      17,    0,  390,    2, 0x06,   46 /* Public */,
-      18,    1,  391,    2, 0x06,   47 /* Public */,
+       1,   18,  350,    2, 0x06,    1 /* Public */,
+       3,    0,  387,    2, 0x06,   20 /* Public */,
+       4,    1,  388,    2, 0x06,   21 /* Public */,
+       5,    1,  391,    2, 0x06,   23 /* Public */,
+       6,    3,  394,    2, 0x06,   25 /* Public */,
+       7,    0,  401,    2, 0x06,   29 /* Public */,
+       8,    1,  402,    2, 0x06,   30 /* Public */,
+       9,    0,  405,    2, 0x06,   32 /* Public */,
+      10,    1,  406,    2, 0x06,   33 /* Public */,
+      11,    3,  409,    2, 0x06,   35 /* Public */,
+      12,    0,  416,    2, 0x06,   39 /* Public */,
+      13,    1,  417,    2, 0x06,   40 /* Public */,
+      14,    1,  420,    2, 0x06,   42 /* Public */,
+      16,    1,  423,    2, 0x06,   44 /* Public */,
+      17,    0,  426,    2, 0x06,   46 /* Public */,
+      18,    1,  427,    2, 0x06,   47 /* Public */,
+      19,    2,  430,    2, 0x06,   49 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      19,    0,  394,    2, 0x0a,   49 /* Public */,
-      20,    0,  395,    2, 0x0a,   50 /* Public */,
-      21,    0,  396,    2, 0x0a,   51 /* Public */,
-      22,    0,  397,    2, 0x0a,   52 /* Public */,
-      23,    0,  398,    2, 0x0a,   53 /* Public */,
-      24,    0,  399,    2, 0x0a,   54 /* Public */,
-      25,    0,  400,    2, 0x0a,   55 /* Public */,
-      26,    0,  401,    2, 0x0a,   56 /* Public */,
-      27,    0,  402,    2, 0x0a,   57 /* Public */,
-      28,    0,  403,    2, 0x0a,   58 /* Public */,
-      29,    0,  404,    2, 0x0a,   59 /* Public */,
-      30,    1,  405,    2, 0x0a,   60 /* Public */,
-      31,    1,  408,    2, 0x0a,   62 /* Public */,
-      32,    2,  411,    2, 0x0a,   64 /* Public */,
-      33,    3,  416,    2, 0x0a,   67 /* Public */,
-      34,    5,  423,    2, 0x0a,   71 /* Public */,
-      35,    2,  434,    2, 0x0a,   77 /* Public */,
-      36,    2,  439,    2, 0x0a,   80 /* Public */,
-      37,    1,  444,    2, 0x0a,   83 /* Public */,
-      38,    0,  447,    2, 0x0a,   85 /* Public */,
-      39,    0,  448,    2, 0x0a,   86 /* Public */,
-      40,    1,  449,    2, 0x0a,   87 /* Public */,
-      41,    0,  452,    2, 0x0a,   89 /* Public */,
-      42,    1,  453,    2, 0x0a,   90 /* Public */,
-      44,    0,  456,    2, 0x0a,   92 /* Public */,
-      45,    0,  457,    2, 0x0a,   93 /* Public */,
-      46,    0,  458,    2, 0x0a,   94 /* Public */,
-      47,    0,  459,    2, 0x0a,   95 /* Public */,
-      48,    2,  460,    2, 0x0a,   96 /* Public */,
-      49,    0,  465,    2, 0x0a,   99 /* Public */,
-      50,    0,  466,    2, 0x0a,  100 /* Public */,
-      51,    1,  467,    2, 0x0a,  101 /* Public */,
-      53,    0,  470,    2, 0x0a,  103 /* Public */,
-      54,    0,  471,    2, 0x0a,  104 /* Public */,
+      20,    0,  435,    2, 0x0a,   52 /* Public */,
+      21,    0,  436,    2, 0x0a,   53 /* Public */,
+      22,    0,  437,    2, 0x0a,   54 /* Public */,
+      23,    0,  438,    2, 0x0a,   55 /* Public */,
+      24,    0,  439,    2, 0x0a,   56 /* Public */,
+      25,    0,  440,    2, 0x0a,   57 /* Public */,
+      26,    0,  441,    2, 0x0a,   58 /* Public */,
+      27,    0,  442,    2, 0x0a,   59 /* Public */,
+      28,    0,  443,    2, 0x0a,   60 /* Public */,
+      29,    0,  444,    2, 0x0a,   61 /* Public */,
+      30,    0,  445,    2, 0x0a,   62 /* Public */,
+      31,    1,  446,    2, 0x0a,   63 /* Public */,
+      32,    1,  449,    2, 0x0a,   65 /* Public */,
+      33,    2,  452,    2, 0x0a,   67 /* Public */,
+      34,    3,  457,    2, 0x0a,   70 /* Public */,
+      35,    5,  464,    2, 0x0a,   74 /* Public */,
+      36,    2,  475,    2, 0x0a,   80 /* Public */,
+      37,    2,  480,    2, 0x0a,   83 /* Public */,
+      38,    1,  485,    2, 0x0a,   86 /* Public */,
+      39,    0,  488,    2, 0x0a,   88 /* Public */,
+      40,    0,  489,    2, 0x0a,   89 /* Public */,
+      41,    1,  490,    2, 0x0a,   90 /* Public */,
+      42,    0,  493,    2, 0x0a,   92 /* Public */,
+      43,    1,  494,    2, 0x0a,   93 /* Public */,
+      45,    0,  497,    2, 0x0a,   95 /* Public */,
+      46,    0,  498,    2, 0x0a,   96 /* Public */,
+      47,    0,  499,    2, 0x0a,   97 /* Public */,
+      48,    0,  500,    2, 0x0a,   98 /* Public */,
+      49,    2,  501,    2, 0x0a,   99 /* Public */,
+      50,    0,  506,    2, 0x0a,  102 /* Public */,
+      51,    0,  507,    2, 0x0a,  103 /* Public */,
+      52,    1,  508,    2, 0x0a,  104 /* Public */,
+      54,    0,  511,    2, 0x0a,  106 /* Public */,
+      55,    0,  512,    2, 0x0a,  107 /* Public */,
+      56,    0,  513,    2, 0x0a,  108 /* Public */,
+      57,    0,  514,    2, 0x0a,  109 /* Public */,
+      58,    0,  515,    2, 0x0a,  110 /* Public */,
+      59,    0,  516,    2, 0x08,  111 /* Private */,
+      60,    0,  517,    2, 0x08,  112 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Bool, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Bool, QMetaType::Bool,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
@@ -287,6 +311,7 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::Int, QMetaType::QString,    2,    2,
 
  // slots: parameters
     QMetaType::Void,
@@ -312,7 +337,7 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Bool,    2,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Bool,   43,
+    QMetaType::Void, QMetaType::Bool,   44,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -320,7 +345,12 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::QString, QMetaType::QString,    2,    2,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,   52,
+    QMetaType::Void, QMetaType::Int,   53,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -399,6 +429,10 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'openCsvFileSignal'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'copyUpSlot'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
         // method 'openPortPushButton_on'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
@@ -489,6 +523,16 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'on_newDirPushButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_loadFilePushButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'stopPushButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_toAPushButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_toBPushButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_planarCMDButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_resetPortsPushButton_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -516,40 +560,46 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 13: _t->getCurrentCoordsSignal((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 14: _t->measureFCSignal(); break;
         case 15: _t->openCsvFileSignal((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 16: _t->openPortPushButton_on(); break;
-        case 17: _t->coordsPushButton_on(); break;
-        case 18: _t->tableUpPushButton_on(); break;
-        case 19: _t->tableDownPushButton_on(); break;
-        case 20: _t->forwardPushButton_on(); break;
-        case 21: _t->backwardPushButton_on(); break;
-        case 22: _t->leftPushButton_on(); break;
-        case 23: _t->rightPushButton_on(); break;
-        case 24: _t->statePushButton_on(); break;
-        case 25: _t->measurePushButton_on(); break;
-        case 26: _t->lightPushButton_on(); break;
-        case 27: _t->writeLog((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
-        case 28: _t->setProgressBarValue((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 29: _t->setProgressBarRange((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 30: _t->openPortResult((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[3]))); break;
-        case 31: _t->addRowToTable((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5]))); break;
-        case 32: _t->setBCoords((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 33: _t->setCurrentCoords((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 34: _t->pauseButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 35: _t->goToButton_clicked(); break;
-        case 36: _t->saveMeasureButton_clicked(); break;
-        case 37: _t->continueFromButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 38: _t->orientationButton_clicked(); break;
-        case 39: _t->scanPushButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 40: _t->autoPortButton_clicked(); break;
-        case 41: _t->measureBButton_clicked(); break;
-        case 42: _t->on_chartsButton_clicked(); break;
-        case 43: _t->measure2pushButton_clicked(); break;
-        case 44: _t->showMessageBox((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
-        case 45: _t->sendEndWalk(); break;
-        case 46: _t->on_FCMeasureButton_clicked(); break;
-        case 47: _t->on_hotKeysCheckBox_stateChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 48: _t->on_newDirPushButton_clicked(); break;
-        case 49: _t->on_loadFilePushButton_clicked(); break;
+        case 16: _t->copyUpSlot((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 17: _t->openPortPushButton_on(); break;
+        case 18: _t->coordsPushButton_on(); break;
+        case 19: _t->tableUpPushButton_on(); break;
+        case 20: _t->tableDownPushButton_on(); break;
+        case 21: _t->forwardPushButton_on(); break;
+        case 22: _t->backwardPushButton_on(); break;
+        case 23: _t->leftPushButton_on(); break;
+        case 24: _t->rightPushButton_on(); break;
+        case 25: _t->statePushButton_on(); break;
+        case 26: _t->measurePushButton_on(); break;
+        case 27: _t->lightPushButton_on(); break;
+        case 28: _t->writeLog((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
+        case 29: _t->setProgressBarValue((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 30: _t->setProgressBarRange((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 31: _t->openPortResult((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[3]))); break;
+        case 32: _t->addRowToTable((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[5]))); break;
+        case 33: _t->setBCoords((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 34: _t->setCurrentCoords((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 35: _t->pauseButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 36: _t->goToButton_clicked(); break;
+        case 37: _t->saveMeasureButton_clicked(); break;
+        case 38: _t->continueFromButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 39: _t->orientationButton_clicked(); break;
+        case 40: _t->scanPushButton_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 41: _t->autoPortButton_clicked(); break;
+        case 42: _t->measureBButton_clicked(); break;
+        case 43: _t->on_chartsButton_clicked(); break;
+        case 44: _t->measure2pushButton_clicked(); break;
+        case 45: _t->showMessageBox((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2]))); break;
+        case 46: _t->sendEndWalk(); break;
+        case 47: _t->on_FCMeasureButton_clicked(); break;
+        case 48: _t->on_hotKeysCheckBox_stateChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 49: _t->on_newDirPushButton_clicked(); break;
+        case 50: _t->on_loadFilePushButton_clicked(); break;
+        case 51: _t->stopPushButton_clicked(); break;
+        case 52: _t->on_toAPushButton_clicked(); break;
+        case 53: _t->on_toBPushButton_clicked(); break;
+        case 54: _t->on_planarCMDButton_clicked(); break;
+        case 55: _t->on_resetPortsPushButton_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -666,6 +716,13 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
                 return;
             }
         }
+        {
+            using _t = void (MainWindow::*)(int , QString );
+            if (_t _q_method = &MainWindow::copyUpSlot; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 16;
+                return;
+            }
+        }
     }
 }
 
@@ -688,13 +745,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 50)
+        if (_id < 56)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 50;
+        _id -= 56;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 50)
+        if (_id < 56)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 50;
+        _id -= 56;
     }
     return _id;
 }
@@ -804,6 +861,13 @@ void MainWindow::openCsvFileSignal(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 15, _a);
+}
+
+// SIGNAL 16
+void MainWindow::copyUpSlot(int _t1, QString _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 16, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

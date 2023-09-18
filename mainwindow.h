@@ -50,6 +50,11 @@ private:
     QString dir_name;
     QList<int> delays;
     QList<bool> portResult = {false, false, false};
+    bool orientation = false;
+    bool busy = false;
+    void checkBusy();
+    bool portsReady();
+    bool readyCheck();
     QShortcut *keyUp;
     QShortcut *keyDown;
     QShortcut *keyNorth;
@@ -64,7 +69,7 @@ private:
 
     //table length and index
     int numRows, number;
-
+    int gapIndex;
     void createWorkerThread();
     void createStatsThread();
     void addElement(int, int, double);
@@ -76,6 +81,7 @@ private:
     void deactivateShortKeys();
     void initializeModel();
 //    void showMessageBox(QString, QString);
+    void writeCSV();
 
 
 signals:
@@ -95,6 +101,7 @@ signals:
     void getCurrentCoordsSignal(int);
     void measureFCSignal();
     void openCsvFileSignal(QString);
+    void copyUpSlot(int, QString);
 
 public slots:
     void openPortPushButton_on();
@@ -133,5 +140,12 @@ public slots:
     void on_hotKeysCheckBox_stateChanged(int arg1);
     void on_newDirPushButton_clicked();
     void on_loadFilePushButton_clicked();
+    void stopPushButton_clicked();
+    void on_toAPushButton_clicked();
+    void on_toBPushButton_clicked();
+
+private slots:
+    void on_planarCMDButton_clicked();
+    void on_resetPortsPushButton_clicked();
 };
 #endif // MAINWINDOW_H

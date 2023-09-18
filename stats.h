@@ -21,24 +21,27 @@ public:
 
 private:
    Ui::Stats *ui;
-   QString dir;
-   int n = qPow(480, 0.5);
-   double max_d = 9.9 * qPow(10, 37);
-   double min_d = (max_d - 1) * (-1);
-   QList<double> currMin{max_d, max_d, max_d, max_d};
-   QList<double> currMax{min_d, min_d, min_d, min_d};
-   vector<vector<double>> currValue;
-   vector<vector<double>>  currFreq;
-   QList<int> currFreqMax{0, 0, 0, 0};
-   vector<vector<double>>  currRang;
-   QList<double> step;
+   /*
+    vector<double> currMin{max_d, max_d, max_d, max_d};
+    vector<double> currMax{min_d, min_d, min_d, min_d};
+    vector<double> currValueFC, currValueDC10, currValueDC1, currValuePh;
+    vector<int> currFreqFC, currFreqDC10, currFreqDC1, currFreqPh;
+    vector<int> currFreqMax;
+    vector<double>  currRangFC, currRangDC10, currRangDC1, currRangPh;
+    vector<double> step;
+   */
 
    void getData(QString);
-   void getFreq();
-   void drawCharts();
+   void getFreq(const vector<vector<double>>  &, vector<vector<int>>  &,
+                const vector<vector<double>>  &, const vector<double>  &,
+                const vector<double>  &, const vector<double> &);
+   void drawCharts(const vector<vector<double>> &, const vector<vector<int>> &,
+                   const vector<int> &, const vector<double> &,
+                   const vector<double> &);
    QString getE(double);
    double maxDouble(double, double);
    double minDouble(double, double);
+   void borderRange();
 
 public slots:
 
