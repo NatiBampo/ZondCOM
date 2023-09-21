@@ -135,7 +135,7 @@
              </font>
             </property>
             <property name="text">
-             <string>v1509</string>
+             <string>v2109_2</string>
             </property>
            </widget>
           </item>
@@ -348,7 +348,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Новый</string>
+             <string>Сохранить</string>
             </property>
            </widget>
           </item>
@@ -1921,6 +1921,32 @@
             </property>
            </widget>
           </item>
+          <item row="12" column="0" colspan="3">
+           <widget class="QLabel" name="endTimeNameLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Время окончания:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="4">
+           <widget class="QLabel" name="endTimeLabel">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
          </layout>
          <zorder>label_10</zorder>
          <zorder>pauseButton</zorder>
@@ -1974,6 +2000,8 @@
          <zorder>stopPushButton</zorder>
          <zorder>toAPushButton</zorder>
          <zorder>toBPushButton</zorder>
+         <zorder>endTimeNameLabel</zorder>
+         <zorder>endTimeLabel</zorder>
         </widget>
        </widget>
       </item>

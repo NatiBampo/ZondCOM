@@ -143,6 +143,7 @@ public slots:
     void stopPushButton_clicked();
     void on_toAPushButton_clicked();
     void on_toBPushButton_clicked();
+    void setEndOfWalkTime(QString);
 
 private slots:
     void on_planarCMDButton_clicked();

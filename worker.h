@@ -107,6 +107,7 @@ signals:
     void sendPackageSignal(QSerialPort*, QByteArray, int);
     void sendPackageSignalRead(QSerialPort*, QByteArray, int);
     void sendEndWalkSignal();
+    void sendEndOfWalkTime(QString);
 
 public slots:
     void measureElement();

@@ -85,8 +85,6 @@ MainWindow::MainWindow(QWidget *parent)
     readyCheck();
     //statsThread.quit();
     //statsThread.terminate();
-
-    //ui->resetPortsPushButton->setStyleSheet("background-image: url(:/images/image/resetPic.png); ");
 }
 
 MainWindow::~MainWindow()
@@ -142,6 +140,8 @@ void MainWindow::createWorkerThread()
     connect(worker, &Worker::sendCurrentCoordsSignal, this, &MainWindow::setCurrentCoords);
     connect(worker, &Worker::sendMessageBox, this, &MainWindow::showMessageBox);
     connect(worker, &Worker::sendEndWalkSignal, this, &MainWindow::sendEndWalk);
+    connect(worker, &Worker::sendEndOfWalkTime, this, &MainWindow::setEndOfWalkTime);
+
 }
 
 
@@ -390,6 +390,9 @@ void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V,
     QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
     QModelIndex i = ui->tableView->model()->index(number, 0);
     ui->tableView->selectionModel()->select(i, flags);
+    //ui->tableView->selectRow(number);
+
+    //ui->tableView->showEvent();
 
     ui->columnSpinBox->setValue(column);
     ui->rowSpinBox->setValue(row);
@@ -740,9 +743,10 @@ void MainWindow::on_hotKeysCheckBox_stateChanged(int arg1)
     }
 }
 
-
+//save tableview button
 void MainWindow::on_newDirPushButton_clicked()
 {
+    /*
     QFileDialog directory;
     QString dir = directory.getSaveFileName(this,"Choose directory and name");
     if (dir != "")
@@ -750,7 +754,10 @@ void MainWindow::on_newDirPushButton_clicked()
         dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
         ui->addressLabel->setText(dir_name);
         updateDelays();
-    }
+    }*/
+
+    if(!busy) writeCSV();
+
 }
 
 
@@ -884,3 +891,8 @@ void MainWindow::on_resetPortsPushButton_clicked()
 
 }
 
+
+void MainWindow::setEndOfWalkTime(QString endTime)
+{
+    ui->endTimeLabel->setText(endTime);
+}

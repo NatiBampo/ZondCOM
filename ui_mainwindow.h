@@ -179,6 +179,8 @@ public:
     QLabel *label_27;
     QLabel *label_12;
     QPushButton *toBPushButton;
+    QLabel *endTimeNameLabel;
+    QLabel *endTimeLabel;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -1106,6 +1108,19 @@ public:
 
         gridLayout_6->addWidget(toBPushButton, 1, 4, 1, 1);
 
+        endTimeNameLabel = new QLabel(tab_2);
+        endTimeNameLabel->setObjectName("endTimeNameLabel");
+        sizePolicy6.setHeightForWidth(endTimeNameLabel->sizePolicy().hasHeightForWidth());
+        endTimeNameLabel->setSizePolicy(sizePolicy6);
+        endTimeNameLabel->setMinimumSize(QSize(50, 0));
+
+        gridLayout_6->addWidget(endTimeNameLabel, 12, 0, 1, 3);
+
+        endTimeLabel = new QLabel(tab_2);
+        endTimeLabel->setObjectName("endTimeLabel");
+
+        gridLayout_6->addWidget(endTimeLabel, 12, 4, 1, 1);
+
         tabWidget->addTab(tab_2, QString());
         label_10->raise();
         pauseButton->raise();
@@ -1157,6 +1172,8 @@ public:
         stopPushButton->raise();
         toAPushButton->raise();
         toBPushButton->raise();
+        endTimeNameLabel->raise();
+        endTimeLabel->raise();
 
         formLayout->setWidget(1, QFormLayout::FieldRole, tabWidget);
 
@@ -1186,7 +1203,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        label_40->setText(QCoreApplication::translate("MainWindow", "v1509", nullptr));
+        label_40->setText(QCoreApplication::translate("MainWindow", "v2109_2", nullptr));
         label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
         label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
         label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
@@ -1199,7 +1216,7 @@ public:
         openPortPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));
         addressHeaderLabel->setText(QCoreApplication::translate("MainWindow", "\320\220\320\264\321\200\320\265\321\201 \321\204\320\260\320\271\320\273\320\260: ", nullptr));
         addressLabel->setText(QCoreApplication::translate("MainWindow", "\320\241:\\temp\\1.csv", nullptr));
-        newDirPushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\276\320\262\321\213\320\271", nullptr));
+        newDirPushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
         loadFilePushButton->setText(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214", nullptr));
         label_20->setText(QCoreApplication::translate("MainWindow", "\320\226\321\203\321\200\320\275\320\260\320\273", nullptr));
         groupBox_6->setTitle(QCoreApplication::translate("MainWindow", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\270 \320\270 \320\275\320\260\320\277\321\200\321\217\320\266\320\265\320\275\320\270\320\265", nullptr));
@@ -1272,6 +1289,8 @@ public:
         label_27->setText(QCoreApplication::translate("MainWindow", "L:", nullptr));
         label_12->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
         toBPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222 \321\202.\320\222", nullptr));
+        endTimeNameLabel->setText(QCoreApplication::translate("MainWindow", "\320\222\321\200\320\265\320\274\321\217 \320\276\320\272\320\276\320\275\321\207\320\260\320\275\320\270\321\217:", nullptr));
+        endTimeLabel->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
     } // retranslateUi
 

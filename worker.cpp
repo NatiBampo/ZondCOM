@@ -57,6 +57,7 @@ void Worker::tableController(QByteArray message)
 {
     if (serialPortA5->isOpen())
     {
+        //if (message == "State\r\n") serialPortA5->flush();
         emit sendPackageSignalRead(serialPortA5, message, 400);//1000
         planarResponce = "";
         planarResponce.append(lastAnswer);
@@ -106,8 +107,7 @@ void Worker::endLinePlanar()
     planarResponce = "";
     if (serialPortA5->waitForReadyRead(400)) lastAnswer.append(serialPortA5->readAll());
     planarResponce.append(lastAnswer);
-    //emit sendLogSignal('<' + "endLine\\r\\n");
-    emit sendLogSignal('>' + planarResponce);
+    emit sendLogSignal('<' + "endLine\\r\\n");
 }
 
 
@@ -182,6 +182,7 @@ void Worker::autoOpenPorts()
 
 bool Worker::checkPlanarCOM()
 {
+    //serialPortA5->flush();
     tableController("State\r\n");
     QString responce = QString(planarResponce);
 //    QRegularExpression re(R"(?<State>< -?\d+ -?\d+ -?\d+ -?\d+\r\n)|(?<FLT>FLT)|(?<BSY>BSY)|(?<OK>OK)|(?<ERC>ERC)|(?<NBP>NBP)|(?<EDG>EDG)");
@@ -196,6 +197,7 @@ bool Worker::checkPlanarCOM()
     else if (responce == "")
     {
         QThread::msleep(300);
+        //serialPortA5->flush();
         tableController("State\r\n");
         responce = QString(planarResponce);
         match = re.match(responce);
@@ -403,7 +405,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex)
     //dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
     QFileInfo fileInfo(dir_cur);
 
-    QString dir_dump = "C:/qt/dump/" + fileInfo.fileName();
+    QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "__copy__" + QString::number(clock()/100000) + ".csv";
 
     //сдвиг индекса до начала рабочей зоны(не попадает в отступ)
     currentIndex = startIndex < gapIndex ? gapIndex : startIndex;
@@ -423,14 +425,20 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex)
 
     //если обход с начала, то переписать файл, иначе добавить
 //    if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append))
-    if (file.open(QIODevice::Append))
+    if (file.open(QIODevice::ReadWrite))
     {
         QTextStream output(&file);
+        int walkTime = (lastIndex - currentIndex) * 5;
+
+        QDateTime estFinish = QDateTime::currentDateTime().addSecs(walkTime);
+
+        emit sendLogSignal(("Время окончания : " + estFinish.toString("hh:mm:ss")).toUtf8());
+        emit sendEndOfWalkTime(estFinish.toString("hh:mm"));
 
         int start = clock();
         stopped = false;
         QString res = "";
-        qInfo(logInfo()) << "Начат обход пластины " << dir_dump <<" , начиная с элемента -> " << QString::number(currentIndex);
+        qInfo(logInfo()) << "Начат обход пластины " << fileInfo.baseName() <<" , начиная с элемента -> " << QString::number(currentIndex);
         while (currentIndex <= lastIndex && !stopped)
         {
             //если индекс попал на срез, то пропускаем
@@ -488,7 +496,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex)
 
         }
 
-        qInfo(logInfo())<<"Закончен обход пластины " << dir_dump <<"  на элементе -> " << QString::number(currentIndex);
+        qInfo(logInfo())<<"Закончен обход пластины " << fileInfo.baseName() <<"  на элементе -> " << QString::number(currentIndex);
 
         currentIndex = 0;
 
@@ -701,13 +709,16 @@ void Worker::openCsvFile(QString dir)
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         line = QString::fromUtf8(file.readLine());
+        int start = line.split(", ")[0].toInt();
         currentIndex = 0;
-
+        int tmp = 0;
         while(!line.isNull() && currentIndex < 1440)
         {
             auto arr = line.split(", ");
-
-            currentIndex = arr[0].toInt();
+            tmp = arr[0].toInt();
+            if (tmp == 0 && currentIndex > start ) break;
+            //проверка на нулевые строки
+            currentIndex = tmp;
             ForwardCurrent = arr[1].toDouble();
             DarkCurrent10mV = arr[2].toDouble();
             DarkCurrent1V = arr[3].toDouble();
@@ -727,40 +738,49 @@ bool Worker::getCurrentCoords(int index)
 {
     int x = 0;
     int y = 0;
+    //serialPortA5->flush();
     tableController("State\r\n");
-    QString responce = QString(planarResponce);//lastAnswer
-    emit sendLogSignal(planarResponce);
     QRegularExpression re(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)");
-    QRegularExpressionMatch match = re.match(responce);
 
     //if (responce.contains(QRegularExpression(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)")))
-    if (match.hasMatch())
+    for (int i = 0; i < 5; i++)
+    {
+        emit sendLogSignal(planarResponce);
+        QString responce = QString(planarResponce);//lastAnswer
+        QRegularExpressionMatch match = re.match(responce);
+        if (match.hasMatch())
         {
-        QString line = match.captured(0);
-        x = line.split(" ")[2].toInt();
-        y = line.split(" ")[3].toInt();
+            QString line = match.captured(0);
+            x = line.split(" ")[2].toInt();
+            y = line.split(" ")[3].toInt();
 
-        //qDebug(logDebug()) << "Парсинг x :" << x << "|| y : " << y;
-
-        if (index == -1)
-        {
-            emit sendCurrentCoordsSignal(x, y);
+            if (index == -1)
+            {
+                emit sendCurrentCoordsSignal(x, y);
+            }
+            if (index == -2)
+            {
+                emit sendBCoordsSignal(x, y);
+            }
+            if (index > 0)
+            {
+                qDebug(logDebug()) << "Парсинг x, y : " << x << ", " << y << "  Dots: i, x , y = " << currentIndex << ", " << DotsX[currentIndex] << ", " << DotsY[currentIndex];
+                //emit sendLogSignal(("Парсинг x :" + QString::number(x) + "|| y : " + QString::number(y)).toUtf8());
+                bool cond1 = x == (int) DotsX.at(index);
+                bool cond2 = y == (int) DotsY.at(index);
+                return cond1 && cond2;
+            }
+            return true;
         }
-        if (index == -2)
+        else //if (responce == "< OK\r\n")
         {
-            emit sendBCoordsSignal(x, y);
-        }
-        if (index > 0)
-        {
-            qDebug(logDebug()) << "Парсинг x, y : " << x << ", " << y << "  Dots: i, x , y = " << currentIndex << ", " << DotsX[currentIndex] << ", " << DotsY[currentIndex];
-            //emit sendLogSignal(("Парсинг x :" + QString::number(x) + "|| y : " + QString::number(y)).toUtf8());
-            bool cond1 = x == (int) DotsX.at(index);
-            bool cond2 = y == (int) DotsY.at(index);
-            return cond1 && cond2;
+            endLinePlanar();
         }
     }
+
     return false;
 }
+
 
 
 void Worker::lightController(QByteArray msg)
