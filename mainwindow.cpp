@@ -867,6 +867,7 @@ void MainWindow::writeCSV()
                 modelIndex = model->index( row, column, QModelIndex());
                 cellData = model->data(modelIndex);
                 line = column==0 ? QString::number(cellData.toInt()) : QString::number(cellData.toDouble());
+                if (line == "") break;
                 output << line << ", ";
             }
             output << model->index(row, column).data().toString()<< "\n";

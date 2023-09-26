@@ -42,6 +42,7 @@ private:
    double maxDouble(double, double);
    double minDouble(double, double);
    void borderRange();
+   bool inRange(vector<double>  &, vector<double>  &, double, int);
 
 public slots:
 

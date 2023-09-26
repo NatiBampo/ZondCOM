@@ -402,29 +402,17 @@ bool Worker::checkIndex(int i)
 
 void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex)
 {
-    //dir = dir_cur.endsWith(".csv") ? dir_cur : dir_cur + ".csv";
-    QFileInfo fileInfo(dir_cur);
-
-    QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "__copy__" + QString::number(clock()/100000) + ".csv";
 
     //сдвиг индекса до начала рабочей зоны(не попадает в отступ)
     currentIndex = startIndex < gapIndex ? gapIndex : startIndex;
+    QFileInfo fileInfo(dir_cur);
+    QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_start_index_" + QString::number(currentIndex) + ".csv";
+
     emit sendProgressBarRangeSignal(currentIndex, lastIndex);
 
-    /*
-    if (allNew) emit sendProgressBarRangeSignal(currentIndex, lastIndex);
-    //если режим продолжить и скопировать не вышло -> выход
-    if(!allNew)
-    {
-        bool copyOk = copyUpToIndex(currentIndex);
-        //плохо скопировалось. данные будут потерены
-        if (!copyOk) return;
-    }
-    */
     QFile file(dir_dump);
 
     //если обход с начала, то переписать файл, иначе добавить
-//    if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append))
     if (file.open(QIODevice::ReadWrite))
     {
         QTextStream output(&file);
@@ -487,11 +475,19 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex)
             res = QString::number(currentIndex, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                     QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
             output << res;
-            //output.flush();
 
-            //отправляем данные на таблицу
-            emit sendAddTableSignal(currentIndex, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
-            emit sendProgressBarValueSignal(currentIndex);
+            //отправляем данные на таблицу, если ток в норме
+            if (ForwardCurrent > FCBorder || LightCurrent < LightBorder)
+            {
+                stopWalk();
+                emit sendMessageBox("warning", "Недопустимые значения тока");
+                qWarning(logWarning())<<"Недопустимые значения тока :"<< res;
+            }
+            else
+            {
+                emit sendAddTableSignal(currentIndex, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
+                emit sendProgressBarValueSignal(currentIndex);
+            }
             currentIndex++;
 
         }
@@ -674,7 +670,7 @@ void Worker::saveMeasure(int index)
             line = QString::fromUtf8(file.readLine());
         }
 
-        //new line will be added in case measurement is ahead of main group
+        //new line will be added in case measurement took place and it's ahead of a main group
         if (index > i)
         {
             while (i < index)
@@ -702,9 +698,10 @@ void Worker::openCsvFile(QString dir)
 {
     QFile file (dir);
     QFileInfo fileInfo(dir);
+    QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_copy_" + ".csv";
 
-    QFile::copy(dir,  "C:/qt/log/copyOrbita/" + fileInfo.fileName());
-    emit sendMessageBox("info", fileInfo.fileName());
+    QFile::copy(dir,  dir_dump);// "C:/qt/log/copyOrbita/" + fileInfo.fileName());
+    emit sendMessageBox("info", "Загружен " + fileInfo.fileName());
     QString line;
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -738,14 +735,13 @@ bool Worker::getCurrentCoords(int index)
 {
     int x = 0;
     int y = 0;
-    //serialPortA5->flush();
     tableController("State\r\n");
     QRegularExpression re(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)");
 
     //if (responce.contains(QRegularExpression(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)")))
     for (int i = 0; i < 5; i++)
     {
-        emit sendLogSignal(planarResponce);
+        //emit sendLogSignal(planarResponce);
         QString responce = QString(planarResponce);//lastAnswer
         QRegularExpressionMatch match = re.match(responce);
         if (match.hasMatch())
@@ -765,7 +761,13 @@ bool Worker::getCurrentCoords(int index)
             if (index > 0)
             {
                 qDebug(logDebug()) << "Парсинг x, y : " << x << ", " << y << "  Dots: i, x , y = " << currentIndex << ", " << DotsX[currentIndex] << ", " << DotsY[currentIndex];
-                //emit sendLogSignal(("Парсинг x :" + QString::number(x) + "|| y : " + QString::number(y)).toUtf8());
+                if (currentIndex < lastIndex && (x==0 && y == 0))
+                {
+                    QThread::msleep(1000);
+                    endLinePlanar();
+                    continue;
+                }
+
                 bool cond1 = x == (int) DotsX.at(index);
                 bool cond2 = y == (int) DotsY.at(index);
                 return cond1 && cond2;
@@ -821,6 +823,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
         emit sendLogSignal((QString::number(currentIndex) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                         QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
         LightOff();
+
     }
     else
     {

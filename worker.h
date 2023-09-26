@@ -71,6 +71,8 @@ private:
     double DarkCurrent10mV = 0.0;
     double DarkCurrent1V = 0.0;
     double LightCurrent = 0.0;
+    double FCBorder = -qPow(10, -5);
+    double LightBorder = 5*qPow(10, -8);
 
     bool openPort(QSerialPort*, QString, QSerialPort::BaudRate);
     bool copyUpToIndex(int);

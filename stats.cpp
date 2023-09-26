@@ -29,28 +29,26 @@ void Stats::showCharts(QString dir)
 void Stats::getData(QString dir)
 {
 
-    int n = qPow(480, 0.5);
-//    double max_d = 9.9 * qPow(10, 37);
-//    double min_d = (max_d - 1) * (-1);
-    double max_d = qPow(10, -1);
-    double min_d = qPow(10, -16);
-    double max_d1 = (-1) * qPow(10, -16);
-    double min_d1 = (-1) * qPow(10, -1);
-    vector<double> currMin{ max_d1, max_d, max_d, max_d };
-    vector<double> currMax{ min_d1, min_d, min_d, min_d };
+    int n = qPow(480, 0.5) * 4;
+    vector<double> min_d{ -qPow(10,-2), qPow(10,-14), qPow(10,-14), qPow(10, -10) };
+    vector<double> max_d{ -qPow(10,-6), qPow(10,-10), qPow(10, -8), qPow(10, -5) };
+
+    vector<double> currMin{ -qPow(10,-6), qPow(10, -14), qPow(10, -14), qPow(10, -10) };
+    vector<double> currMax{ -qPow(10,-2), qPow(10,-10), qPow(10, -8), qPow(10, -5) };
     vector<vector<double>> currValue;
     vector<vector<int>> currFreq;
     vector<vector<double>>  currRang;
     vector<double> step;
-
+    vector<vector<int>> percent;
 
     for (int i = 0; i < 4; i++)
     {
         vector<double> v1, v2;
-        vector<int> v3;
+        vector<int> v3, v4;
         currValue.push_back(v1);
         currRang.push_back(v2);
         currFreq.push_back(v3);
+        percent.push_back(v4);
 
     }
 
@@ -63,13 +61,14 @@ void Stats::getData(QString dir)
         QString line = source.readLine();
         QStringList arr;
         //while (!output.atEnd())
-        for (int i = 0; !line.isNull(); ++i)
+        int i = 0;
+        for (; !line.isNull(); ++i)
         {
             arr = line.split(", ");
             for (int j = 0; j < 4; j++)
             {
                 currValue[j].push_back(arr[j+1].toDouble());
-                if (j==0)
+                /*if (j==0)
                 {
                     if (currValue[j][i] > min_d1 && currValue[j][i] < max_d1)
                     {
@@ -84,15 +83,38 @@ void Stats::getData(QString dir)
                         currMax[j] = maxDouble(currMax[j], currValue[j][i]);
                         currMin[j] = minDouble(currMin[j], currValue[j][i]);
                     }
-                }
+                }*/
             }
             line = source.readLine();
         }
 
-        for (int i = 0; i < 4; i++)
+        for (int k = 0; k < 4; k++)
         {
-            sort(currValue[i].begin(), currValue[i].end());
-            step.push_back((currMax[i] - currMin[i]) / n);
+            sort(currValue[k].begin(), currValue[k].end());
+            /*int p = (k==1 || k==2) ? 5 : 1;
+            //увеличиваем процент брака пока не попадет в диапазон
+            int idx = (int) (i * p /100);
+            double tmp =  currValue[k][idx];
+            qDebug()<< inRange(max_d, min_d, tmp, 0);
+            while(!inRange(max_d, min_d, currValue[k][(int) (i * p /100)], k))
+            {
+                p++;
+            }
+            currMin[k] = currValue[k][(int) (i * p /100)];
+            percent[k].push_back(p);
+
+            p = (k==2 || k==1) ? 5 : 1;
+            while(!inRange(max_d, min_d, currValue[k][(int) (i  - i * p / 100)], k))
+            {
+                p++;
+            }
+            currMax[k] = currValue[k][(int) (i - i * p / 100)];
+            percent[k].push_back(p);
+            */
+
+
+
+            step.push_back((currMax[k] - currMin[k]) / n);
         }
 
 
@@ -105,13 +127,20 @@ void Stats::getData(QString dir)
             for (int j = 0; j < n; j++)
             {
                 currFreq[i].push_back(0);
-                currRang[i].push_back(currMin[i] + j * step[0]);
+                currRang[i].push_back(currMin[i] + j * step[i]);
             }
         }
 
     }
     getFreq(currValue, currFreq, currRang, currMin, currMax, step);
 }
+
+
+bool Stats::inRange(vector<double> &max_d, vector<double> &min_d, double num, int i)
+{
+    return (num > min_d[i] && num < max_d[i]);
+}
+
 
 void Stats::getFreq(const vector<vector<double>>  &currValue, vector<vector<int>> &currFreq,
                     const vector<vector<double>> &currRang, const vector<double> &currMin,
@@ -130,7 +159,8 @@ void Stats::getFreq(const vector<vector<double>>  &currValue, vector<vector<int>
             //if (currValue[j][i] < currMin[j])  currFreq[i];//|| currValue[i][j] > currMax[j]) continue;
 
             //calc proper range
-            int idx = (currValue[j][i] - currMin[j]) / step[j] - 1;// - 1;
+            double tmp = currValue[j][i] - currMin[j];
+            int idx = abs(currValue[j][i] - currMin[j]) / step[j];// - 1;
             //raising frequency
 
             if (idx < 0) currFreq[j][0] += 1;
@@ -180,22 +210,34 @@ void Stats::drawCharts(const vector<vector<double>> &currRang, const vector<vect
 
     seriesFC->setName("Forward current 600mV");
     seriesDC10mV->setName("Dark current 10mV");
-    seriesDC10mV->setName("Dark current 1V");
+    seriesDC1V->setName("Dark current 1V");
     seriesLC->setName("Light current 10mV");
 
-    QChart *chartDC = new QChart();
-    chartDC->legend()->hide();
-    chartDC->addSeries(seriesDC10mV);
-    chartDC->addSeries(seriesDC1V);
-    chartDC->createDefaultAxes();
+    QChart *chartDC10mV = new QChart();
+    chartDC10mV->legend()->hide();
+    chartDC10mV->addSeries(seriesDC10mV);
+    chartDC10mV->createDefaultAxes();
+
+    QChart *chartDC1V = new QChart();
+    chartDC1V->legend()->hide();
+    chartDC1V->addSeries(seriesDC1V);
+    chartDC1V->createDefaultAxes();
 
     QValueAxis *axisY = new QValueAxis;
     //axisX->setRange(10, 20.5);
     axisY->setTickCount(10);
     axisY->setLabelFormat("%.0f");
     //chartView->chart()->setAxisX(axisX, series);
-    chartDC->setAxisY(axisY, seriesDC10mV);
-    chartDC->setTitle("Dark Currents");
+    chartDC10mV->setAxisY(axisY, seriesDC10mV);
+    chartDC10mV->setTitle("Dark Current 10mV");
+
+    QValueAxis *axisY1 = new QValueAxis;
+    //axisX->setRange(10, 20.5);
+    axisY1->setTickCount(10);
+    axisY1->setLabelFormat("%.0f");
+    //chartView->chart()->setAxisX(axisX, series);
+    chartDC1V->setAxisY(axisY1, seriesDC1V);
+    chartDC1V->setTitle("Dark Current 1V");
 
     QChart *chartFC = new QChart();
     chartFC->legend()->hide();
@@ -279,27 +321,31 @@ void Stats::drawCharts(const vector<vector<double>> &currRang, const vector<vect
     */
 
 
-    QChartView *chartViewDC = new QChartView(chartDC);
+    QChartView *chartViewDC10mV = new QChartView(chartDC10mV);
+    QChartView *chartViewDC1V = new QChartView(chartDC1V);
     QChartView *chartViewFC = new QChartView(chartFC);
     QChartView *chartViewLC = new QChartView(chartLC);
 
     chartViewFC->setRenderHint(QPainter::Antialiasing);
     chartViewLC->setRenderHint(QPainter::Antialiasing);
-    chartViewDC->setRenderHint(QPainter::Antialiasing);
-
+    chartViewDC10mV->setRenderHint(QPainter::Antialiasing);
+    chartViewDC1V->setRenderHint(QPainter::Antialiasing);
 
     QFrame* centralFrame = new QFrame();
 
-    QHBoxLayout* myLayoutHorizontal = new QHBoxLayout;
+    QHBoxLayout* myLayoutHorizontal1 = new QHBoxLayout;
+    QHBoxLayout* myLayoutHorizontal2 = new QHBoxLayout;
     QVBoxLayout* myLayoutVertical = new QVBoxLayout;
-    myLayoutHorizontal->addWidget(chartViewFC);
-    myLayoutHorizontal->addWidget(chartViewLC);
-    myLayoutVertical->addWidget(chartViewDC);
-    myLayoutVertical->addLayout(myLayoutHorizontal);
+
+    myLayoutHorizontal1->addWidget(chartViewFC);
+    myLayoutHorizontal1->addWidget(chartViewLC);
+    myLayoutVertical->addLayout(myLayoutHorizontal1);
+
+    myLayoutHorizontal2->addWidget(chartViewDC10mV);
+    myLayoutHorizontal2->addWidget(chartViewDC1V);
+    myLayoutVertical->addLayout(myLayoutHorizontal2);
 
     centralFrame->setLayout(myLayoutVertical);
-
-
     this->setCentralWidget(centralFrame);
     this->resize(1280, 950);
     this->show();
