@@ -57,6 +57,7 @@ private:
     int gapIndex = 0;
     int lastIndex = 0;
     int numX, numY;
+    int errorCount = 0;
 
     int zeroDelay = 400;
     int FCdelay = 300;

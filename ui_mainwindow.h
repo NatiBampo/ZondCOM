@@ -1203,7 +1203,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        label_40->setText(QCoreApplication::translate("MainWindow", "v2109_2", nullptr));
+        label_40->setText(QCoreApplication::translate("MainWindow", "v2609_1", nullptr));
         label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
         label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
         label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));

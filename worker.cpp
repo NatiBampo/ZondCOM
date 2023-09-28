@@ -106,8 +106,22 @@ void Worker::endLinePlanar()
     lastAnswer = "";
     planarResponce = "";
     if (serialPortA5->waitForReadyRead(400)) lastAnswer.append(serialPortA5->readAll());
+    if (lastAnswer==planarResponce)
+    {
+        errorCount++;
+        emit sendLogSignal(lastAnswer + "<-ответ на /r/n||прошлый->" + planarResponce);
+    }
+    else
+    {
+        errorCount = 0;
+    }
+    if (errorCount > 5)
+    {
+        stopWalk();
+
+        emit sendMessageBox("warning", "Планар не отвечает");
+    }
     planarResponce.append(lastAnswer);
-    emit sendLogSignal('<' + "endLine\\r\\n");
 }
 
 
@@ -701,7 +715,7 @@ void Worker::openCsvFile(QString dir)
     QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_copy_" + ".csv";
 
     QFile::copy(dir,  dir_dump);// "C:/qt/log/copyOrbita/" + fileInfo.fileName());
-    emit sendMessageBox("info", "Загружен " + fileInfo.fileName());
+    emit sendMessageBox("info", "Загружен " + fileInfo.baseName());
     QString line;
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
