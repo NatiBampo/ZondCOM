@@ -148,5 +148,6 @@ public slots:
 private slots:
     void on_planarCMDButton_clicked();
     void on_resetPortsPushButton_clicked();
+    void on_stop2pushButton_clicked();
 };
 #endif // MAINWINDOW_H

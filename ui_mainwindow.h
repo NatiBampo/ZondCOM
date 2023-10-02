@@ -102,6 +102,7 @@ public:
     QPushButton *continueFromButton;
     QPushButton *measure2pushButton;
     QPushButton *FCMeasureButton;
+    QPushButton *stop2pushButton;
     QGroupBox *moveGroupBox;
     QGridLayout *gridLayout_4;
     QPushButton *tableDownPushButton;
@@ -188,14 +189,14 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1280, 867);
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        MainWindow->resize(1280, 924);
+        QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
         MainWindow->setSizePolicy(sizePolicy);
-        MainWindow->setMinimumSize(QSize(1280, 800));
-        MainWindow->setMaximumSize(QSize(4000, 2000));
+        MainWindow->setMinimumSize(QSize(1280, 924));
+        MainWindow->setMaximumSize(QSize(1980, 1080));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         gridLayout_5 = new QGridLayout(centralwidget);
@@ -210,11 +211,8 @@ public:
 
         tableView = new QTableView(centralwidget);
         tableView->setObjectName("tableView");
-        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(tableView->sizePolicy().hasHeightForWidth());
-        tableView->setSizePolicy(sizePolicy1);
+        sizePolicy.setHeightForWidth(tableView->sizePolicy().hasHeightForWidth());
+        tableView->setSizePolicy(sizePolicy);
         tableView->setMinimumSize(QSize(400, 200));
         tableView->setBaseSize(QSize(400, 200));
         tableView->setDragDropOverwriteMode(false);
@@ -285,25 +283,25 @@ public:
 
         portComboBox = new QComboBox(centralwidget);
         portComboBox->setObjectName("portComboBox");
-        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
-        portComboBox->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
+        portComboBox->setSizePolicy(sizePolicy1);
 
         horizontalLayout->addWidget(portComboBox);
 
         keithlyPortComboBox = new QComboBox(centralwidget);
         keithlyPortComboBox->setObjectName("keithlyPortComboBox");
-        sizePolicy2.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
-        keithlyPortComboBox->setSizePolicy(sizePolicy2);
+        sizePolicy1.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
+        keithlyPortComboBox->setSizePolicy(sizePolicy1);
 
         horizontalLayout->addWidget(keithlyPortComboBox);
 
         lightPortComboBox = new QComboBox(centralwidget);
         lightPortComboBox->setObjectName("lightPortComboBox");
-        sizePolicy2.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
-        lightPortComboBox->setSizePolicy(sizePolicy2);
+        sizePolicy1.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
+        lightPortComboBox->setSizePolicy(sizePolicy1);
 
         horizontalLayout->addWidget(lightPortComboBox);
 
@@ -355,19 +353,19 @@ public:
 
         newDirPushButton = new QPushButton(centralwidget);
         newDirPushButton->setObjectName("newDirPushButton");
-        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(newDirPushButton->sizePolicy().hasHeightForWidth());
-        newDirPushButton->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(newDirPushButton->sizePolicy().hasHeightForWidth());
+        newDirPushButton->setSizePolicy(sizePolicy2);
         newDirPushButton->setMinimumSize(QSize(60, 0));
 
         horizontalLayout_3->addWidget(newDirPushButton);
 
         loadFilePushButton = new QPushButton(centralwidget);
         loadFilePushButton->setObjectName("loadFilePushButton");
-        sizePolicy3.setHeightForWidth(loadFilePushButton->sizePolicy().hasHeightForWidth());
-        loadFilePushButton->setSizePolicy(sizePolicy3);
+        sizePolicy2.setHeightForWidth(loadFilePushButton->sizePolicy().hasHeightForWidth());
+        loadFilePushButton->setSizePolicy(sizePolicy2);
         loadFilePushButton->setMinimumSize(QSize(60, 0));
 
         horizontalLayout_3->addWidget(loadFilePushButton);
@@ -385,18 +383,21 @@ public:
 
         logsListWidget = new QListWidget(centralwidget);
         logsListWidget->setObjectName("logsListWidget");
-        QSizePolicy sizePolicy4(QSizePolicy::Expanding, QSizePolicy::Minimum);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(logsListWidget->sizePolicy().hasHeightForWidth());
-        logsListWidget->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(logsListWidget->sizePolicy().hasHeightForWidth());
+        logsListWidget->setSizePolicy(sizePolicy3);
 
         formLayout->setWidget(3, QFormLayout::FieldRole, logsListWidget);
 
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName("tabWidget");
-        sizePolicy.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
-        tabWidget->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy4(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
+        tabWidget->setSizePolicy(sizePolicy4);
         tabWidget->setMinimumSize(QSize(0, 450));
         tabWidget->setMaximumSize(QSize(600, 580));
         tab = new QWidget();
@@ -509,47 +510,47 @@ public:
         goToGroupBox = new QGroupBox(tab);
         goToGroupBox->setObjectName("goToGroupBox");
         goToGroupBox->setEnabled(false);
-        sizePolicy.setHeightForWidth(goToGroupBox->sizePolicy().hasHeightForWidth());
-        goToGroupBox->setSizePolicy(sizePolicy);
+        sizePolicy4.setHeightForWidth(goToGroupBox->sizePolicy().hasHeightForWidth());
+        goToGroupBox->setSizePolicy(sizePolicy4);
         goToGroupBox->setMinimumSize(QSize(280, 200));
         goToGroupBox->setMaximumSize(QSize(700, 250));
         label_17 = new QLabel(goToGroupBox);
         label_17->setObjectName("label_17");
         label_17->setGeometry(QRect(0, 20, 71, 60));
-        sizePolicy.setHeightForWidth(label_17->sizePolicy().hasHeightForWidth());
-        label_17->setSizePolicy(sizePolicy);
+        sizePolicy4.setHeightForWidth(label_17->sizePolicy().hasHeightForWidth());
+        label_17->setSizePolicy(sizePolicy4);
         label_17->setMinimumSize(QSize(40, 60));
         label_17->setLayoutDirection(Qt::LeftToRight);
         label_17->setMargin(6);
         label_18 = new QLabel(goToGroupBox);
         label_18->setObjectName("label_18");
         label_18->setGeometry(QRect(0, 70, 81, 41));
-        sizePolicy.setHeightForWidth(label_18->sizePolicy().hasHeightForWidth());
-        label_18->setSizePolicy(sizePolicy);
+        sizePolicy4.setHeightForWidth(label_18->sizePolicy().hasHeightForWidth());
+        label_18->setSizePolicy(sizePolicy4);
         label_18->setMinimumSize(QSize(40, 0));
         label_18->setLayoutDirection(Qt::LeftToRight);
         label_18->setMargin(6);
         label_19 = new QLabel(goToGroupBox);
         label_19->setObjectName("label_19");
         label_19->setGeometry(QRect(230, -150, 177, 156));
-        sizePolicy.setHeightForWidth(label_19->sizePolicy().hasHeightForWidth());
-        label_19->setSizePolicy(sizePolicy);
+        sizePolicy4.setHeightForWidth(label_19->sizePolicy().hasHeightForWidth());
+        label_19->setSizePolicy(sizePolicy4);
         label_19->setMinimumSize(QSize(40, 0));
         label_19->setLayoutDirection(Qt::LeftToRight);
         label_19->setMargin(6);
         columnSpinBox = new QSpinBox(goToGroupBox);
         columnSpinBox->setObjectName("columnSpinBox");
         columnSpinBox->setGeometry(QRect(70, 40, 51, 22));
-        sizePolicy.setHeightForWidth(columnSpinBox->sizePolicy().hasHeightForWidth());
-        columnSpinBox->setSizePolicy(sizePolicy);
+        sizePolicy4.setHeightForWidth(columnSpinBox->sizePolicy().hasHeightForWidth());
+        columnSpinBox->setSizePolicy(sizePolicy4);
         columnSpinBox->setMinimumSize(QSize(20, 20));
         columnSpinBox->setMinimum(1);
         columnSpinBox->setMaximum(3);
         rowSpinBox = new QSpinBox(goToGroupBox);
         rowSpinBox->setObjectName("rowSpinBox");
         rowSpinBox->setGeometry(QRect(70, 80, 51, 22));
-        sizePolicy.setHeightForWidth(rowSpinBox->sizePolicy().hasHeightForWidth());
-        rowSpinBox->setSizePolicy(sizePolicy);
+        sizePolicy4.setHeightForWidth(rowSpinBox->sizePolicy().hasHeightForWidth());
+        rowSpinBox->setSizePolicy(sizePolicy4);
         rowSpinBox->setMinimumSize(QSize(20, 20));
         rowSpinBox->setMinimum(1);
         rowSpinBox->setMaximum(30);
@@ -582,14 +583,17 @@ public:
         FCMeasureButton = new QPushButton(goToGroupBox);
         FCMeasureButton->setObjectName("FCMeasureButton");
         FCMeasureButton->setGeometry(QRect(130, 160, 141, 24));
+        stop2pushButton = new QPushButton(goToGroupBox);
+        stop2pushButton->setObjectName("stop2pushButton");
+        stop2pushButton->setGeometry(QRect(20, 160, 93, 29));
 
         gridLayout_3->addWidget(goToGroupBox, 5, 1, 1, 1);
 
         moveGroupBox = new QGroupBox(tab);
         moveGroupBox->setObjectName("moveGroupBox");
         moveGroupBox->setEnabled(false);
-        sizePolicy.setHeightForWidth(moveGroupBox->sizePolicy().hasHeightForWidth());
-        moveGroupBox->setSizePolicy(sizePolicy);
+        sizePolicy4.setHeightForWidth(moveGroupBox->sizePolicy().hasHeightForWidth());
+        moveGroupBox->setSizePolicy(sizePolicy4);
         moveGroupBox->setMinimumSize(QSize(250, 150));
         moveGroupBox->setMaximumSize(QSize(16777215, 236));
         gridLayout_4 = new QGridLayout(moveGroupBox);
@@ -935,8 +939,8 @@ public:
 
         label_29 = new QLabel(tab_2);
         label_29->setObjectName("label_29");
-        sizePolicy.setHeightForWidth(label_29->sizePolicy().hasHeightForWidth());
-        label_29->setSizePolicy(sizePolicy);
+        sizePolicy4.setHeightForWidth(label_29->sizePolicy().hasHeightForWidth());
+        label_29->setSizePolicy(sizePolicy4);
 
         gridLayout_6->addWidget(label_29, 0, 0, 1, 1);
 
@@ -1191,7 +1195,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
         orientationButton->setDefault(false);
         measureBButton->setDefault(false);
 
@@ -1203,7 +1207,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        label_40->setText(QCoreApplication::translate("MainWindow", "v2609_1", nullptr));
+        label_40->setText(QCoreApplication::translate("MainWindow", "v2809_1", nullptr));
         label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
         label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
         label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
@@ -1237,6 +1241,7 @@ public:
         continueFromButton->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214 \320\276\320\261\321\205\320\276\320\264 \321\201 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\320\260", nullptr));
         measure2pushButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\265\320\275\320\270\320\265", nullptr));
         FCMeasureButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\270\321\202\321\214 FC", nullptr));
+        stop2pushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\277", nullptr));
         moveGroupBox->setTitle(QCoreApplication::translate("MainWindow", "\320\243\320\277\321\200\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \321\201\321\202\320\276\320\273\320\276\320\274", nullptr));
         tableDownPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\320\277\321\203\321\201\321\202\320\270\321\202\321\214", nullptr));
         tableUpPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\320\264\320\275\321\217\321\202\321\214", nullptr));

@@ -390,10 +390,10 @@ void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V,
     QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
     QModelIndex i = ui->tableView->model()->index(number, 0);
     ui->tableView->selectionModel()->select(i, flags);
-    //ui->tableView->selectRow(number);
-
+    ui->tableView->scrollTo(i);//ui->tableView->model()->index(number,2)
     //ui->tableView->showEvent();
 
+    //add actual data to spinners
     ui->columnSpinBox->setValue(column);
     ui->rowSpinBox->setValue(row);
     ui->elemSpinBox->setValue(element);
@@ -897,3 +897,15 @@ void MainWindow::setEndOfWalkTime(QString endTime)
 {
     ui->endTimeLabel->setText(endTime);
 }
+
+void MainWindow::on_stop2pushButton_clicked()
+{
+    mutex.lock();
+    worker->stopWalk();
+    mutex.unlock();
+
+    busy = false;
+    checkBusy();
+    writeCSV();
+}
+
