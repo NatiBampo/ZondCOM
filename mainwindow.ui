@@ -135,7 +135,7 @@
              </font>
             </property>
             <property name="text">
-             <string>v2809_1</string>
+             <string>v0210_1</string>
             </property>
            </widget>
           </item>
@@ -171,22 +171,6 @@
              <string>Диод</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Maximum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>150</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </item>
@@ -334,7 +318,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="newDirPushButton">
+           <widget class="QPushButton" name="savePushButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -413,7 +397,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -1082,8 +1066,8 @@
           <string>Авто</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="2" column="5">
-           <widget class="QLabel" name="label_8">
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_5">
             <property name="minimumSize">
              <size>
               <width>20</width>
@@ -1101,7 +1085,64 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="9">
+          <item row="0" column="7">
+           <widget class="QSpinBox" name="AYspinBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>500000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="label_39">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0" colspan="2">
+           <widget class="QLabel" name="endTimeNameLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Время окончания:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="7">
            <widget class="QSpinBox" name="BYspinBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -1123,111 +1164,56 @@
             </property>
            </widget>
           </item>
-          <item row="11" column="6">
-           <widget class="QPushButton" name="scanPushButton">
+          <item row="7" column="2">
+           <widget class="QLabel" name="endTimeLabel">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QSpinBox" name="AXspinBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximum">
+             <number>500000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_29">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string> Координаты т.А</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="toAPushButton">
             <property name="enabled">
              <bool>false</bool>
             </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
             <property name="text">
-             <string>Начать</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
+             <string>В т.А</string>
             </property>
            </widget>
           </item>
-          <item row="6" column="9">
-           <widget class="QSpinBox" name="upRightSpinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>29</number>
-            </property>
-            <property name="singleStep">
-             <number>0</number>
-            </property>
-            <property name="value">
-             <number>4</number>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="8">
-           <widget class="QLabel" name="label_23">
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="4">
-           <widget class="QSpinBox" name="upLeftSpinBox">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>29</number>
-            </property>
-            <property name="value">
-             <number>4</number>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="6">
-           <widget class="QSpinBox" name="centerUpOffSpinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>29</number>
-            </property>
-           </widget>
-          </item>
-          <item row="9" column="6">
+          <item row="4" column="4">
            <widget class="QPushButton" name="orientationButton">
             <property name="enabled">
              <bool>true</bool>
@@ -1255,71 +1241,7 @@
             </property>
            </widget>
           </item>
-          <item row="8" column="4">
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Minimum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>10</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="6">
-           <widget class="QDoubleSpinBox" name="stepXspinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="decimals">
-             <number>3</number>
-            </property>
-            <property name="value">
-             <double>1.550000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="9">
-           <widget class="QDoubleSpinBox" name="stepRowSpinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="value">
-             <double>0.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="8">
-           <widget class="QLabel" name="label_28">
-            <property name="text">
-             <string>R:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="5">
+          <item row="0" column="3">
            <widget class="QLabel" name="label_30">
             <property name="minimumSize">
              <size>
@@ -1332,16 +1254,50 @@
             </property>
            </widget>
           </item>
-          <item row="11" column="0" colspan="5">
-           <widget class="QProgressBar" name="progressBar">
+          <item row="6" column="4">
+           <widget class="QPushButton" name="scanPushButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
-              <width>200</width>
-              <height>30</height>
+              <width>100</width>
+              <height>0</height>
              </size>
             </property>
-            <property name="value">
-             <number>24</number>
+            <property name="text">
+             <string>Начать</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="4">
+           <widget class="QPushButton" name="chartsButton">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Гистограммы</string>
             </property>
            </widget>
           </item>
@@ -1364,202 +1320,8 @@
             </property>
            </widget>
           </item>
-          <item row="7" column="4">
-           <widget class="QSpinBox" name="downLeftSpinBox">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>29</number>
-            </property>
-            <property name="value">
-             <number>4</number>
-            </property>
-           </widget>
-          </item>
-          <item row="10" column="4">
-           <spacer name="verticalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Minimum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>10</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="3" column="0" colspan="3">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Количество шагов</string>
-            </property>
-           </widget>
-          </item>
-          <item row="15" column="0" colspan="10">
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>270</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item row="4" column="0" colspan="3">
-           <widget class="QLabel" name="label_21">
-            <property name="text">
-             <string>Шаг мультипликации</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="8">
-           <widget class="QLabel" name="label_39">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="5">
-           <widget class="QLabel" name="label_22">
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>10</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>X:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="6">
-           <widget class="QSpinBox" name="numXspinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="value">
-             <number>15</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="5">
-           <widget class="QLabel" name="label_5">
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>10</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>X:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="9">
-           <widget class="QSpinBox" name="numYspinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="value">
-             <number>30</number>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Отступ сверху</string>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="9">
-           <widget class="QPushButton" name="stopPushButton">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Стоп</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="6">
-           <widget class="QCheckBox" name="centerCheckBox">
-            <property name="text">
-             <string>Центральный</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="8">
-           <widget class="QLabel" name="label_15">
+          <item row="1" column="6">
+           <widget class="QLabel" name="label_12">
             <property name="minimumSize">
              <size>
               <width>20</width>
@@ -1577,20 +1339,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_29">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string> Координаты т.А</string>
-            </property>
-           </widget>
-          </item>
-          <item row="11" column="9">
+          <item row="6" column="7">
            <widget class="QPushButton" name="pauseButton">
             <property name="enabled">
              <bool>false</bool>
@@ -1618,239 +1367,50 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="4">
-           <widget class="QPushButton" name="toAPushButton">
+          <item row="7" column="7">
+           <widget class="QPushButton" name="stopPushButton">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>В т.А</string>
+             <string>Стоп</string>
             </property>
            </widget>
           </item>
-          <item row="7" column="6">
-           <widget class="QSpinBox" name="downCenterOffspinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+          <item row="6" column="0" colspan="3">
+           <widget class="QProgressBar" name="progressBar">
             <property name="minimumSize">
              <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>29</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="8">
-           <widget class="QLabel" name="label_14">
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Отступ снизу</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="3">
-           <widget class="QLabel" name="label_41">
-            <property name="text">
-             <string>L:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="4">
-           <widget class="QCheckBox" name="leftCheckBox">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="text">
-             <string>Левый</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <property name="tristate">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="6">
-           <widget class="QDoubleSpinBox" name="stepColSpinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
+              <width>200</width>
+              <height>30</height>
              </size>
             </property>
             <property name="value">
-             <double>26.059999999999999</double>
+             <number>24</number>
             </property>
            </widget>
           </item>
-          <item row="0" column="6">
-           <widget class="QSpinBox" name="AXspinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>500000</number>
-            </property>
-           </widget>
+          <item row="10" column="0" colspan="8">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>270</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
-          <item row="7" column="9">
-           <widget class="QSpinBox" name="downRightSpinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>29</number>
-            </property>
-            <property name="value">
-             <number>4</number>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="5">
-           <widget class="QLabel" name="label_42">
-            <property name="text">
-             <string>C:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="9">
-           <widget class="QCheckBox" name="rightCheckBox">
-            <property name="text">
-             <string>Правый</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="12" column="6">
-           <widget class="QPushButton" name="chartsButton">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Гистограммы</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="5">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>C:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="5">
-           <widget class="QLabel" name="label_9">
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>10</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>X:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="8">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>R:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="9">
-           <widget class="QDoubleSpinBox" name="stepYspinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="decimals">
-             <number>3</number>
-            </property>
-            <property name="value">
-             <double>2.805000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="6">
+          <item row="1" column="4">
            <widget class="QSpinBox" name="BXspinBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1872,59 +1432,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Шаг</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="9">
-           <widget class="QSpinBox" name="AYspinBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <number>500000</number>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="3">
-           <widget class="QLabel" name="label_27">
-            <property name="text">
-             <string>L:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="8">
-           <widget class="QLabel" name="label_12">
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
+          <item row="1" column="2">
            <widget class="QPushButton" name="toBPushButton">
             <property name="enabled">
              <bool>false</bool>
@@ -1934,87 +1442,739 @@
             </property>
            </widget>
           </item>
-          <item row="12" column="0" colspan="3">
-           <widget class="QLabel" name="endTimeNameLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="5" column="2">
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-            <property name="minimumSize">
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
              <size>
-              <width>50</width>
-              <height>0</height>
+              <width>20</width>
+              <height>10</height>
              </size>
             </property>
-            <property name="text">
-             <string>Время окончания:</string>
-            </property>
-           </widget>
+           </spacer>
           </item>
-          <item row="12" column="4">
-           <widget class="QLabel" name="endTimeLabel">
-            <property name="text">
-             <string/>
+          <item row="3" column="2">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-           </widget>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
-         <zorder>label_10</zorder>
          <zorder>pauseButton</zorder>
-         <zorder>stepYspinBox</zorder>
          <zorder>BYspinBox</zorder>
-         <zorder>numYspinBox</zorder>
-         <zorder>label_11</zorder>
-         <zorder>label_21</zorder>
-         <zorder>stepRowSpinBox</zorder>
-         <zorder>label_23</zorder>
-         <zorder>label_15</zorder>
-         <zorder>label_14</zorder>
          <zorder>label_12</zorder>
          <zorder>progressBar</zorder>
-         <zorder>upRightSpinBox</zorder>
-         <zorder>label_7</zorder>
-         <zorder>downRightSpinBox</zorder>
-         <zorder>label_13</zorder>
-         <zorder>label_28</zorder>
          <zorder>label_29</zorder>
          <zorder>AYspinBox</zorder>
          <zorder>label_39</zorder>
-         <zorder>label_4</zorder>
          <zorder>measureBButton</zorder>
-         <zorder>centerUpOffSpinBox</zorder>
-         <zorder>stepColSpinBox</zorder>
-         <zorder>numXspinBox</zorder>
-         <zorder>stepXspinBox</zorder>
          <zorder>BXspinBox</zorder>
          <zorder>AXspinBox</zorder>
          <zorder>label_30</zorder>
          <zorder>label_5</zorder>
-         <zorder>label_8</zorder>
-         <zorder>label_9</zorder>
-         <zorder>label_22</zorder>
-         <zorder>label_6</zorder>
-         <zorder>downCenterOffspinBox</zorder>
-         <zorder>label_42</zorder>
          <zorder>orientationButton</zorder>
          <zorder>scanPushButton</zorder>
          <zorder>chartsButton</zorder>
-         <zorder>upLeftSpinBox</zorder>
-         <zorder>downLeftSpinBox</zorder>
-         <zorder>label_27</zorder>
-         <zorder>label_41</zorder>
          <zorder>verticalSpacer_3</zorder>
          <zorder>verticalSpacer_4</zorder>
-         <zorder>leftCheckBox</zorder>
-         <zorder>centerCheckBox</zorder>
-         <zorder>rightCheckBox</zorder>
          <zorder>stopPushButton</zorder>
          <zorder>toAPushButton</zorder>
          <zorder>toBPushButton</zorder>
          <zorder>endTimeNameLabel</zorder>
          <zorder>endTimeLabel</zorder>
+         <zorder></zorder>
+        </widget>
+        <widget class="QWidget" name="tab_3">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <attribute name="title">
+          <string>Настройки пластины</string>
+         </attribute>
+         <widget class="QLabel" name="label_10">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>20</y>
+            <width>31</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Шаг</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_8">
+          <property name="geometry">
+           <rect>
+            <x>240</x>
+            <y>20</y>
+            <width>20</width>
+            <height>21</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>X:</string>
+          </property>
+         </widget>
+         <widget class="QDoubleSpinBox" name="stepXspinBox">
+          <property name="geometry">
+           <rect>
+            <x>270</x>
+            <y>20</y>
+            <width>120</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="value">
+           <double>1.550000000000000</double>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_14">
+          <property name="geometry">
+           <rect>
+            <x>410</x>
+            <y>20</y>
+            <width>20</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Y:</string>
+          </property>
+         </widget>
+         <widget class="QDoubleSpinBox" name="stepYspinBox">
+          <property name="geometry">
+           <rect>
+            <x>450</x>
+            <y>20</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="value">
+           <double>2.805000000000000</double>
+          </property>
+         </widget>
+         <widget class="QLabel" name="stepCountLabel">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>50</y>
+            <width>149</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Количество шагов</string>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="numXspinBox">
+          <property name="geometry">
+           <rect>
+            <x>270</x>
+            <y>50</y>
+            <width>120</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>15</number>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="numYspinBox">
+          <property name="geometry">
+           <rect>
+            <x>450</x>
+            <y>50</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>30</number>
+          </property>
+         </widget>
+         <widget class="QLabel" name="stepCountYLabel">
+          <property name="geometry">
+           <rect>
+            <x>410</x>
+            <y>50</y>
+            <width>20</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Y:</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="stepCountXLabel">
+          <property name="geometry">
+           <rect>
+            <x>240</x>
+            <y>50</y>
+            <width>20</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>X:</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="multStepLabel">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>90</y>
+            <width>149</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Шаг мультипликации</string>
+          </property>
+         </widget>
+         <widget class="QDoubleSpinBox" name="stepColSpinBox">
+          <property name="geometry">
+           <rect>
+            <x>270</x>
+            <y>90</y>
+            <width>120</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="value">
+           <double>26.059999999999999</double>
+          </property>
+         </widget>
+         <widget class="QLabel" name="multStepXLabel">
+          <property name="geometry">
+           <rect>
+            <x>240</x>
+            <y>90</y>
+            <width>20</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>X:</string>
+          </property>
+         </widget>
+         <widget class="QDoubleSpinBox" name="stepRowSpinBox">
+          <property name="geometry">
+           <rect>
+            <x>450</x>
+            <y>90</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="value">
+           <double>0.000000000000000</double>
+          </property>
+         </widget>
+         <widget class="QLabel" name="multStepYLabel">
+          <property name="geometry">
+           <rect>
+            <x>410</x>
+            <y>90</y>
+            <width>20</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Y:</string>
+          </property>
+         </widget>
+         <widget class="QCheckBox" name="leftCheckBox">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="geometry">
+           <rect>
+            <x>170</x>
+            <y>150</y>
+            <width>93</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Левый</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+         <widget class="QCheckBox" name="centerCheckBox">
+          <property name="geometry">
+           <rect>
+            <x>290</x>
+            <y>150</y>
+            <width>120</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Центральный</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QCheckBox" name="rightCheckBox">
+          <property name="geometry">
+           <rect>
+            <x>460</x>
+            <y>150</y>
+            <width>100</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Правый</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_4">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>190</y>
+            <width>118</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Отступ сверху</string>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="upLeftSpinBox">
+          <property name="geometry">
+           <rect>
+            <x>160</x>
+            <y>180</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>29</number>
+          </property>
+          <property name="value">
+           <number>4</number>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="centerUpOffSpinBox">
+          <property name="geometry">
+           <rect>
+            <x>300</x>
+            <y>180</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>29</number>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="upRightSpinBox">
+          <property name="geometry">
+           <rect>
+            <x>450</x>
+            <y>180</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>29</number>
+          </property>
+          <property name="singleStep">
+           <number>0</number>
+          </property>
+          <property name="value">
+           <number>4</number>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_13">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>220</y>
+            <width>118</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Отступ снизу</string>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="downLeftSpinBox">
+          <property name="geometry">
+           <rect>
+            <x>160</x>
+            <y>220</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>29</number>
+          </property>
+          <property name="value">
+           <number>4</number>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="downCenterOffspinBox">
+          <property name="geometry">
+           <rect>
+            <x>300</x>
+            <y>220</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>29</number>
+          </property>
+         </widget>
+         <widget class="QSpinBox" name="downRightSpinBox">
+          <property name="geometry">
+           <rect>
+            <x>450</x>
+            <y>220</y>
+            <width>100</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <number>29</number>
+          </property>
+          <property name="value">
+           <number>4</number>
+          </property>
+         </widget>
+         <widget class="QWidget" name="verticalLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>60</x>
+            <y>290</y>
+            <width>160</width>
+            <height>150</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QCheckBox" name="admCheckBox">
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>admin</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="planarCheckBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>planar</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="keithleyCheckBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>keithley</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="lightCheckBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>Light</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="badDieCheckBox">
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>Плохие токи</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="tab_4">
+         <attribute name="title">
+          <string>Схема</string>
+         </attribute>
         </widget>
        </widget>
       </item>

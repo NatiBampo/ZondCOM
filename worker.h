@@ -82,15 +82,12 @@ private:
     bool checkLightCOM();
     bool checkIndex(int);
 
-    void MeasureDie(QSerialPort *, QSerialPort *);
+    void MeasureDie(QSerialPort *, QSerialPort *, const bool &, const bool &, const bool &);
     void KeithlyZeroCorrection(QSerialPort *);
     void Keithly05VSet(QSerialPort *);
     double KeithlyGet(QSerialPort *);
     void Keithly10mVSet(QSerialPort *);
     void Keithly1VSet(QSerialPort *);
-    void LightOn();
-    void LightOff();
-
     void closePort(QSerialPort*);
     bool allPortsOpen();
     //void sendPackage(QSerialPort*, QByteArray, int);
@@ -102,7 +99,7 @@ signals:
     void sendProgressBarRangeSignal(int, int);
     void openPortResultSignal(QString, QString, bool);
     void sendAddTableSignal(int, double, double, double, double);
-    void autoWalkSignal(bool, QString);
+    //void autoWalkSignal(bool, QString);
     void sendBCoordsSignal(int, int);
     void getKeithleyData();
     void sendMessageBox(QString, QString);
@@ -113,25 +110,24 @@ signals:
     void sendEndOfWalkTime(QString);
 
 public slots:
-    void measureElement();
+    void measureElement(const bool &, const bool &, const bool &);
     void scanningPlate(double, double, double, double, double, double, double, double, double, bool, int, int, int, int, int, int, bool, bool);
-    void tableController(QByteArray);
-    void lightController(QByteArray);
+    void tableController(QByteArray, const bool &);
+    void lightController(QByteArray, const bool &);
     void openPorts(QString, QString, QString);
     void closePorts();
     void pauseWalk();
-    void goToElement(int);
-    void saveMeasure(int);
+    void goToElement(int, const bool &);
+    void saveMeasure(int, const bool &, const bool &, const bool &);
     void autoOpenPorts();
-    bool getCurrentCoords(int);
+    bool getCurrentCoords(int,  const bool &);
 
-    void autoWalk(bool, QString, int);
+    void autoWalk(bool , QString , int , const bool &, const bool &, const bool &, const bool &);
     void setDelay(QList<int> *);
     void sendPackage(QSerialPort*, QByteArray, int);
     void sendPackageRead(QSerialPort*, QByteArray, int);
-    void measureFC();
+    void measureFC(const bool &, const bool &);
     void openCsvFile(QString dir);
-    void copyUpSlot(int, QString);
 };
 
 #endif // WORKER_H

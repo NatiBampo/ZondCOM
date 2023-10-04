@@ -8,6 +8,8 @@
 #include <QDebug>
 #include "LoggingCategories.h"
 #include <QFile>
+#include <QRect>
+#include <QPainter>
 
 //using namespace QtCharts;
 
@@ -44,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->measure2pushButton, &QPushButton::clicked, this, &MainWindow::measure2pushButton_clicked);
     connect(ui->FCMeasureButton, &QPushButton::clicked, this, &MainWindow::on_FCMeasureButton_clicked);
 
-    //connect(ui->newDirPushButton, &QPushButton::clicked, this, &MainWindow::on_newDirPushButton_clicked);
+    connect(ui->savePushButton, &QPushButton::clicked, this, &MainWindow::savePushButton_clicked);
     //connect(ui->loadFilePushButton, &QPushButton::clicked, this, &MainWindow::on_loadFilePushButton_clicked);
     connect(ui->stopPushButton, &QPushButton::clicked, this, &MainWindow::stopPushButton_clicked);
 
@@ -231,11 +233,10 @@ void MainWindow::openPortResult(QString port, QString portName, bool result)
 {
     if (!result)
     {
-        QMessageBox::warning(this, "Ошибка", "Не удалось подключиться к порту " + port);
+        QMessageBox::information(this, "Сообщение", "Не удалось подключиться\n к порту" +port);
     }
     else
     {
-        //QMessageBox::information(this, "Сообщение", "Выбранный порт: " + port + " для " + portName);
         if (!portName.compare("Planar"))
         {
             ui->portComboBox->setCurrentText(port);
@@ -296,7 +297,7 @@ bool MainWindow::readyCheck()
 void MainWindow::statePushButton_on()
 {
     //emit sendPackageSignal(serialPortA5, "State\r\n", 1000);
-    emit getCurrentCoordsSignal(-1);
+    emit getCurrentCoordsSignal(-1, ui->planarCheckBox->isChecked());
 }
 
 
@@ -304,50 +305,54 @@ void MainWindow::coordsPushButton_on()
 {
     QByteArray x = ui->xLineEdit->text().toUtf8();
     QByteArray y = ui->yLineEdit->text().toUtf8();
-    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n');
+    planarSender("Set " + x + " " + y + '\r' + '\n');
 }
 
 
 void MainWindow::tableUpPushButton_on()
 {
-    emit tableControllerSignal("Table UP\r\n");
+    planarSender("Table UP\r\n");
 }
 
 
 void MainWindow::tableDownPushButton_on()
 {
-    emit tableControllerSignal("Table DN\r\n");
+    planarSender("Table DN\r\n");
 }
 
 
 void MainWindow::forwardPushButton_on()
 {
-    emit tableControllerSignal(("Move 0 -" + QString::number(ui->stepSpinBox->value()) + "\r\n").toUtf8());//0 100
+    planarSender(("Move 0 -" + QString::number(ui->stepSpinBox->value()) + "\r\n").toUtf8());//0 100
 }
 
 
 void MainWindow::backwardPushButton_on()
 {
-    emit tableControllerSignal(("Move 0 " + QString::number(ui->stepSpinBox->value()) + "\r\n").toUtf8());//0 -100
+    planarSender(("Move 0 " + QString::number(ui->stepSpinBox->value()) + "\r\n").toUtf8());//0 -100
 }
 
 
 void MainWindow::leftPushButton_on()
 {
-    emit tableControllerSignal(("Move -" +  QString::number(ui->stepSpinBox->value()) + " 0\r\n").toUtf8());//-100 0
+    planarSender(("Move -" +  QString::number(ui->stepSpinBox->value()) + " 0\r\n").toUtf8());//-100 0
 }
 
 
 void MainWindow::rightPushButton_on()
 {
-    emit tableControllerSignal(("Move " + QString::number(ui->stepSpinBox->value()) + " 0\r\n").toUtf8());//100 0
+    planarSender(("Move " + QString::number(ui->stepSpinBox->value()) + " 0\r\n").toUtf8());//100 0
 }
 
+void MainWindow::planarSender(QString msg)
+{
+    emit tableControllerSignal(msg.toUtf8(), ui->planarCheckBox->isChecked());
+}
 
 void MainWindow::measurePushButton_on()
 {
     updateDelays();
-    emit measureSignal();
+    emit measureSignal(ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked());
 }
 
 
@@ -355,11 +360,11 @@ void MainWindow::lightPushButton_on()
 {
     if (ui->lightPushButton->text() == "Диод Вкл")
     {
-        emit lightControllerSignal("1111\n");
+        emit lightControllerSignal("1111\n", ui->lightCheckBox->isChecked());
         ui->lightPushButton->setText("Диод Выкл");
     } else
     {
-        emit lightControllerSignal("0001\n");
+        emit lightControllerSignal("0001\n",  ui->lightCheckBox->isChecked());
         ui->lightPushButton->setText("Диод Вкл");
     }
 }
@@ -465,7 +470,7 @@ int MainWindow::getUIIndex()
 
 void MainWindow::goToButton_clicked()
 {
-    emit goToElementSignal(getUIIndex());
+    emit goToElementSignal(getUIIndex(), ui->planarCheckBox->isChecked());
 
 }
 
@@ -475,7 +480,7 @@ void MainWindow::saveMeasureButton_clicked()
     if (!busy)
     {
         updateDelays();
-        emit saveMeasureSignal(getUIIndex());
+        emit saveMeasureSignal(getUIIndex(), ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked());
     }
 }
 
@@ -507,7 +512,7 @@ void MainWindow::continueFromButton_clicked(bool checked)
 
         ui->scanPushButton->setEnabled(false);
 
-        emit autoWalkSignal(getUIIndex() <= gapIndex, dir_name, getUIIndex());
+        emit autoWalkSignal(getUIIndex() <= gapIndex, dir_name, getUIIndex(), ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked(),  ui->badDieCheckBox->isChecked());
 
         busy = true;
         checkBusy();
@@ -529,7 +534,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
         ui->pauseButton->setEnabled(true);
         ui->addressLabel->setText(dir_name);
         updateDelays();
-        emit autoWalkSignal(true, dir_name, 0);
+        emit autoWalkSignal(true, dir_name, 0,ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked(), ui->badDieCheckBox->isChecked());
 
         busy = true;
         checkBusy();
@@ -612,7 +617,7 @@ void MainWindow::autoPortButton_clicked()
 
 void MainWindow::measureBButton_clicked()
 {
-    emit getCurrentCoordsSignal(-2);
+    emit getCurrentCoordsSignal(-2, ui->planarCheckBox->isChecked());
 }
 
 
@@ -711,14 +716,14 @@ void MainWindow::syncSettings()
 void MainWindow::measure2pushButton_clicked()
 {
     updateDelays();
-    emit measureSignal();
+    emit measureSignal(ui->planarCheckBox->isChecked(), ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked());
 }
 
 
 void MainWindow::on_FCMeasureButton_clicked()
 {
     updateDelays();
-    emit measureFCSignal();
+    emit measureFCSignal(ui->planarCheckBox->isChecked(), ui->keithleyCheckBox->isChecked());
 }
 
 
@@ -743,27 +748,15 @@ void MainWindow::on_hotKeysCheckBox_stateChanged(int arg1)
     }
 }
 
-//save tableview button
-void MainWindow::on_newDirPushButton_clicked()
+void MainWindow::savePushButton_clicked()
 {
-    /*
-    QFileDialog directory;
-    QString dir = directory.getSaveFileName(this,"Choose directory and name");
-    if (dir != "")
-    {
-        dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
-        ui->addressLabel->setText(dir_name);
-        updateDelays();
-    }*/
-
     if(!busy) writeCSV();
-
 }
 
 
 void MainWindow::on_loadFilePushButton_clicked()
 {
-    if (busy)//ui->scanPushButton->isChecked() || ui->continueFromButton->isChecked()
+    if (busy)
     {
         showMessageBox("warning", "Нельзя открыть файл во время обхода");
         return;
@@ -773,7 +766,6 @@ void MainWindow::on_loadFilePushButton_clicked()
         QFileDialog directory;
         QString dir = directory.getOpenFileName(this,"Choose directory and name");
 
-        //dir_name = directory.getSaveFileName(this,"Choose directory and name");
         if (dir != "")
         {
             dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
@@ -784,8 +776,6 @@ void MainWindow::on_loadFilePushButton_clicked()
             initializeModel();
 
             emit openCsvFileSignal(dir_name);
-            //showMessageBox("warning", "Проверьте ориентацию пластины");
-            //orientation = false;
             readyCheck();
         }
     }
@@ -807,7 +797,7 @@ void MainWindow::on_toAPushButton_clicked()
 {
     QByteArray x = ui->AXspinBox->text().toUtf8();
     QByteArray y = ui->AYspinBox->text().toUtf8();
-    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n');
+    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n', ui->planarCheckBox->isChecked());
 }
 
 
@@ -815,7 +805,7 @@ void MainWindow::on_toBPushButton_clicked()
 {
     QByteArray x = ui->BXspinBox->text().toUtf8();
     QByteArray y = ui->BYspinBox->text().toUtf8();
-    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n');
+    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n', ui->planarCheckBox->isChecked());
 
 }
 
@@ -841,19 +831,17 @@ void MainWindow::on_planarCMDButton_clicked()
 {
     QString line = ui->queryLineEdit->text();
     QByteArray cmd = line.toUtf8();
-    emit tableControllerSignal(cmd + '\r' + '\n');
+    planarSender(cmd + '\r' + '\n');
 }
 
 
 void MainWindow::writeCSV()
 {
-    //QString dir = ui->addressLabel->text();
     QFile file(dir_name);
 
     QVariant cellData; //Сюда положим данные из ячейки
     QModelIndex modelIndex;
     QString line = "";
-    //    if (file.open(allNew ? QIODevice::ReadWrite : QIODevice::Append))
     if (file.open(QIODevice::ReadWrite))
     {
         QTextStream output(&file);
@@ -889,7 +877,6 @@ void MainWindow::on_resetPortsPushButton_clicked()
         ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
     }
-
 }
 
 
@@ -909,3 +896,51 @@ void MainWindow::on_stop2pushButton_clicked()
     writeCSV();
 }
 
+
+void MainWindow::drawCanvas()
+{
+    int x = 594;
+    int y = 474;
+
+    QPainter painter(this);
+    painter.setBrush(QBrush(Qt::red,Qt::SolidPattern));
+    painter.setPen(QPen(Qt::blue,Qt::SolidLine));
+    QRect currRect(200, 300, 30, 30);
+//    painter.drawRect(currRect, Qt::AlignCenter, "3");
+//    painter.drawRect(QRect(10,10,300,300));
+
+}
+
+
+
+void MainWindow::on_admCheckBox_stateChanged(int arg1)
+{
+
+    adm = ui->admCheckBox->isChecked();
+    ui->planarCheckBox->setEnabled(adm);
+    ui->keithleyCheckBox->setEnabled(adm);
+    ui->lightCheckBox->setEnabled(adm);
+
+    busy = !adm;
+
+    ui->measureBButton->setEnabled(adm);
+    ui->orientationButton->setEnabled(adm);
+    ui->toAPushButton->setEnabled(adm);
+    ui->toBPushButton->setEnabled(adm);
+    ui->moveGroupBox->setEnabled(adm);
+    ui->coordsGroupBox->setEnabled(adm);
+
+    ui->FCMeasureButton->setEnabled(adm);
+    ui->measure2pushButton->setEnabled(adm);
+
+    ui->scanPushButton->setEnabled(adm);
+
+    ui->continueFromButton->setEnabled(adm);
+    ui->goToGroupBox->setEnabled(adm);
+
+    ui->pauseButton->setEnabled(adm);
+
+    checkBusy();
+
+
+}

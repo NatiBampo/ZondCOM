@@ -55,6 +55,7 @@ private:
     void checkBusy();
     bool portsReady();
     bool readyCheck();
+    bool adm = false;
     QShortcut *keyUp;
     QShortcut *keyDown;
     QShortcut *keyNorth;
@@ -63,11 +64,9 @@ private:
     QShortcut *keyWest;
     QShortcut *keyLight;
 
-    //die parameters
     int numX, numY, upLeft, upRight, downLeft, downRight, downCenter, upCenter;
     bool centerColumn, leftColumn, rightColumn;
 
-    //table length and index
     int numRows, number;
     int gapIndex;
     void createWorkerThread();
@@ -80,26 +79,27 @@ private:
     void activateShortKeys();
     void deactivateShortKeys();
     void initializeModel();
-//    void showMessageBox(QString, QString);
     void writeCSV();
+    void drawCanvas();
+    void planarSender(QString);
 
 
 signals:
     void scanningPlateSignal(double, double, double, double, double, double, double, double, double, bool, int, int, int, int, int, int, bool, bool);
-    void measureSignal();
-    void tableControllerSignal(QByteArray);
-    void lightControllerSignal(QByteArray);
+    void measureSignal(bool, bool, bool);
+    void tableControllerSignal(QByteArray, bool);
+    void lightControllerSignal(QByteArray, bool);
     void openPortsSignal(QString, QString, QString);
     void closePortsSignal();
-    void goToElementSignal(int);
+    void goToElementSignal(int, bool);
     void sendPauseCommandSignal();
-    void saveMeasureSignal(int);
-    void autoWalkSignal(bool, QString, int);
+    void saveMeasureSignal(int, bool, bool, bool);
+    void autoWalkSignal(bool, QString, int, bool, bool, bool, bool);
     void autoOpenPortsSignal();
     void showChartsSignal(QString);
     void setDelaySignal(QList<int>*);
-    void getCurrentCoordsSignal(int);
-    void measureFCSignal();
+    void getCurrentCoordsSignal(int, bool);
+    void measureFCSignal(bool, bool);
     void openCsvFileSignal(QString);
     void copyUpSlot(int, QString);
 
@@ -138,7 +138,7 @@ public slots:
     void on_FCMeasureButton_clicked();
 //private slots:
     void on_hotKeysCheckBox_stateChanged(int arg1);
-    void on_newDirPushButton_clicked();
+    void savePushButton_clicked();
     void on_loadFilePushButton_clicked();
     void stopPushButton_clicked();
     void on_toAPushButton_clicked();
@@ -149,5 +149,6 @@ private slots:
     void on_planarCMDButton_clicked();
     void on_resetPortsPushButton_clicked();
     void on_stop2pushButton_clicked();
+    void on_admCheckBox_stateChanged(int arg1);
 };
 #endif // MAINWINDOW_H
