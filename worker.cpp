@@ -441,6 +441,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex, const bool &
         stopped = false;
         QString res = "";
         qInfo(logInfo()) << "Начат обход пластины " << fileInfo.baseName() <<" , начиная с элемента -> " << QString::number(currentIndex);
+        int lowFCcounter = 0;
         while (currentIndex <= lastIndex && !stopped)
         {
             //если индекс попал на срез, то пропускаем
@@ -490,17 +491,21 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex, const bool &
                     QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
             output << res;
 
+            //считаем количество элементов без прямого контакта, если больше 2 подряд выключаем
+            if (ForwardCurrent > FCBorder || LightCurrent < LightBorder) lowFCcounter++;
+            else lowFCcounter=0;
+
             //отправляем данные на таблицу, если ток в норме
-            if (ForwardCurrent > FCBorder || LightCurrent < LightBorder || !keithley_status || !badDie)
+            if (lowFCcounter<=2 || keithley_status || badDie)
+            {
+                emit sendAddTableSignal(currentIndex, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
+                emit sendProgressBarValueSignal(currentIndex);
+            }
+            else
             {
                 stopWalk();
                 emit sendMessageBox("warning", "Недопустимые значения тока");
                 qWarning(logWarning())<<"Недопустимые значения тока :"<< res;
-            }
-            else
-            {
-                emit sendAddTableSignal(currentIndex, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
-                emit sendProgressBarValueSignal(currentIndex);
             }
             currentIndex++;
 
