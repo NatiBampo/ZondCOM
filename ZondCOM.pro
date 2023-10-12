@@ -12,6 +12,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 SOURCES += \
     LoggingCategories.cpp \
+    colortableview.cpp \
     keithley.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 
 HEADERS += \
     LoggingCategories.h \
+    colortableview.h \
     keithley.h \
     mainwindow.h \
     stats.h \

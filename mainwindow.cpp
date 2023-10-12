@@ -370,6 +370,7 @@ void MainWindow::lightPushButton_on()
 }
 
 
+
 //функция записи последних измерений в таблицу
 void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V, double LC)
 {
@@ -411,6 +412,8 @@ void MainWindow::addElement(int row, int element, double value)
     QModelIndex index;
     index = model->index(row, element);
     model->setData(index, value);
+    ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::yellow), Qt::BackgroundRole);
+//    model->data()
 }
 
 
@@ -594,7 +597,7 @@ void MainWindow::initializeModel()
     numRows += ((int) leftColumn) * (numX + 1) * (numY - downLeft - upLeft);
     numRows += ((int) centerColumn) * (numX + 1) * (numY - downCenter - upCenter);
 
-    model = new QStandardItemModel(numRows, 8, this);
+    model = new QStandardItemModel(numRows, 8, this);//ColorTableView
     model->setHeaderData(0, Qt::Horizontal, "№");
     model->setHeaderData(1, Qt::Horizontal, "Столб");
     model->setHeaderData(2, Qt::Horizontal, "Ряд");
@@ -939,8 +942,7 @@ void MainWindow::on_admCheckBox_stateChanged(int arg1)
     ui->goToGroupBox->setEnabled(adm);
 
     ui->pauseButton->setEnabled(adm);
+    ui->loadFilePushButton->setEnabled(adm);
 
     checkBusy();
-
-
 }

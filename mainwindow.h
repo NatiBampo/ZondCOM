@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include <worker.h>
+#include <colortableview.h>
 #include <QStandardItemModel>
 #include <QSqlDatabase>
 #include <QMutex>
@@ -43,6 +44,7 @@ private:
     Ui::MainWindow *ui;
     Worker *worker;
     Stats *stats;
+//    ColorTableView *model;
     QStandardItemModel *model;
     QThread workerThread;
     QThread statsThread;

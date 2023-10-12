@@ -1,10 +1,12 @@
 release/LoggingCategories.o
+release/colortableview.o
 release/keithley.o
 release/main.o
 release/mainwindow.o
 release/stats.o
 release/worker.o
 release/qrc_images.o
+release/moc_colortableview.o
 release/moc_keithley.o
 release/moc_mainwindow.o
 release/moc_stats.o
