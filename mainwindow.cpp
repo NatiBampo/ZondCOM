@@ -392,12 +392,11 @@ void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V,
     addElement(number, 7, LC);          //фототок
 
 
-    //focusing on the last row
+    //focus on the last row
     QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
     QModelIndex i = ui->tableView->model()->index(number, 0);
     ui->tableView->selectionModel()->select(i, flags);
-    ui->tableView->scrollTo(i);//ui->tableView->model()->index(number,2)
-    //ui->tableView->showEvent();
+    ui->tableView->scrollTo(i);
 
     //add actual data to spinners
     ui->columnSpinBox->setValue(column);
@@ -412,7 +411,7 @@ void MainWindow::addElement(int row, int element, double value)
     QModelIndex index;
     index = model->index(row, element);
     model->setData(index, value);
-    ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::yellow), Qt::BackgroundRole);
+    //if (row>1 && element>4 && value > qPow(10, -11)) ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::yellow), Qt::BackgroundRole);
 //    model->data()
 }
 
@@ -560,12 +559,13 @@ void MainWindow::orientationButton_clicked()
     //double rowSlide = (double)ui->stepRowSpinBox->value();
 
     initializeModel();
-
+    qDebug()<<"all througth";
     emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, (double) numX, (double) numY, colSlide, centerColumn, upLeft, upRight, downLeft, downRight, upCenter, downCenter, leftColumn, rightColumn);
     updateDelays();
     orientation = true;
     readyCheck();
     syncSettings();
+
 }
 
 
@@ -597,7 +597,7 @@ void MainWindow::initializeModel()
     numRows += ((int) leftColumn) * (numX + 1) * (numY - downLeft - upLeft);
     numRows += ((int) centerColumn) * (numX + 1) * (numY - downCenter - upCenter);
 
-    model = new QStandardItemModel(numRows, 8, this);//ColorTableView
+    model = new ColorTableView(numRows, 8, this);//ColorTableView//QStandardItemModel
     model->setHeaderData(0, Qt::Horizontal, "№");
     model->setHeaderData(1, Qt::Horizontal, "Столб");
     model->setHeaderData(2, Qt::Horizontal, "Ряд");
