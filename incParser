@@ -1,0 +1,72 @@
+
+print('Введите название файла для чтения')
+old_file_name = input()
+
+with open(old_file_name, "r") as f:
+    lines = f.readlines()
+
+arr = []
+for line in lines:
+    line = line.strip().replace(',', '')
+    arr += line
+
+
+print('Введите название файла для записи')
+new_file_name = input()
+
+
+with open(new_file_name, "w") as f:
+
+    f.write(
+f"""[Wafer]
+Dat={new_file_name}
+Prg=140-26x2,8_ФУР-124v2
+DiamWafer=126000 (126 мм)
+Diam=126000 (126 мм)
+Xstep=1500 (1,5 мм)
+Ystep=1500 (1,5 мм)
+Hbase=3900 (3,9 мм)
+Type=3 (Bottom)
+Mode=0 (GoSnakeTopLeft)
+GrMode=On
+XstepGr=1500 (1,5 мм)
+YstepGr=1500 (1,5 мм)
+NxGr=1
+NyGr=1
+ConfigGr=1
+NewTypeCodFormat=On
+Format= 14:Edge; 13:Bad; 12:Test; 10,9,8:Inker; 7,6,5,4,3,2,1,0:cod;\n
+
+ZondName=ЭМ-6610 №14
+
+[Base]
+X=348477 (348,477 мм)
+Y=108177 (108,177 мм)
+Xc=-35380 (-35,38 мм)
+Yc=-6910 (-6,91 мм)
+
+[Table:WorkArea]
+WorkArea(enb)=0 (off)
+WorkArea(X1)=200000 (200 мм)
+WorkArea(Y1)=0 (0 мм)
+WorkArea(X2)=450000 (450 мм)
+WorkArea(Y2)=210000 (210 мм)
+
+[Table:ZWorkArea]
+ZWorkArea(enb)=0 (off)
+ZWorkArea(X1)=200000 (200 мм)
+ZWorkArea(Y1)=0 (0 мм)
+ZWorkArea(X2)=450000 (450 мм)
+ZWorkArea(Y2)=210000 (210 мм)
+
+[Border]
+
+[Points]
+N=3600
+"""
+    )
+    for i in range(3600):
+        if arr[i]== '1':
+            f.write(f'{i+1}=0000({-9000 + (i%60)*1500};{-37500 + (i//60)*1500})(0;0)(0;0)\n')
+        else:
+            f.write(f'{i+1}=3001({-9000 + (i%60)*1500};{-37500 + (i//60)*1500})(0;0)(0;0)\n')
