@@ -413,7 +413,23 @@ void MainWindow::addElement(int row, int element, double value)
     model->setData(index, value);
     //if (row>1 && element>4 && value > qPow(10, -11)) ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::yellow), Qt::BackgroundRole);
 //    model->data()
+    int rank = 0;
+    if (element == 4) rank = (value < - qPow(10, -5)) ? 1 : 9;
+    if (element == 5) rank = (value < qPow(10, -12)) ? 1 : (value < 5 * qPow(10, -12)) ? 2 : (value < qPow(10, -11)) ? 3 : 9;
+    if (element == 6) rank = (value < qPow(10, -11)) ? 1 : 9;
+    if (element == 7) rank = (value > 1.07026 * qPow(10, -7)) ? 1 : 9;
+
+    switch(rank)
+    {
+    case 0: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::white), Qt::BackgroundRole); break;
+    case 1: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::darkGreen), Qt::BackgroundRole); break;
+    case 2: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::green), Qt::BackgroundRole); break;
+    case 3: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::blue), Qt::BackgroundRole); break;
+    case 9: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::red), Qt::BackgroundRole); break;
+//    default: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::darkGray), Qt::BackgroundRole);
+    }
 }
+
 
 
 void MainWindow::writeLog(QByteArray log)
@@ -597,7 +613,7 @@ void MainWindow::initializeModel()
     numRows += ((int) leftColumn) * (numX + 1) * (numY - downLeft - upLeft);
     numRows += ((int) centerColumn) * (numX + 1) * (numY - downCenter - upCenter);
 
-    model = new ColorTableView(numRows, 8, this);//ColorTableView//QStandardItemModel
+    model = new QStandardItemModel{numRows, 8, this};
     model->setHeaderData(0, Qt::Horizontal, "№");
     model->setHeaderData(1, Qt::Horizontal, "Столб");
     model->setHeaderData(2, Qt::Horizontal, "Ряд");

@@ -57,7 +57,7 @@ Q_CONSTINIT static const uint qt_meta_data_ColorTableView[] = {
 };
 
 Q_CONSTINIT const QMetaObject ColorTableView::staticMetaObject = { {
-    QMetaObject::SuperData::link<QStandardItemModel::staticMetaObject>(),
+    QMetaObject::SuperData::link<QItemDelegate::staticMetaObject>(),
     qt_meta_stringdata_ColorTableView.offsetsAndSizes,
     qt_meta_data_ColorTableView,
     qt_static_metacall,
@@ -87,12 +87,12 @@ void *ColorTableView::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_ColorTableView.stringdata0))
         return static_cast<void*>(this);
-    return QStandardItemModel::qt_metacast(_clname);
+    return QItemDelegate::qt_metacast(_clname);
 }
 
 int ColorTableView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QStandardItemModel::qt_metacall(_c, _id, _a);
+    _id = QItemDelegate::qt_metacall(_c, _id, _a);
     return _id;
 }
 QT_WARNING_POP

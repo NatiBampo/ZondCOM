@@ -1,17 +1,13 @@
 #ifndef COLORTABLEVIEW_H
 #define COLORTABLEVIEW_H
-#include <QStandardItemModel>
+#include <QItemDelegate>
 
 
-class ColorTableView : public QStandardItemModel
+class ColorTableView : QItemDelegate
 {
 Q_OBJECT
 public:
-    ColorTableView();
-    ColorTableView(int rows, int columns, QObject *parent = nullptr); //: QStandardItemModel( rows,  columns, parent);
-    int color = 0;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    void colorData(const QModelIndex &index, double current);
+    ColorTableView(QWidget *parent = 0) : QItemDelegate(parent) {}
 };
 
 #endif // COLORTABLEVIEW_H
