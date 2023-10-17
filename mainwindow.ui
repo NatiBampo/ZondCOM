@@ -135,7 +135,7 @@
              </font>
             </property>
             <property name="text">
-             <string>v0210_1</string>
+             <string>v1710_1</string>
             </property>
            </widget>
           </item>
@@ -397,7 +397,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>4</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -866,6 +866,9 @@
              </property>
             </widget>
             <widget class="QPushButton" name="stop2pushButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="geometry">
               <rect>
                <x>20</x>
@@ -1498,6 +1501,11 @@
          <zorder>endTimeNameLabel</zorder>
          <zorder>endTimeLabel</zorder>
          <zorder></zorder>
+        </widget>
+        <widget class="QWidget" name="tab_4">
+         <attribute name="title">
+          <string>Схема</string>
+         </attribute>
         </widget>
         <widget class="QWidget" name="tab_3">
          <property name="focusPolicy">
@@ -2158,6 +2166,31 @@
              </property>
             </widget>
            </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="verticalLayoutWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>270</x>
+            <y>290</y>
+            <width>203</width>
+            <height>151</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QCheckBox" name="colorRangeCheckBox">
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>Цветовое ранжирование</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
            <item>
             <widget class="QCheckBox" name="badDieCheckBox">
              <property name="layoutDirection">
@@ -2171,10 +2204,406 @@
           </layout>
          </widget>
         </widget>
-        <widget class="QWidget" name="tab_4">
+        <widget class="QWidget" name="tab_5">
          <attribute name="title">
-          <string>Схема</string>
+          <string>Статистика</string>
          </attribute>
+         <widget class="QLabel" name="label_6">
+          <property name="geometry">
+           <rect>
+            <x>60</x>
+            <y>30</y>
+            <width>181</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Диапазоны гистограмм</string>
+          </property>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>100</y>
+            <width>561</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="StatLayout">
+           <item>
+            <widget class="QLabel" name="fcstatlabel">
+             <property name="minimumSize">
+              <size>
+               <width>58</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>FC</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="fcStatLowMantis"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="fcStatLowQ"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="fcStatHighMantis"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="fcStatHighQ"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="fcStatRange"/>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="FCLogX">
+             <property name="text">
+              <string>logX</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="FCLogY">
+             <property name="text">
+              <string>logY</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QLabel" name="label_9">
+          <property name="geometry">
+           <rect>
+            <x>82</x>
+            <y>70</y>
+            <width>121</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Левая граница</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_11">
+          <property name="geometry">
+           <rect>
+            <x>260</x>
+            <y>70</y>
+            <width>121</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Правая граница</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_15">
+          <property name="geometry">
+           <rect>
+            <x>400</x>
+            <y>70</y>
+            <width>141</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Кол-во диапазонов</string>
+          </property>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>170</y>
+            <width>561</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="StatLayout2">
+           <item>
+            <widget class="QLabel" name="statlabel_2">
+             <property name="minimumSize">
+              <size>
+               <width>58</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>DC10mV</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="StatLowMantis_2"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="StatLowQ_2"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="StatHighMantis_2"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="StatHighQ_2"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="StatRange_2"/>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="LogX_2">
+             <property name="text">
+              <string>logX</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="LogY_2">
+             <property name="text">
+              <string>logY</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget_3">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>240</y>
+            <width>561</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="StatLayout_2">
+           <item>
+            <widget class="QLabel" name="fcstatlabel_2">
+             <property name="minimumSize">
+              <size>
+               <width>58</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>DC1V</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="fcStatLowMantis_2"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="fcStatLowQ_2"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="fcStatHighMantis_2"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="fcStatHighQ_2"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="fcStatRange_2"/>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="FCLogX_2">
+             <property name="text">
+              <string>logX</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="FCLogY_2">
+             <property name="text">
+              <string>logY</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="horizontalLayoutWidget_4">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>310</y>
+            <width>561</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="StatLayout2_2">
+           <item>
+            <widget class="QLabel" name="statlabel_3">
+             <property name="minimumSize">
+              <size>
+               <width>58</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Photo</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="StatLowMantis_3"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="StatLowQ_3"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="StatHighMantis_3"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="StatHighQ_3"/>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="StatRange_3"/>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="LogX_3">
+             <property name="text">
+              <string>logX</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="LogY_3">
+             <property name="text">
+              <string>logY</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </widget>
       </item>

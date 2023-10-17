@@ -149,6 +149,7 @@ public:
     QPushButton *toBPushButton;
     QSpacerItem *verticalSpacer_4;
     QSpacerItem *verticalSpacer_3;
+    QWidget *tab_4;
     QWidget *tab_3;
     QLabel *label_10;
     QLabel *label_8;
@@ -182,8 +183,63 @@ public:
     QCheckBox *planarCheckBox;
     QCheckBox *keithleyCheckBox;
     QCheckBox *lightCheckBox;
+    QWidget *verticalLayoutWidget_2;
+    QVBoxLayout *verticalLayout_4;
+    QCheckBox *colorRangeCheckBox;
     QCheckBox *badDieCheckBox;
-    QWidget *tab_4;
+    QWidget *tab_5;
+    QLabel *label_6;
+    QWidget *horizontalLayoutWidget;
+    QHBoxLayout *StatLayout;
+    QLabel *fcstatlabel;
+    QDoubleSpinBox *fcStatLowMantis;
+    QSpinBox *fcStatLowQ;
+    QSpacerItem *horizontalSpacer_2;
+    QDoubleSpinBox *fcStatHighMantis;
+    QSpinBox *fcStatHighQ;
+    QSpacerItem *horizontalSpacer_6;
+    QSpinBox *fcStatRange;
+    QCheckBox *FCLogX;
+    QCheckBox *FCLogY;
+    QLabel *label_9;
+    QLabel *label_11;
+    QLabel *label_15;
+    QWidget *horizontalLayoutWidget_2;
+    QHBoxLayout *StatLayout2;
+    QLabel *statlabel_2;
+    QDoubleSpinBox *StatLowMantis_2;
+    QSpinBox *StatLowQ_2;
+    QSpacerItem *horizontalSpacer_3;
+    QDoubleSpinBox *StatHighMantis_2;
+    QSpinBox *StatHighQ_2;
+    QSpacerItem *horizontalSpacer_7;
+    QSpinBox *StatRange_2;
+    QCheckBox *LogX_2;
+    QCheckBox *LogY_2;
+    QWidget *horizontalLayoutWidget_3;
+    QHBoxLayout *StatLayout_2;
+    QLabel *fcstatlabel_2;
+    QDoubleSpinBox *fcStatLowMantis_2;
+    QSpinBox *fcStatLowQ_2;
+    QSpacerItem *horizontalSpacer_4;
+    QDoubleSpinBox *fcStatHighMantis_2;
+    QSpinBox *fcStatHighQ_2;
+    QSpacerItem *horizontalSpacer_8;
+    QSpinBox *fcStatRange_2;
+    QCheckBox *FCLogX_2;
+    QCheckBox *FCLogY_2;
+    QWidget *horizontalLayoutWidget_4;
+    QHBoxLayout *StatLayout2_2;
+    QLabel *statlabel_3;
+    QDoubleSpinBox *StatLowMantis_3;
+    QSpinBox *StatLowQ_3;
+    QSpacerItem *horizontalSpacer_5;
+    QDoubleSpinBox *StatHighMantis_3;
+    QSpinBox *StatHighQ_3;
+    QSpacerItem *horizontalSpacer_9;
+    QSpinBox *StatRange_3;
+    QCheckBox *LogX_3;
+    QCheckBox *LogY_3;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -583,6 +639,7 @@ public:
         FCMeasureButton->setGeometry(QRect(130, 160, 141, 24));
         stop2pushButton = new QPushButton(goToGroupBox);
         stop2pushButton->setObjectName("stop2pushButton");
+        stop2pushButton->setEnabled(false);
         stop2pushButton->setGeometry(QRect(20, 160, 93, 29));
 
         gridLayout_3->addWidget(goToGroupBox, 5, 1, 1, 1);
@@ -914,6 +971,9 @@ public:
         toBPushButton->raise();
         endTimeNameLabel->raise();
         endTimeLabel->raise();
+        tab_4 = new QWidget();
+        tab_4->setObjectName("tab_4");
+        tabWidget->addTab(tab_4, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName("tab_3");
         tab_3->setFocusPolicy(Qt::NoFocus);
@@ -1101,16 +1161,261 @@ public:
 
         verticalLayout_2->addWidget(lightCheckBox);
 
-        badDieCheckBox = new QCheckBox(verticalLayoutWidget);
+        verticalLayoutWidget_2 = new QWidget(tab_3);
+        verticalLayoutWidget_2->setObjectName("verticalLayoutWidget_2");
+        verticalLayoutWidget_2->setGeometry(QRect(270, 290, 203, 151));
+        verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_2);
+        verticalLayout_4->setObjectName("verticalLayout_4");
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        colorRangeCheckBox = new QCheckBox(verticalLayoutWidget_2);
+        colorRangeCheckBox->setObjectName("colorRangeCheckBox");
+        colorRangeCheckBox->setLayoutDirection(Qt::RightToLeft);
+        colorRangeCheckBox->setChecked(true);
+
+        verticalLayout_4->addWidget(colorRangeCheckBox);
+
+        badDieCheckBox = new QCheckBox(verticalLayoutWidget_2);
         badDieCheckBox->setObjectName("badDieCheckBox");
         badDieCheckBox->setLayoutDirection(Qt::RightToLeft);
 
-        verticalLayout_2->addWidget(badDieCheckBox);
+        verticalLayout_4->addWidget(badDieCheckBox);
 
         tabWidget->addTab(tab_3, QString());
-        tab_4 = new QWidget();
-        tab_4->setObjectName("tab_4");
-        tabWidget->addTab(tab_4, QString());
+        tab_5 = new QWidget();
+        tab_5->setObjectName("tab_5");
+        label_6 = new QLabel(tab_5);
+        label_6->setObjectName("label_6");
+        label_6->setGeometry(QRect(60, 30, 181, 20));
+        horizontalLayoutWidget = new QWidget(tab_5);
+        horizontalLayoutWidget->setObjectName("horizontalLayoutWidget");
+        horizontalLayoutWidget->setGeometry(QRect(20, 100, 561, 71));
+        StatLayout = new QHBoxLayout(horizontalLayoutWidget);
+        StatLayout->setObjectName("StatLayout");
+        StatLayout->setContentsMargins(0, 0, 0, 0);
+        fcstatlabel = new QLabel(horizontalLayoutWidget);
+        fcstatlabel->setObjectName("fcstatlabel");
+        fcstatlabel->setMinimumSize(QSize(58, 0));
+
+        StatLayout->addWidget(fcstatlabel);
+
+        fcStatLowMantis = new QDoubleSpinBox(horizontalLayoutWidget);
+        fcStatLowMantis->setObjectName("fcStatLowMantis");
+
+        StatLayout->addWidget(fcStatLowMantis);
+
+        fcStatLowQ = new QSpinBox(horizontalLayoutWidget);
+        fcStatLowQ->setObjectName("fcStatLowQ");
+
+        StatLayout->addWidget(fcStatLowQ);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        StatLayout->addItem(horizontalSpacer_2);
+
+        fcStatHighMantis = new QDoubleSpinBox(horizontalLayoutWidget);
+        fcStatHighMantis->setObjectName("fcStatHighMantis");
+
+        StatLayout->addWidget(fcStatHighMantis);
+
+        fcStatHighQ = new QSpinBox(horizontalLayoutWidget);
+        fcStatHighQ->setObjectName("fcStatHighQ");
+
+        StatLayout->addWidget(fcStatHighQ);
+
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        StatLayout->addItem(horizontalSpacer_6);
+
+        fcStatRange = new QSpinBox(horizontalLayoutWidget);
+        fcStatRange->setObjectName("fcStatRange");
+
+        StatLayout->addWidget(fcStatRange);
+
+        FCLogX = new QCheckBox(horizontalLayoutWidget);
+        FCLogX->setObjectName("FCLogX");
+
+        StatLayout->addWidget(FCLogX);
+
+        FCLogY = new QCheckBox(horizontalLayoutWidget);
+        FCLogY->setObjectName("FCLogY");
+
+        StatLayout->addWidget(FCLogY);
+
+        label_9 = new QLabel(tab_5);
+        label_9->setObjectName("label_9");
+        label_9->setGeometry(QRect(82, 70, 121, 20));
+        label_11 = new QLabel(tab_5);
+        label_11->setObjectName("label_11");
+        label_11->setGeometry(QRect(260, 70, 121, 20));
+        label_15 = new QLabel(tab_5);
+        label_15->setObjectName("label_15");
+        label_15->setGeometry(QRect(400, 70, 141, 20));
+        horizontalLayoutWidget_2 = new QWidget(tab_5);
+        horizontalLayoutWidget_2->setObjectName("horizontalLayoutWidget_2");
+        horizontalLayoutWidget_2->setGeometry(QRect(20, 170, 561, 71));
+        StatLayout2 = new QHBoxLayout(horizontalLayoutWidget_2);
+        StatLayout2->setObjectName("StatLayout2");
+        StatLayout2->setContentsMargins(0, 0, 0, 0);
+        statlabel_2 = new QLabel(horizontalLayoutWidget_2);
+        statlabel_2->setObjectName("statlabel_2");
+        statlabel_2->setMinimumSize(QSize(58, 0));
+
+        StatLayout2->addWidget(statlabel_2);
+
+        StatLowMantis_2 = new QDoubleSpinBox(horizontalLayoutWidget_2);
+        StatLowMantis_2->setObjectName("StatLowMantis_2");
+
+        StatLayout2->addWidget(StatLowMantis_2);
+
+        StatLowQ_2 = new QSpinBox(horizontalLayoutWidget_2);
+        StatLowQ_2->setObjectName("StatLowQ_2");
+
+        StatLayout2->addWidget(StatLowQ_2);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        StatLayout2->addItem(horizontalSpacer_3);
+
+        StatHighMantis_2 = new QDoubleSpinBox(horizontalLayoutWidget_2);
+        StatHighMantis_2->setObjectName("StatHighMantis_2");
+
+        StatLayout2->addWidget(StatHighMantis_2);
+
+        StatHighQ_2 = new QSpinBox(horizontalLayoutWidget_2);
+        StatHighQ_2->setObjectName("StatHighQ_2");
+
+        StatLayout2->addWidget(StatHighQ_2);
+
+        horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        StatLayout2->addItem(horizontalSpacer_7);
+
+        StatRange_2 = new QSpinBox(horizontalLayoutWidget_2);
+        StatRange_2->setObjectName("StatRange_2");
+
+        StatLayout2->addWidget(StatRange_2);
+
+        LogX_2 = new QCheckBox(horizontalLayoutWidget_2);
+        LogX_2->setObjectName("LogX_2");
+
+        StatLayout2->addWidget(LogX_2);
+
+        LogY_2 = new QCheckBox(horizontalLayoutWidget_2);
+        LogY_2->setObjectName("LogY_2");
+
+        StatLayout2->addWidget(LogY_2);
+
+        horizontalLayoutWidget_3 = new QWidget(tab_5);
+        horizontalLayoutWidget_3->setObjectName("horizontalLayoutWidget_3");
+        horizontalLayoutWidget_3->setGeometry(QRect(20, 240, 561, 71));
+        StatLayout_2 = new QHBoxLayout(horizontalLayoutWidget_3);
+        StatLayout_2->setObjectName("StatLayout_2");
+        StatLayout_2->setContentsMargins(0, 0, 0, 0);
+        fcstatlabel_2 = new QLabel(horizontalLayoutWidget_3);
+        fcstatlabel_2->setObjectName("fcstatlabel_2");
+        fcstatlabel_2->setMinimumSize(QSize(58, 0));
+
+        StatLayout_2->addWidget(fcstatlabel_2);
+
+        fcStatLowMantis_2 = new QDoubleSpinBox(horizontalLayoutWidget_3);
+        fcStatLowMantis_2->setObjectName("fcStatLowMantis_2");
+
+        StatLayout_2->addWidget(fcStatLowMantis_2);
+
+        fcStatLowQ_2 = new QSpinBox(horizontalLayoutWidget_3);
+        fcStatLowQ_2->setObjectName("fcStatLowQ_2");
+
+        StatLayout_2->addWidget(fcStatLowQ_2);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        StatLayout_2->addItem(horizontalSpacer_4);
+
+        fcStatHighMantis_2 = new QDoubleSpinBox(horizontalLayoutWidget_3);
+        fcStatHighMantis_2->setObjectName("fcStatHighMantis_2");
+
+        StatLayout_2->addWidget(fcStatHighMantis_2);
+
+        fcStatHighQ_2 = new QSpinBox(horizontalLayoutWidget_3);
+        fcStatHighQ_2->setObjectName("fcStatHighQ_2");
+
+        StatLayout_2->addWidget(fcStatHighQ_2);
+
+        horizontalSpacer_8 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        StatLayout_2->addItem(horizontalSpacer_8);
+
+        fcStatRange_2 = new QSpinBox(horizontalLayoutWidget_3);
+        fcStatRange_2->setObjectName("fcStatRange_2");
+
+        StatLayout_2->addWidget(fcStatRange_2);
+
+        FCLogX_2 = new QCheckBox(horizontalLayoutWidget_3);
+        FCLogX_2->setObjectName("FCLogX_2");
+
+        StatLayout_2->addWidget(FCLogX_2);
+
+        FCLogY_2 = new QCheckBox(horizontalLayoutWidget_3);
+        FCLogY_2->setObjectName("FCLogY_2");
+
+        StatLayout_2->addWidget(FCLogY_2);
+
+        horizontalLayoutWidget_4 = new QWidget(tab_5);
+        horizontalLayoutWidget_4->setObjectName("horizontalLayoutWidget_4");
+        horizontalLayoutWidget_4->setGeometry(QRect(20, 310, 561, 71));
+        StatLayout2_2 = new QHBoxLayout(horizontalLayoutWidget_4);
+        StatLayout2_2->setObjectName("StatLayout2_2");
+        StatLayout2_2->setContentsMargins(0, 0, 0, 0);
+        statlabel_3 = new QLabel(horizontalLayoutWidget_4);
+        statlabel_3->setObjectName("statlabel_3");
+        statlabel_3->setMinimumSize(QSize(58, 0));
+
+        StatLayout2_2->addWidget(statlabel_3);
+
+        StatLowMantis_3 = new QDoubleSpinBox(horizontalLayoutWidget_4);
+        StatLowMantis_3->setObjectName("StatLowMantis_3");
+
+        StatLayout2_2->addWidget(StatLowMantis_3);
+
+        StatLowQ_3 = new QSpinBox(horizontalLayoutWidget_4);
+        StatLowQ_3->setObjectName("StatLowQ_3");
+
+        StatLayout2_2->addWidget(StatLowQ_3);
+
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        StatLayout2_2->addItem(horizontalSpacer_5);
+
+        StatHighMantis_3 = new QDoubleSpinBox(horizontalLayoutWidget_4);
+        StatHighMantis_3->setObjectName("StatHighMantis_3");
+
+        StatLayout2_2->addWidget(StatHighMantis_3);
+
+        StatHighQ_3 = new QSpinBox(horizontalLayoutWidget_4);
+        StatHighQ_3->setObjectName("StatHighQ_3");
+
+        StatLayout2_2->addWidget(StatHighQ_3);
+
+        horizontalSpacer_9 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        StatLayout2_2->addItem(horizontalSpacer_9);
+
+        StatRange_3 = new QSpinBox(horizontalLayoutWidget_4);
+        StatRange_3->setObjectName("StatRange_3");
+
+        StatLayout2_2->addWidget(StatRange_3);
+
+        LogX_3 = new QCheckBox(horizontalLayoutWidget_4);
+        LogX_3->setObjectName("LogX_3");
+
+        StatLayout2_2->addWidget(LogX_3);
+
+        LogY_3 = new QCheckBox(horizontalLayoutWidget_4);
+        LogY_3->setObjectName("LogY_3");
+
+        StatLayout2_2->addWidget(LogY_3);
+
+        tabWidget->addTab(tab_5, QString());
 
         formLayout->setWidget(1, QFormLayout::FieldRole, tabWidget);
 
@@ -1128,7 +1433,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(4);
         orientationButton->setDefault(false);
         measureBButton->setDefault(false);
 
@@ -1140,7 +1445,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        label_40->setText(QCoreApplication::translate("MainWindow", "v0210_1", nullptr));
+        label_40->setText(QCoreApplication::translate("MainWindow", "v1710_1", nullptr));
         label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
         label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
         label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
@@ -1210,6 +1515,7 @@ public:
         stopPushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\277", nullptr));
         toBPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222 \321\202.\320\222", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QCoreApplication::translate("MainWindow", "\320\241\321\205\320\265\320\274\320\260", nullptr));
         label_10->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
         label_14->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
@@ -1228,9 +1534,26 @@ public:
         planarCheckBox->setText(QCoreApplication::translate("MainWindow", "planar", nullptr));
         keithleyCheckBox->setText(QCoreApplication::translate("MainWindow", "keithley", nullptr));
         lightCheckBox->setText(QCoreApplication::translate("MainWindow", "Light", nullptr));
+        colorRangeCheckBox->setText(QCoreApplication::translate("MainWindow", "\320\246\320\262\320\265\321\202\320\276\320\262\320\276\320\265 \321\200\320\260\320\275\320\266\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265", nullptr));
         badDieCheckBox->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\276\321\205\320\270\320\265 \321\202\320\276\320\272\320\270", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QCoreApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270 \320\277\320\273\320\260\321\201\321\202\320\270\320\275\321\213", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QCoreApplication::translate("MainWindow", "\320\241\321\205\320\265\320\274\320\260", nullptr));
+        label_6->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\260\320\277\320\260\320\267\320\276\320\275\321\213 \320\263\320\270\321\201\321\202\320\276\320\263\321\200\320\260\320\274\320\274", nullptr));
+        fcstatlabel->setText(QCoreApplication::translate("MainWindow", "FC", nullptr));
+        FCLogX->setText(QCoreApplication::translate("MainWindow", "logX", nullptr));
+        FCLogY->setText(QCoreApplication::translate("MainWindow", "logY", nullptr));
+        label_9->setText(QCoreApplication::translate("MainWindow", "\320\233\320\265\320\262\320\260\321\217 \320\263\321\200\320\260\320\275\320\270\321\206\320\260", nullptr));
+        label_11->setText(QCoreApplication::translate("MainWindow", "\320\237\321\200\320\260\320\262\320\260\321\217 \320\263\321\200\320\260\320\275\320\270\321\206\320\260", nullptr));
+        label_15->setText(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\273-\320\262\320\276 \320\264\320\270\320\260\320\277\320\260\320\267\320\276\320\275\320\276\320\262", nullptr));
+        statlabel_2->setText(QCoreApplication::translate("MainWindow", "DC10mV", nullptr));
+        LogX_2->setText(QCoreApplication::translate("MainWindow", "logX", nullptr));
+        LogY_2->setText(QCoreApplication::translate("MainWindow", "logY", nullptr));
+        fcstatlabel_2->setText(QCoreApplication::translate("MainWindow", "DC1V", nullptr));
+        FCLogX_2->setText(QCoreApplication::translate("MainWindow", "logX", nullptr));
+        FCLogY_2->setText(QCoreApplication::translate("MainWindow", "logY", nullptr));
+        statlabel_3->setText(QCoreApplication::translate("MainWindow", "Photo", nullptr));
+        LogX_3->setText(QCoreApplication::translate("MainWindow", "logX", nullptr));
+        LogY_3->setText(QCoreApplication::translate("MainWindow", "logY", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_5), QCoreApplication::translate("MainWindow", "\320\241\321\202\320\260\321\202\320\270\321\201\321\202\320\270\320\272\320\260", nullptr));
     } // retranslateUi
 
 };

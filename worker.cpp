@@ -492,11 +492,16 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex, const bool &
             output << res;
 
             //считаем количество элементов без прямого контакта, если больше 2 подряд выключаем
-            if (ForwardCurrent > FCBorder || LightCurrent < LightBorder) lowFCcounter++;
-            else lowFCcounter=0;
-
+            if (ForwardCurrent > FCBorder || LightCurrent < LightBorder)
+            {
+                lowFCcounter++;
+            }
+            else
+            {
+                lowFCcounter=0;
+            }
             //отправляем данные на таблицу, если ток в норме
-            if (lowFCcounter<=2 || keithley_status || badDie)
+            if (lowFCcounter<=2 || badDie || !keithley_status)
             {
                 emit sendAddTableSignal(currentIndex, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
                 emit sendProgressBarValueSignal(currentIndex);

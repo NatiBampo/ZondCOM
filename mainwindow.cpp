@@ -289,7 +289,7 @@ bool MainWindow::readyCheck()
     ui->measure2pushButton->setEnabled(res);
     ui->continueFromButton->setEnabled(res);
     ui->scanPushButton->setEnabled(res);
-    ui->loadFilePushButton->setEnabled(res);
+    //ui->loadFilePushButton->setEnabled(res);
     ui->stopPushButton->setEnabled(res);
     return res;
 }
@@ -411,21 +411,23 @@ void MainWindow::addElement(int row, int element, double value)
     QModelIndex index;
     index = model->index(row, element);
     model->setData(index, value);
-    //if (row>1 && element>4 && value > qPow(10, -11)) ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::yellow), Qt::BackgroundRole);
-//    model->data()
+
+    if (!ui->colorRangeCheckBox->isChecked()) return;
+
     int rank = 0;
     if (element == 4) rank = (value < - qPow(10, -5)) ? 1 : 9;
     if (element == 5) rank = (value < qPow(10, -12)) ? 1 : (value < 5 * qPow(10, -12)) ? 2 : (value < qPow(10, -11)) ? 3 : 9;
-    if (element == 6) rank = (value < qPow(10, -11)) ? 1 : 9;
+    if (element == 6) rank = (value < qPow(10, -10)) ? 1 : 9;
     if (element == 7) rank = (value > 1.07026 * qPow(10, -7)) ? 1 : 9;
 
     switch(rank)
     {
     case 0: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::white), Qt::BackgroundRole); break;
-    case 1: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::darkGreen), Qt::BackgroundRole); break;
-    case 2: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::green), Qt::BackgroundRole); break;
-    case 3: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::blue), Qt::BackgroundRole); break;
-    case 9: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::red), Qt::BackgroundRole); break;
+    case 1: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(QColor(0, 187, 63)), Qt::BackgroundRole); break;
+    case 2: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(QColor(10, 207, 0)), Qt::BackgroundRole); break;
+    case 3: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(QColor(131, 233, 0)), Qt::BackgroundRole); break;
+    case 4: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(QColor(220, 249, 0)), Qt::BackgroundRole); break;
+    case 9: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(QColor(255, 113, 0)), Qt::BackgroundRole); break;
 //    default: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::darkGray), Qt::BackgroundRole);
     }
 }
@@ -778,7 +780,10 @@ void MainWindow::on_loadFilePushButton_clicked()
     if (busy)
     {
         showMessageBox("warning", "Нельзя открыть файл во время обхода");
-        return;
+    }
+    else if (model == nullptr)
+    {
+        showMessageBox("warning", "Ориентация не выполнена");//model not initialized
     }
     else
     {
@@ -959,6 +964,7 @@ void MainWindow::on_admCheckBox_stateChanged(int arg1)
 
     ui->pauseButton->setEnabled(adm);
     ui->loadFilePushButton->setEnabled(adm);
+    ui->stop2pushButton->setEnabled(adm);
 
     checkBusy();
 }

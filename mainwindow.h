@@ -43,7 +43,7 @@ private:
     Ui::MainWindow *ui;
     Worker *worker;
     Stats *stats;
-    QStandardItemModel *model;
+    QStandardItemModel *model = nullptr;
     QThread workerThread;
     QThread statsThread;
     QMutex mutex;

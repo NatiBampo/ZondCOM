@@ -461,23 +461,9 @@ release/moc_mainwindow.cpp: mainwindow.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QRegularExpression \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/qregularexpression.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QRegularExpressionMatch \
-		colortableview.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/QItemDelegate \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qitemdelegate.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qstyleoption.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtCore/qlocale.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractspinbox.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtGui/qvalidator.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qslider.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractslider.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qstyle.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qtabbar.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qrubberband.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qframe.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/QStandardItemModel \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qstandarditemmodel.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtSql/QSqlDatabase \
 		stats.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QSettings \
@@ -1266,23 +1252,9 @@ release/main.o: main.cpp mainwindow.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QRegularExpression \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/qregularexpression.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QRegularExpressionMatch \
-		colortableview.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/QItemDelegate \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qitemdelegate.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qstyleoption.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtCore/qlocale.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractspinbox.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtGui/qvalidator.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qslider.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractslider.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qstyle.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qtabbar.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qrubberband.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qframe.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/QStandardItemModel \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qstandarditemmodel.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtSql/QSqlDatabase \
 		stats.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QSettings \
@@ -1305,6 +1277,7 @@ release/main.o: main.cpp mainwindow.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/qpromise.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qguiapplication.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qinputmethod.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtCore/qlocale.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qguiapplication_platform.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QDir \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/qdir.h \
@@ -1489,23 +1462,9 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QRegularExpression \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/qregularexpression.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QRegularExpressionMatch \
-		colortableview.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/QItemDelegate \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qitemdelegate.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qstyleoption.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtCore/qlocale.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractspinbox.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtGui/qvalidator.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qslider.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractslider.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qstyle.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qtabbar.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qrubberband.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qframe.h \
-		../../../qt_new/6.4.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/QStandardItemModel \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qstandarditemmodel.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtSql/QSqlDatabase \
 		stats.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/QSettings \
@@ -1531,12 +1490,23 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtCore/qpromise.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qguiapplication.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qinputmethod.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtCore/qlocale.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtGui/qguiapplication_platform.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/QCheckBox \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qcheckbox.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractbutton.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/QComboBox \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qcombobox.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qstyleoption.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractspinbox.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtGui/qvalidator.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qslider.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qabstractslider.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qstyle.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qtabbar.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qrubberband.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qframe.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/QDoubleSpinBox \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qspinbox.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/QFormLayout \
@@ -1828,6 +1798,7 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qgraphicsview.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qscrollarea.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qinputdialog.h \
+		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qitemdelegate.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qitemeditorfactory.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qkeysequenceedit.h \
 		../../../qt_new/6.4.3/mingw_64/include/QtWidgets/qlcdnumber.h \
