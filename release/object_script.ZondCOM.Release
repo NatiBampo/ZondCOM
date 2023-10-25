@@ -3,9 +3,11 @@ release/keithley.o
 release/main.o
 release/mainwindow.o
 release/stats.o
+release/tabcanvas.o
 release/worker.o
 release/qrc_images.o
 release/moc_keithley.o
 release/moc_mainwindow.o
 release/moc_stats.o
+release/moc_tabcanvas.o
 release/moc_worker.o

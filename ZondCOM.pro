@@ -16,6 +16,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     stats.cpp \
+    tabcanvas.cpp \
     worker.cpp
 
 HEADERS += \
@@ -23,6 +24,7 @@ HEADERS += \
     keithley.h \
     mainwindow.h \
     stats.h \
+    tabcanvas.h \
     worker.h
 
 FORMS += \

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.3)
+** Created by: The Qt Meta Object Compiler version 68 (Qt 6.4.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -13,7 +13,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 68
-#error "This file was generated using the moc from 6.4.3. It"
+#error "This file was generated using the moc from 6.4.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -27,7 +27,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 namespace {
 struct qt_meta_stringdata_MainWindow_t {
-    uint offsetsAndSizes[128];
+    uint offsetsAndSizes[130];
     char stringdata0[11];
     char stringdata1[20];
     char stringdata2[1];
@@ -92,6 +92,7 @@ struct qt_meta_stringdata_MainWindow_t {
     char stringdata61[32];
     char stringdata62[27];
     char stringdata63[28];
+    char stringdata64[28];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(sizeof(qt_meta_stringdata_MainWindow_t::offsetsAndSizes) + ofs), len 
@@ -160,7 +161,8 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
         QT_MOC_LITERAL(1140, 26),  // "on_planarCMDButton_clicked"
         QT_MOC_LITERAL(1167, 31),  // "on_resetPortsPushButton_clicked"
         QT_MOC_LITERAL(1199, 26),  // "on_stop2pushButton_clicked"
-        QT_MOC_LITERAL(1226, 27)   // "on_admCheckBox_stateChanged"
+        QT_MOC_LITERAL(1226, 27),  // "on_admCheckBox_stateChanged"
+        QT_MOC_LITERAL(1254, 27)   // "on_schemePushButton_clicked"
     },
     "MainWindow",
     "scanningPlateSignal",
@@ -225,7 +227,8 @@ Q_CONSTINIT static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_Main
     "on_planarCMDButton_clicked",
     "on_resetPortsPushButton_clicked",
     "on_stop2pushButton_clicked",
-    "on_admCheckBox_stateChanged"
+    "on_admCheckBox_stateChanged",
+    "on_schemePushButton_clicked"
 };
 #undef QT_MOC_LITERAL
 } // unnamed namespace
@@ -236,7 +239,7 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
       10,       // revision
        0,       // classname
        0,    0, // classinfo
-      59,   14, // methods
+      60,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -244,67 +247,68 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
       17,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,   18,  368,    2, 0x06,    1 /* Public */,
-       3,    3,  405,    2, 0x06,   20 /* Public */,
-       4,    2,  412,    2, 0x06,   24 /* Public */,
-       5,    2,  417,    2, 0x06,   27 /* Public */,
-       6,    3,  422,    2, 0x06,   30 /* Public */,
-       7,    0,  429,    2, 0x06,   34 /* Public */,
-       8,    2,  430,    2, 0x06,   35 /* Public */,
-       9,    0,  435,    2, 0x06,   38 /* Public */,
-      10,    4,  436,    2, 0x06,   39 /* Public */,
-      11,    7,  445,    2, 0x06,   44 /* Public */,
-      12,    0,  460,    2, 0x06,   52 /* Public */,
-      13,    1,  461,    2, 0x06,   53 /* Public */,
-      14,    1,  464,    2, 0x06,   55 /* Public */,
-      16,    2,  467,    2, 0x06,   57 /* Public */,
-      17,    2,  472,    2, 0x06,   60 /* Public */,
-      18,    1,  477,    2, 0x06,   63 /* Public */,
-      19,    2,  480,    2, 0x06,   65 /* Public */,
+       1,   18,  374,    2, 0x06,    1 /* Public */,
+       3,    3,  411,    2, 0x06,   20 /* Public */,
+       4,    2,  418,    2, 0x06,   24 /* Public */,
+       5,    2,  423,    2, 0x06,   27 /* Public */,
+       6,    3,  428,    2, 0x06,   30 /* Public */,
+       7,    0,  435,    2, 0x06,   34 /* Public */,
+       8,    2,  436,    2, 0x06,   35 /* Public */,
+       9,    0,  441,    2, 0x06,   38 /* Public */,
+      10,    4,  442,    2, 0x06,   39 /* Public */,
+      11,    7,  451,    2, 0x06,   44 /* Public */,
+      12,    0,  466,    2, 0x06,   52 /* Public */,
+      13,    1,  467,    2, 0x06,   53 /* Public */,
+      14,    1,  470,    2, 0x06,   55 /* Public */,
+      16,    2,  473,    2, 0x06,   57 /* Public */,
+      17,    2,  478,    2, 0x06,   60 /* Public */,
+      18,    1,  483,    2, 0x06,   63 /* Public */,
+      19,    2,  486,    2, 0x06,   65 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      20,    0,  485,    2, 0x0a,   68 /* Public */,
-      21,    0,  486,    2, 0x0a,   69 /* Public */,
-      22,    0,  487,    2, 0x0a,   70 /* Public */,
-      23,    0,  488,    2, 0x0a,   71 /* Public */,
-      24,    0,  489,    2, 0x0a,   72 /* Public */,
-      25,    0,  490,    2, 0x0a,   73 /* Public */,
-      26,    0,  491,    2, 0x0a,   74 /* Public */,
-      27,    0,  492,    2, 0x0a,   75 /* Public */,
-      28,    0,  493,    2, 0x0a,   76 /* Public */,
-      29,    0,  494,    2, 0x0a,   77 /* Public */,
-      30,    0,  495,    2, 0x0a,   78 /* Public */,
-      31,    1,  496,    2, 0x0a,   79 /* Public */,
-      32,    1,  499,    2, 0x0a,   81 /* Public */,
-      33,    2,  502,    2, 0x0a,   83 /* Public */,
-      34,    3,  507,    2, 0x0a,   86 /* Public */,
-      35,    5,  514,    2, 0x0a,   90 /* Public */,
-      36,    2,  525,    2, 0x0a,   96 /* Public */,
-      37,    2,  530,    2, 0x0a,   99 /* Public */,
-      38,    1,  535,    2, 0x0a,  102 /* Public */,
-      39,    0,  538,    2, 0x0a,  104 /* Public */,
-      40,    0,  539,    2, 0x0a,  105 /* Public */,
-      41,    1,  540,    2, 0x0a,  106 /* Public */,
-      42,    0,  543,    2, 0x0a,  108 /* Public */,
-      43,    1,  544,    2, 0x0a,  109 /* Public */,
-      45,    0,  547,    2, 0x0a,  111 /* Public */,
-      46,    0,  548,    2, 0x0a,  112 /* Public */,
-      47,    0,  549,    2, 0x0a,  113 /* Public */,
-      48,    0,  550,    2, 0x0a,  114 /* Public */,
-      49,    2,  551,    2, 0x0a,  115 /* Public */,
-      50,    0,  556,    2, 0x0a,  118 /* Public */,
-      51,    0,  557,    2, 0x0a,  119 /* Public */,
-      52,    1,  558,    2, 0x0a,  120 /* Public */,
-      54,    0,  561,    2, 0x0a,  122 /* Public */,
-      55,    0,  562,    2, 0x0a,  123 /* Public */,
-      56,    0,  563,    2, 0x0a,  124 /* Public */,
-      57,    0,  564,    2, 0x0a,  125 /* Public */,
-      58,    0,  565,    2, 0x0a,  126 /* Public */,
-      59,    1,  566,    2, 0x0a,  127 /* Public */,
-      60,    0,  569,    2, 0x08,  129 /* Private */,
-      61,    0,  570,    2, 0x08,  130 /* Private */,
-      62,    0,  571,    2, 0x08,  131 /* Private */,
-      63,    1,  572,    2, 0x08,  132 /* Private */,
+      20,    0,  491,    2, 0x0a,   68 /* Public */,
+      21,    0,  492,    2, 0x0a,   69 /* Public */,
+      22,    0,  493,    2, 0x0a,   70 /* Public */,
+      23,    0,  494,    2, 0x0a,   71 /* Public */,
+      24,    0,  495,    2, 0x0a,   72 /* Public */,
+      25,    0,  496,    2, 0x0a,   73 /* Public */,
+      26,    0,  497,    2, 0x0a,   74 /* Public */,
+      27,    0,  498,    2, 0x0a,   75 /* Public */,
+      28,    0,  499,    2, 0x0a,   76 /* Public */,
+      29,    0,  500,    2, 0x0a,   77 /* Public */,
+      30,    0,  501,    2, 0x0a,   78 /* Public */,
+      31,    1,  502,    2, 0x0a,   79 /* Public */,
+      32,    1,  505,    2, 0x0a,   81 /* Public */,
+      33,    2,  508,    2, 0x0a,   83 /* Public */,
+      34,    3,  513,    2, 0x0a,   86 /* Public */,
+      35,    5,  520,    2, 0x0a,   90 /* Public */,
+      36,    2,  531,    2, 0x0a,   96 /* Public */,
+      37,    2,  536,    2, 0x0a,   99 /* Public */,
+      38,    1,  541,    2, 0x0a,  102 /* Public */,
+      39,    0,  544,    2, 0x0a,  104 /* Public */,
+      40,    0,  545,    2, 0x0a,  105 /* Public */,
+      41,    1,  546,    2, 0x0a,  106 /* Public */,
+      42,    0,  549,    2, 0x0a,  108 /* Public */,
+      43,    1,  550,    2, 0x0a,  109 /* Public */,
+      45,    0,  553,    2, 0x0a,  111 /* Public */,
+      46,    0,  554,    2, 0x0a,  112 /* Public */,
+      47,    0,  555,    2, 0x0a,  113 /* Public */,
+      48,    0,  556,    2, 0x0a,  114 /* Public */,
+      49,    2,  557,    2, 0x0a,  115 /* Public */,
+      50,    0,  562,    2, 0x0a,  118 /* Public */,
+      51,    0,  563,    2, 0x0a,  119 /* Public */,
+      52,    1,  564,    2, 0x0a,  120 /* Public */,
+      54,    0,  567,    2, 0x0a,  122 /* Public */,
+      55,    0,  568,    2, 0x0a,  123 /* Public */,
+      56,    0,  569,    2, 0x0a,  124 /* Public */,
+      57,    0,  570,    2, 0x0a,  125 /* Public */,
+      58,    0,  571,    2, 0x0a,  126 /* Public */,
+      59,    1,  572,    2, 0x0a,  127 /* Public */,
+      60,    0,  575,    2, 0x08,  129 /* Private */,
+      61,    0,  576,    2, 0x08,  130 /* Private */,
+      62,    0,  577,    2, 0x08,  131 /* Private */,
+      63,    1,  578,    2, 0x08,  132 /* Private */,
+      64,    0,  581,    2, 0x08,  134 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Bool, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Bool, QMetaType::Bool,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
@@ -368,6 +372,7 @@ Q_CONSTINIT static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,   53,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -572,7 +577,9 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_admCheckBox_stateChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'on_schemePushButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -642,6 +649,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 56: _t->on_resetPortsPushButton_clicked(); break;
         case 57: _t->on_stop2pushButton_clicked(); break;
         case 58: _t->on_admCheckBox_stateChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 59: _t->on_schemePushButton_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -787,13 +795,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 59)
+        if (_id < 60)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 59;
+        _id -= 60;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 59)
+        if (_id < 60)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 59;
+        _id -= 60;
     }
     return _id;
 }

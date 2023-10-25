@@ -135,7 +135,7 @@
              </font>
             </property>
             <property name="text">
-             <string>v1710_1</string>
+             <string>v2510_1</string>
             </property>
            </widget>
           </item>
@@ -397,7 +397,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>4</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -1506,6 +1506,19 @@
          <attribute name="title">
           <string>Схема</string>
          </attribute>
+         <widget class="QPushButton" name="schemePushButton">
+          <property name="geometry">
+           <rect>
+            <x>380</x>
+            <y>30</y>
+            <width>75</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Отрисовать</string>
+          </property>
+         </widget>
         </widget>
         <widget class="QWidget" name="tab_3">
          <property name="focusPolicy">
@@ -2617,7 +2630,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

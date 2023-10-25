@@ -53,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     //connect(ui->toAPushButton, &QPushButton::clicked, this, &MainWindow::on_toAPushButton_clicked);
     //connect(ui->toBPushButton, &QPushButton::clicked, this, &MainWindow::on_toBPushButton_clicked);
     //connect(ui->planarCMDButton, &QPushButton::clicked, this, &MainWindow::on_planarCMDButton_clicked);
+    //connect(ui->schemePushButton, &QPushButton::clicked, this, &MainWindow::on_schemePushButton_clicked);
 
     createWorkerThread();
     createStatsThread();
@@ -923,15 +924,10 @@ void MainWindow::on_stop2pushButton_clicked()
 
 void MainWindow::drawCanvas()
 {
-    int x = 594;
-    int y = 474;
 
-    QPainter painter(this);
-    painter.setBrush(QBrush(Qt::red,Qt::SolidPattern));
-    painter.setPen(QPen(Qt::blue,Qt::SolidLine));
-    QRect currRect(200, 300, 30, 30);
-//    painter.drawRect(currRect, Qt::AlignCenter, "3");
-//    painter.drawRect(QRect(10,10,300,300));
+    tabCanvas *page = new tabCanvas(ui->tabWidget);
+
+    ui->tabWidget->addTab(page,"Scheme");
 
 }
 
@@ -968,3 +964,10 @@ void MainWindow::on_admCheckBox_stateChanged(int arg1)
 
     checkBusy();
 }
+
+void MainWindow::on_schemePushButton_clicked()
+{
+    drawCanvas();
+    QMessageBox::information(this, "Информация", "auf");
+}
+

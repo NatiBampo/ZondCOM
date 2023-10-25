@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 6.4.3
+** Created by: Qt User Interface Compiler version 6.4.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -150,6 +150,7 @@ public:
     QSpacerItem *verticalSpacer_4;
     QSpacerItem *verticalSpacer_3;
     QWidget *tab_4;
+    QPushButton *schemePushButton;
     QWidget *tab_3;
     QLabel *label_10;
     QLabel *label_8;
@@ -973,6 +974,9 @@ public:
         endTimeLabel->raise();
         tab_4 = new QWidget();
         tab_4->setObjectName("tab_4");
+        schemePushButton = new QPushButton(tab_4);
+        schemePushButton->setObjectName("schemePushButton");
+        schemePushButton->setGeometry(QRect(380, 30, 75, 24));
         tabWidget->addTab(tab_4, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName("tab_3");
@@ -1425,7 +1429,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1280, 26));
+        menubar->setGeometry(QRect(0, 0, 1280, 22));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -1433,7 +1437,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(4);
+        tabWidget->setCurrentIndex(2);
         orientationButton->setDefault(false);
         measureBButton->setDefault(false);
 
@@ -1445,7 +1449,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        label_40->setText(QCoreApplication::translate("MainWindow", "v1710_1", nullptr));
+        label_40->setText(QCoreApplication::translate("MainWindow", "v2510_1", nullptr));
         label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
         label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
         label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
@@ -1515,6 +1519,7 @@ public:
         stopPushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\277", nullptr));
         toBPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222 \321\202.\320\222", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
+        schemePushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\321\200\320\270\321\201\320\276\320\262\320\260\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QCoreApplication::translate("MainWindow", "\320\241\321\205\320\265\320\274\320\260", nullptr));
         label_10->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));

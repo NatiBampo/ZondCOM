@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include <worker.h>
+#include <tabcanvas.h>
 #include <QStandardItemModel>
 #include <QSqlDatabase>
 #include <QMutex>
@@ -150,5 +151,6 @@ private slots:
     void on_resetPortsPushButton_clicked();
     void on_stop2pushButton_clicked();
     void on_admCheckBox_stateChanged(int arg1);
+    void on_schemePushButton_clicked();
 };
 #endif // MAINWINDOW_H
