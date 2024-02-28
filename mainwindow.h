@@ -13,7 +13,7 @@
 #include <QShortcut>
 
 
-#define ORGANIZATION_NAME "ZOO"
+#define ORGANIZATION_NAME " "
 #define ORGANIZATION_DOMAIN "www.ZOO.ru"
 #define APPLICATION_NAME "QSettings Program"
 

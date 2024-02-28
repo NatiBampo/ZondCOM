@@ -825,3 +825,4 @@ void Worker::setDelay(QList<int> * delays)
     FCVoltage =  delays->at(5);
     planarDelay = delays->at(6);
 }
+//

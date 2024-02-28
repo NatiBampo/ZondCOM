@@ -318,6 +318,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="schemePushButton">
+            <property name="text">
+             <string>Отрисовать</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="savePushButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -397,7 +404,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -1506,19 +1513,6 @@
          <attribute name="title">
           <string>Схема</string>
          </attribute>
-         <widget class="QPushButton" name="schemePushButton">
-          <property name="geometry">
-           <rect>
-            <x>380</x>
-            <y>30</y>
-            <width>75</width>
-            <height>24</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Отрисовать</string>
-          </property>
-         </widget>
         </widget>
         <widget class="QWidget" name="tab_3">
          <property name="focusPolicy">
@@ -2630,7 +2624,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

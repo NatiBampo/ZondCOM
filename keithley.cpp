@@ -28,7 +28,7 @@ void Keithley::openSerialPort(QString name)
     m_serial->setParity(QSerialPort::Parity::NoParity);
     m_serial->setStopBits(QSerialPort::StopBits::OneStop);
     m_serial->setFlowControl(QSerialPort::NoFlowControl);
-
+//
 
     if (m_serial->open(QIODevice::ReadWrite))
     {

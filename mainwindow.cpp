@@ -971,3 +971,4 @@ void MainWindow::on_schemePushButton_clicked()
     QMessageBox::information(this, "Информация", "auf");
 }
 
+//

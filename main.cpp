@@ -56,3 +56,4 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
     out <<  ": " << msg << "\n";//context.category <<
     out.flush();    // Очищаем буферизированные данные
 }
+//

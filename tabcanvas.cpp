@@ -23,12 +23,10 @@ void tabCanvas::paintEvent(QPaintEvent *)
     {
         if (k == 1) x_0 -= (s + g) * 17 * 2;
         if (k == 2) x_0 += (s + g) * 17;
-
         for (int i = 0; i < 16; i++)
         {
             for (int j = 0; j < 30; j++)
             {
-
                 rects.push_back(QRect(QPoint(x_0 + i*(s+g) + c, y_0 + j*(s+g)), rectSize));
             }
         }
@@ -42,3 +40,4 @@ void tabCanvas::paintEvent(QPaintEvent *)
     painter.beginNativePainting();
     painter.end();
 }
+//
