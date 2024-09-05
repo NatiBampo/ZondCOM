@@ -17,7 +17,7 @@ class Stats : public QMainWindow
 public:
    explicit Stats(QWidget *parent = nullptr);
    ~Stats();
-   void showCharts(QString);
+
 
 private:
    Ui::Stats *ui;
@@ -41,11 +41,14 @@ private:
    QString getE(double);
    double maxDouble(double, double);
    double minDouble(double, double);
-   void borderRange();
+   void clear3Percentyles(std::vector<double> &v);
+   void normalize(std::vector<double> &v);
+
+
    bool inRange(vector<double>  &, vector<double>  &, double, int);
 
 public slots:
-
+    void showCharts(QString);
 };
 
 #endif // STATS_H

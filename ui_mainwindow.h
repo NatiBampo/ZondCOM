@@ -10,6 +10,7 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QAction>
 #include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
@@ -24,6 +25,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
@@ -48,18 +50,21 @@ public:
     QFormLayout *formLayout;
     QVBoxLayout *verticalLayout_3;
     QHBoxLayout *horizontalLayout_2;
-    QLabel *label_40;
-    QLabel *label_26;
-    QLabel *label_25;
-    QLabel *label_24;
-    QHBoxLayout *horizontalLayout;
     QLabel *label;
+    QVBoxLayout *verticalLayout_5;
+    QLabel *label_26;
     QComboBox *portComboBox;
+    QVBoxLayout *verticalLayout_6;
+    QLabel *label_25;
     QComboBox *keithlyPortComboBox;
+    QVBoxLayout *verticalLayout_7;
+    QLabel *label_24;
     QComboBox *lightPortComboBox;
     QPushButton *resetPortsPushButton;
+    QVBoxLayout *verticalLayout_9;
     QPushButton *autoPortButton;
     QPushButton *openPortPushButton;
+    QHBoxLayout *horizontalLayout;
     QSpacerItem *verticalSpacer_5;
     QHBoxLayout *horizontalLayout_3;
     QLabel *addressHeaderLabel;
@@ -102,6 +107,16 @@ public:
     QPushButton *measure2pushButton;
     QPushButton *FCMeasureButton;
     QPushButton *stop2pushButton;
+    QGroupBox *coordsGroupBox;
+    QGridLayout *gridLayout;
+    QLabel *label_2;
+    QLineEdit *yLineEdit;
+    QLabel *label_3;
+    QPushButton *statePushButton;
+    QPushButton *coordsPushButton;
+    QLineEdit *xLineEdit;
+    QLineEdit *queryLineEdit;
+    QPushButton *planarCMDButton;
     QGroupBox *moveGroupBox;
     QGridLayout *gridLayout_4;
     QPushButton *tableDownPushButton;
@@ -113,16 +128,6 @@ public:
     QPushButton *leftPushButton;
     QPushButton *forwardPushButton;
     QCheckBox *hotKeysCheckBox;
-    QGroupBox *coordsGroupBox;
-    QGridLayout *gridLayout;
-    QLineEdit *xLineEdit;
-    QPushButton *coordsPushButton;
-    QLineEdit *yLineEdit;
-    QLabel *label_3;
-    QLabel *label_2;
-    QPushButton *statePushButton;
-    QLineEdit *queryLineEdit;
-    QPushButton *planarCMDButton;
     QWidget *tab_2;
     QGridLayout *gridLayout_6;
     QLabel *label_5;
@@ -134,10 +139,8 @@ public:
     QSpinBox *AXspinBox;
     QLabel *label_29;
     QPushButton *toAPushButton;
-    QPushButton *orientationButton;
     QLabel *label_30;
     QPushButton *scanPushButton;
-    QPushButton *chartsButton;
     QPushButton *measureBButton;
     QLabel *label_12;
     QPushButton *pauseButton;
@@ -149,8 +152,7 @@ public:
     QPushButton *toBPushButton;
     QSpacerItem *verticalSpacer_4;
     QSpacerItem *verticalSpacer_3;
-    QWidget *tab_4;
-    QPushButton *schemePushButton;
+    QPushButton *orientationButton;
     QWidget *tab_3;
     QLabel *label_10;
     QLabel *label_8;
@@ -241,7 +243,10 @@ public:
     QSpinBox *StatRange_3;
     QCheckBox *LogX_3;
     QCheckBox *LogY_3;
+    QPushButton *chartsButton;
+    QPushButton *schemePushButton;
     QMenuBar *menubar;
+    QMenu *menujh_jg;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -299,42 +304,19 @@ public:
         verticalLayout_3->setContentsMargins(-1, -1, -1, 11);
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName("horizontalLayout_2");
-        label_40 = new QLabel(centralwidget);
-        label_40->setObjectName("label_40");
-        label_40->setMaximumSize(QSize(60, 16777215));
-        QFont font;
-        font.setPointSize(7);
-        font.setItalic(true);
-        label_40->setFont(font);
+        label = new QLabel(centralwidget);
+        label->setObjectName("label");
 
-        horizontalLayout_2->addWidget(label_40);
+        horizontalLayout_2->addWidget(label);
 
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setObjectName("verticalLayout_5");
+        verticalLayout_5->setContentsMargins(10, -1, -1, -1);
         label_26 = new QLabel(centralwidget);
         label_26->setObjectName("label_26");
         label_26->setMaximumSize(QSize(90, 16777215));
 
-        horizontalLayout_2->addWidget(label_26);
-
-        label_25 = new QLabel(centralwidget);
-        label_25->setObjectName("label_25");
-        label_25->setMaximumSize(QSize(120, 16777215));
-
-        horizontalLayout_2->addWidget(label_25);
-
-        label_24 = new QLabel(centralwidget);
-        label_24->setObjectName("label_24");
-
-        horizontalLayout_2->addWidget(label_24);
-
-
-        verticalLayout_3->addLayout(horizontalLayout_2);
-
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName("horizontalLayout");
-        label = new QLabel(centralwidget);
-        label->setObjectName("label");
-
-        horizontalLayout->addWidget(label);
+        verticalLayout_5->addWidget(label_26);
 
         portComboBox = new QComboBox(centralwidget);
         portComboBox->setObjectName("portComboBox");
@@ -344,21 +326,47 @@ public:
         sizePolicy1.setHeightForWidth(portComboBox->sizePolicy().hasHeightForWidth());
         portComboBox->setSizePolicy(sizePolicy1);
 
-        horizontalLayout->addWidget(portComboBox);
+        verticalLayout_5->addWidget(portComboBox);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_5);
+
+        verticalLayout_6 = new QVBoxLayout();
+        verticalLayout_6->setObjectName("verticalLayout_6");
+        verticalLayout_6->setContentsMargins(10, -1, -1, -1);
+        label_25 = new QLabel(centralwidget);
+        label_25->setObjectName("label_25");
+        label_25->setMaximumSize(QSize(120, 16777215));
+
+        verticalLayout_6->addWidget(label_25);
 
         keithlyPortComboBox = new QComboBox(centralwidget);
         keithlyPortComboBox->setObjectName("keithlyPortComboBox");
         sizePolicy1.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
         keithlyPortComboBox->setSizePolicy(sizePolicy1);
 
-        horizontalLayout->addWidget(keithlyPortComboBox);
+        verticalLayout_6->addWidget(keithlyPortComboBox);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_6);
+
+        verticalLayout_7 = new QVBoxLayout();
+        verticalLayout_7->setObjectName("verticalLayout_7");
+        verticalLayout_7->setContentsMargins(10, -1, 10, -1);
+        label_24 = new QLabel(centralwidget);
+        label_24->setObjectName("label_24");
+
+        verticalLayout_7->addWidget(label_24);
 
         lightPortComboBox = new QComboBox(centralwidget);
         lightPortComboBox->setObjectName("lightPortComboBox");
         sizePolicy1.setHeightForWidth(lightPortComboBox->sizePolicy().hasHeightForWidth());
         lightPortComboBox->setSizePolicy(sizePolicy1);
 
-        horizontalLayout->addWidget(lightPortComboBox);
+        verticalLayout_7->addWidget(lightPortComboBox);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_7);
 
         resetPortsPushButton = new QPushButton(centralwidget);
         resetPortsPushButton->setObjectName("resetPortsPushButton");
@@ -367,18 +375,29 @@ public:
         icon.addFile(QString::fromUtf8(":/image/resetPic.png"), QSize(), QIcon::Normal, QIcon::Off);
         resetPortsPushButton->setIcon(icon);
 
-        horizontalLayout->addWidget(resetPortsPushButton);
+        horizontalLayout_2->addWidget(resetPortsPushButton);
 
+        verticalLayout_9 = new QVBoxLayout();
+        verticalLayout_9->setObjectName("verticalLayout_9");
+        verticalLayout_9->setContentsMargins(10, -1, -1, -1);
         autoPortButton = new QPushButton(centralwidget);
         autoPortButton->setObjectName("autoPortButton");
 
-        horizontalLayout->addWidget(autoPortButton);
+        verticalLayout_9->addWidget(autoPortButton);
 
         openPortPushButton = new QPushButton(centralwidget);
         openPortPushButton->setObjectName("openPortPushButton");
 
-        horizontalLayout->addWidget(openPortPushButton);
+        verticalLayout_9->addWidget(openPortPushButton);
 
+
+        horizontalLayout_2->addLayout(verticalLayout_9);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_2);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName("horizontalLayout");
 
         verticalLayout_3->addLayout(horizontalLayout);
 
@@ -645,6 +664,60 @@ public:
 
         gridLayout_3->addWidget(goToGroupBox, 5, 1, 1, 1);
 
+        coordsGroupBox = new QGroupBox(tab);
+        coordsGroupBox->setObjectName("coordsGroupBox");
+        coordsGroupBox->setEnabled(false);
+        QSizePolicy sizePolicy5(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy5.setHorizontalStretch(28);
+        sizePolicy5.setVerticalStretch(150);
+        sizePolicy5.setHeightForWidth(coordsGroupBox->sizePolicy().hasHeightForWidth());
+        coordsGroupBox->setSizePolicy(sizePolicy5);
+        coordsGroupBox->setMaximumSize(QSize(16777215, 236));
+        gridLayout = new QGridLayout(coordsGroupBox);
+        gridLayout->setObjectName("gridLayout");
+        label_2 = new QLabel(coordsGroupBox);
+        label_2->setObjectName("label_2");
+
+        gridLayout->addWidget(label_2, 0, 0, 1, 1);
+
+        yLineEdit = new QLineEdit(coordsGroupBox);
+        yLineEdit->setObjectName("yLineEdit");
+
+        gridLayout->addWidget(yLineEdit, 1, 1, 1, 1);
+
+        label_3 = new QLabel(coordsGroupBox);
+        label_3->setObjectName("label_3");
+
+        gridLayout->addWidget(label_3, 1, 0, 1, 1);
+
+        statePushButton = new QPushButton(coordsGroupBox);
+        statePushButton->setObjectName("statePushButton");
+
+        gridLayout->addWidget(statePushButton, 3, 1, 1, 1);
+
+        coordsPushButton = new QPushButton(coordsGroupBox);
+        coordsPushButton->setObjectName("coordsPushButton");
+
+        gridLayout->addWidget(coordsPushButton, 2, 1, 1, 1);
+
+        xLineEdit = new QLineEdit(coordsGroupBox);
+        xLineEdit->setObjectName("xLineEdit");
+
+        gridLayout->addWidget(xLineEdit, 0, 1, 1, 1);
+
+
+        gridLayout_3->addWidget(coordsGroupBox, 4, 1, 1, 1);
+
+        queryLineEdit = new QLineEdit(tab);
+        queryLineEdit->setObjectName("queryLineEdit");
+
+        gridLayout_3->addWidget(queryLineEdit, 6, 1, 1, 1);
+
+        planarCMDButton = new QPushButton(tab);
+        planarCMDButton->setObjectName("planarCMDButton");
+
+        gridLayout_3->addWidget(planarCMDButton, 6, 0, 1, 1);
+
         moveGroupBox = new QGroupBox(tab);
         moveGroupBox->setObjectName("moveGroupBox");
         moveGroupBox->setEnabled(false);
@@ -707,60 +780,6 @@ public:
 
 
         gridLayout_3->addWidget(moveGroupBox, 4, 0, 1, 1);
-
-        coordsGroupBox = new QGroupBox(tab);
-        coordsGroupBox->setObjectName("coordsGroupBox");
-        coordsGroupBox->setEnabled(false);
-        QSizePolicy sizePolicy5(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy5.setHorizontalStretch(28);
-        sizePolicy5.setVerticalStretch(150);
-        sizePolicy5.setHeightForWidth(coordsGroupBox->sizePolicy().hasHeightForWidth());
-        coordsGroupBox->setSizePolicy(sizePolicy5);
-        coordsGroupBox->setMaximumSize(QSize(16777215, 236));
-        gridLayout = new QGridLayout(coordsGroupBox);
-        gridLayout->setObjectName("gridLayout");
-        xLineEdit = new QLineEdit(coordsGroupBox);
-        xLineEdit->setObjectName("xLineEdit");
-
-        gridLayout->addWidget(xLineEdit, 0, 1, 1, 1);
-
-        coordsPushButton = new QPushButton(coordsGroupBox);
-        coordsPushButton->setObjectName("coordsPushButton");
-
-        gridLayout->addWidget(coordsPushButton, 2, 1, 1, 1);
-
-        yLineEdit = new QLineEdit(coordsGroupBox);
-        yLineEdit->setObjectName("yLineEdit");
-
-        gridLayout->addWidget(yLineEdit, 1, 1, 1, 1);
-
-        label_3 = new QLabel(coordsGroupBox);
-        label_3->setObjectName("label_3");
-
-        gridLayout->addWidget(label_3, 1, 0, 1, 1);
-
-        label_2 = new QLabel(coordsGroupBox);
-        label_2->setObjectName("label_2");
-
-        gridLayout->addWidget(label_2, 0, 0, 1, 1);
-
-        statePushButton = new QPushButton(coordsGroupBox);
-        statePushButton->setObjectName("statePushButton");
-
-        gridLayout->addWidget(statePushButton, 3, 1, 1, 1);
-
-
-        gridLayout_3->addWidget(coordsGroupBox, 4, 1, 1, 1);
-
-        queryLineEdit = new QLineEdit(tab);
-        queryLineEdit->setObjectName("queryLineEdit");
-
-        gridLayout_3->addWidget(queryLineEdit, 6, 1, 1, 1);
-
-        planarCMDButton = new QPushButton(tab);
-        planarCMDButton->setObjectName("planarCMDButton");
-
-        gridLayout_3->addWidget(planarCMDButton, 6, 0, 1, 1);
 
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
@@ -845,16 +864,6 @@ public:
 
         gridLayout_6->addWidget(toAPushButton, 0, 2, 1, 1);
 
-        orientationButton = new QPushButton(tab_2);
-        orientationButton->setObjectName("orientationButton");
-        orientationButton->setEnabled(true);
-        sizePolicy8.setHeightForWidth(orientationButton->sizePolicy().hasHeightForWidth());
-        orientationButton->setSizePolicy(sizePolicy8);
-        orientationButton->setMinimumSize(QSize(100, 0));
-        orientationButton->setFlat(false);
-
-        gridLayout_6->addWidget(orientationButton, 4, 4, 1, 1);
-
         label_30 = new QLabel(tab_2);
         label_30->setObjectName("label_30");
         label_30->setMinimumSize(QSize(20, 0));
@@ -870,15 +879,6 @@ public:
         scanPushButton->setCheckable(true);
 
         gridLayout_6->addWidget(scanPushButton, 6, 4, 1, 1);
-
-        chartsButton = new QPushButton(tab_2);
-        chartsButton->setObjectName("chartsButton");
-        chartsButton->setEnabled(true);
-        sizePolicy8.setHeightForWidth(chartsButton->sizePolicy().hasHeightForWidth());
-        chartsButton->setSizePolicy(sizePolicy8);
-        chartsButton->setMinimumSize(QSize(100, 0));
-
-        gridLayout_6->addWidget(chartsButton, 7, 4, 1, 1);
 
         measureBButton = new QPushButton(tab_2);
         measureBButton->setObjectName("measureBButton");
@@ -951,6 +951,16 @@ public:
 
         gridLayout_6->addItem(verticalSpacer_3, 3, 2, 1, 1);
 
+        orientationButton = new QPushButton(tab_2);
+        orientationButton->setObjectName("orientationButton");
+        orientationButton->setEnabled(true);
+        sizePolicy8.setHeightForWidth(orientationButton->sizePolicy().hasHeightForWidth());
+        orientationButton->setSizePolicy(sizePolicy8);
+        orientationButton->setMinimumSize(QSize(100, 0));
+        orientationButton->setFlat(false);
+
+        gridLayout_6->addWidget(orientationButton, 7, 4, 1, 1);
+
         tabWidget->addTab(tab_2, QString());
         pauseButton->raise();
         BYspinBox->raise();
@@ -964,20 +974,13 @@ public:
         AXspinBox->raise();
         label_30->raise();
         label_5->raise();
-        orientationButton->raise();
         scanPushButton->raise();
-        chartsButton->raise();
         stopPushButton->raise();
         toAPushButton->raise();
         toBPushButton->raise();
         endTimeNameLabel->raise();
         endTimeLabel->raise();
-        tab_4 = new QWidget();
-        tab_4->setObjectName("tab_4");
-        schemePushButton = new QPushButton(tab_4);
-        schemePushButton->setObjectName("schemePushButton");
-        schemePushButton->setGeometry(QRect(380, 30, 75, 24));
-        tabWidget->addTab(tab_4, QString());
+        orientationButton->raise();
         tab_3 = new QWidget();
         tab_3->setObjectName("tab_3");
         tab_3->setFocusPolicy(Qt::NoFocus);
@@ -1187,6 +1190,7 @@ public:
         tabWidget->addTab(tab_3, QString());
         tab_5 = new QWidget();
         tab_5->setObjectName("tab_5");
+        tab_5->setEnabled(true);
         label_6 = new QLabel(tab_5);
         label_6->setObjectName("label_6");
         label_6->setGeometry(QRect(60, 30, 181, 20));
@@ -1419,6 +1423,16 @@ public:
 
         StatLayout2_2->addWidget(LogY_3);
 
+        chartsButton = new QPushButton(tab_5);
+        chartsButton->setObjectName("chartsButton");
+        chartsButton->setEnabled(true);
+        chartsButton->setGeometry(QRect(300, 400, 166, 24));
+        sizePolicy8.setHeightForWidth(chartsButton->sizePolicy().hasHeightForWidth());
+        chartsButton->setSizePolicy(sizePolicy8);
+        chartsButton->setMinimumSize(QSize(100, 0));
+        schemePushButton = new QPushButton(tab_5);
+        schemePushButton->setObjectName("schemePushButton");
+        schemePushButton->setGeometry(QRect(260, 30, 166, 24));
         tabWidget->addTab(tab_5, QString());
 
         formLayout->setWidget(1, QFormLayout::FieldRole, tabWidget);
@@ -1429,17 +1443,21 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1280, 22));
+        menubar->setGeometry(QRect(0, 0, 1280, 21));
+        menujh_jg = new QMenu(menubar);
+        menujh_jg->setObjectName("menujh_jg");
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
         MainWindow->setStatusBar(statusbar);
 
+        menubar->addAction(menujh_jg->menuAction());
+
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
-        orientationButton->setDefault(false);
+        tabWidget->setCurrentIndex(3);
         measureBButton->setDefault(false);
+        orientationButton->setDefault(false);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1449,13 +1467,12 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        label_40->setText(QCoreApplication::translate("MainWindow", "v2510_1", nullptr));
-        label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
-        label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
-        label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\321\200\321\202\321\213", nullptr));
+        label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
         portComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\235\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", nullptr));
+        label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
         keithlyPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\235\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", nullptr));
+        label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
         lightPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\235\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", nullptr));
         resetPortsPushButton->setText(QString());
         autoPortButton->setText(QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
@@ -1484,21 +1501,24 @@ public:
         measure2pushButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\265\320\275\320\270\320\265", nullptr));
         FCMeasureButton->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\270\321\202\321\214 FC", nullptr));
         stop2pushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\277", nullptr));
+        coordsGroupBox->setTitle(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
+        statePushButton->setText(QCoreApplication::translate("MainWindow", "\320\242\320\265\320\272\321\203\321\211\320\270\320\265 \320\272\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213", nullptr));
+        coordsPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\265\321\200\320\265\321\201\321\202\320\260\320\262\320\270\321\202\321\214", nullptr));
+        planarCMDButton->setText(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\274\320\260\320\275\320\264\320\260 \320\275\320\260 \320\277\320\273\320\260\320\275\320\260\321\200", nullptr));
         moveGroupBox->setTitle(QCoreApplication::translate("MainWindow", "\320\243\320\277\321\200\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \321\201\321\202\320\276\320\273\320\276\320\274", nullptr));
         tableDownPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\320\277\321\203\321\201\321\202\320\270\321\202\321\214", nullptr));
         tableUpPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\320\264\320\275\321\217\321\202\321\214", nullptr));
         backwardPushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\320\267\320\260\320\264", nullptr));
         rightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\277\321\200\320\260\320\262\320\276", nullptr));
+#if QT_CONFIG(shortcut)
+        rightPushButton->setShortcut(QString());
+#endif // QT_CONFIG(shortcut)
         lightPushButton->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264 \320\222\320\272\320\273", nullptr));
         leftPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\273\320\265\320\262\320\276", nullptr));
         forwardPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222\320\277\320\265\321\200\320\265\320\264", nullptr));
         hotKeysCheckBox->setText(QString());
-        coordsGroupBox->setTitle(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213", nullptr));
-        coordsPushButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\265\321\200\320\265\321\201\321\202\320\260\320\262\320\270\321\202\321\214", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
-        statePushButton->setText(QCoreApplication::translate("MainWindow", "\320\242\320\265\320\272\321\203\321\211\320\270\320\265 \320\272\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213", nullptr));
-        planarCMDButton->setText(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\274\320\260\320\275\320\264\320\260 \320\275\320\260 \320\277\320\273\320\260\320\275\320\260\321\200", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainWindow", "\320\240\321\203\321\207\320\275\320\276\320\271", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
         label_39->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
@@ -1506,10 +1526,8 @@ public:
         endTimeLabel->setText(QString());
         label_29->setText(QCoreApplication::translate("MainWindow", " \320\232\320\276\320\276\321\200\320\264\320\270\320\275\320\260\321\202\321\213 \321\202.\320\220", nullptr));
         toAPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222 \321\202.\320\220", nullptr));
-        orientationButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\200\320\270\320\265\320\275\321\202\320\260\321\206\320\270\321\217", nullptr));
         label_30->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
         scanPushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\321\207\320\260\321\202\321\214", nullptr));
-        chartsButton->setText(QCoreApplication::translate("MainWindow", "\320\223\320\270\321\201\321\202\320\276\320\263\321\200\320\260\320\274\320\274\321\213", nullptr));
 #if QT_CONFIG(whatsthis)
         measureBButton->setWhatsThis(QCoreApplication::translate("MainWindow", "<html><head/><body><p>\320\235\320\260\320\266\320\270\320\274\320\260\321\202\321\214 \321\202\320\276\320\273\321\214\320\272\320\276 \320\275\320\260\320\264 \321\202\320\276\321\207\320\272\320\276\320\271 \320\222</p></body></html>", nullptr));
 #endif // QT_CONFIG(whatsthis)
@@ -1518,9 +1536,8 @@ public:
         pauseButton->setText(QCoreApplication::translate("MainWindow", "\320\237\320\260\321\203\320\267\320\260", nullptr));
         stopPushButton->setText(QCoreApplication::translate("MainWindow", "\320\241\321\202\320\276\320\277", nullptr));
         toBPushButton->setText(QCoreApplication::translate("MainWindow", "\320\222 \321\202.\320\222", nullptr));
+        orientationButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\200\320\270\320\265\320\275\321\202\320\260\321\206\320\270\321\217", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
-        schemePushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\321\200\320\270\321\201\320\276\320\262\320\260\321\202\321\214", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QCoreApplication::translate("MainWindow", "\320\241\321\205\320\265\320\274\320\260", nullptr));
         label_10->setText(QCoreApplication::translate("MainWindow", "\320\250\320\260\320\263", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "X:", nullptr));
         label_14->setText(QCoreApplication::translate("MainWindow", "Y:", nullptr));
@@ -1558,7 +1575,10 @@ public:
         statlabel_3->setText(QCoreApplication::translate("MainWindow", "Photo", nullptr));
         LogX_3->setText(QCoreApplication::translate("MainWindow", "logX", nullptr));
         LogY_3->setText(QCoreApplication::translate("MainWindow", "logY", nullptr));
+        chartsButton->setText(QCoreApplication::translate("MainWindow", "\320\223\320\270\321\201\321\202\320\276\320\263\321\200\320\260\320\274\320\274\321\213", nullptr));
+        schemePushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\321\200\320\270\321\201\320\276\320\262\320\260\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_5), QCoreApplication::translate("MainWindow", "\320\241\321\202\320\260\321\202\320\270\321\201\321\202\320\270\320\272\320\260", nullptr));
+        menujh_jg->setTitle(QCoreApplication::translate("MainWindow", "v08_04_24", nullptr));
     } // retranslateUi
 
 };

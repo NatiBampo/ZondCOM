@@ -23,6 +23,53 @@ MainWindow::MainWindow(QWidget *parent)
     ui->progressBar->setMaximum(1);
     ui->progressBar->setValue(0);
 
+    createWorkerThread();
+    createStatsThread();
+
+    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
+    {
+        ui->portComboBox->addItem(serialPortInfo.portName());
+        ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
+        ui->lightPortComboBox->addItem(serialPortInfo.portName());
+    }
+
+    dir_name = "С:\temp\1.csv";
+
+    delays.append({300, 300, 500, 500, 400, 400, 600});
+
+    initializeShortKeys();
+    initializeSettings();
+    initConnects();
+
+    readyCheck();
+    //statsThread.quit();
+    //statsThread.terminate();
+
+    tabCanvas *page = new tabCanvas(ui->tabWidget);
+
+    ui->tabWidget->addTab(page,"Scheme");
+
+    ui->tabWidget->setTabVisible(3, true);
+    ui->tabWidget->setTabVisible(4, false);
+    ui->chartsButton->setVisible(true);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+    emit closePortsSignal();
+    qInfo(logInfo()) << "Финишь worker";
+    workerThread.quit();
+    workerThread.terminate();
+
+    //statsThread.quit();
+    //statsThread.terminate();
+    qInfo(logInfo()) << "Finish MainWindow";
+}
+
+
+void MainWindow::initConnects()
+{
     connect(ui->statePushButton, &QPushButton::clicked, this, &MainWindow::statePushButton_on);
     connect(ui->openPortPushButton, &QPushButton::clicked, this, &MainWindow::openPortPushButton_on);
     connect(ui->coordsPushButton, &QPushButton::clicked, this, &MainWindow::coordsPushButton_on);
@@ -55,54 +102,37 @@ MainWindow::MainWindow(QWidget *parent)
     //connect(ui->planarCMDButton, &QPushButton::clicked, this, &MainWindow::on_planarCMDButton_clicked);
     //connect(ui->schemePushButton, &QPushButton::clicked, this, &MainWindow::on_schemePushButton_clicked);
 
-    createWorkerThread();
-    createStatsThread();
+}
 
-    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
-    {
-        ui->portComboBox->addItem(serialPortInfo.portName());
-        ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
-        ui->lightPortComboBox->addItem(serialPortInfo.portName());
-    }
-
-    dir_name = "С:\temp\1.csv";
-
-    delays.append({300, 300, 500, 500, 400, 400, 600});
-
-    initializeShortKeys();
-
+void MainWindow::initializeSettings()
+{
     QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME);
     int bx = (int) settings.value(POINT_B_X, 0).toInt();
     int by = (int) settings.value(POINT_B_Y, 0).toInt();
     ui->BXspinBox->setValue(bx);
     ui->BYspinBox->setValue(by);
 
-    ui->zeroSpinBox->setValue((int) settings.value(ZERO_D, 0).toInt());
-    ui->FCSpinBox->setValue((int) settings.value(FC_D, 0).toInt());
-    ui->DC10spinBox->setValue((int) settings.value(DC10mV_D, 0).toInt());
-    ui->DC1VSpinBox->setValue((int) settings.value(DC1V_D, 0).toInt());
-    ui->lightSpinBox->setValue((int) settings.value(LIGHT_D, 0).toInt());
-    ui->planarSpinBox->setValue((int) settings.value(PLANAR_D, 0).toInt());
-    ui->voltageSpinBox->setValue((int) settings.value(FC_V, 0).toInt());
+    int tmp = (int) settings.value(ZERO_D, 0).toInt();
+    if (tmp !=  0) ui->zeroSpinBox->setValue(tmp);
 
-    readyCheck();
-    //statsThread.quit();
-    //statsThread.terminate();
+    tmp = (int) settings.value(FC_D, 0).toInt();
+    if (tmp !=  0) ui->FCSpinBox->setValue(tmp);
+
+    tmp  = (int) settings.value(DC10mV_D, 0).toInt();
+    if (tmp !=  0) ui->DC10spinBox->setValue(tmp);
+
+    tmp = (int) settings.value(DC1V_D, 0).toInt();
+    if (tmp != 0) ui->DC1VSpinBox->setValue(tmp);
+
+    tmp = (int) settings.value(LIGHT_D, 0).toInt();
+    if (tmp != 0) ui->lightSpinBox->setValue(tmp);
+
+    tmp = (int) settings.value(PLANAR_D, 0).toInt();
+    if (tmp != 0) ui->planarSpinBox->setValue(tmp);
+
+    tmp = (int) settings.value(FC_V, 0).toInt();
+    if (tmp != 0) ui->voltageSpinBox->setValue(tmp);
 }
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-    emit closePortsSignal();
-    qInfo(logInfo()) << "Финишь worker";
-    workerThread.quit();
-    workerThread.terminate();
-
-    //statsThread.quit();
-    //statsThread.terminate();
-    qInfo(logInfo()) << "Finish MainWindow";
-}
-
 
 void MainWindow::createWorkerThread()
 {
@@ -416,7 +446,7 @@ void MainWindow::addElement(int row, int element, double value)
     if (!ui->colorRangeCheckBox->isChecked()) return;
 
     int rank = 0;
-    if (element == 4) rank = (value < - qPow(10, -5)) ? 1 : 9;
+    if (element == 4) rank = (value < - qPow(10, -4)) ? 1 : 9;
     if (element == 5) rank = (value < qPow(10, -12)) ? 1 : (value < 5 * qPow(10, -12)) ? 2 : (value < qPow(10, -11)) ? 3 : 9;
     if (element == 6) rank = (value < qPow(10, -10)) ? 1 : 9;
     if (element == 7) rank = (value > 1.07026 * qPow(10, -7)) ? 1 : 9;
@@ -673,9 +703,10 @@ void MainWindow::on_chartsButton_clicked()
 {
     //emit showChartsSignal(dir_name);
     QFileDialog directory;
-    QString stats_dir = directory.getSaveFileName(this,"Выберите данные для построенния графика");
+    QString stats_dir = directory.getOpenFileName(this,"Выберите данные для построенния графика");
     qInfo(logInfo()) << "Построение гистограммы из ->" << stats_dir;
     stats->showCharts(stats_dir);
+    qInfo(logInfo()) << "Построили гистограммы из ->" << stats_dir;
 }
 
 
@@ -924,11 +955,7 @@ void MainWindow::on_stop2pushButton_clicked()
 
 void MainWindow::drawCanvas()
 {
-
-    tabCanvas *page = new tabCanvas(ui->tabWidget);
-
-    ui->tabWidget->addTab(page,"Scheme");
-
+    ui->tabWidget->setTabVisible(4, true);
 }
 
 

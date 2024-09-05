@@ -7,12 +7,10 @@
 #include <QSerialPortInfo>
 #include <ctime>
 #include <QMessageBox>
-#include <windows.h>
 #include <typeinfo>
 #include <QDebug>
 #include "LoggingCategories.h"
 
-HANDLE hSerial;
 
 Worker::Worker(QMutex* mtxp)
 {

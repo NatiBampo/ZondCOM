@@ -16,6 +16,7 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 
 int main(int argc, char *argv[])
 {
+    //инициализируем настройки для последующего вызода кэшируемых настроек
     QCoreApplication::setOrganizationName(ORGANIZATION_NAME);
     QCoreApplication::setOrganizationDomain(ORGANIZATION_DOMAIN);
     QCoreApplication::setApplicationName(APPLICATION_NAME);

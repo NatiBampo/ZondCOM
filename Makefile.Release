@@ -1195,7 +1195,7 @@ release/keithley.o: keithley.cpp keithley.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMessageBox \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmessagebox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qdialog.h \
-		release/ui_keithley.h \
+		ui_keithley.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QVariant \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QApplication \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qapplication.h \
@@ -1623,8 +1623,10 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qsettings.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QShortcut \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qshortcut.h \
-		release/ui_mainwindow.h \
+		ui_mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QVariant \
+		../../qt6/6.4.2/mingw_64/include/QtGui/QAction \
+		../../qt6/6.4.2/mingw_64/include/QtGui/QIcon \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QApplication \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qapplication.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication.h \
@@ -1689,9 +1691,10 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QListWidget \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlistwidget.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlistview.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMenu \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenu.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMenuBar \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenubar.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenu.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QProgressBar \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qprogressbar.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QPushButton \
@@ -1904,7 +1907,6 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QtWidgetsDepends \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qaccessiblewidget.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qaction.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/QAction \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qactiongroup.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QActionGroup \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qbuttongroup.h \
@@ -2248,7 +2250,7 @@ release/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QTransform \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qnativeinterface.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtabwidget.h \
-		release/ui_stats.h \
+		ui_stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QVariant \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QApplication \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qapplication.h \
@@ -2729,7 +2731,8 @@ release/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/qvpiemodelmapper.h \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/qvxymodelmapper.h \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/qxylegendmarker.h \
-		../../qt6/6.4.2/mingw_64/include/QtCharts/qtchartsversion.h
+		../../qt6/6.4.2/mingw_64/include/QtCharts/qtchartsversion.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\stats.o stats.cpp
 
 release/tabcanvas.o: tabcanvas.cpp tabcanvas.h \

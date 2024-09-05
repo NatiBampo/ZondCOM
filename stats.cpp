@@ -1,6 +1,7 @@
 #include "stats.h"
 #include "ui_stats.h"
 #include <QtCharts>
+#include <QDebug>
 
 using namespace std;
 
@@ -49,10 +50,9 @@ void Stats::getData(QString dir)
         currRang.push_back(v2);
         currFreq.push_back(v3);
         percent.push_back(v4);
-
     }
 
-
+    qDebug() << "waz here";
     QFile source(dir);
     if (source.open(QIODevice::ReadWrite))
     {
@@ -111,12 +111,11 @@ void Stats::getData(QString dir)
             currMax[k] = currValue[k][(int) (i - i * p / 100)];
             percent[k].push_back(p);
             */
-
-
+            qDebug() << "k " << k;
+            clear3Percentyles(currValue[k]);
 
             step.push_back((currMax[k] - currMin[k]) / n);
         }
-
 
         //compute ranges for each of currents
         //float o = (currMax[0] - currMin[0]) / n;
@@ -173,16 +172,47 @@ void Stats::getFreq(const vector<vector<double>>  &currValue, vector<vector<int>
         }
     }
 
+
+
     drawCharts(currRang, currFreq, currFreqMax, currMin, step);
 
 }
 
-
-void Stats::borderRange()
+//takes sorted vector and gets rid off 3 sigmas() given 25-75 percentile is one sigma
+//may be should be done substitute median value
+void Stats::clear3Percentyles(std::vector<double> &v)
 {
+    int sizeV = v.size();
+    //3sigma border
+    double p25 = v.at(sizeV*0.25) * 3;
+    double p75 = v.at(sizeV*0.75) * 3;
+
+    double sigma = p75 - p25;
+    double l = p25 - 3 * sigma;
+    double r = p75 + 3 * sigma;
+    double med = v.at(sizeV * 0.5);
+
+
+    int counter = 0;
+    for (auto it = v.begin(); it != v.end();)
+    {
+        if (*it > r || *it < l)
+        {
+            it = v.erase(it);
+            ++counter;
+        }
+        else
+        {
+            ++it;
+        }
+    }
+    qDebug() << "sizeV " << sizeV << " | sigma " << sigma << " | l " << l
+             << " | r " << r << " | counter " << counter;
 
 }
 
+void Stats::normalize(std::vector<double> &v)
+{}
 
 void Stats::drawCharts(const vector<vector<double>> &currRang, const vector<vector<int>> &currFreq,
                        const vector<int> &currFreqMax, const vector<double> &currMin,

@@ -13,8 +13,8 @@
 #include <QShortcut>
 
 
-#define ORGANIZATION_NAME " "
-#define ORGANIZATION_DOMAIN "www.ZOO.ru"
+#define ORGANIZATION_NAME "Orion"
+#define ORGANIZATION_DOMAIN "AlfaCentarius"
 #define APPLICATION_NAME "QSettings Program"
 
 #define POINT_B_X "point_B_x"
@@ -83,6 +83,8 @@ private:
     void writeCSV();
     void drawCanvas();
     void planarSender(QString);
+    void initializeSettings();
+    void initConnects();
 
 
 signals:

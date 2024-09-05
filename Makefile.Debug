@@ -1195,7 +1195,37 @@ debug/keithley.o: keithley.cpp keithley.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMessageBox \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmessagebox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qdialog.h \
-		ui_keithley.h
+		ui_keithley.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QVariant \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QApplication \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qapplication.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qeventloop.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication_platform.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qjnitypes.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qfuture.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qfutureinterface.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qmutex.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qtsan_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qresultstore.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qfuture_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qthreadpool.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qelapsedtimer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qrunnable.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qexception.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qpromise.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qinputmethod.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qlocale.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication_platform.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMenuBar \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenubar.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenu.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QStatusBar \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstatusbar.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\keithley.o keithley.cpp
 
 debug/main.o: main.cpp mainwindow.h \
@@ -1594,29 +1624,13 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QShortcut \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qshortcut.h \
 		ui_mainwindow.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/QFileDialog \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qfiledialog.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qdir.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qfileinfo.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qdatetime.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qcalendar.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qlocale.h \
-		../../qt6/6.4.2/mingw_64/include/QtCharts/QtCharts \
-		../../qt6/6.4.2/mingw_64/include/QtCharts/QtChartsDepends \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QtCore \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QtCoreDepends \
-		../../qt6/6.4.2/mingw_64/include/QtCore/q20algorithm.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/q20functional.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/q20iterator.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/q23functional.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractanimation.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qabstracteventdispatcher.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qeventloop.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractnativeeventfilter.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractproxymodel.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qanimationgroup.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qapplicationstatic.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QVariant \
+		../../qt6/6.4.2/mingw_64/include/QtGui/QAction \
+		../../qt6/6.4.2/mingw_64/include/QtGui/QIcon \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QApplication \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qapplication.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qeventloop.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication_platform.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qjnitypes.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qfuture.h \
@@ -1627,6 +1641,92 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qrunnable.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qexception.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qpromise.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qinputmethod.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qlocale.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication_platform.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QCheckBox \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcheckbox.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractbutton.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QComboBox \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcombobox.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstyleoption.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractspinbox.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qvalidator.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qslider.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractslider.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstyle.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtabbar.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qrubberband.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qframe.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QDoubleSpinBox \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qspinbox.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QFormLayout \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qformlayout.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QLayout \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlayout.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlayoutitem.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qboxlayout.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qgridlayout.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QGridLayout \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QGroupBox \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qgroupbox.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QHBoxLayout \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QHeaderView \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qheaderview.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractitemview.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractscrollarea.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qitemselectionmodel.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QLabel \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlabel.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qpicture.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qtextdocument.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QLineEdit \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlineedit.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qtextcursor.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qtextformat.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qpen.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qtextoption.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QListWidget \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlistwidget.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlistview.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMenu \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenu.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMenuBar \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenubar.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QProgressBar \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qprogressbar.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QPushButton \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qpushbutton.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QSpacerItem \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QSpinBox \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QStatusBar \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstatusbar.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QTabWidget \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QTableView \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtableview.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QVBoxLayout \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QFileDialog \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qfiledialog.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qdir.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qfileinfo.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qdatetime.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qcalendar.h \
+		../../qt6/6.4.2/mingw_64/include/QtCharts/QtCharts \
+		../../qt6/6.4.2/mingw_64/include/QtCharts/QtChartsDepends \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QtCore \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QtCoreDepends \
+		../../qt6/6.4.2/mingw_64/include/QtCore/q20algorithm.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/q20functional.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/q20iterator.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/q23functional.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractanimation.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qabstracteventdispatcher.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractnativeeventfilter.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractproxymodel.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qanimationgroup.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qapplicationstatic.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qassociativeiterable.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qbitarray.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qbuffer.h \
@@ -1656,7 +1756,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qfuturesynchronizer.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qfuturewatcher.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qidentityproxymodel.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qitemselectionmodel.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qjnienvironment.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QScopedPointer \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qjniobject.h \
@@ -1716,7 +1815,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qurlquery.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qvarianthash.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QHash \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QVariant \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QString \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qvariantlist.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qvariantmap.h \
@@ -1736,11 +1834,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qglyphrun.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qrawfont.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qfontdatabase.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtextcursor.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtextdocument.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtextformat.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpen.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtextoption.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qaccessible.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qaccessible_base.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qaccessiblebridge.h \
@@ -1762,9 +1855,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qgenericmatrix.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qgenericplugin.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qgenericpluginfactory.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qinputmethod.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication_platform.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qiconengine.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qiconengineplugin.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qimageiohandler.h \
@@ -1797,7 +1887,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpainter.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpainterpath.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpdfwriter.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpicture.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpixmapcache.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qrasterwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QPaintDeviceWindow \
@@ -1813,41 +1902,19 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qtexttable.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qundogroup.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qundostack.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qvalidator.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qtguiversion.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QtWidgets \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QtWidgetsDepends \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractbutton.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstyleoption.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractspinbox.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qslider.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractslider.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstyle.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtabbar.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qrubberband.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qframe.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractitemview.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractscrollarea.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qaccessiblewidget.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qaction.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/QAction \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qactiongroup.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QActionGroup \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qapplication.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qboxlayout.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlayout.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlayoutitem.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qgridlayout.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qbuttongroup.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcalendarwidget.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcheckbox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcolordialog.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcolormap.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcolumnview.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcombobox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcommandlinkbutton.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qpushbutton.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcommonstyle.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qcompleter.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qdatawidgetmapper.h \
@@ -1863,8 +1930,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qfocusframe.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qfontcombobox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qfontdialog.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qformlayout.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/QLayout \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qgesture.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qgesturerecognizer.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qgraphicsanchorlayout.h \
@@ -1884,24 +1949,15 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QMatrix4x4 \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qgraphicsview.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qscrollarea.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qgroupbox.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qheaderview.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qinputdialog.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlineedit.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qitemdelegate.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qitemeditorfactory.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qkeysequenceedit.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlabel.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlcdnumber.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlistview.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlistwidget.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmdiarea.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmdisubwindow.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenu.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenubar.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qplaintextedit.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtextedit.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qprogressbar.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qprogressdialog.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qproxystyle.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QCommonStyle \
@@ -1914,18 +1970,15 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QMetaType \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qshortcut.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qsizegrip.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qspinbox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qsplashscreen.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qsplitter.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstackedlayout.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstackedwidget.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstatusbar.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstyleditemdelegate.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstylefactory.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstylepainter.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstyleplugin.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qsystemtrayicon.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtableview.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtablewidget.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtextbrowser.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtoolbar.h \
@@ -2198,6 +2251,41 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qnativeinterface.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtabwidget.h \
 		ui_stats.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QVariant \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QApplication \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qapplication.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qeventloop.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication_platform.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qjnitypes.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qfuture.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qfutureinterface.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qmutex.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qtsan_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qresultstore.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qfuture_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qthreadpool.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qelapsedtimer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qrunnable.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qexception.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qpromise.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qinputmethod.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qlocale.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication_platform.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QLabel \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlabel.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qframe.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qpicture.h \
+		../../qt6/6.4.2/mingw_64/include/QtGui/qtextdocument.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMenuBar \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenubar.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenu.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QStatusBar \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstatusbar.h \
+		../../qt6/6.4.2/mingw_64/include/QtWidgets/QWidget \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/QtCharts \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/QtChartsDepends \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QtCore \
@@ -2208,29 +2296,12 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/q23functional.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractanimation.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qabstracteventdispatcher.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qeventloop.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractitemmodel.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractnativeeventfilter.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qabstractproxymodel.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qanimationgroup.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qapplicationstatic.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QMutex \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qmutex.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qtsan_impl.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreapplication_platform.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qjnitypes.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qfuture.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qfutureinterface.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qresultstore.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qfuture_impl.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qthreadpool.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qelapsedtimer.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qrunnable.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qexception.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qpromise.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qassociativeiterable.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qbasictimer.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qbitarray.h \
@@ -2238,7 +2309,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qbytearraymatcher.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcache.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcalendar.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qlocale.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcborarray.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcborvalue.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qdatetime.h \
@@ -2331,7 +2401,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qurlquery.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qvarianthash.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QHash \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QVariant \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QString \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qvariantlist.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qvariantmap.h \
@@ -2352,7 +2421,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qrawfont.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qfontdatabase.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qtextcursor.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtextdocument.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qtextformat.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpen.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qtextoption.h \
@@ -2377,9 +2445,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qgenericmatrix.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qgenericplugin.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qgenericpluginfactory.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qinputmethod.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qguiapplication_platform.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qiconengine.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qiconengineplugin.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qimageiohandler.h \
@@ -2412,7 +2477,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpainter.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpainterpath.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpdfwriter.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpicture.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpixmapcache.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qrasterwindow.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QPaintDeviceWindow \
@@ -2443,7 +2507,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstyle.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtabbar.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qrubberband.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qframe.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractitemview.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qabstractscrollarea.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qaccessiblewidget.h \
@@ -2451,7 +2514,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QAction \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qactiongroup.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/QActionGroup \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qapplication.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qboxlayout.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlayout.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlayoutitem.h \
@@ -2510,14 +2572,11 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qitemdelegate.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qitemeditorfactory.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qkeysequenceedit.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlabel.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlcdnumber.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlistview.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qlistwidget.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmdiarea.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmdisubwindow.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenu.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmenubar.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmessagebox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qplaintextedit.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtextedit.h \
@@ -2540,7 +2599,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qsplitter.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstackedlayout.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstackedwidget.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstatusbar.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstyleditemdelegate.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstylefactory.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qstylepainter.h \
@@ -2590,7 +2648,6 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
 		../../qt6/6.4.2/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsexports.h \
 		../../qt6/6.4.2/mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/QWidget \
 		../../qt6/6.4.2/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsversion.h \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/qchartglobal.h \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/qtcharts-config.h \
@@ -2674,7 +2731,8 @@ debug/stats.o: stats.cpp stats.h \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/qvpiemodelmapper.h \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/qvxymodelmapper.h \
 		../../qt6/6.4.2/mingw_64/include/QtCharts/qxylegendmarker.h \
-		../../qt6/6.4.2/mingw_64/include/QtCharts/qtchartsversion.h
+		../../qt6/6.4.2/mingw_64/include/QtCharts/qtchartsversion.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\stats.o stats.cpp
 
 debug/tabcanvas.o: tabcanvas.cpp tabcanvas.h \
