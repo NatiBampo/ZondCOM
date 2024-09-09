@@ -1455,7 +1455,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(0);
         measureBButton->setDefault(false);
         orientationButton->setDefault(false);
 

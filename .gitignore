@@ -57,3 +57,5 @@ WindCOM
 release
 debug
 csv
+SerialWin.*
+colortableview.*
