@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>resetPic.png</file>
+    </qresource>
+</RCC>
