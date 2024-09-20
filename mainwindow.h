@@ -3,15 +3,16 @@
 
 #include <QMainWindow>
 #include <QThread>
-#include <worker.h>
-#include <tabcanvas.h>
+
 #include <QStandardItemModel>
-#include <QSqlDatabase>
 #include <QMutex>
-#include <stats.h>
 #include <QSettings>
 #include <QShortcut>
 
+#include "stats.h"
+#include "worker.h"
+#include "tabcanvas.h"
+#include "serials.h"
 
 #define ORGANIZATION_NAME "Orion"
 #define ORGANIZATION_DOMAIN "AlfaCentarius"
@@ -39,10 +40,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    Worker *worker;
 
 private:
     Ui::MainWindow *ui;
-    Worker *worker;
     Stats *stats;
     QStandardItemModel *model = nullptr;
     QThread workerThread;
@@ -65,9 +66,6 @@ private:
     QShortcut *keyWest;
     QShortcut *keyLight;
 
-    int numX, numY, upLeft, upRight, downLeft, downRight, downCenter, upCenter;
-    bool centerColumn, leftColumn, rightColumn;
-
     int numRows, number;
     int gapIndex;
     void createWorkerThread();
@@ -88,7 +86,7 @@ private:
 
 
 signals:
-    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, bool, int, int, int, int, int, int, bool, bool);
+    void scanningPlateSignal(struct DieParameters*);
     void measureSignal(bool, bool, bool);
     void tableControllerSignal(QByteArray, bool);
     void lightControllerSignal(QByteArray, bool);
@@ -105,6 +103,8 @@ signals:
     void measureFCSignal(bool, bool);
     void openCsvFileSignal(QString);
     void copyUpSlot(int, QString);
+
+
 
 public slots:
     void openPortPushButton_on();

@@ -1,39 +1,29 @@
 #ifndef KEITHLEY_H
 #define KEITHLEY_H
 
-#include <QMainWindow>
-#include <QSerialPort>
-#include <QSerialPortInfo>
+#include <QWidget>
 #include <QMessageBox>
+#include <QThread>
+#include "meter.h"
 
-
-namespace Ui {
-class Keithley;
-}
-
-class Keithley : public QMainWindow
+class Keithley : public Meter
 {
     Q_OBJECT
 
 public:
-    Keithley(QWidget *parent = nullptr);
+    Keithley();
     ~Keithley();
 
+    void zeroCorrection(int);
+    void set_05V(int, int);
+    void set_10mV(int);
+    void set_1V(int);
+
+    double read_double();
+    QString read_responce();
 private:
-    Ui::Keithley *ui = nullptr;
-    QSerialPort *m_serial = nullptr;
-    QString port_name;
-    QString lastAnswer;
-
-    void writeData(const QByteArray&);
-
-
-public slots:
-    void openSerialPort(QString);
-    void closeSerialPort();
-    void readData();
-    void handleError(QSerialPort::SerialPortError error);
-    void sendStatus(QString);
+    QSerialPort *serial = nullptr;
+    QString* port_name;
 };
 
 #endif // KEITHLEY_H

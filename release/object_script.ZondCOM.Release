@@ -1,4 +1,5 @@
 release/LoggingCategories.o
+release/comcontroller.o
 release/keithley.o
 release/main.o
 release/mainwindow.o

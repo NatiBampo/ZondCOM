@@ -29,6 +29,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
@@ -54,12 +55,23 @@ public:
     QVBoxLayout *verticalLayout_5;
     QLabel *label_26;
     QComboBox *portComboBox;
-    QVBoxLayout *verticalLayout_6;
-    QLabel *label_25;
-    QComboBox *keithlyPortComboBox;
+    QSpacerItem *verticalSpacer_7;
     QVBoxLayout *verticalLayout_7;
     QLabel *label_24;
     QComboBox *lightPortComboBox;
+    QSpacerItem *verticalSpacer_6;
+    QVBoxLayout *verticalLayout_6;
+    QLabel *label_25;
+    QHBoxLayout *keithleyLayout;
+    QRadioButton *keithleyRB;
+    QComboBox *keithlyPortComboBox;
+    QHBoxLayout *KeysightLayout;
+    QRadioButton *keisightRB;
+    QSpinBox *ip0;
+    QSpinBox *ip1;
+    QSpinBox *ip2;
+    QSpinBox *ip3;
+    QSpacerItem *verticalSpacer_8;
     QPushButton *resetPortsPushButton;
     QVBoxLayout *verticalLayout_9;
     QPushButton *autoPortButton;
@@ -306,6 +318,7 @@ public:
         horizontalLayout_2->setObjectName("horizontalLayout_2");
         label = new QLabel(centralwidget);
         label->setObjectName("label");
+        label->setMargin(3);
 
         horizontalLayout_2->addWidget(label);
 
@@ -328,27 +341,12 @@ public:
 
         verticalLayout_5->addWidget(portComboBox);
 
+        verticalSpacer_7 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_5->addItem(verticalSpacer_7);
+
 
         horizontalLayout_2->addLayout(verticalLayout_5);
-
-        verticalLayout_6 = new QVBoxLayout();
-        verticalLayout_6->setObjectName("verticalLayout_6");
-        verticalLayout_6->setContentsMargins(10, -1, -1, -1);
-        label_25 = new QLabel(centralwidget);
-        label_25->setObjectName("label_25");
-        label_25->setMaximumSize(QSize(120, 16777215));
-
-        verticalLayout_6->addWidget(label_25);
-
-        keithlyPortComboBox = new QComboBox(centralwidget);
-        keithlyPortComboBox->setObjectName("keithlyPortComboBox");
-        sizePolicy1.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
-        keithlyPortComboBox->setSizePolicy(sizePolicy1);
-
-        verticalLayout_6->addWidget(keithlyPortComboBox);
-
-
-        horizontalLayout_2->addLayout(verticalLayout_6);
 
         verticalLayout_7 = new QVBoxLayout();
         verticalLayout_7->setObjectName("verticalLayout_7");
@@ -365,8 +363,85 @@ public:
 
         verticalLayout_7->addWidget(lightPortComboBox);
 
+        verticalSpacer_6 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_7->addItem(verticalSpacer_6);
+
 
         horizontalLayout_2->addLayout(verticalLayout_7);
+
+        verticalLayout_6 = new QVBoxLayout();
+        verticalLayout_6->setObjectName("verticalLayout_6");
+        verticalLayout_6->setContentsMargins(10, -1, -1, -1);
+        label_25 = new QLabel(centralwidget);
+        label_25->setObjectName("label_25");
+        label_25->setMaximumSize(QSize(120, 16777215));
+
+        verticalLayout_6->addWidget(label_25);
+
+        keithleyLayout = new QHBoxLayout();
+        keithleyLayout->setObjectName("keithleyLayout");
+        keithleyRB = new QRadioButton(centralwidget);
+        keithleyRB->setObjectName("keithleyRB");
+
+        keithleyLayout->addWidget(keithleyRB);
+
+        keithlyPortComboBox = new QComboBox(centralwidget);
+        keithlyPortComboBox->setObjectName("keithlyPortComboBox");
+        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(keithlyPortComboBox->sizePolicy().hasHeightForWidth());
+        keithlyPortComboBox->setSizePolicy(sizePolicy2);
+
+        keithleyLayout->addWidget(keithlyPortComboBox);
+
+
+        verticalLayout_6->addLayout(keithleyLayout);
+
+        KeysightLayout = new QHBoxLayout();
+        KeysightLayout->setObjectName("KeysightLayout");
+        keisightRB = new QRadioButton(centralwidget);
+        keisightRB->setObjectName("keisightRB");
+
+        KeysightLayout->addWidget(keisightRB);
+
+        ip0 = new QSpinBox(centralwidget);
+        ip0->setObjectName("ip0");
+        ip0->setMaximum(255);
+        ip0->setValue(192);
+
+        KeysightLayout->addWidget(ip0);
+
+        ip1 = new QSpinBox(centralwidget);
+        ip1->setObjectName("ip1");
+        ip1->setMaximum(255);
+        ip1->setValue(168);
+
+        KeysightLayout->addWidget(ip1);
+
+        ip2 = new QSpinBox(centralwidget);
+        ip2->setObjectName("ip2");
+        ip2->setMaximum(255);
+
+        KeysightLayout->addWidget(ip2);
+
+        ip3 = new QSpinBox(centralwidget);
+        ip3->setObjectName("ip3");
+        ip3->setMaximum(255);
+        ip3->setValue(9);
+
+        KeysightLayout->addWidget(ip3);
+
+
+        verticalLayout_6->addLayout(KeysightLayout);
+
+        verticalSpacer_8 = new QSpacerItem(20, 5, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_6->addItem(verticalSpacer_8);
+
+
+        horizontalLayout_2->addLayout(verticalLayout_6);
 
         resetPortsPushButton = new QPushButton(centralwidget);
         resetPortsPushButton->setObjectName("resetPortsPushButton");
@@ -427,9 +502,6 @@ public:
 
         savePushButton = new QPushButton(centralwidget);
         savePushButton->setObjectName("savePushButton");
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(savePushButton->sizePolicy().hasHeightForWidth());
         savePushButton->setSizePolicy(sizePolicy2);
         savePushButton->setMinimumSize(QSize(60, 0));
@@ -1443,7 +1515,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1280, 21));
+        menubar->setGeometry(QRect(0, 0, 1280, 22));
         menujh_jg = new QMenu(menubar);
         menujh_jg->setObjectName("menujh_jg");
         MainWindow->setMenuBar(menubar);
@@ -1467,13 +1539,15 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_16->setText(QCoreApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\270\320\267\320\274\320\265\321\200\320\265\320\275\320\270\321\217", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "\320\237\320\276\321\200\321\202\321\213", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "COM", nullptr));
         label_26->setText(QCoreApplication::translate("MainWindow", "\320\237\320\273\320\260\320\275\320\260\321\200", nullptr));
         portComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\235\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", nullptr));
-        label_25->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
-        keithlyPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\235\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", nullptr));
         label_24->setText(QCoreApplication::translate("MainWindow", "\320\224\320\270\320\276\320\264", nullptr));
         lightPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\235\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", nullptr));
+        label_25->setText(QCoreApplication::translate("MainWindow", "\320\230\320\267\320\274\320\265\321\200\320\270\321\202\320\265\320\273\321\214", nullptr));
+        keithleyRB->setText(QCoreApplication::translate("MainWindow", "Keithley", nullptr));
+        keithlyPortComboBox->setPlaceholderText(QCoreApplication::translate("MainWindow", "\320\235\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", nullptr));
+        keisightRB->setText(QCoreApplication::translate("MainWindow", "Keysight", nullptr));
         resetPortsPushButton->setText(QString());
         autoPortButton->setText(QCoreApplication::translate("MainWindow", "\320\220\320\262\321\202\320\276", nullptr));
         openPortPushButton->setText(QCoreApplication::translate("MainWindow", "\320\236\321\202\320\272\321\200\321\213\321\202\321\214", nullptr));

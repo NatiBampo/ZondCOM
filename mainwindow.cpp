@@ -424,7 +424,8 @@ void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V,
 
 
     //focus on the last row
-    QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
+    QItemSelectionModel::SelectionFlags flags;
+    flags = QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows;
     QModelIndex i = ui->tableView->model()->index(number, 0);
     ui->tableView->selectionModel()->select(i, flags);
     ui->tableView->scrollTo(i);
@@ -585,7 +586,10 @@ void MainWindow::scanPushButton_clicked(bool checked)
         ui->pauseButton->setEnabled(true);
         ui->addressLabel->setText(dir_name);
         updateDelays();
-        emit autoWalkSignal(true, dir_name, 0,ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked(), ui->badDieCheckBox->isChecked());
+        emit autoWalkSignal(true, dir_name, 0,ui->planarCheckBox->isChecked(),
+                            ui->keithleyCheckBox->isChecked(),
+                            ui->lightCheckBox->isChecked(),
+                            ui->badDieCheckBox->isChecked());
 
         busy = true;
         checkBusy();
@@ -609,7 +613,11 @@ void MainWindow::orientationButton_clicked()
 
     initializeModel();
     qDebug()<<"all througth";
-    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, (double) numX, (double) numY, colSlide, centerColumn, upLeft, upRight, downLeft, downRight, upCenter, downCenter, leftColumn, rightColumn);
+    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY,
+                             (double) numX, (double) numY, colSlide,
+                             centerColumn, upLeft, upRight, downLeft,
+                             downRight, upCenter, downCenter, leftColumn,
+                             rightColumn);
     updateDelays();
     orientation = true;
     readyCheck();
