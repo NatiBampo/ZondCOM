@@ -38,6 +38,7 @@ public:
     bool openPort(QSerialPort *port, QString portName,
                           QSerialPort::BaudRate baudRate);
     void closePort(QSerialPort* port);
+
 private:
     struct Peripherals* peripherals = nullptr;
 

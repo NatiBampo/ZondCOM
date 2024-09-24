@@ -1,8 +1,12 @@
 release/LoggingCategories.o
-release/comcontroller.o
+release/connector.o
 release/keithley.o
+release/keysight.o
+release/light.o
 release/main.o
 release/mainwindow.o
+release/meter.o
+release/planar.o
 release/stats.o
 release/tabcanvas.o
 release/worker.o

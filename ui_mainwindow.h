@@ -1515,7 +1515,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1280, 22));
+        menubar->setGeometry(QRect(0, 0, 1280, 21));
         menujh_jg = new QMenu(menubar);
         menujh_jg->setObjectName("menujh_jg");
         MainWindow->setMenuBar(menubar);

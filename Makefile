@@ -347,7 +347,6 @@ Makefile: ZondCOM.pro ../../qt6/6.4.2/mingw_64/mkspecs/win32-g++/qmake.conf ../.
 		../../qt6/6.4.2/mingw_64/lib/Qt6OpenGL.prl \
 		../../qt6/6.4.2/mingw_64/lib/Qt6Gui.prl \
 		../../qt6/6.4.2/mingw_64/lib/Qt6SerialPort.prl \
-		../../qt6/6.4.2/mingw_64/lib/Qt6Sql.prl \
 		../../qt6/6.4.2/mingw_64/lib/Qt6Core.prl \
 		../../qt6/6.4.2/mingw_64/lib/Qt6EntryPoint.prl \
 		../../qt6/6.4.2/mingw_64/mkspecs/features/build_pass.prf \
@@ -630,7 +629,6 @@ ZondCOM.pro:
 ../../qt6/6.4.2/mingw_64/lib/Qt6OpenGL.prl:
 ../../qt6/6.4.2/mingw_64/lib/Qt6Gui.prl:
 ../../qt6/6.4.2/mingw_64/lib/Qt6SerialPort.prl:
-../../qt6/6.4.2/mingw_64/lib/Qt6Sql.prl:
 ../../qt6/6.4.2/mingw_64/lib/Qt6Core.prl:
 ../../qt6/6.4.2/mingw_64/lib/Qt6EntryPoint.prl:
 ../../qt6/6.4.2/mingw_64/mkspecs/features/build_pass.prf:

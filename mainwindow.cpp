@@ -187,7 +187,6 @@ void MainWindow::initializeShortKeys()
     keyDown = new QShortcut(this);
     keyDown -> setKey(Qt::Key_F);
 
-
     keyNorth = new QShortcut(this);
     keyNorth -> setKey(Qt::Key_W);//Qt::CTRL +
 

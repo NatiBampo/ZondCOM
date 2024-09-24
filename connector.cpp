@@ -8,7 +8,6 @@ Connector::Connector()
     serialPortLight = new QSerialPort();
 
 
-
 }
 
 
@@ -23,9 +22,14 @@ Connector::~Connector()
 void Connector::openPorts(struct Peripherals* periph)
 {
     closePorts();
-    openPort(periph->planar, periph->planar_com ,periph->planar_name, QSerialPort::Baud115200);
-    openPort(periph->keithley, periph->keithley_com ,periph->keithley_name, QSerialPort::Baud57600);
-    openPort(periph-light, periph->light_com ,periph->light_name, QSerialPort::Baud9600);
+    if (openPort(serialPortPlanar, periph->planar_com, periph->planar_name, QSerialPort::Baud115200))
+        periph->planar = serialPortPlanar;
+
+    if (openPort(periph->keithley, periph->keithley_com ,periph->keithley_name, QSerialPort::Baud57600))
+        periph->keithley = serialPortKeithly;
+
+    if (openPort(periph-light, periph->light_com ,periph->light_name, QSerialPort::Baud9600))
+        periph->light = serialPortLight;
 }
 
 void Connector::openPorts2()
@@ -49,7 +53,7 @@ bool Connector::openPort(QSerialPort *port, QString* comPort,
     port->setParity(QSerialPort::Parity::NoParity);
     port->setFlowControl(QSerialPort::NoFlowControl);
 
-    bool res = port->open(QSerialPort::ReadWrite);
+    bool res = port->open(QSerialPort::ReadWrite); 
     emit openPortResultSignal(port, portName, comPort, res);
     return res;
 }
