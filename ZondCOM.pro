@@ -11,13 +11,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 SOURCES += \
     LoggingCategories.cpp \
+    comport.cpp \
     connector.cpp \
     keithley.cpp \
     keysight.cpp \
     light.cpp \
     main.cpp \
     mainwindow.cpp \
-    meter.cpp \
     planar.cpp \
     stats.cpp \
     tabcanvas.cpp \
@@ -25,6 +25,7 @@ SOURCES += \
 
 HEADERS += \
     LoggingCategories.h \
+    comport.h \
     connector.h \
     keysight.h \
     light.h \

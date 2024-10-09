@@ -1,20 +1,20 @@
 #include "keysight.h"
 
-Keysight_handler::Keysight_handler() : Meter()
-{
-}
+Keysight::Keysight() : Meter()
+{}
 
-int Keysight_handler::open_connection(const char* ip_address)
+int Keysight::openConnection(struct Peripherals* p)//const char* ip_address
 {
     // Connection info
+
     ViChar resource_string[] = "TCPIP::192.168.0.9::INSTR";
     ViAccessMode access_mode = VI_NULL;
     ViUInt32 timeout_ms      = 400;//5000
     char full_address[32];
     if(strlen(ip_address))
     {
-        snprintf(full_address, 32, "%s%s%s", "TCPIP::",
-                 ip_address, "::INSTR");
+        snprintf(full_address, 32, "%s%d.%d.%d.%d%s", "TCPIP::",
+                 p->ip[0], p->ip[1], p->ip[2], p->ip[3], "::INSTR"); //"%s%s%s"
         qDebug() << full_address;
         memmove(resource_string,  full_address, strlen(full_address));
     }
@@ -86,7 +86,7 @@ int Keysight_handler::open_connection(const char* ip_address)
 }
 
 
-void Keysight_handler::close_connection()
+void Keysight::closeConnection()
 {
     if (!pair->first)
         return;
@@ -97,7 +97,7 @@ void Keysight_handler::close_connection()
 
 }
 
-int Keysight_handler::write_package(const char* command)
+int Keysight::writePackage(const char* command)
 {
     // Communication buffer
     //const ViUInt32 buffer_size_B = 1000;
@@ -112,15 +112,15 @@ int Keysight_handler::write_package(const char* command)
         qDebug() <<  buffer;
         return 0;
     }
-    qDebug() << "write_package success" << command;
+    qDebug() << "writePackage success" << command;
     return 1;
 }
 
 
-const char* Keysight_handler::read_responce(const char* command)
+QString* Keysight::readResponce(const char* command)
 {
 
-    if (!write_package(command))
+    if (!writePackage(command))
         return "";
     // Communication buffer
     const ViUInt32 buffer_size_B = 1000;
@@ -147,14 +147,14 @@ const char* Keysight_handler::read_responce(const char* command)
     }
     qDebug() << "read_responce success";
     // return response
-    return (const char*) buffer;
+    return &QString((const char*) buffer);
 }
 
 
-double Keysight_handler::read_double(const char* command)
+double Keysight::readDouble(const char* command)
 {
 
-    if (!write_package(command))
+    if (!writePackage(command))
         return 0.0;
     // Communication buffer
     const ViUInt32 buffer_size_B = 1000;
@@ -185,110 +185,109 @@ double Keysight_handler::read_double(const char* command)
     double d1;
     d1 = strtod ((char*)buffer, &pEnd);
 
-     qDebug() << "read double ensd";
+    qDebug() << "read double end";
     return d1;
 }
 
 
-void Keysight_handler::zero_correction(int delay)
+void Keysight::zeroCorrection(int delay)
 {
     qDebug() << "zero begin";
-    write_package("*RST\n");
-    write_package( ":SYST:ZCH ON\n");
-    write_package( ":CURR:RANG 2e-9\n");
+    writePackage("*RST\n");
+    writePackage( ":SYST:ZCH ON\n");
+    writePackage( ":CURR:RANG 2e-9\n");
     qDebug() << "delay start " << delay;
     QThread::msleep(delay);//400
     qDebug() << "delay end " << delay;
 
-    write_package( ":INIT\n");
+    writePackage( ":INIT\n");
     QThread::msleep(delay);
-    write_package( ":SYST:ZCOR:STAT OFF\n");
+    writePackage( ":SYST:ZCOR:STAT OFF\n");
     QThread::msleep(delay);
-    write_package( ":SYST:ZCOR:ACQ\n");
-    write_package( ":SYST:ZCH OFF\n");
-    write_package( ":SYST:ZCOR ON\n");
+    writePackage( ":SYST:ZCOR:ACQ\n");
+    writePackage( ":SYST:ZCH OFF\n");
+    writePackage( ":SYST:ZCOR ON\n");
     qDebug() << "zero end";
 
 }
 
-void Keysight_handler::set_05V(int volt, int delay)
+void Keysight::set05V(int volt, int delay)
 {
     qDebug() << "set_05V begin";
 
     delay = delay? delay : 6;
-    write_package( ":CURR:RANG 2e-3\n");
-    write_package( ":SOUR:VOLT:RANG 1\n");
+    writePackage( ":CURR:RANG 2e-3\n");
+    writePackage( ":SOUR:VOLT:RANG 1\n");
     char full_address[32];
     snprintf(full_address, 32, ":SOUR:VOLT %d-1\n", volt);
-    write_package((const char*) full_address);
-    write_package( ":SOUR:VOLT:ILIM 1e-3\n");
-    write_package( ":SOUR:VOLT:STAT ON\n");
+    writePackage((const char*) full_address);
+    writePackage( ":SOUR:VOLT:ILIM 1e-3\n");
+    writePackage( ":SOUR:VOLT:STAT ON\n");
     QThread::msleep(delay);//600);
     qDebug() << "set_05V end";
 }
 
 
-void Keysight_handler::set_1V(int delay)
+void Keysight::set1V(int delay)
 {
     qDebug() << "set_1V begin";
-    write_package("SOUR:VOLT:STAT OFF\n");
-    write_package("SOUR:VOLT -1\n");
-    write_package("SOUR:VOLT:STAT ON\n");
+    writePackage("SOUR:VOLT:STAT OFF\n");
+    writePackage("SOUR:VOLT -1\n");
+    writePackage("SOUR:VOLT:STAT ON\n");
     QThread::msleep(delay);
-    write_package("CURR:RANG 2e-10\n");
+    writePackage("CURR:RANG 2e-10\n");
     qDebug() << "set_1V end";
 }
 
-void Keysight_handler::set_10mV(int delay)
+void Keysight::set10mV(int delay)
 {
     qDebug() << "set_10mV begin";
-    write_package("SOUR:VOLT:STAT OFF\n");
-    write_package("SOUR:VOLT -1e-2\n");
-    write_package("SOUR:VOLT:STAT ON\n");
-    write_package("CURR:RANG 2e-10\n");
+    writePackage("SOUR:VOLT:STAT OFF\n");
+    writePackage("SOUR:VOLT -1e-2\n");
+    writePackage("SOUR:VOLT:STAT ON\n");
+    writePackage("CURR:RANG 2e-10\n");
     QThread::msleep(delay);
     qDebug() << "set_10mV end";
 }
 
 
-QList<double> Keysight_handler::single_measurement(struct Delays* settings)
+void Keysight::darkCurrents(struct Delays* delays,
+                            struct Currents* curr)
 {
-    QList<double> res;
+    qDebug() << "settings->dc_10mV" << delays->dc_10mV;
+    qDebug() << "settings->dc_1V" << delays->dc_1V;
+    qDebug() << "settings->fc" << delays->fc;
+    qDebug() << "settings->light" << delays->light;
+    qDebug() << "settings->fc_volt" << delays->fc_volt;
 
-    qDebug() << "1settings->dc_10mV" << settings->dc_10mV;
-    qDebug() << "settings->dc_1V" << settings->dc_1V;
-    qDebug() << "settings->fc" << settings->fc;
-    qDebug() << "settings->light" << settings->light;
-    qDebug() << "settings->fc_volt" << settings->fc_volt;
-
-
-    zero_correction(settings->zero);
-    set_10mV(settings->dc_10mV);
+    zeroCorrection(delays->zero);
+    set10mV(delays->dc_10mV);
     //get dark current
-    res.append(read_double(":SENS:FUNC CURR\n:MEAS:CURR?"));
+    curr->dark10mV = readDouble(":SENS:FUNC CURR\n:MEAS:CURR?");
 
-    set_1V(settings->dc_1V);
-    res.append(read_double(":SENS:FUNC CURR\n:MEAS:CURR?"));
+    set1V(delays->dc_1V);
+    curr->dark1V = readDouble(":SENS:FUNC CURR\n:MEAS:CURR?");
 
     //get forward current
-    set_05V(settings->fc, settings->fc_volt);
-    res.append(read_double(":SENS:FUNC CURR\n:MEAS:CURR?"));
-    qDebug() << "light begin";
-    set_10mV(settings->light);
-    //get light current
-    res.append(read_double(":SENS:FUNC CURR\n:MEAS:CURR?"));
-    return res;
+    set05V(delays->fc, delays->fc_volt);
+    curr->forward05V = readDouble(":SENS:FUNC CURR\n:MEAS:CURR?");
 }
 
 
-double Keysight_handler::forward_current(struct Delays* settings)
+void Keysight::lightCurrent(struct Delays* delays,
+                            struct Currents* curr)
 {
-    zero_correction(settings->zero);
-    set_05V(settings->fc_volt, settings->fc);
-    const char* resp = read_responce(":SENS:FUNC CURR\n:MEAS:CURR?");
+    qDebug() << "light begin";
 
-    char* pEnd;
-    double d1;
-    d1 = strtod (resp, &pEnd);
-    return d1;
+    set10mV(delays->light);
+    //get light current
+    curr->light10mV = readDouble(":SENS:FUNC CURR\n:MEAS:CURR?");
+}
+
+
+double Keysight::forwardCurrent(struct Delays* delays)
+{
+    zeroCorrection(delays->zero);
+    set05V(delays->fc_volt, delays->fc);
+    return readResponce(":SENS:FUNC CURR\n:MEAS:CURR?");
 }

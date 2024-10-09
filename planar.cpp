@@ -1,33 +1,36 @@
 #include "planar.h"
 
-Planar::Planar(QSerialPort *port, QString* com_name)
+Planar::Planar()
 {
-    serial = port;
-    name = com_name;
+    m_rate = QSerialPort::Baud115200;
 }
 
 
-bool Planar::parsePort(QSerialPort *port, QString* com_name)
+bool Planar::parsePort(QString* com_name, struct Peripherals* periph)
 {
     //serialPortA5->flush();
-    tableController("State\r\n", true);
+    if (working) return true;
+    tableController("State\r\n", periph);
     QString responce = QString(planarResponce);
     QRegularExpression re(R"(-?\d+ -?\d+ -?\d+ -?\d+\r\n|BSY|OK|ERC|NBP|EDG)");
     QRegularExpressionMatch match = re.match(responce);
     if (responce != "" && match.hasMatch())
     {
         emit sendLogSignal(match.captured(0).toUtf8());
-
+        periph->planar_com = com_name;
+        working = true;
+        serial = periph->planar;
         return true;
     }
     else if (responce == "")
     {
         QThread::msleep(300);
-        tableController("State\r\n", true);
+        tableController("State\r\n", periph);
         responce = QString(planarResponce);
         match = re.match(responce);
         if (responce != "" && match.hasMatch())
         {
+            working = true;
             return true;
         }
 
@@ -65,11 +68,11 @@ void Planar::endLinePlanar()
 
 void Planar::tableController(const QByteArray message, struct WalkSettings* walk)
 {
-    if (serialPortA5->isOpen() || walk->planarStatus)
+    if (serial->isOpen() || walk->planarStatus)
     {
         //if (message == "State\r\n") serialPortA5->flush();
         emit sendPackageSignalRead(serialPortA5, message, 400);//1000
-        planarResponce = "";
+        QString planarResponce = "";
         planarResponce.append(lastAnswer);
 
         QString responce = QString(planarResponce);//lastAnswer
@@ -111,9 +114,76 @@ void Planar::tableController(const QByteArray message, struct WalkSettings* walk
 
 void Planar::up()
 {
-
+    tableController("Table UP\r\n", walk);
 }
 void Planar::down()
 {
+    tableController("Table DN\r\n", walk);
+}
 
+
+void Planar::currentCoords(struct WalkSettings* walk, struct Dots* dots)
+{
+    int x = 0;
+    int y = 0;
+    controller->tableController("State\r\n", walk);
+    QRegularExpression re(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)");
+
+    //if (responce.contains(QRegularExpression(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)")))
+    for (int i = 0; i < 5; i++)
+    {
+        //emit sendLogSignal(planarResponce);
+        QString responce = QString(planarResponce);//lastAnswer
+        QRegularExpressionMatch match = re.match(responce);
+        if (match.hasMatch())
+        {
+            QString line = match.captured(0);
+            x = line.split(" ")[2].toInt();
+            y = line.split(" ")[3].toInt();
+
+            if (index == -1)
+            {
+                emit sendCurrentCoordsSignal(x, y);
+            }
+            if (index == -2)
+            {
+                emit sendBCoordsSignal(x, y);
+            }
+            if (index > 0)
+            {
+                qDebug(logDebug()) << "Парсинг x, y : " << x << ", " << y
+                                   << "  Dots: i, x , y = "
+                                   << walk->currentIndex << ", "
+                                   << dots->X->at(walk->currentIndex) << ", "
+                                   << dots->Y->at(walk->currentIndex);
+                if (currentIndex < lastIndex && (x==0 && y == 0))
+                {
+                    QThread::msleep(1000);
+                    endLinePlanar();
+                    continue;
+                }
+
+                bool cond1 = x == (int) dots->X->at(walk->currentIndex);
+                bool cond2 = y == (int) dots->Y->at(walk->currentIndex);
+                return cond1 && cond2;
+            }
+            return true;
+        }
+        else //if (responce == "< OK\r\n")
+        {
+            endLinePlanar();
+        }
+    }
+    return false;
+}
+
+
+void Planar::goToDot(struct WalkSettings* walk, struct Dots* dots)
+{
+    //опустить стол
+    down();
+    //перевод координат в массив байтов для передачи станку
+    QByteArray x = QByteArray::number((int)dots->X->at(walk->currentIndex);
+    QByteArray y = QByteArray::number((int)dots->Y->at(walk->currentIndex);
+    tableController("Set " + x + " " + y + '\r' + '\n', walk);
 }

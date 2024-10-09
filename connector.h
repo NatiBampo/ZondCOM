@@ -5,6 +5,9 @@
 #include <QSerialPortInfo>
 #include "serials.h"
 #include "meter.h"
+#include "planar.h"
+#include "light.h"
+
 
 #define ANSWER_DELAY 400
 #define NO_ANSWER_DELAY 10
@@ -12,41 +15,30 @@
 class Connector
 {
 public:
-    Connector();
+    Connector(struct Peripherals*);
+    ~Connector();
 
-    void openPorts(struct Ports*);
+public slots:
+    void openPorts();
+    void openPorts2();
     void autoOpen();
     void closePorts();
-    bool checkPlanar();
-    bool checkKeithly();
-    bool checkKeysight();
-    bool checkLight();
     bool allPortsOpen();
-    void sendPackage(QSerialPort *serialPort,
-                     QByteArray package, int delay);
-    void sendPackageRead(QSerialPort *serialPort,
-                         QByteArray package, int delay);
-
 
     /**
      * @brief parsePort проверяет, по ответу, что устройство выбрано правидьно
-     * @param
+     * @param port
      */
     virtual bool parsePort(QSerialPort *port, QString* com_name){return false;}
 
+    void measureDot(struct WalkSettings* , struct Delays* , struct Currents*, struct Dots*);
 
-    bool openPort(QSerialPort *port, QString portName,
-                          QSerialPort::BaudRate baudRate);
-    void closePort(QSerialPort* port);
-
+    void measureFC(struct WalkSettings* , struct Delays* , struct Currents*, struct Dots*);
 private:
-    struct Peripherals* peripherals = nullptr;
 
-    QSerialPort* serialPortPlanar = nullptr;
-    QSerialPort* serialPortKeithly = nullptr;
-    QSerialPort* serialPortLight = nullptr;
-
-    QString lastAnswer;
+    Meter* meter = nullptr;
+    Planar* planar = nullptr;
+    Light* light = nullptr;
 };
 
 #endif // CONNECTOR_H

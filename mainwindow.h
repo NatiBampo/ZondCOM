@@ -8,11 +8,21 @@
 #include <QMutex>
 #include <QSettings>
 #include <QShortcut>
+#include <QSerialPortInfo>
+#include <QMessageBox>
+#include <QThread>
+#include <QFileDialog>
+#include <QtCharts>
+#include <QDebug>
+#include <QFile>
+#include <QRect>
+#include <QPainter>
 
 #include "stats.h"
 #include "worker.h"
 #include "tabcanvas.h"
 #include "serials.h"
+#include "LoggingCategories.h"
 
 #define ORGANIZATION_NAME "Orion"
 #define ORGANIZATION_DOMAIN "AlfaCentarius"
@@ -50,8 +60,8 @@ private:
     QThread statsThread;
     QMutex mutex;
     QString dir_name;
-    QList<int> delays;
-    QList<bool> portResult = {false, false, false};
+    //QList<int> delays;
+    //QList<bool> portResult = {false, false, false};
     bool orientation = false;
     bool busy = false;
     void checkBusy();
@@ -65,6 +75,13 @@ private:
     QShortcut *keyEast;
     QShortcut *keyWest;
     QShortcut *keyLight;
+
+    struct Peripherals* periph = nullptr;
+    struct WalkSettings* walk = nullptr;
+    struct Dots* dots = nullptr;
+    struct Delays* delays = nullptr;
+    struct DieParameters* die = nullptr;
+    struct Currents* currs = nullptr;
 
     int numRows, number;
     int gapIndex;
@@ -83,11 +100,17 @@ private:
     void planarSender(QString);
     void initializeSettings();
     void initConnects();
+    void updateDelays();
 
 
 signals:
-    void scanningPlateSignal(struct DieParameters*);
-    void measureSignal(bool, bool, bool);
+    void calculateDotsSignal(struct DieParameters*,
+                        struct Dots*,
+                        struct WalkSettings*);
+    void measureSignal(struct WalkSettings* walk,
+                       struct Delays* delays,
+                       struct Currents* currs,
+                       struct Dots* dots);
     void tableControllerSignal(QByteArray, bool);
     void lightControllerSignal(QByteArray, bool);
     void openPortsSignal(QString, QString, QString);
@@ -95,12 +118,17 @@ signals:
     void goToElementSignal(int, bool);
     void sendPauseCommandSignal();
     void saveMeasureSignal(int, bool, bool, bool);
-    void autoWalkSignal(bool, QString, int, bool, bool, bool, bool);
+    void autoWalkSignal(struct WalkSettings* walk,
+                        struct Peripherals* periph,
+                        struct Dots* dots,
+                        struct DieParameters* die);
     void autoOpenPortsSignal();
     void showChartsSignal(QString);
-    void setDelaySignal(QList<int>*);
     void getCurrentCoordsSignal(int, bool);
-    void measureFCSignal(bool, bool);
+    void measureFCSignal(struct WalkSettings* ,
+                         struct Delays* ,
+                         struct Currents*,
+                         struct Dots*);
     void openCsvFileSignal(QString);
     void copyUpSlot(int, QString);
 
@@ -122,8 +150,8 @@ public slots:
     void writeLog(QByteArray);
     void setProgressBarValue(int);
     void setProgressBarRange(int, int);
-    void openPortResult(QString, QString, bool);
-    void addRowToTable(int, double, double, double, double);
+    //void openPortResult(QString, QString, bool);
+    void addRowToTable();
     void setBCoords(int, int);
     void setCurrentCoords(int, int);
     void pauseButton_clicked(bool);
@@ -139,7 +167,7 @@ public slots:
     void showMessageBox(QString, QString);
     void sendEndWalk();
     void on_FCMeasureButton_clicked();
-//private slots:
+
     void on_hotKeysCheckBox_stateChanged(int arg1);
     void savePushButton_clicked();
     void on_loadFilePushButton_clicked();

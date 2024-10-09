@@ -2,9 +2,9 @@
 #define LIGHT_H
 
 #include "connector.h"
+#include "comport.h"
 
-
-class Light : public Connector
+class Light : public ComPort
 {
 public:
     Light();
@@ -13,10 +13,9 @@ public:
     void on();
     void off();
 
-    bool parsePort(QSerialPort *port, QString* com_name) override;
+    bool parsePort(QString* , struct Peripherals*) override;
 private:
-    QSerialPort *serial = nullptr;
-    QString* port_name;
+
     QString lastAnswer;
 };
 

@@ -33,11 +33,6 @@ public:
     Worker(QMutex*);
     ~Worker();
 public:
-    void stopWalk();
-    void setIndex(int);
-
-
-private:
 
     QByteArray lastAnswer;
     qint64 m_bytesWritten = 0;
@@ -46,18 +41,17 @@ private:
     QMutex* mutex;
     QString dir = "С:\temp\1.csv";
 
-    Connector* connecter = nullptr;
-
-    volatile bool paused = false;
-    volatile bool stopped = false;
-
-    double FCBorder = -qPow(10, -5);
-    double LightBorder = 5*qPow(10, -8);
-
+    Connector* connector = nullptr;
+public:
+    void stopWalk();
     void checkPause();
-
-    bool copyUpToIndex(int);
-    bool checkIndex(int);
+    /**
+     * @brief checkIndex проверяет, попадание индекса за пределы измеряемой зоны
+     * //check if measure is of odd space
+     * @param DieParameters параметры пластины
+     * @param Dots координаты мест контактирования зонда. gap диапазон разрыва
+     */
+    bool checkIndex(int, struct DieParameters*, struct Dots*);
 
     void timeSpent(int start);
 signals:
@@ -65,34 +59,36 @@ signals:
     void sendLogSignal(QByteArray);
     void sendProgressBarValueSignal(int);
     void sendProgressBarRangeSignal(int, int);
-    void openPortResultSignal(QString, QString, bool);
-    void sendAddTableSignal(int, double, double, double, double);
+    void sendAddTableSignal();
     void sendBCoordsSignal(int, int);
     void sendMessageBox(QString, QString);
-    void sendCurrentCoordsSignal(int, int);
-    void sendPackageSignal(QSerialPort*, QByteArray, int);
-    void sendPackageSignalRead(QSerialPort*, QByteArray, int);
     void sendEndWalkSignal();
     void sendEndOfWalkTime(QString);
 
 public slots:
-    void measureElement(struct WalkSettings*, struct Currents*);
-    void calculate_dots(struct DieParameters*, struct Dots*);
-    void tableController(QByteArray, struct WalkSettings*);
-    void lightController(QByteArray, struct WalkSettings*);
-    void openPorts(QString, QString, QString);
-    void closePorts();
+    /**
+     * @brief calculate_dots проверяет, по ответу, что устройство выбрано правидьно
+     * @param DieParameters параметры пластины
+     * @param Dots координаты мест контактирования зонда
+     * @param WalkSettings настройки обхода пластины
+     */
+    void calculate_dots(struct DieParameters*, struct Dots*, struct WalkSettings*);
     void pauseWalk();
-    void goToDot(struct WalkSettings*);
+    //void goToDot(struct WalkSettings*, struct Dots*);
     void saveMeasure(struct WalkSettings*);
-    void autoOpenPorts();
-    bool getCurrentCoords(int, bool);
 
-    void autoWalk(struct DieParameters*, int);
+    /**
+     * @brief autoWalk проверяет, по ответу, что устройство выбрано правидьно
+     * @param Peripherals настройки подключения устройств
+     * @param Dots координаты мест контактирования зонда
+     * @param WalkSettings настройки обхода пластины
+     */
+    void autoWalk(struct WalkSettings*, struct Peripherals*, struct Dots*,
+                  struct DieParameters*);
 
-    void sendPackageRead(QSerialPort*, QByteArray, int);
-    void measureFC(bool, bool );
-    void openCsvFile(QString dir);
+
+    //вынести в отдельный виджет. заполнить таблицу
+    void openCsvFile(QString, struct Currents*);
 };
 
 #endif // WORKER_H

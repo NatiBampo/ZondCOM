@@ -6,24 +6,22 @@
 #include <QThread>
 #include "meter.h"
 
-class Keithley : public Meter
+class Keithley : public Meter, public ComPort
 {
     Q_OBJECT
 
 public:
-    Keithley();
+    Keithley(QSerialPort *);
     ~Keithley();
 
-    void zeroCorrection(int);
-    void set_05V(int, int);
-    void set_10mV(int);
-    void set_1V(int);
+    void zeroCorrection(int) override;
+    void set05V(int, int) override;
+    void set10mV(int) override;
+    void set1V(int) override;
 
-    double read_double();
-    QString read_responce();
-private:
-    QSerialPort *serial = nullptr;
-    QString* port_name;
+    double readDouble() override;
+    QString readResponce();
+
 };
 
 #endif // KEITHLEY_H

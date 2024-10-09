@@ -14,6 +14,7 @@ struct Delays
     int dc_1V;
     int fc;
     int light;
+    int planar;
     int fc_volt;
 };
 
@@ -42,14 +43,6 @@ struct Currents
 };
 
 
-struct ComPort
-{
-    QSerialPort *port = nullptr;
-    QString* name = nullptr;
-    bool open;
-
-};
-
 struct Peripherals
 {
     QSerialPort *planar = nullptr;
@@ -60,21 +53,23 @@ struct Peripherals
     QString* planar_com = nullptr;
     QString* keithley_com = nullptr;
 
-    QString* light_name = &"Light";
-    QString* planar_name = &"Planar";
-    QString* keithley_name = &"Keithley";
-
     bool light_open;
     bool planar_open;
     bool keithley_open;
+
+    bool meter;
+
+    bool lan;
+    int ip[4];
+    int keysight_open;
 };
 
 
 struct Dots
 {
     int gap[12]{};
-    std::vector<int> X;
-    std::vector<int> Y;
+    std::vector<int> *X;
+    std::vector<int> *Y;
 
 };
 
@@ -90,6 +85,7 @@ struct WalkSettings
     int currentIndex;
     bool paused;
     bool stopped;
+    bool orientation;
 
     QString dir_cur;
 };

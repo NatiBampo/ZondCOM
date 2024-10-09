@@ -1,38 +1,54 @@
 #include "connector.h"
 
 
-Connector::Connector()
+Connector::Connector(struct Peripherals* periph)
 {
-    serialPortPlanar = new QSerialPort();
-    serialPortKeithly = new QSerialPort();
-    serialPortLight = new QSerialPort();
+    periph->planar = new QSerialPort();
+    periph->keithley = new QSerialPort();
+    periph->light = new QSerialPort();
 
-
+    planar = new Planar(periph->planar);
+    light = new Light(periph->light);
+    meter = new Keithley(periph->keithley);
 }
 
 
 Connector::~Connector()
 {
-    //closePorts();
-    delete serialPortPlanar;
-    delete serialPortKeithly;
-    delete serialPortLight;
+    delete periph->planar;
+    delete periph->keithley;
+    delete periph->light;
 }
 
 void Connector::openPorts(struct Peripherals* periph)
 {
     closePorts();
-    if (openPort(serialPortPlanar, periph->planar_com, periph->planar_name, QSerialPort::Baud115200))
-        periph->planar = serialPortPlanar;
-
-    if (openPort(periph->keithley, periph->keithley_com ,periph->keithley_name, QSerialPort::Baud57600))
-        periph->keithley = serialPortKeithly;
+    if (openPort(periph->planar, periph->planar_com, periph->planar_name, QSerialPort::Baud115200))
+        planar->setPort(periph->planar);
 
     if (openPort(periph-light, periph->light_com ,periph->light_name, QSerialPort::Baud9600))
-        periph->light = serialPortLight;
+        light->setPort(periph->light);
+
+    if (periph->lan)
+    {
+        delete meter;
+        meter = new Keysight(periph);
+    }
+    else if (openPort(periph->keithley, periph->keithley_com,
+                 periph->keithley_name, QSerialPort::Baud57600))
+    {
+        meter->setPort(periph->keithley);
+    }
+    else
+    {
+        qDebug() << "you're moron";
+    }
+
+    emit portsReady();
 }
 
-void Connector::openPorts2()
+
+void Connector::openPorts2(struct Peripherals* periph)
 {
     closePorts();
     emit openPortResultSignal(periph->planar_com, "Planar",
@@ -43,20 +59,6 @@ void Connector::openPorts2()
                               openPort(periph->light, periph->light_com, QSerialPort::Baud9600));
 }
 
-bool Connector::openPort(QSerialPort *port, QString* comPort,
-                         QString* portName, QSerialPort::BaudRate baudRate)
-{
-    port->setPortName(*comPort);
-    port->setBaudRate(baudRate);
-    port->setDataBits(QSerialPort::DataBits::Data8);
-    port->setStopBits(QSerialPort::StopBits::OneStop);
-    port->setParity(QSerialPort::Parity::NoParity);
-    port->setFlowControl(QSerialPort::NoFlowControl);
-
-    bool res = port->open(QSerialPort::ReadWrite); 
-    emit openPortResultSignal(port, portName, comPort, res);
-    return res;
-}
 
 bool Connector::openPort(QSerialPort *port, QString portName,
                       QSerialPort::BaudRate baudRate)
@@ -72,124 +74,75 @@ bool Connector::openPort(QSerialPort *port, QString portName,
 }
 
 
-
-void Connector::autoOpen()
+bool Connector::openPort(QSerialPort *port, QString* comPort,
+                         QString* portName, QSerialPort::BaudRate baudRate)
 {
-    serialPortPlanar = new QSerialPort();
-    serialPortKeithly = new QSerialPort();
-    serialPortLight = new QSerialPort();
-    QList<QString> list;
+    port->setPortName(*comPort);
+    port->setBaudRate(baudRate);
+    port->setDataBits(QSerialPort::DataBits::Data8);
+    port->setStopBits(QSerialPort::StopBits::OneStop);
+    port->setParity(QSerialPort::Parity::NoParity);
+    port->setFlowControl(QSerialPort::NoFlowControl);
+
+    bool res = port->open(QSerialPort::ReadWrite);
+    emit openPortResultSignal(port, portName, comPort, res);
+    return res;
+}
+
+//актуализировать
+void Connector::parsePorts(struct Peripherals* periph)
+{
+    if (periph->lan ) meter = new Keysight(periph);
+    else meter = new Keithley(periph);
+
     foreach(const QSerialPortInfo &port,  QSerialPortInfo::availablePorts())
     {
-        list.append(port.portName());
-    };
-
-    QHash<QSerialPort *, QString> map;
-    bool tmp_flag;
-    for (int i=0; i < list.length(); i++)
-    {
-        //сперва окрываем порт планара
-        if (!map.contains(serialPortA5))
-        {
-            tmp_flag = openPort(serialPortA5, list[i], QSerialPort::Baud115200);
-
-            if (tmp_flag && checkPlanarCOM())
-            {
-                map.insert(serialPortA5, list[i]);
-                emit openPortResultSignal(list[i], "Planar", tmp_flag);
-                continue;
-            }
-            if (serialPortA5->isOpen())serialPortA5->close();
-        }
-
-        //порт кейтли
-        if (!map.contains(serialPortKeithly))
-        {
-            tmp_flag = openPort(serialPortKeithly, list[i], QSerialPort::Baud57600);
-            if (tmp_flag && checkKeithlyCOM())
-            {
-                map.insert(serialPortKeithly, list[i]);
-                emit openPortResultSignal(list[i], "Keithley", tmp_flag);
-                continue;
-            }
-            if (serialPortKeithly->isOpen()) serialPortKeithly->close();
-        }
-        //порт ардуины/диода
-
-        if (!map.contains(serialPortLight))
-        {
-            //qDebug() << i << " light condition";
-            tmp_flag = openPort(serialPortLight, list[i], QSerialPort::Baud9600);
-            if (tmp_flag && checkLightCOM())
-            {
-                map.insert(serialPortLight, list[i]);
-                emit openPortResultSignal(list[i], "Light", tmp_flag);
-            } else
-            {
-                if (serialPortLight->isOpen()) serialPortLight->close();
-            }
-        }
+        planar->parsePort(port.portName(), periph);
+        meter->parsePort(port.portName(), periph);
+        light->parsePort(port.portName(), periph);
     }
 }
 
 
-
 void Connector::closePorts(struct Peripherals* periph)
 {
-    closePort(periph->keithley);
-    closePort(periph->light);
-    closePort(periph->planar);
-}
-
-
-void Connector::closePort(QSerialPort* port)
-{
-    if (port->isOpen())
-        port->close();
+    if (periph->lan)
+        meter->closeConnection();
+    else
+        meter->closePort();
+    planar->closePort();
+    light->closePort();
 }
 
 
 bool Connector::allPortsOpen()
 {
-    return (serialPortPlanar->isOpen()
-            && serialPortKeithly->isOpen()
-            && serialPortLight->isOpen());
-}
-
-
-void Connector::sendPackage(QSerialPort *serialPort, QByteArray package, int delay)
-{
-    lastAnswer = "";
-    serialPort->write(package);
-    serialPort->flush();
-    serialPort->waitForBytesWritten(400);
-}
-
-void Connector::sendPackageRead (QSerialPort *serialPort, QByteArray package, int delay)
-{
-    lastAnswer = "";
-    serialPort->write(package);
-    serialPort->flush();
-    serialPort->waitForBytesWritten(400);
-    if (serialPort->waitForReadyRead(400)) lastAnswer.append(serialPort->readAll());
+    return (serialPortPlanar->isOpen()            
+            && serialPortLight->isOpen()
+            && meter->isOpen());
 }
 
 
 void Connector::measureDot(struct WalkSettings* walk,
-                           struct Delays* delays, struct Currents* curr)
+                           struct Delays* delays,
+                           struct Currents* currs,
+                           struct Dots* dots)
 {
     if (allPortsOpen() || walk->keithley_status)
     {
+        int start = clock();
+        //planar->goToDot(walk, dots);
         meter->zeroCorrection();
         //emit sendPackageSignalRead(periph->serialPortA5, "Table UP\r\n", 200);
         if (walk->planar_status) table->up();
-        meter->dark_currents(walk, delays, curr);
+
+        meter->darkCurrents(walk, delays, currs);
         //lightController("1111\n", walk->light_status);
         light->on(walk);
 
-        meter->light_current(walk, delays, curr);
+        meter->lightCurrent(walk, delays, currs);
 
-        emit sendLogSignal((QString::number(currentIndex) + ", "
+        emit sendLogSignal((QString::number(currs->currentIndex) + ", "
                             + QString::number(curr->forward05V, 'E', 4) + ", "
                             + QString::number(curr->dark10mV, 'E', 4) + ", "
                             + QString::number(curr->dark1V, 'E', 4) + ", "
@@ -197,8 +150,58 @@ void Connector::measureDot(struct WalkSettings* walk,
 
         //lightController("0001\n", walk->light_status);
         light->off(walk);
-        if (walk->planar_status) table_down();
+        if (walk->planar_status) planar->down();
             //emit sendPackageSignalRead(periph->planar, "Table DN\r\n", 200);
+
+        int end = clock();
+        int t = (end - start);
+
+        emit sendMessageBox("Последнее измерение: ",
+                            "FC: " + QString::number(curr->forward05V, 'E', 4)
+                            + ", \nDC10mV: " + QString::number(curr->dark10mV, 'E', 4)
+                            + ", \nDC1V: " + QString::number(curr->dark1V, 'E', 4)
+                            + ", \nLC10mV: " + QString::number(curr->light10mV, 'E', 4)
+                            + "\n\nВремя: " + QString::number(t / CLOCKS_PER_SEC) + "сек");
+    }
+    else
+    {
+        emit sendMessageBox("warning", "Один из портов закрыт.\n Измерение не возможно.");
+    }
+}
+
+
+void Connector::measureFC(struct WalkSettings* walk,
+                          struct Delays* delays,
+                          struct Currents* currs,
+                          struct Dots* dots)
+{
+    if (allPortsOpen() || walk->keithley_status)
+    {
+        //planar->goToDot(walk, dots);
+        meter->zeroCorrection();
+        //emit sendPackageSignalRead(periph->serialPortA5, "Table UP\r\n", 200);
+        if (walk->planar_status)
+            table->up();
+        if (walk->keithley_status)
+            meter->darkCurrents(walk, delays, currs);
+        //lightController("1111\n", walk->light_status);
+        light->on(walk);
+
+        meter->lightCurrent(walk, delays, currs);
+
+        emit sendLogSignal((QString::number(currs->currentIndex) + ", "
+                            + QString::number(curr->forward05V, 'E', 4) + ", "
+                            + QString::number(curr->dark10mV, 'E', 4) + ", "
+                            + QString::number(curr->dark1V, 'E', 4) + ", "
+                            + QString::number(curr->LightCurrent, 'E', 4)).toUtf8());
+
+        //lightController("0001\n", walk->light_status);
+        light->off(walk);
+        if (walk->planar_status) planar->down();
+            //emit sendPackageSignalRead(periph->planar, "Table DN\r\n", 200);
+        emit sendMessageBox("Прямой ток измерение: ", "Voltage : "
+                            + QByteArray::number(((double)FCVoltage) / 1000) + " V : "
+                            + QString::number(ForwardCurrent, 'E', 4));
 
     }
     else

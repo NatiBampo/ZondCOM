@@ -1,15 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QSerialPortInfo>
-#include <QMessageBox>
-#include <QThread>
-#include <QFileDialog>
-#include <QtCharts>
-#include <QDebug>
-#include "LoggingCategories.h"
-#include <QFile>
-#include <QRect>
-#include <QPainter>
+
 
 //using namespace QtCharts;
 
@@ -25,17 +16,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     createWorkerThread();
     createStatsThread();
-
+    /*
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
     {
         ui->portComboBox->addItem(serialPortInfo.portName());
         ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
         ui->lightPortComboBox->addItem(serialPortInfo.portName());
-    }
+    }*/
 
     dir_name = "С:\temp\1.csv";
 
-    delays.append({300, 300, 500, 500, 400, 400, 600});
+    //delays.append({300, 300, 500, 500, 400, 400, 600});
+    delays = {300, 300, 500, 500, 400, 400, 600};
 
     initializeShortKeys();
     initializeSettings();
@@ -104,6 +96,7 @@ void MainWindow::initConnects()
 
 }
 
+
 void MainWindow::initializeSettings()
 {
     QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME);
@@ -134,47 +127,49 @@ void MainWindow::initializeSettings()
     if (tmp != 0) ui->voltageSpinBox->setValue(tmp);
 }
 
+
 void MainWindow::createWorkerThread()
 {
     qInfo(logInfo()) << "Старт Worker";
-    worker = new Worker(&mutex);
+    periph = new Peripherals();
+    worker = new Worker(&mutex, periph);
     worker->moveToThread(&workerThread);
     workerThread.start();
 
-    connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::scanningPlate);
-    connect(this, &MainWindow::measureSignal, worker, &Worker::measureElement);
-    connect(this, &MainWindow::openPortsSignal, worker, &Worker::openPorts);
-    connect(this, &MainWindow::autoOpenPortsSignal, worker, &Worker::autoOpenPorts);
-    connect(this, &MainWindow::tableControllerSignal, worker, &Worker::tableController);
-    connect(this, &MainWindow::lightControllerSignal, worker, &Worker::lightController);
-    connect(this, &MainWindow::closePortsSignal, worker, &Worker::closePorts);
-    //остановка цикла обхода
+    connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::calculate_dots);
+    connect(this, &MainWindow::measureSignal, worker->connector, &Connector::measureElement);
+    connect(this, &MainWindow::openPortsSignal, worker->connector, &Connector::openPorts);
+    connect(this, &MainWindow::autoOpenPortsSignal, worker->connector, &Connector::autoOpenPorts);
+    connect(this, &MainWindow::tableControllerSignal,
+            worker->connector->planar, &Worker::tableController);
+    connect(this, &MainWindow::lightControllerSignal,
+            worker->connector->light, &Worker::lightController);
+    connect(this, &MainWindow::closePortsSignal, worker->connector, &Connector::closePorts);
     connect(this, &MainWindow::sendPauseCommandSignal, worker, &Worker::pauseWalk);
-    //переход на элемент в строке
-    connect(this, &MainWindow::goToElementSignal, worker, &Worker::goToElement);
-    //сохрание элемента в строке
+    connect(this, &MainWindow::goToElementSignal, worker->connector->planar, &Planar::goToDot);
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
-    //начать обход
     connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
-    connect(this, &MainWindow::getCurrentCoordsSignal, worker, &Worker::getCurrentCoords);
-    connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
-    connect(this, &MainWindow::measureFCSignal, worker, &Worker::measureFC);
+    connect(this, &MainWindow::getCurrentCoordsSignal,
+            worker->connector->planar, &Worker::getCurrentCoords);
+    //connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
+    connect(this, &MainWindow::measureFCSignal, worker->connector, &Connector::measureFC);
     connect(this, &MainWindow::openCsvFileSignal, worker, &Worker::openCsvFile);
 
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
     connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
-    connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
+    //connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
     //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
     //сигнал паузы
 
-    connect(worker, &Worker::sendBCoordsSignal, this, &MainWindow::setBCoords);
-    connect(worker, &Worker::sendCurrentCoordsSignal, this, &MainWindow::setCurrentCoords);
+    connect(worker->connector->planar, &Planar::sendBCoordsSignal,
+            this, &MainWindow::setBCoords);
+    connect(worker->connector->planar, &Planar::sendCurrentCoordsSignal,
+            this, &MainWindow::setCurrentCoords);
     connect(worker, &Worker::sendMessageBox, this, &MainWindow::showMessageBox);
     connect(worker, &Worker::sendEndWalkSignal, this, &MainWindow::sendEndWalk);
     connect(worker, &Worker::sendEndOfWalkTime, this, &MainWindow::setEndOfWalkTime);
-
 }
 
 
@@ -215,6 +210,7 @@ void MainWindow::activateShortKeys()
     connect(keyLight, SIGNAL(activated()), this, SLOT(lightPushButton_on()));
 }
 
+
 void MainWindow::deactivateShortKeys()
 {
     disconnect(keyUp, SIGNAL(activated()), this, SLOT(tableUpPushButton_on()));
@@ -231,7 +227,9 @@ void MainWindow::openPortPushButton_on()
 {
     if (ui->openPortPushButton->text() == "Открыть")
     {
-        emit openPortsSignal(ui->portComboBox->currentText(), ui->keithlyPortComboBox->currentText(), ui->lightPortComboBox->currentText());
+        emit openPortsSignal(ui->portComboBox->currentText(),
+                             ui->keithlyPortComboBox->currentText(),
+                             ui->lightPortComboBox->currentText());
         ui->openPortPushButton->setText("Закрыть");
     } else
     {
@@ -251,49 +249,28 @@ void MainWindow::openPortPushButton_on()
         ui->scanPushButton->setEnabled(false);
         QMessageBox::information(this, "Сообщение", "COM порты закрыты");
 
-        for (int i = 0; i < portResult.length(); i++)
-        {
-            portResult[i] = false;
-        }
     }
 }
 
 
-void MainWindow::openPortResult(QString port, QString portName, bool result)
+void MainWindow::openPortsResult()
 {
-    if (!result)
-    {
-        QMessageBox::information(this, "Сообщение", "Не удалось подключиться\n к порту" +port);
-    }
-    else
-    {
-        if (!portName.compare("Planar"))
-        {
-            ui->portComboBox->setCurrentText(port);
-            portResult[0] = true;
-        }
-        else if (!portName.compare("Keithley"))
-        {
-            ui->keithlyPortComboBox->setCurrentText(port);
-            portResult[1] = true;
-        }
-        else if (!portName.compare("Light"))
-        {
-            ui->lightPortComboBox->setCurrentText(port);
-            portResult[2] = true;
-        }
-    }
-
-
-    if (portsReady()) QMessageBox::information(this, "Сообщение", "Выбранные порты:\n"
-                                      + ui->portComboBox->currentText() + " для Планара\n"
-                                      + ui->keithlyPortComboBox->currentText() + " для Кейтли\n"
-                                      + ui->lightPortComboBox->currentText() + " для Диода\n");
+    QString work = "открыт\n";
+    QString no = "закрыт\n";
+    portsReady();
+    QMessageBox::information(this, "Сообщение", "Выбранные порты:\n"
+                                      + "Планар " + periph->planar_open? work : no
+                                      + "Измеритель " + periph->meter? work : no
+                                      + "Диода " + periph->light_open? work : no;
 }
+
 
 bool MainWindow::portsReady()
 {
-    bool res = portResult[0] && portResult[1] && portResult[2];
+    bool res = periph->lan? periph->keysight_open : periph->keithley_open;
+    res = periph->planar_open &&
+            periph->light && res;
+
     ui->measureBButton->setEnabled(res);
     ui->orientationButton->setEnabled(res);
     ui->toAPushButton->setEnabled(res);
@@ -307,9 +284,10 @@ bool MainWindow::portsReady()
     return res;
 }
 
+
 bool MainWindow::readyCheck()
 {
-    bool res = portsReady() && orientation;
+    bool res = portsReady() && periph->orientation;
     //block some buttons in case COMports not open
 
     ui->goToGroupBox->setEnabled(res);
@@ -323,6 +301,7 @@ bool MainWindow::readyCheck()
     ui->stopPushButton->setEnabled(res);
     return res;
 }
+
 
 void MainWindow::statePushButton_on()
 {
@@ -374,15 +353,18 @@ void MainWindow::rightPushButton_on()
     planarSender(("Move " + QString::number(ui->stepSpinBox->value()) + " 0\r\n").toUtf8());//100 0
 }
 
+
 void MainWindow::planarSender(QString msg)
 {
-    emit tableControllerSignal(msg.toUtf8(), ui->planarCheckBox->isChecked());
+    emit tableControllerSignal(msg.toUtf8(), periph);
+    //ui->planarCheckBox->isChecked()
 }
+
 
 void MainWindow::measurePushButton_on()
 {
     updateDelays();
-    emit measureSignal(ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked());
+    emit measureSignal(walk, delays, currs, dots);
 }
 
 
@@ -400,26 +382,26 @@ void MainWindow::lightPushButton_on()
 }
 
 
-
 //функция записи последних измерений в таблицу
-void MainWindow::addRowToTable(int index, double FC, double DC10mV, double DC1V, double LC)
+//int index, double FC, double DC10mV, double DC1V, double LC
+void MainWindow::addRowToTable()
 {
-    int column = index / (numY * (numX+1)) + 1;
-    int row = index % (numY * (numX+1)) / (numX+1) + 1;
-    int element = index % (numY * (numX+1)) % (numX+1) + 1;
+    int column = currs->currentIndex / (die->numY * (die->numX+1)) + 1;
+    int row = currs->currentIndex % (die->numY * (die->numX+1)) / (die->numX+1) + 1;
+    int element = currs->currentIndex % (die->numY * (die->numX+1)) % (die->numX+1) + 1;
 
-    number = index - downRight * (numX+1);
-    number = (column>1)? number - (upRight + downLeft) * (numX+1) : number;
-    number = (column>2)? number - (upLeft + downCenter) * (numX+1) : number;
+    number = currs->currentIndex - die->downRight * (die->numX+1);
+    number = (column>1)? number - (die->upRight + die->downLeft) * (die->numX+1) : number;
+    number = (column>2)? number - (die->upLeft + die->downCenter) * (die->numX+1) : number;
 
-    addElement(number, 0, index);       //индекс
+    addElement(number, 0, currs->currentIndex);       //индекс
     addElement(number, 1, column);      //колонка
     addElement(number, 2, row);         //ряд //index % (numY * (numX+1)) / (numX+1) + 1
     addElement(number, 3, element);     //элемент // index % (numY * (numX+1)) % (numX+1) + 1
-    addElement(number, 4, FC);          //прямой ток
-    addElement(number, 5, DC10mV);      //темновой ток при 10мВ
-    addElement(number, 6, DC1V);        //темновой ток при 1В
-    addElement(number, 7, LC);          //фототок
+    addElement(number, 4, currs->forward05V);          //прямой ток
+    addElement(number, 5, currs->dark10mV);      //темновой ток при 10мВ
+    addElement(number, 6, currs->dark1V);        //темновой ток при 1В
+    addElement(number, 7, currs->light10mV);          //фототок
 
 
     //focus on the last row
@@ -462,7 +444,6 @@ void MainWindow::addElement(int row, int element, double value)
 //    default: ((QStandardItemModel*)index.model())->item(row, element)->setData(QBrush(Qt::darkGray), Qt::BackgroundRole);
     }
 }
-
 
 
 void MainWindow::writeLog(QByteArray log)
@@ -513,7 +494,7 @@ int MainWindow::getUIIndex()
     int row = ui->rowSpinBox->value();
     int element = ui->elemSpinBox->value();
     int col = ui->columnSpinBox->value();
-    int index = (col - 1) * (numX+1) * numY + (row - 1) * (numX+1) + element - 1;
+    int index = (col - 1) * (die->numX+1) * die->numY + (row - 1) * (die->numX+1) + element - 1;
 
     return index;
 }
@@ -521,17 +502,19 @@ int MainWindow::getUIIndex()
 
 void MainWindow::goToButton_clicked()
 {
-    emit goToElementSignal(getUIIndex(), ui->planarCheckBox->isChecked());
+    walk->currentIndex = getUIIndex();
+    emit goToElementSignal(walk, dots);
 
 }
 
 
 void MainWindow::saveMeasureButton_clicked()
 {
+    updateDelays();
+    walk->currentIndex = getUIIndex();
     if (!busy)
     {
-        updateDelays();
-        emit saveMeasureSignal(getUIIndex(), ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked());
+        emit saveMeasureSignal(walk, dots, currs);
     }
 }
 
@@ -560,14 +543,10 @@ void MainWindow::continueFromButton_clicked(bool checked)
     {
         ui->pauseButton->setText("Пауза");
         ui->pauseButton->setEnabled(true);
-
         ui->scanPushButton->setEnabled(false);
-
-        emit autoWalkSignal(getUIIndex() <= gapIndex, dir_name, getUIIndex(), ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked(),  ui->badDieCheckBox->isChecked());
-
+        emit autoWalkSignal(walk, delays, currs, dots);
         busy = true;
         checkBusy();
-
     }
     ui->continueFromButton->setChecked(false);
 }
@@ -581,15 +560,11 @@ void MainWindow::scanPushButton_clicked(bool checked)
     if (dir != "")
     {
         dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
-
         ui->pauseButton->setEnabled(true);
         ui->addressLabel->setText(dir_name);
         updateDelays();
-        emit autoWalkSignal(true, dir_name, 0,ui->planarCheckBox->isChecked(),
-                            ui->keithleyCheckBox->isChecked(),
-                            ui->lightCheckBox->isChecked(),
-                            ui->badDieCheckBox->isChecked());
-
+        walk->currentIndex = 0;
+        emit autoWalkSignal(walk, delays, currs, dots);
         busy = true;
         checkBusy();
     }
@@ -599,59 +574,68 @@ void MainWindow::scanPushButton_clicked(bool checked)
 
 void MainWindow::orientationButton_clicked()
 {
-    double AX = (double)ui->AXspinBox->value();
-    double AY = (double)ui->AYspinBox->value();
-    double BX = (double)ui->BXspinBox->value();
-    double BY = (double)ui->BYspinBox->value();
-    double stepX = (double)ui->stepXspinBox->value();
-    double stepY = (double)ui->stepYspinBox->value();
+    die = new DieParameters();
+    die->AX = ui->AXspinBox->value();
+    die->AY = ui->AYspinBox->value();
+    die->BX = ui->BXspinBox->value();
+    die->BY = ui->BYspinBox->value();
+    die->stepX = ui->stepXspinBox->value();
+    die->stepY = ui->stepYspinBox->value();
+    die->numX = ui->numXspinBox->value();
+    die->numY = ui->numYspinBox->value();
 
+    die->upLeft = ui->upLeftSpinBox->value();
+    die->upRight = ui->upRightSpinBox->value();
+    die->downLeft = ui->downLeftSpinBox->value();
+    die->downRight = ui->downRightSpinBox->value();
+    die->downCenter = ui->downCenterSpinBox->value();
+    die->upCenter = ui->upCenterSpinBox->value();
     //сдвиг меж столбцов и рядов
-    double colSlide = (double)ui->stepColSpinBox->value();
+    die->colSlide = (double)ui->stepColSpinBox->value();
     //double rowSlide = (double)ui->stepRowSpinBox->value();
 
     initializeModel();
     qDebug()<<"all througth";
-    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY,
-                             (double) numX, (double) numY, colSlide,
-                             centerColumn, upLeft, upRight, downLeft,
-                             downRight, upCenter, downCenter, leftColumn,
-                             rightColumn);
+    emit calculateDotsSignal(die, dots, walk);
     updateDelays();
-    orientation = true;
+    //orientation = true;
     readyCheck();
     syncSettings();
-
 }
 
 
 void MainWindow::initializeModel()
 {
-    numX = ui->numXspinBox->value();
-    numY = ui->numYspinBox->value();
+    die->numX = ui->numXspinBox->value();
+    die->numY = ui->numYspinBox->value();
 
-    centerColumn = ui->centerCheckBox->isChecked();
-    leftColumn = ui->leftCheckBox->isChecked();
-    rightColumn = ui->rightCheckBox->isChecked();
+    die->centerColumn = ui->centerCheckBox->isChecked();
+    die->leftColumn = ui->leftCheckBox->isChecked();
+    die->rightColumn = ui->rightCheckBox->isChecked();
 
     //die offset due to cirle border cut
-    upLeft = ui->upLeftSpinBox->value();
-    upRight = ui->upRightSpinBox->value();
-    downLeft = ui->downLeftSpinBox->value();
-    downRight = ui->downRightSpinBox->value();
-    downCenter = ui->downCenterOffspinBox->value();
-    upCenter = ui->centerUpOffSpinBox->value();
+    die->upLeft = ui->upLeftSpinBox->value();
+    die->upRight = ui->upRightSpinBox->value();
+    die->downLeft = ui->downLeftSpinBox->value();
+    die->downRight = ui->downRightSpinBox->value();
+    die->downCenter = ui->downCenterOffspinBox->value();
+    die->upCenter = ui->centerUpOffSpinBox->value();
 
-    if (((upLeft + downLeft) > (numX+1)*numY) || ((downRight + upRight) > (numX+1)*numY) || ((downCenter + upCenter) > (numX+1)*numY))
+    if (((die->upLeft + die->downLeft) > (die->numX+1)*die->numY)
+            || ((die->downRight + die->upRight) > (die->numX+1)*die->numY)
+            || ((die->downCenter + die->upCenter) > (die->numX+1)*die->numY))
     {
         showMessageBox("warning", "Не допустимое значение отступов");
         return;
     }
 
     //количество измерений(рядов в таблице)
-    numRows = ((int) rightColumn) * (numX + 1) * (numY - downRight - upRight);
-    numRows += ((int) leftColumn) * (numX + 1) * (numY - downLeft - upLeft);
-    numRows += ((int) centerColumn) * (numX + 1) * (numY - downCenter - upCenter);
+    numRows = ((int) die->rightColumn) * (die->numX + 1)
+            * (die->numY - die->downRight - die->upRight);
+    numRows += ((int) die->leftColumn) * (die->numX + 1)
+            * (die->numY - die->downLeft - die->upLeft);
+    numRows += ((int) die->centerColumn) * (die->numX + 1)
+            * (die->numY - die->downCenter - die->upCenter);
 
     model = new QStandardItemModel{numRows, 8, this};
     model->setHeaderData(0, Qt::Horizontal, "№");
@@ -669,7 +653,7 @@ void MainWindow::initializeModel()
 
 void MainWindow::autoPortButton_clicked()
 {
-    emit autoOpenPortsSignal();
+    emit autoOpenPortsSignal(periph);
     ui->openPortPushButton->setText("Закрыть");
 }
 
@@ -695,6 +679,7 @@ void MainWindow::setCurrentCoords(int x, int y)
     ui->xLineEdit->setText(QString::number(x));
     ui->yLineEdit->setText(QString::number(y));
 }
+
 
 void  MainWindow::createStatsThread()
 {
@@ -735,20 +720,6 @@ void MainWindow::showMessageBox(QString msg_type, QString msg)
 }
 
 
-void MainWindow::updateDelays()
-{
-    delays[0] = ui->zeroSpinBox->value();
-    delays[1] = ui->FCSpinBox->value();
-    delays[2] = ui->DC10spinBox->value();
-    delays[3] = ui->DC1VSpinBox->value();
-    delays[4] = ui->lightSpinBox->value();
-    delays[5] = ui->voltageSpinBox->value();
-    delays[6] = ui->planarSpinBox->value();
-
-    emit setDelaySignal(&delays);
-}
-
-
 void MainWindow::syncSettings()
 {
     QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME);
@@ -768,7 +739,6 @@ void MainWindow::syncSettings()
     settings.setValue(LIGHT_D, ui->lightSpinBox->value());
     settings.setValue(PLANAR_D, ui->planarSpinBox->value());
     settings.setValue(FC_V, ui->voltageSpinBox->value());
-
     settings.sync();
 }
 
@@ -794,6 +764,7 @@ void MainWindow::sendEndWalk()
     writeCSV();
 }
 
+
 void MainWindow::on_hotKeysCheckBox_stateChanged(int arg1)
 {
     if (arg1==0)
@@ -807,6 +778,7 @@ void MainWindow::on_hotKeysCheckBox_stateChanged(int arg1)
         activateShortKeys();
     }
 }
+
 
 void MainWindow::savePushButton_clicked()
 {
@@ -843,6 +815,7 @@ void MainWindow::on_loadFilePushButton_clicked()
         }
     }
 }
+
 
 void MainWindow::stopPushButton_clicked()
 {
@@ -890,6 +863,7 @@ void MainWindow::checkBusy()
 
 }
 
+
 void MainWindow::on_planarCMDButton_clicked()
 {
     QString line = ui->queryLineEdit->text();
@@ -926,6 +900,7 @@ void MainWindow::writeCSV()
     }
 }
 
+
 void MainWindow::on_resetPortsPushButton_clicked()
 {
     emit closePortsSignal();
@@ -948,6 +923,7 @@ void MainWindow::setEndOfWalkTime(QString endTime)
     ui->endTimeLabel->setText(endTime);
 }
 
+
 void MainWindow::on_stop2pushButton_clicked()
 {
     mutex.lock();
@@ -964,7 +940,6 @@ void MainWindow::drawCanvas()
 {
     ui->tabWidget->setTabVisible(4, true);
 }
-
 
 
 void MainWindow::on_admCheckBox_stateChanged(int arg1)
@@ -999,10 +974,25 @@ void MainWindow::on_admCheckBox_stateChanged(int arg1)
     checkBusy();
 }
 
+
 void MainWindow::on_schemePushButton_clicked()
 {
     drawCanvas();
     QMessageBox::information(this, "Информация", "auf");
 }
 
-//
+
+void MainWindow::updateDelays()
+{
+    delays->zero = ui->zeroSpinBox->value();
+    delays->planar = ui->planarSpinBox->value();
+    delays->fc = ui->FCSpinBox->value();
+    delays->dc_10mV = ui->DC10spinBox->value();
+    delays->dc_1V = ui->DC1VSpinBox->value();
+    delays->light = ui->lightSpinBox->value();
+    delays->fc_volt = ui->voltageSpinBox->value();
+
+    walk->planar_status = ui->planarCheckBox->isChecked();
+    walk->keithley_status = ui->keithleyCheckBox->isChecked();
+    walk->light_status = ui->lightCheckBox->isChecked();
+}

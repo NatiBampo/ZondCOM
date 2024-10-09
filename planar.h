@@ -3,11 +3,12 @@
 
 #include "connector.h"
 
-class Planar : public Connector
+class Planar
 {
 public:
     Planar();
 
+    bool openPort(QString) override;
     /**
      * @brief endLine проверяет, выход из строя планара через задержу
      * @param
@@ -19,14 +20,18 @@ public:
      * @brief parsePort проверяет, по ответу, что устройство выбрано правидьно
      * @param
      */
-    bool parsePort(QSerialPort *port, QString* com_name);
+    bool parsePort(QString* com_name);
 
-    void tableController(QByteArray package);
+    void tableController(QByteArray , struct WalkSettings*);
+    void goToDot(struct WalkSettings* walk, struct Dots* dots);
     void down();
     void up();
+
+ public slots:
+    void currentCoords(int, bool);
+
 private:
-    QSerialPort* serial = nullptr;
-    QString* name = nullptr;
+    bool working;
 };
 
 #endif // PLANAR_H
