@@ -136,7 +136,7 @@ void MainWindow::createWorkerThread()
     worker->moveToThread(&workerThread);
     workerThread.start();
 
-    connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::calculate_dots);
+    connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::calculateDots);
     connect(this, &MainWindow::measureSignal, worker->connector, &Connector::measureElement);
     connect(this, &MainWindow::openPortsSignal, worker->connector, &Connector::openPorts);
     connect(this, &MainWindow::autoOpenPortsSignal, worker->connector, &Connector::autoOpenPorts);
@@ -158,7 +158,7 @@ void MainWindow::createWorkerThread()
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
     connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
-    //connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
+    connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
     //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
     //сигнал паузы
@@ -248,7 +248,6 @@ void MainWindow::openPortPushButton_on()
         ui->pauseButton->setEnabled(false);
         ui->scanPushButton->setEnabled(false);
         QMessageBox::information(this, "Сообщение", "COM порты закрыты");
-
     }
 }
 

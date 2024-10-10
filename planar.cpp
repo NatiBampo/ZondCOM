@@ -1,9 +1,13 @@
 #include "planar.h"
 
-Planar::Planar()
+Planar::Planar(QSerialPort* port) : ComPort(port)
 {
     m_rate = QSerialPort::Baud115200;
 }
+
+
+Planar::~Planar()
+{}
 
 
 bool Planar::parsePort(QString* com_name, struct Peripherals* periph)
@@ -70,32 +74,26 @@ void Planar::tableController(const QByteArray message, struct WalkSettings* walk
 {
     if (serial->isOpen() || walk->planarStatus)
     {
-        //if (message == "State\r\n") serialPortA5->flush();
-        emit sendPackageSignalRead(serialPortA5, message, 400);//1000
-        QString planarResponce = "";
-        planarResponce.append(lastAnswer);
+        sendPackageRead( message, ANSWER_DELAY );//1000
+        qInfo(logInfo())<< lastAnswer << "<- в ответ на ->" + QString(message);//\r\n
 
-        QString responce = QString(planarResponce);//lastAnswer
-        //
-        qInfo(logInfo())<< responce << "<- в ответ на ->" + QString(message);//\r\n
-
-        if (responce == "")
+        if (lastAnswer == "")
         {
             endLinePlanar();
         }
-        else if (responce.contains(QRegularExpression(R"(BSY)")))//< BSY\r\n
+        else if (lastAnswer.contains(QRegularExpression(R"(BSY)")))//< BSY\r\n
         {
             stopped = true;
             emit sendMessageBox("warning", "BSY. Планар не отвечает.\n Проверьте передачу управления.");
             qWarning(logWarning()) << "BSY – ЗУ находится в режиме ручной настройки, обхода или исполняет команду";
         }
-        else if (responce.contains(QRegularExpression(R"(FLT)")))
+        else if (lastAnswer.contains(QRegularExpression(R"(FLT)")))
         {
             stopped = true;
             emit sendMessageBox("warning", "FLT – авария ЗУ");
             qCritical(logCritical()) << "FLT – авария ЗУ";
         }
-        else if (responce.contains(QRegularExpression(R"(ERC)")))
+        else if (lastAnswer.contains(QRegularExpression(R"(ERC)")))
         {
             emit sendMessageBox("warning", "ERC – ошибка команды или формата");
             qWarning(logWarning()) << "ERC – ошибка команды или формата";
@@ -105,18 +103,18 @@ void Planar::tableController(const QByteArray message, struct WalkSettings* walk
     }
     else
     {
-        stopped = true;
+        walk->stopped = true;
         emit sendMessageBox("warning",
                             "Порт планара закрыт.\n Отправка комманды не работает");
     }
 }
 
 
-void Planar::up()
+void Planar::up(struct WalkSettings* walk)
 {
     tableController("Table UP\r\n", walk);
 }
-void Planar::down()
+void Planar::down(struct WalkSettings* walk)
 {
     tableController("Table DN\r\n", walk);
 }
@@ -126,7 +124,7 @@ void Planar::currentCoords(struct WalkSettings* walk, struct Dots* dots)
 {
     int x = 0;
     int y = 0;
-    controller->tableController("State\r\n", walk);
+    tableController("State\r\n", walk);
     QRegularExpression re(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)");
 
     //if (responce.contains(QRegularExpression(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)")))
@@ -141,11 +139,11 @@ void Planar::currentCoords(struct WalkSettings* walk, struct Dots* dots)
             x = line.split(" ")[2].toInt();
             y = line.split(" ")[3].toInt();
 
-            if (index == -1)
+            if (walk->currentIndex == -1)
             {
                 emit sendCurrentCoordsSignal(x, y);
             }
-            if (index == -2)
+            if (walk->currentIndex == -2)
             {
                 emit sendBCoordsSignal(x, y);
             }
@@ -156,7 +154,7 @@ void Planar::currentCoords(struct WalkSettings* walk, struct Dots* dots)
                                    << walk->currentIndex << ", "
                                    << dots->X->at(walk->currentIndex) << ", "
                                    << dots->Y->at(walk->currentIndex);
-                if (currentIndex < lastIndex && (x==0 && y == 0))
+                if (walk->currentIndex < walk->currentIndex && (x==0 && y == 0))
                 {
                     QThread::msleep(1000);
                     endLinePlanar();
@@ -181,7 +179,7 @@ void Planar::currentCoords(struct WalkSettings* walk, struct Dots* dots)
 void Planar::goToDot(struct WalkSettings* walk, struct Dots* dots)
 {
     //опустить стол
-    down();
+    down(walk);
     //перевод координат в массив байтов для передачи станку
     QByteArray x = QByteArray::number((int)dots->X->at(walk->currentIndex);
     QByteArray y = QByteArray::number((int)dots->Y->at(walk->currentIndex);

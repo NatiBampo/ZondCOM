@@ -1,11 +1,11 @@
 debug/LoggingCategories.o
+debug/comport.o
 debug/connector.o
 debug/keithley.o
 debug/keysight.o
 debug/light.o
 debug/main.o
 debug/mainwindow.o
-debug/meter.o
 debug/planar.o
 debug/stats.o
 debug/tabcanvas.o

@@ -72,7 +72,7 @@ public slots:
      * @param Dots координаты мест контактирования зонда
      * @param WalkSettings настройки обхода пластины
      */
-    void calculate_dots(struct DieParameters*, struct Dots*, struct WalkSettings*);
+    void calculateDots(struct DieParameters*, struct Dots*, struct WalkSettings*);
     void pauseWalk();
     //void goToDot(struct WalkSettings*, struct Dots*);
     void saveMeasure(struct WalkSettings*);

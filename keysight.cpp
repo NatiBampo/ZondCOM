@@ -3,15 +3,13 @@
 Keysight::Keysight() : Meter()
 {}
 
-int Keysight::openConnection(struct Peripherals* p)//const char* ip_address
+bool Keysight::openConnection(struct Peripherals* p)//const char* ip_address
 {
-    // Connection info
-
     ViChar resource_string[] = "TCPIP::192.168.0.9::INSTR";
     ViAccessMode access_mode = VI_NULL;
     ViUInt32 timeout_ms      = 400;//5000
     char full_address[32];
-    if(strlen(ip_address))
+    if(strlen(p->ip))
     {
         snprintf(full_address, 32, "%s%d.%d.%d.%d%s", "TCPIP::",
                  p->ip[0], p->ip[1], p->ip[2], p->ip[3], "::INSTR"); //"%s%s%s"
@@ -30,7 +28,7 @@ int Keysight::openConnection(struct Peripherals* p)//const char* ip_address
 
     if (status < VI_SUCCESS) {
         qDebug() << "Could not open VISA resource manager";
-        return 0;
+        return false;
     }
 
     // Connect to instrument
@@ -41,7 +39,7 @@ int Keysight::openConnection(struct Peripherals* p)//const char* ip_address
         qDebug() << "Error connecting to instrument";
         viStatusDesc(resource_manager, status, buffer);
         qDebug() <<  buffer;
-        return 0;
+        return false;
     }
 
     // Set timeout on instrument io
@@ -59,7 +57,7 @@ int Keysight::openConnection(struct Peripherals* p)//const char* ip_address
         qDebug() << "Error writing to instrument";
         viStatusDesc(resource_manager, status, buffer);
         qDebug() << buffer;
-        return 0;
+        return false;
     }
 
     // Read response from instrument
@@ -72,7 +70,7 @@ int Keysight::openConnection(struct Peripherals* p)//const char* ip_address
         qDebug() << "Error reading from instrument";
         viStatusDesc(resource_manager, status, buffer);
         qDebug() <<  buffer;
-        return 0;
+        return false;
     }
 
 
@@ -82,7 +80,7 @@ int Keysight::openConnection(struct Peripherals* p)//const char* ip_address
 
     status = true;
     qDebug() << "success!!!";
-    return 1;
+    return status;
 }
 
 
@@ -97,7 +95,7 @@ void Keysight::closeConnection()
 
 }
 
-int Keysight::writePackage(const char* command)
+int Keysight::writePackage(const char* command, int l = 0)
 {
     // Communication buffer
     //const ViUInt32 buffer_size_B = 1000;
@@ -105,7 +103,9 @@ int Keysight::writePackage(const char* command)
     ViUInt32 io_bytes;
 
     ViBuf scpi_command = (ViBuf) command;
-    ViStatus status = viWrite(pair->second, scpi_command, (ViUInt32)strlen( (const char*) scpi_command), &io_bytes);
+    ViStatus status = viWrite(pair->second, scpi_command,
+                              (ViUInt32)strlen( (const char*) scpi_command),
+                              &io_bytes);
     if (status < VI_SUCCESS) {
         qDebug() << "Error writing to instrument";
         viStatusDesc(pair->first, status, buffer);
@@ -117,11 +117,11 @@ int Keysight::writePackage(const char* command)
 }
 
 
-QString* Keysight::readResponce(const char* command)
+QString* Keysight::readResponce(const char* cmd, int l = 0)
 {
-
-    if (!writePackage(command))
-        return "";
+    //const char* command = ":SENS:FUNC CURR\n:MEAS:CURR?";
+    if (!writePackage(cmd, l))
+        return nullptr;
     // Communication buffer
     const ViUInt32 buffer_size_B = 1000;
     ViChar buffer[1000];
@@ -147,14 +147,16 @@ QString* Keysight::readResponce(const char* command)
     }
     qDebug() << "read_responce success";
     // return response
-    return &QString((const char*) buffer);
+
+    QString res = QString((const char*) buffer);
+    return &res;
 }
 
 
-double Keysight::readDouble(const char* command)
+double Keysight::readDouble(const char* command, int l = 0)
 {
 
-    if (!writePackage(command))
+    if (!writePackage(command, l))
         return 0.0;
     // Communication buffer
     const ViUInt32 buffer_size_B = 1000;
@@ -251,7 +253,8 @@ void Keysight::set10mV(int delay)
 }
 
 
-void Keysight::darkCurrents(struct Delays* delays,
+void Keysight::darkCurrents(struct WalkSettings* walk,
+                            struct Delays* delays,
                             struct Currents* curr)
 {
     qDebug() << "settings->dc_10mV" << delays->dc_10mV;
@@ -274,9 +277,12 @@ void Keysight::darkCurrents(struct Delays* delays,
 }
 
 
-void Keysight::lightCurrent(struct Delays* delays,
+void Keysight::lightCurrent(struct WalkSettings* walk,
+                            struct Delays* delays,
                             struct Currents* curr)
 {
+    if (walk->keithley_status)
+        return;
     qDebug() << "light begin";
 
     set10mV(delays->light);
@@ -289,5 +295,5 @@ double Keysight::forwardCurrent(struct Delays* delays)
 {
     zeroCorrection(delays->zero);
     set05V(delays->fc_volt, delays->fc);
-    return readResponce(":SENS:FUNC CURR\n:MEAS:CURR?");
+    return readResponce(":SENS:FUNC CURR\n:MEAS:CURR?", 1);
 }

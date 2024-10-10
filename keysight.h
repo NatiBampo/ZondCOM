@@ -11,18 +11,28 @@ class Keysight : public Meter
 public:
     Keysight();
     //const char*
-    int open_connection(const int*);
-    void close_connection()  override;
-    int write_package(const char*) override;
-    const char* read_responce(const char*) override;
-    double read_double(const char*);
+    bool openConnection(struct Peripherals*);
+    void closeConnection()  override;
+    int writePackage(const char*, int) override;
+    double readDouble(const char*, int) override;
+    QString* readResponce(const char*, int) override;
 
-    void zero_correction(int) override;
-    void set_05V(int, int) override;
-    void set_1V(int) override;
-    void set_10mV(int) override;
-    QList<double> single_measurement(struct Delays*) override;
-    double forward_current(struct Delays*) override;
+    bool parsePort(QSerialPort *port,
+                   QString* com_name);
+
+    void zeroCorrection(int) override;
+    void set05V(int, int) override;
+    void set10mV(int) override;
+    void set1V(int) override;
+
+    void darkCurrents(struct WalkSettings* walk,
+                      struct Delays* delays,
+                      struct Currents* curr) override;
+    void lightCurrent(struct WalkSettings* walk,
+                      struct Delays* delays,
+                      struct Currents* curr) override;
+
+    double forwardCurrent(struct Delays*) override;
 
 
 

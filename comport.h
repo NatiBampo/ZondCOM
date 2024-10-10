@@ -11,30 +11,27 @@ class ComPort
 {
 public:
     ComPort(QSerialPort*);
+    ~ComPort();
 
-    bool openPort(QSerialPort*, QString);
-
-    virtual bool openPort(QString) override;
+    bool openPort(QString*);
 
     bool openPort(QSerialPort *port, QString* comPort,
-                  QString* portName,
                   QSerialPort::BaudRate baudRate);
 
+    virtual bool parsePort(QString*, struct Peripherals*) = 0;
+
     void closePort();
-
     void sendPackage(QByteArray, int);
-
     void sendPackageRead (QByteArray, int);
-
-    void autoOpen(struct Peripherals* periph);
-
+    // autoOpen(struct Peripherals* periph);
     void setPort(QSerialPort*);
 
     QString lastAnswer;
 
 
 protected:
-    QSerialPort::BaudRate m_rate;
+    bool opened;
+    QSerialPort::BaudRate *m_rate = nullptr;
     QSerialPort* m_serial = nullptr;
     QString* m_port_name = nullptr;
 };

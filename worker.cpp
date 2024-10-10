@@ -13,7 +13,7 @@ Worker::~Worker()
 }
 
 
-void Worker::calculate_dots(struct DieParameters* die,
+void Worker::calculateDots(struct DieParameters* die,
                             struct Dots* dots,
                             struct WalkSettings* walk)
 {
@@ -29,7 +29,7 @@ void Worker::calculate_dots(struct DieParameters* die,
 
     die->BX = abs(die->AX - die->BX);
     die->BY = abs(die->AY - die->BY);
-    emit sendBCoordsSignal(die->BX, die->BY);
+    //emit sendBCoordsSignal(die->BX, die->BY);
 
     double X3 = -die->BX * CosAlpha * CosAlpha - die->BY * SinAlpha * CosAlpha + die->BX;
     double Y3 = -die->BY * CosAlpha * CosAlpha + die->BX * SinAlpha * CosAlpha + die->BY;
@@ -76,7 +76,7 @@ void Worker::calculate_dots(struct DieParameters* die,
             else dots->Y->append(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
-    lastIndex = dots->X->length() - 1;
+    walk->lastIndex = dots->X->length() - 1;
 
     //нижний правый угол
     dots->gap[0] = 0;
@@ -128,33 +128,26 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
     //if (!planar_status) return;
     //сдвиг индекса до начала рабочей зоны(не попадает в отступ)
     walk->currentIndex = walk->startIndex < gapIndex ? gapIndex : walk->startIndex;
-
     QFileInfo fileInfo(dir_cur);
     QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_start_index_"
             + QString::number(walk->currentIndex) + ".csv";
-
-    emit sendProgressBarRangeSignal(walk->currentIndex, lastIndex);
-
+    emit sendProgressBarRangeSignal();
     QFile file(dir_dump);
 
     if (file.open(QIODevice::ReadWrite))
     {
         QTextStream output(&file);
         int walkTime = (lastIndex - walk->currentIndex) * 5;
-
         QDateTime estFinish = QDateTime::currentDateTime().addSecs(walkTime);
-
         emit sendLogSignal(("Время окончания : " + estFinish.toString("hh:mm:ss")).toUtf8());
         emit sendEndOfWalkTime(estFinish.toString("hh:mm"));
-
         int start = clock();
         stopped = false;
         QString res = "";
         qInfo(logInfo()) << "Начат обход пластины " << fileInfo.baseName()
                          <<" , начиная с элемента -> " << QString::number(walk->currentIndex);
         int lowFCcounter = 0;
-
-        while (walk->currentIndex <= lastIndex && !stopped)
+        while (walk->currentIndex <= walk->lastIndex && !stopped)
         {
             //если индекс попал на срез, то пропускаем
             if (checkIndex(walk->currentIndex, die, dots))
@@ -162,13 +155,12 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
                 walk->currentIndex++;
                 continue;
             }
-
             //проверка отзывчивости планара в конце ряда,
             //дабы не дырявить пластины активностью(вверх/вниз) на месте
             if (walk->currentIndex % 16 == 0 && !getCurrentCoords(walk, dots))
             //(currentIndex, planar_status)
             {
-                emit sendLogSignal(planarResponce);
+                //emit sendLogSignal(planarResponce);
                 emit sendMessageBox("Ошибка", "Планар не отвечает на элементах :\n"
                                     + QString::number(walk->currentIndex-15)  + " - "
                                     + QString::number(walk->currentIndex));
@@ -176,14 +168,11 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
                 walk->paused = false;
                 break;
             }
-
             //проверка нажатия Паузы
             checkPause();
-
             //начинаем мерить элемент
             connector->planar->goToDot(walk, dots);
             connector->measureDot(walk, delays, currs, dots);
-
             //запись в файл дампа строки с измерениями токов
             res = QString::number(walk->currentIndex, 'D', 0) + ", "
                     + QString::number(ForwardCurrent, 'E', 4)
@@ -191,7 +180,6 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
                     QString::number(DarkCurrent1V, 'E', 4) + ", "
                     + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
             output << res;
-
             //считаем количество элементов без прямого контакта, если больше 2 подряд выключаем
             if (currs->forward05V > currs->borderFC
                     || currs->light10mV < currs->borderLC)
@@ -216,20 +204,15 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
                 emit sendMessageBox("warning", "Недопустимые значения тока");
                 qWarning(logWarning())<<"Недопустимые значения тока :"<< res;
             }
-
             walk->currentIndex++;
-
         }
 
         qInfo(logInfo())<<"Закончен обход пластины " << fileInfo.baseName()
                        <<"  на элементе -> " << QString::number(currentIndex);
 
         walk->currentIndex = 0;
-
         file.close();
-
         connector->planar->down();
-
         timeSpent(start);
     }
     else

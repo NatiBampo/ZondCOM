@@ -83,6 +83,7 @@ struct WalkSettings
 
     int startIndex;
     int currentIndex;
+    int lastIndex;
     bool paused;
     bool stopped;
     bool orientation;

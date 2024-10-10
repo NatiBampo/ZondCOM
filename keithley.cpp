@@ -1,29 +1,39 @@
 #include "keithley.h"
 
 
-Keithley::Keithley(QSerialPort* serial) : ComPort(serial)
+Keithley::Keithley(QSerialPort* serial) : ComPort(serial), Meter()
 {
-    m_rate =  QSerialPort::Baud57600;
+    *m_rate =  QSerialPort::Baud57600;
 }
 
 Keithley::~Keithley()
 {}
 
 
-int Keithley::openConnection(struct Peripherals* p)
+bool Keithley::openConnection(struct Peripherals* p)
 {
-    if (ComPort::openPort(p->keithley_com))
-        return 1;
-    return 0;
+    return ComPort::openPort(p->keithley_com);
+}
+
+void Keithley::closeConnection()
+{
+    return ComPort::closePort();
+}
+
+int Keithley::writePackage(const char * cmd, int l = 0)
+{
+    sendPackage(QByteArray(cmd), NO_ANSWER_DELAY);
 }
 
 
-bool Keithley::parsePort(QSerialport *port, QString* com_name)
+bool Keithley::parsePort(QString* com_name, struct Peripherals*)
 {
     try
     {
-        QString* responce = readResponce();
-        if (responce->contains(QRegularExpression(R"(\d+A,)")))
+        if (!ComPort::openPort(com_name))
+            return false;
+        lastAnswer = *readResponce("READ?\n", 1);
+        if (lastAnswer.contains(QRegularExpression(R"(\d+A,)")))
         {
             return true;//\d+.\d+[+-]\d+A,
         }
@@ -53,7 +63,7 @@ void Keithley::set05V(int FCVoltage, int delay)
 {
     sendPackage("CURR:RANG 2e-3\n", NO_ANSWER_DELAY);
     sendPackage("SOUR:VOLT:RANG 1\n", NO_ANSWER_DELAY);
-    QByteArray tmp = QByteArray::number(((double)FCVoltage) / 10);
+    QByteArray tmp = QByteArray::number(((double)FCVoltage) / 1000);
     sendPackage("SOUR:VOLT " + tmp + '\n', NO_ANSWER_DELAY);
     sendPackage("SOUR:VOLT:ILIM 1e-3\n", NO_ANSWER_DELAY);
     sendPackage("SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
@@ -78,16 +88,17 @@ void Keithley::set1V(int delay)
     QThread::msleep(delay);
 }
 
-double Keithley::readDouble()
+double Keithley::readDouble(const char * cmd, int l = 0)
 {
-    emit sendPackageSignalRead( "READ?\n", ANSWER_DELAY);
-    QByteArray byteArray = lastAnswer;
+    sendPackageRead( "READ?\n", ANSWER_DELAY);
+    QByteArray byteArray = lastAnswer.toUtf8();
     byteArray = byteArray.remove(byteArray.indexOf("A"),
                                  byteArray.length() - byteArray.indexOf("A"));
     return byteArray.toDouble();
 }
 
-QString* Keithley::readResponce()
+
+QString* Keithley::readResponce(const char * cmd, int l = 0)
 {
     sendPackage("READ?\n", ANSWER_DELAY);
     return &lastAnswer;
@@ -103,11 +114,11 @@ void Keithley::darkCurrents(struct WalkSettings* walk,
     QThread::msleep(200);//800
     set10mV(delays->dc_10mV);
     QThread::msleep(delays->dc_10mV);//800
-    curr->dark10mV = readDouble();
+    curr->dark10mV = readDouble("READ?\n", 1);
     set1V(delays->dc_1V);
-    curr->dark1V = readDouble();
+    curr->dark1V = readDouble("READ?\n", 1);
     set05V(delays->fc_volt, delays->fc);
-    curr->forward05V = readDouble();
+    curr->forward05V = readDouble("READ?\n",1);
 }
 
 void Keithley::lightCurrent(struct WalkSettings* walk,
@@ -117,13 +128,13 @@ void Keithley::lightCurrent(struct WalkSettings* walk,
     set10mV(delays->light);
     sendPackage("CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
     QThread::msleep(delays->light);//200
-    curr->light10mV = readDouble();
+    curr->light10mV = readDouble("READ?\n",1);
 }
 
 
-double Keysight::forwardCurrent(struct Delays* settings)
+double Keithley::forwardCurrent(struct Delays* delays)
 {
-    zeroCorrection(settings->zero);
-    set05V(settings->fc_volt, settings->fc);
-    return readResponce(":SENS:FUNC CURR\n:MEAS:CURR?");
+    zeroCorrection(delays->zero);
+    set05V(delays->fc_volt, delays->fc);
+    return readDouble("READ?\n", 1);
 }

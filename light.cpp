@@ -36,21 +36,22 @@ bool Light::parsePort(QString* com_name, struct Peripherals* periph)
 }
 
 
-void Light::on()
+void Light::on(struct WalkSettings* walk)
 {
-    lightController("1111\r\n");
+    lightController("1111\r\n", walk);
 }
 
 
-void Light::off()
+void Light::off(struct WalkSettings* walk)
 {
-    lightController("0001\n");
+    lightController("0001\n", walk);
 }
 
 
-void Light::lightController(QByteArray msg)
+void Light::lightController(QByteArray msg,
+                            struct WalkSettings* walk)
 {
-    if (serialPort->isOpen())
+    if (serialPort->isOpen() && walk->keithley_status)
     {
         sendPackage(msg, NO_ANSWER_DELAY);
     }

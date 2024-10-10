@@ -1,22 +1,23 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "connector.h"
+#include <QByteArray>
+#include <QString>
+#include <QSerialPort>
+#include "serials.h"
 #include "comport.h"
 
 class Light : public ComPort
 {
 public:
-    Light();
+    Light(QSerialPort*);
     ~Light();
-    void lightController(QByteArray msg);
-    void on();
-    void off();
 
-    bool parsePort(QString* , struct Peripherals*) override;
-private:
+    void lightController(QByteArray msg, struct WalkSettings* walk);
+    void on(struct WalkSettings* walk);
+    void off(struct WalkSettings* walk);
 
-    QString lastAnswer;
+    bool parsePort(QString*, struct Peripherals*) override;
 };
 
 #endif // LIGHT_H

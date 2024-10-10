@@ -83,8 +83,8 @@ private:
     struct DieParameters* die = nullptr;
     struct Currents* currs = nullptr;
 
-    int numRows, number;
     int gapIndex;
+
     void createWorkerThread();
     void createStatsThread();
     void addElement(int, int, double);
@@ -107,22 +107,23 @@ signals:
     void calculateDotsSignal(struct DieParameters*,
                         struct Dots*,
                         struct WalkSettings*);
-    void measureSignal(struct WalkSettings* walk,
-                       struct Delays* delays,
-                       struct Currents* currs,
-                       struct Dots* dots);
-    void tableControllerSignal(QByteArray, bool);
-    void lightControllerSignal(QByteArray, bool);
+    void measureSignal(struct WalkSettings* ,
+                       struct Delays* ,
+                       struct Currents* ,
+                       struct Dots* );
+    void tableControllerSignal(QByteArray, struct WalkSettings* );
+    void lightControllerSignal(QByteArray, struct WalkSettings* );
     void openPortsSignal(QString, QString, QString);
     void closePortsSignal();
-    void goToElementSignal(int, bool);
+    void goToElementSignal(int, struct WalkSettings* );
     void sendPauseCommandSignal();
-    void saveMeasureSignal(int, bool, bool, bool);
-    void autoWalkSignal(struct WalkSettings* walk,
-                        struct Peripherals* periph,
-                        struct Dots* dots,
-                        struct DieParameters* die);
-    void autoOpenPortsSignal();
+    void saveMeasureSignal(struct WalkSettings* , struct Delays* ,
+                           struct Dots* , struct Currents* );
+    void autoWalkSignal(struct WalkSettings* ,
+                        struct Peripherals* ,
+                        struct Dots* ,
+                        struct DieParameters* );
+    void autoOpenPortsSignal(struct Peripherals*);
     void showChartsSignal(QString);
     void getCurrentCoordsSignal(int, bool);
     void measureFCSignal(struct WalkSettings* ,
@@ -147,13 +148,6 @@ public slots:
     void measurePushButton_on();
     void lightPushButton_on();
 
-    void writeLog(QByteArray);
-    void setProgressBarValue(int);
-    void setProgressBarRange(int, int);
-    //void openPortResult(QString, QString, bool);
-    void addRowToTable();
-    void setBCoords(int, int);
-    void setCurrentCoords(int, int);
     void pauseButton_clicked(bool);
     void goToButton_clicked();
     void saveMeasureButton_clicked();
@@ -164,16 +158,25 @@ public slots:
     void measureBButton_clicked();
     void on_chartsButton_clicked();
     void measure2pushButton_clicked();
-    void showMessageBox(QString, QString);
-    void sendEndWalk();
-    void on_FCMeasureButton_clicked();
 
-    void on_hotKeysCheckBox_stateChanged(int arg1);
     void savePushButton_clicked();
     void on_loadFilePushButton_clicked();
     void stopPushButton_clicked();
     void on_toAPushButton_clicked();
     void on_toBPushButton_clicked();
+    void on_FCMeasureButton_clicked();
+    void on_hotKeysCheckBox_stateChanged(int arg1);
+
+    void writeLog(QByteArray);
+    void setProgressBarValue(int);
+    void setProgressBarRange(int, int);
+    void openPortResult();
+    void addRowToTable();
+    void setBCoords(int, int);
+    void setCurrentCoords(int, int);
+
+    void showMessageBox(QString, QString);
+    void sendEndWalk();
     void setEndOfWalkTime(QString);
 
 private slots:
