@@ -32,6 +32,8 @@ public:
     virtual QString* readResponce(const char*, int) = 0;
     virtual double readDouble(const char*, int) = 0;
 
+
+
 };
 
 #endif // METER_H

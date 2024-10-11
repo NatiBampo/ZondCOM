@@ -50,7 +50,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    Worker *worker;
+    Worker *worker = nullptr;
 
 private:
     Ui::MainWindow *ui;
@@ -88,7 +88,6 @@ private:
     void createWorkerThread();
     void createStatsThread();
     void addElement(int, int, double);
-    int getUIIndex();
     void updateDelays();
     void syncSettings();
     void initializeShortKeys();
@@ -100,8 +99,8 @@ private:
     void planarSender(QString);
     void initializeSettings();
     void initConnects();
-    void updateDelays();
 
+    int getUIIndex();
 
 signals:
     void calculateDotsSignal(struct DieParameters*,
@@ -115,17 +114,18 @@ signals:
     void lightControllerSignal(QByteArray, struct WalkSettings* );
     void openPortsSignal(QString, QString, QString);
     void closePortsSignal();
-    void goToElementSignal(int, struct WalkSettings* );
+    void goToElementSignal(struct WalkSettings*, struct Dots* );
     void sendPauseCommandSignal();
     void saveMeasureSignal(struct WalkSettings* , struct Delays* ,
                            struct Dots* , struct Currents* );
     void autoWalkSignal(struct WalkSettings* ,
-                        struct Peripherals* ,
+                        struct Delays* ,
                         struct Dots* ,
-                        struct DieParameters* );
+                        struct DieParameters*,
+                        struct Currents*);
     void autoOpenPortsSignal(struct Peripherals*);
     void showChartsSignal(QString);
-    void getCurrentCoordsSignal(int, bool);
+    void getCurrentCoordsSignal(int , struct WalkSettings* , struct Dots* );
     void measureFCSignal(struct WalkSettings* ,
                          struct Delays* ,
                          struct Currents*,
@@ -170,10 +170,10 @@ public slots:
     void writeLog(QByteArray);
     void setProgressBarValue(int);
     void setProgressBarRange(int, int);
-    void openPortResult();
+    void openPortsResult();
     void addRowToTable();
-    void setBCoords(int, int);
-    void setCurrentCoords(int, int);
+    //void setBCoords(int, int);
+    void setCurrentCoords(int, int, int);
 
     void showMessageBox(QString, QString);
     void sendEndWalk();

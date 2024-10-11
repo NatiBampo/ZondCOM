@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QMessageBox>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 #include <QThread>
 #include "comport.h"
 #include "meter.h"
@@ -21,7 +23,7 @@ public:
     double readDouble(const char*, int ) override;
     QString* readResponce(const char*, int) override;
 
-    bool parsePort(QString*, struct Peripherals*) override;
+    bool parsePort(QString, struct Peripherals*) override;
 
     void zeroCorrection(int) override;
     void set05V(int, int) override;

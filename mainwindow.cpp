@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     dir_name = "С:\temp\1.csv";
 
     //delays.append({300, 300, 500, 500, 400, 400, 600});
-    delays = {300, 300, 500, 500, 400, 400, 600};
+    //delays = {300, 300, 500, 500, 400, 400, 600};
 
     initializeShortKeys();
     initializeSettings();
@@ -136,38 +136,37 @@ void MainWindow::createWorkerThread()
     worker->moveToThread(&workerThread);
     workerThread.start();
 
-    connect(this, &MainWindow::scanningPlateSignal, worker, &Worker::calculateDots);
-    connect(this, &MainWindow::measureSignal, worker->connector, &Connector::measureElement);
+    connect(this, &MainWindow::calculateDotsSignal, worker, &Worker::calculateDots);
+    connect(this, &MainWindow::measureSignal, worker->connector, &Connector::measureDot);
     connect(this, &MainWindow::openPortsSignal, worker->connector, &Connector::openPorts);
-    connect(this, &MainWindow::autoOpenPortsSignal, worker->connector, &Connector::autoOpenPorts);
-    connect(this, &MainWindow::tableControllerSignal,
-            worker->connector->planar, &Worker::tableController);
-    connect(this, &MainWindow::lightControllerSignal,
-            worker->connector->light, &Worker::lightController);
+    connect(this, &MainWindow::autoOpenPortsSignal, worker->connector, &Connector::parsePorts);
+    connect(this, &MainWindow::tableControllerSignal, worker->connector->planar, &Planar::tableController);
+    connect(this, &MainWindow::lightControllerSignal, worker->connector->light, &Light::lightController);
     connect(this, &MainWindow::closePortsSignal, worker->connector, &Connector::closePorts);
     connect(this, &MainWindow::sendPauseCommandSignal, worker, &Worker::pauseWalk);
     connect(this, &MainWindow::goToElementSignal, worker->connector->planar, &Planar::goToDot);
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
     connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
     connect(this, &MainWindow::getCurrentCoordsSignal,
-            worker->connector->planar, &Worker::getCurrentCoords);
+            worker->connector->planar, &Planar::currentCoords);
     //connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
     connect(this, &MainWindow::measureFCSignal, worker->connector, &Connector::measureFC);
     connect(this, &MainWindow::openCsvFileSignal, worker, &Worker::openCsvFile);
 
-    connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
+    connect(worker->connector, &Connector::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
     connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
-    connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
+    connect(worker->connector, &Connector::portsReadySignal, this, &MainWindow::openPortsResult);
     //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
     //сигнал паузы
 
-    connect(worker->connector->planar, &Planar::sendBCoordsSignal,
-            this, &MainWindow::setBCoords);
+    /*connect(worker->connector->planar, &Planar::sendBCoordsSignal,
+            this, &MainWindow::setBCoords);*/
     connect(worker->connector->planar, &Planar::sendCurrentCoordsSignal,
             this, &MainWindow::setCurrentCoords);
-    connect(worker, &Worker::sendMessageBox, this, &MainWindow::showMessageBox);
+    connect(worker->connector, &Connector::sendMessageBoxSignal, this, &MainWindow::showMessageBox);
+    connect(worker->connector->planar, &Planar::sendMessageBoxSignal, this, &MainWindow::showMessageBox);
     connect(worker, &Worker::sendEndWalkSignal, this, &MainWindow::sendEndWalk);
     connect(worker, &Worker::sendEndOfWalkTime, this, &MainWindow::setEndOfWalkTime);
 }
@@ -256,11 +255,12 @@ void MainWindow::openPortsResult()
 {
     QString work = "открыт\n";
     QString no = "закрыт\n";
+    QString msg = QString("Выбранные порты:\nПланар ")
+                          + (periph->planar_open) ? work : no
+            + QString("Измеритель ") + (periph->meter) ? work : no
+            + QString("Диода ") + (periph->light_open) ? work : no;
     portsReady();
-    QMessageBox::information(this, "Сообщение", "Выбранные порты:\n"
-                                      + "Планар " + periph->planar_open? work : no
-                                      + "Измеритель " + periph->meter? work : no
-                                      + "Диода " + periph->light_open? work : no;
+    QMessageBox::information(this, "Сообщение", msg);
 }
 
 
@@ -286,7 +286,7 @@ bool MainWindow::portsReady()
 
 bool MainWindow::readyCheck()
 {
-    bool res = portsReady() && periph->orientation;
+    bool res = portsReady() && walk->orientation;
     //block some buttons in case COMports not open
 
     ui->goToGroupBox->setEnabled(res);
@@ -355,8 +355,9 @@ void MainWindow::rightPushButton_on()
 
 void MainWindow::planarSender(QString msg)
 {
-    emit tableControllerSignal(msg.toUtf8(), periph);
-    //ui->planarCheckBox->isChecked()
+    updateDelays();
+    emit tableControllerSignal(msg.toUtf8(), walk);
+
 }
 
 
@@ -369,13 +370,15 @@ void MainWindow::measurePushButton_on()
 
 void MainWindow::lightPushButton_on()
 {
+    walk->keithley_status = ui->lightCheckBox->isChecked();
     if (ui->lightPushButton->text() == "Диод Вкл")
     {
-        emit lightControllerSignal("1111\n", ui->lightCheckBox->isChecked());
+
+        emit lightControllerSignal("1111\n", walk);
         ui->lightPushButton->setText("Диод Выкл");
     } else
     {
-        emit lightControllerSignal("0001\n",  ui->lightCheckBox->isChecked());
+        emit lightControllerSignal("0001\n", walk);
         ui->lightPushButton->setText("Диод Вкл");
     }
 }
@@ -389,7 +392,8 @@ void MainWindow::addRowToTable()
     int row = currs->currentIndex % (die->numY * (die->numX+1)) / (die->numX+1) + 1;
     int element = currs->currentIndex % (die->numY * (die->numX+1)) % (die->numX+1) + 1;
 
-    number = currs->currentIndex - die->downRight * (die->numX+1);
+
+    int number = currs->currentIndex - die->downRight * (die->numX+1);
     number = (column>1)? number - (die->upRight + die->downLeft) * (die->numX+1) : number;
     number = (column>2)? number - (die->upLeft + die->downCenter) * (die->numX+1) : number;
 
@@ -513,7 +517,7 @@ void MainWindow::saveMeasureButton_clicked()
     walk->currentIndex = getUIIndex();
     if (!busy)
     {
-        emit saveMeasureSignal(walk, dots, currs);
+        emit saveMeasureSignal(walk, delays, dots, currs);
     }
 }
 
@@ -543,7 +547,7 @@ void MainWindow::continueFromButton_clicked(bool checked)
         ui->pauseButton->setText("Пауза");
         ui->pauseButton->setEnabled(true);
         ui->scanPushButton->setEnabled(false);
-        emit autoWalkSignal(walk, delays, currs, dots);
+        emit autoWalkSignal(walk, delays, dots, die, currs);
         busy = true;
         checkBusy();
     }
@@ -563,7 +567,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
         ui->addressLabel->setText(dir_name);
         updateDelays();
         walk->currentIndex = 0;
-        emit autoWalkSignal(walk, delays, currs, dots);
+        emit autoWalkSignal(walk, delays, dots, die, currs);
         busy = true;
         checkBusy();
     }
@@ -587,8 +591,8 @@ void MainWindow::orientationButton_clicked()
     die->upRight = ui->upRightSpinBox->value();
     die->downLeft = ui->downLeftSpinBox->value();
     die->downRight = ui->downRightSpinBox->value();
-    die->downCenter = ui->downCenterSpinBox->value();
-    die->upCenter = ui->upCenterSpinBox->value();
+    die->downCenter = ui->downCenterOffspinBox->value();
+    die->upCenter = ui->centerUpOffSpinBox->value();
     //сдвиг меж столбцов и рядов
     die->colSlide = (double)ui->stepColSpinBox->value();
     //double rowSlide = (double)ui->stepRowSpinBox->value();
@@ -605,6 +609,7 @@ void MainWindow::orientationButton_clicked()
 
 void MainWindow::initializeModel()
 {
+    int numRows;
     die->numX = ui->numXspinBox->value();
     die->numY = ui->numYspinBox->value();
 
@@ -659,24 +664,26 @@ void MainWindow::autoPortButton_clicked()
 
 void MainWindow::measureBButton_clicked()
 {
-    emit getCurrentCoordsSignal(-2, ui->planarCheckBox->isChecked());
+    emit getCurrentCoordsSignal(-2, walk, dots);
 }
 
 
-void MainWindow::setBCoords(int x, int y)
+void MainWindow::setCurrentCoords(int x, int y, int param)
 {
-    ui->BXspinBox->setValue(x);
-    ui->BYspinBox->setValue(y);
+    if (param == -1)
+    {
+        ui->xLineEdit->setText(QString::number(x));
+        ui->yLineEdit->setText(QString::number(y));
+    }
+    if (param == -2)
+    {
+        ui->BXspinBox->setValue(x);
+        ui->BYspinBox->setValue(y);
 
-    ui->AXspinBox->setValue(0);
-    ui->AYspinBox->setValue(0);
-}
+        ui->AXspinBox->setValue(0);
+        ui->AYspinBox->setValue(0);
+    }
 
-
-void MainWindow::setCurrentCoords(int x, int y)
-{
-    ui->xLineEdit->setText(QString::number(x));
-    ui->yLineEdit->setText(QString::number(y));
 }
 
 
@@ -745,14 +752,15 @@ void MainWindow::syncSettings()
 void MainWindow::measure2pushButton_clicked()
 {
     updateDelays();
-    emit measureSignal(ui->planarCheckBox->isChecked(), ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked());
+
+    emit measureSignal(walk, delays, currs, dots);
 }
 
 
 void MainWindow::on_FCMeasureButton_clicked()
 {
     updateDelays();
-    emit measureFCSignal(ui->planarCheckBox->isChecked(), ui->keithleyCheckBox->isChecked());
+    emit measureFCSignal(walk, delays, currs, dots);
 }
 
 
@@ -830,17 +838,19 @@ void MainWindow::stopPushButton_clicked()
 
 void MainWindow::on_toAPushButton_clicked()
 {
+    walk->planar_status = ui->planarCheckBox->isChecked();
     QByteArray x = ui->AXspinBox->text().toUtf8();
     QByteArray y = ui->AYspinBox->text().toUtf8();
-    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n', ui->planarCheckBox->isChecked());
+    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n', walk);
 }
 
 
 void MainWindow::on_toBPushButton_clicked()
 {
+    walk->planar_status = ui->planarCheckBox->isChecked();
     QByteArray x = ui->BXspinBox->text().toUtf8();
     QByteArray y = ui->BYspinBox->text().toUtf8();
-    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n', ui->planarCheckBox->isChecked());
+    emit tableControllerSignal("Set " + x + " " + y + '\r' + '\n', walk);
 
 }
 
@@ -995,3 +1005,13 @@ void MainWindow::updateDelays()
     walk->keithley_status = ui->keithleyCheckBox->isChecked();
     walk->light_status = ui->lightCheckBox->isChecked();
 }
+
+/*void MainWindow::setBCoords(int x, int y)
+{
+    ui->BXspinBox->setValue(x);
+    ui->BYspinBox->setValue(y);
+
+    ui->AXspinBox->setValue(0);
+    ui->AYspinBox->setValue(0);
+}*/
+

@@ -3,6 +3,7 @@
 
 #include <QSerialPort>
 #include <QSerialPortInfo>
+
 #include "serials.h"
 #include "meter.h"
 #include "comport.h"
@@ -24,6 +25,7 @@ public slots:
     void openPorts(struct Peripherals* periph);
 
     void closePorts();
+
     bool allPortsOpen(struct WalkSettings* walk);
 
     bool openPort(QSerialPort *port, QString portName,
@@ -37,16 +39,21 @@ public slots:
 
     void measureFC(struct WalkSettings* , struct Delays* , struct Currents*, struct Dots*);
 
-    void sendLog(QByteArray);
-    void sendProgessRange(int, int);
+    void sendLog(QByteArray msg);
+
     void sendMessageBox(QString, QString);
+
+    void sendProgessRange(int, int);
+
 public:
     Meter* meter = nullptr;
     Planar* planar = nullptr;
     Light* light = nullptr;
-
+    Keithley* kith = nullptr;
 signals:
-    portsReady();
+    void portsReadySignal();
+    void sendLogSignal(QByteArray msg);
+    void sendMessageBoxSignal(QString, QString);
 };
 
 #endif // CONNECTOR_H

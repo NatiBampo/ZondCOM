@@ -2,7 +2,7 @@
 
 Planar::Planar(QSerialPort* port) : ComPort(port)
 {
-    m_rate = QSerialPort::Baud115200;
+    *m_rate = QSerialPort::Baud115200;
 }
 
 
@@ -10,29 +10,29 @@ Planar::~Planar()
 {}
 
 
-bool Planar::parsePort(QString* com_name, struct Peripherals* periph)
+bool Planar::parsePort(QString com_name, struct Peripherals* periph)
 {
     //serialPortA5->flush();
     if (working) return true;
-    tableController("State\r\n", periph);
-    QString responce = QString(planarResponce);
+    sendPackageRead("State\r\n", ANSWER_DELAY);
+
     QRegularExpression re(R"(-?\d+ -?\d+ -?\d+ -?\d+\r\n|BSY|OK|ERC|NBP|EDG)");
-    QRegularExpressionMatch match = re.match(responce);
-    if (responce != "" && match.hasMatch())
+    QRegularExpressionMatch match = re.match(lastAnswer);
+    if (lastAnswer != "" && match.hasMatch())
     {
-        emit sendLogSignal(match.captured(0).toUtf8());
-        periph->planar_com = com_name;
+        //emit sendLogSignal(match.captured(0).toUtf8());
+        periph->planar_com = &com_name;
         working = true;
-        serial = periph->planar;
+        m_serial = periph->planar;
         return true;
     }
-    else if (responce == "")
+    else if (lastAnswer == "")
     {
         QThread::msleep(300);
-        tableController("State\r\n", periph);
-        responce = QString(planarResponce);
-        match = re.match(responce);
-        if (responce != "" && match.hasMatch())
+        sendPackageRead("State\r\n", ANSWER_DELAY);
+
+        match = re.match(lastAnswer);
+        if (lastAnswer != "" && match.hasMatch())
         {
             working = true;
             return true;
@@ -43,19 +43,13 @@ bool Planar::parsePort(QString* com_name, struct Peripherals* periph)
 
 }
 
-void Planar::endLinePlanar()
+void Planar::endLine(struct WalkSettings* walk)
 {
-    serial->write("\r\n");
-    serial->flush();
-    serial->waitForBytesWritten(400);
-    lastAnswer = "";
-    planarResponce = "";
-    if (serial->waitForReadyRead(400))
-        lastAnswer.append(serial->readAll());
-    if (lastAnswer==planarResponce)
+    sendPackageRead("\r\n", ANSWER_DELAY);
+    if (lastAnswer == "")
     {
         errorCount++;
-        //emit sendLogSignal(lastAnswer + "<-ответ на /r/n||прошлый->" + planarResponce);
+        emit sendLogSignal((lastAnswer + "<-ответ на /r/n").toUtf8());
     }
     else
     {
@@ -63,48 +57,47 @@ void Planar::endLinePlanar()
     }
     if (errorCount > 5)
     {
-        stopWalk();
+        walk->stopped = true;
 
-        emit sendMessageBox("warning", "Планар не отвечает");
+        emit sendMessageBoxSignal("warning", "Планар не отвечает");
     }
-    planarResponce.append(lastAnswer);
 }
 
 void Planar::tableController(const QByteArray message, struct WalkSettings* walk)
 {
-    if (serial->isOpen() || walk->planarStatus)
+    if (m_serial->isOpen() || walk->planar_status)
     {
-        sendPackageRead( message, ANSWER_DELAY );//1000
+        sendPackageRead(message, ANSWER_DELAY );//1000
         qInfo(logInfo())<< lastAnswer << "<- в ответ на ->" + QString(message);//\r\n
 
         if (lastAnswer == "")
         {
-            endLinePlanar();
+            endLine(walk);
         }
         else if (lastAnswer.contains(QRegularExpression(R"(BSY)")))//< BSY\r\n
         {
-            stopped = true;
-            emit sendMessageBox("warning", "BSY. Планар не отвечает.\n Проверьте передачу управления.");
+            walk->stopped = true;
+            emit sendMessageBoxSignal("warning", "BSY. Планар не отвечает.\n Проверьте передачу управления.");
             qWarning(logWarning()) << "BSY – ЗУ находится в режиме ручной настройки, обхода или исполняет команду";
         }
         else if (lastAnswer.contains(QRegularExpression(R"(FLT)")))
         {
-            stopped = true;
-            emit sendMessageBox("warning", "FLT – авария ЗУ");
+            walk->stopped = true;
+            emit sendMessageBoxSignal("warning", "FLT – авария ЗУ");
             qCritical(logCritical()) << "FLT – авария ЗУ";
         }
         else if (lastAnswer.contains(QRegularExpression(R"(ERC)")))
         {
-            emit sendMessageBox("warning", "ERC – ошибка команды или формата");
+            emit sendMessageBoxSignal("warning", "ERC – ошибка команды или формата");
             qWarning(logWarning()) << "ERC – ошибка команды или формата";
 
-            endLinePlanar();
+            endLine(walk);
         }
     }
     else
     {
         walk->stopped = true;
-        emit sendMessageBox("warning",
+        emit sendMessageBoxSignal("warning",
                             "Порт планара закрыт.\n Отправка комманды не работает");
     }
 }
@@ -114,13 +107,15 @@ void Planar::up(struct WalkSettings* walk)
 {
     tableController("Table UP\r\n", walk);
 }
+
+
 void Planar::down(struct WalkSettings* walk)
 {
     tableController("Table DN\r\n", walk);
 }
 
 
-void Planar::currentCoords(struct WalkSettings* walk, struct Dots* dots)
+void Planar::currentCoords(int index, struct WalkSettings* walk, struct Dots* dots)
 {
     int x = 0;
     int y = 0;
@@ -131,21 +126,21 @@ void Planar::currentCoords(struct WalkSettings* walk, struct Dots* dots)
     for (int i = 0; i < 5; i++)
     {
         //emit sendLogSignal(planarResponce);
-        QString responce = QString(planarResponce);//lastAnswer
-        QRegularExpressionMatch match = re.match(responce);
+
+        QRegularExpressionMatch match = re.match(lastAnswer);
         if (match.hasMatch())
         {
             QString line = match.captured(0);
             x = line.split(" ")[2].toInt();
             y = line.split(" ")[3].toInt();
 
-            if (walk->currentIndex == -1)
+            if (index == -1)
             {
-                emit sendCurrentCoordsSignal(x, y);
+                emit sendCurrentCoordsSignal(x, y, -1);
             }
-            if (walk->currentIndex == -2)
+            if (index == -2)
             {
-                emit sendBCoordsSignal(x, y);
+                emit sendCurrentCoordsSignal(x, y, -2);
             }
             if (index > 0)
             {
@@ -154,25 +149,27 @@ void Planar::currentCoords(struct WalkSettings* walk, struct Dots* dots)
                                    << walk->currentIndex << ", "
                                    << dots->X->at(walk->currentIndex) << ", "
                                    << dots->Y->at(walk->currentIndex);
-                if (walk->currentIndex < walk->currentIndex && (x==0 && y == 0))
+                if ( x==0 && y == 0)//&& (index < walk->currentIndex
                 {
                     QThread::msleep(1000);
-                    endLinePlanar();
+                    endLine(walk);
                     continue;
                 }
 
                 bool cond1 = x == (int) dots->X->at(walk->currentIndex);
                 bool cond2 = y == (int) dots->Y->at(walk->currentIndex);
-                return cond1 && cond2;
+
+                //stop if current coords differ from calculated for index
+                walk->stopped = !(cond1 && cond2);
             }
-            return true;
+            //return true;
         }
         else //if (responce == "< OK\r\n")
         {
-            endLinePlanar();
+            endLine(walk);
         }
     }
-    return false;
+    //return false;
 }
 
 
@@ -181,7 +178,7 @@ void Planar::goToDot(struct WalkSettings* walk, struct Dots* dots)
     //опустить стол
     down(walk);
     //перевод координат в массив байтов для передачи станку
-    QByteArray x = QByteArray::number((int)dots->X->at(walk->currentIndex);
-    QByteArray y = QByteArray::number((int)dots->Y->at(walk->currentIndex);
+    QByteArray x = QByteArray::number((int)dots->X->at(walk->currentIndex));
+    QByteArray y = QByteArray::number((int)dots->Y->at(walk->currentIndex));
     tableController("Set " + x + " " + y + '\r' + '\n', walk);
 }

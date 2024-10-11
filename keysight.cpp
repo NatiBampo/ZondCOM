@@ -9,13 +9,13 @@ bool Keysight::openConnection(struct Peripherals* p)//const char* ip_address
     ViAccessMode access_mode = VI_NULL;
     ViUInt32 timeout_ms      = 400;//5000
     char full_address[32];
-    if(strlen(p->ip))
-    {
+    //if(strlen(p->ip))
+    //{
         snprintf(full_address, 32, "%s%d.%d.%d.%d%s", "TCPIP::",
                  p->ip[0], p->ip[1], p->ip[2], p->ip[3], "::INSTR"); //"%s%s%s"
         qDebug() << full_address;
         memmove(resource_string,  full_address, strlen(full_address));
-    }
+    ///}
     // Communication buffer
     const ViUInt32 buffer_size_B = 1000;
     ViChar buffer[1000];
@@ -91,7 +91,7 @@ void Keysight::closeConnection()
     viClose(pair->first);
     viClose(pair->second);
 
-    status = false;
+    //status = false;
 
 }
 
@@ -295,5 +295,5 @@ double Keysight::forwardCurrent(struct Delays* delays)
 {
     zeroCorrection(delays->zero);
     set05V(delays->fc_volt, delays->fc);
-    return readResponce(":SENS:FUNC CURR\n:MEAS:CURR?", 1);
+    return readDouble(":SENS:FUNC CURR\n:MEAS:CURR?", 1);
 }

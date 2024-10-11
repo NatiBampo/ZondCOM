@@ -306,6 +306,9 @@ debug/moc_keithley.cpp: keithley.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMessageBox \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmessagebox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qdialog.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpression \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qregularexpression.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpressionMatch \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QThread \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
@@ -316,6 +319,9 @@ debug/moc_keithley.cpp: keithley.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialport.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialportglobal.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qtserialportexports.h \
+		LoggingCategories.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QLoggingCategory \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qloggingcategory.h \
 		meter.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QPair \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QDebug \
@@ -2101,7 +2107,22 @@ debug/comport.o: comport.cpp comport.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qobject_impl.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qbindingstorage.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialportglobal.h \
-		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qtserialportexports.h
+		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qtserialportexports.h \
+		LoggingCategories.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QLoggingCategory \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qloggingcategory.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qdebug.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qtextstream.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qstringconverter_base.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qcontiguouscache.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qsharedpointer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qsharedpointer_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qmap.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qset.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qhash.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qvarlengtharray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\comport.o comport.cpp
 
 debug/connector.o: connector.cpp connector.h \
@@ -2201,7 +2222,18 @@ debug/connector.o: connector.cpp connector.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qhash.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qvarlengtharray.h \
 		comport.h \
+		LoggingCategories.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QLoggingCategory \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qloggingcategory.h \
 		planar.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QThread \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qelapsedtimer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpression \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qregularexpression.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qvariant.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpressionMatch \
 		light.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QByteArray \
 		keithley.h \
@@ -2233,7 +2265,6 @@ debug/connector.o: connector.cpp connector.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpolygon.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qregion.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qline.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qvariant.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qpalette.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qbrush.h \
 		../../qt6/6.4.2/mingw_64/include/QtGui/qfont.h \
@@ -2260,10 +2291,6 @@ debug/connector.o: connector.cpp connector.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMessageBox \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmessagebox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qdialog.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QThread \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qelapsedtimer.h \
 		keysight.h \
 		visa/visa.h \
 		visa/visatype.h
@@ -2408,6 +2435,9 @@ debug/keithley.o: keithley.cpp keithley.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMessageBox \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmessagebox.h \
 		../../qt6/6.4.2/mingw_64/include/QtWidgets/qdialog.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpression \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qregularexpression.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpressionMatch \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QThread \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
@@ -2418,6 +2448,9 @@ debug/keithley.o: keithley.cpp keithley.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialport.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialportglobal.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qtserialportexports.h \
+		LoggingCategories.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QLoggingCategory \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qloggingcategory.h \
 		meter.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QPair \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QDebug \
@@ -2579,22 +2612,17 @@ debug/light.o: light.cpp light.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qutf8stringview.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qstringtokenizer.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qstringbuilder.h \
-		../../qt6/6.4.2/mingw_64/include/QtSerialPort/QSerialPort \
-		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialport.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qiodevice.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QDebug \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qdebug.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qtextstream.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qiodevicebase.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qobject.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qobjectdefs.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qobjectdefs_impl.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qlist.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qhashfunctions.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qiterator.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qbytearraylist.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qstringlist.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qalgorithms.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qstringmatcher.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreevent.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qscopedpointer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qstringconverter_base.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qcontiguouscache.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qsharedpointer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qhashfunctions.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qsharedpointer_impl.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qmetatype.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcompare.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qscopeguard.h \
@@ -2603,19 +2631,41 @@ debug/light.o: light.cpp light.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qmetacontainer.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcontainerinfo.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qtaggedpointer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qalgorithms.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qmath.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qobjectdefs.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qobjectdefs_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qlist.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qiterator.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qbytearraylist.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qstringlist.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qstringmatcher.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qmap.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qset.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qhash.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qvarlengtharray.h \
+		../../qt6/6.4.2/mingw_64/include/QtSerialPort/QSerialPort \
+		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialport.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qiodevice.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qobject.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qcoreevent.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qobject_impl.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qbindingstorage.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialportglobal.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qtserialportexports.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpression \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qregularexpression.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qvariant.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpressionMatch \
 		serials.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/QMap \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qmap.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata_impl.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/QSerialPortInfo \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialportinfo.h \
-		comport.h
+		comport.h \
+		LoggingCategories.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QLoggingCategory \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qloggingcategory.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\light.o light.cpp
 
 debug/main.o: main.cpp mainwindow.h \
@@ -3925,9 +3975,11 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o mainwindow.cpp
 
 debug/planar.o: planar.cpp planar.h \
-		../../qt6/6.4.2/mingw_64/include/QtSerialPort/QSerialPort \
-		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialport.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qiodevice.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QThread \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qobject.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qobjectdefs.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qnamespace.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qglobal.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qconfig-bootstrapped.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qconfig.h \
@@ -3952,10 +4004,6 @@ debug/planar.o: planar.cpp planar.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qnumeric.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qversiontagging.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qforeach.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qiodevicebase.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qobject.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qobjectdefs.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qnamespace.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qtmetamacros.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qobjectdefs_impl.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qstring.h \
@@ -3990,6 +4038,7 @@ debug/planar.o: planar.cpp planar.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcompare.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qscopeguard.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qdatastream.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qiodevicebase.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qiterable.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qmetacontainer.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcontainerinfo.h \
@@ -3997,96 +4046,38 @@ debug/planar.o: planar.cpp planar.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qmath.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qobject_impl.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qbindingstorage.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qelapsedtimer.h \
+		../../qt6/6.4.2/mingw_64/include/QtSerialPort/QSerialPort \
+		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialport.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qiodevice.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialportglobal.h \
 		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qtserialportexports.h \
-		comport.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QString \
-		connector.h \
-		../../qt6/6.4.2/mingw_64/include/QtSerialPort/QSerialPortInfo \
-		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialportinfo.h \
-		serials.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QMap \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qmap.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpression \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qregularexpression.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata_impl.h \
-		meter.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QPair \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QList \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QDebug \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qvariant.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qdebug.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qtextstream.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qstringconverter_base.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qcontiguouscache.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qsharedpointer.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qsharedpointer_impl.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qmap.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qshareddata_impl.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qset.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qhash.h \
 		../../qt6/6.4.2/mingw_64/include/QtCore/qvarlengtharray.h \
-		light.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QByteArray \
-		keithley.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/QWidget \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qwidget.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtguiglobal.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtgui-config.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtguiexports.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtwidgets-config.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qtwidgetsexports.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qwindowdefs.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qwindowdefs_win.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qmargins.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qaction.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qkeysequence.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qicon.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qsize.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpixmap.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpaintdevice.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qrect.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qpoint.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qcolor.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qrgb.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qrgba64.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qimage.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpixelformat.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qtransform.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpolygon.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qregion.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qline.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qvariant.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpalette.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qbrush.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qfont.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qfontmetrics.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qfontinfo.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qsizepolicy.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qcursor.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qbitmap.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qevent.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qpointer.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qurl.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qeventpoint.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qvector2d.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qvectornd.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qpointingdevice.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qinputdevice.h \
-		../../qt6/6.4.2/mingw_64/include/QtGui/qscreen.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QObject \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QRect \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QSize \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QSizeF \
-		../../qt6/6.4.2/mingw_64/include/QtGui/QTransform \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qnativeinterface.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/QMessageBox \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qmessagebox.h \
-		../../qt6/6.4.2/mingw_64/include/QtWidgets/qdialog.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/QThread \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qthread.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qdeadlinetimer.h \
-		../../qt6/6.4.2/mingw_64/include/QtCore/qelapsedtimer.h \
-		keysight.h \
-		visa/visa.h \
-		visa/visatype.h
+		../../qt6/6.4.2/mingw_64/include/QtCore/QRegularExpressionMatch \
+		LoggingCategories.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QLoggingCategory \
+		../../qt6/6.4.2/mingw_64/include/QtCore/qloggingcategory.h \
+		comport.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QString \
+		serials.h \
+		../../qt6/6.4.2/mingw_64/include/QtCore/QMap \
+		../../qt6/6.4.2/mingw_64/include/QtSerialPort/QSerialPortInfo \
+		../../qt6/6.4.2/mingw_64/include/QtSerialPort/qserialportinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\planar.o planar.cpp
 
 debug/stats.o: stats.cpp stats.h \

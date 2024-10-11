@@ -12,7 +12,9 @@ Keithley::~Keithley()
 
 bool Keithley::openConnection(struct Peripherals* p)
 {
-    return ComPort::openPort(p->keithley_com);
+    bool res = ComPort::openPort(p->keithley_com);
+    p->meter = res;
+    return res;
 }
 
 void Keithley::closeConnection()
@@ -26,15 +28,18 @@ int Keithley::writePackage(const char * cmd, int l = 0)
 }
 
 
-bool Keithley::parsePort(QString* com_name, struct Peripherals*)
+bool Keithley::parsePort(QString com_name, struct Peripherals* periph)
 {
+    if (periph->meter)
+        return true;
     try
     {
-        if (!ComPort::openPort(com_name))
+        if (!ComPort::openPort(&com_name))
             return false;
         lastAnswer = *readResponce("READ?\n", 1);
         if (lastAnswer.contains(QRegularExpression(R"(\d+A,)")))
         {
+            periph->meter = true;
             return true;//\d+.\d+[+-]\d+A,
         }
     }

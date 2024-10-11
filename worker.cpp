@@ -48,8 +48,8 @@ void Worker::calculateDots(struct DieParameters* die,
         {
             if (i % 2 == 0) dots->X->push_back(die->BX + StepxX * i + StepyX * j  + slideX);
             else dots->X->push_back(die->BX + StepxX * i + StepyX * j - StepyX * K + slideX);
-            if (i % 2 == 0) dots->Y->append(BY + StepxY * i + StepyY * j);
-            else dots->Y->append(die->BY + StepxY * i + StepyY * j - StepyY * K);
+            if (i % 2 == 0) dots->Y->push_back(BY + StepxY * i + StepyY * j);
+            else dots->Y->push_back(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
 
@@ -60,8 +60,8 @@ void Worker::calculateDots(struct DieParameters* die,
         {
             if (i % 2 == 0) dots->X->push_back(die->BX + StepxX * i + StepyX * j  - slideX);
             else dots->X->push_back(die->BX + StepxX * i + StepyX * j - StepyX * K - slideX);
-            if (i % 2 == 0) dots->Y->append(die->BY + StepxY * i + StepyY * j);
-            else dots->Y->append(die->BY + StepxY * i + StepyY * j - StepyY * K);
+            if (i % 2 == 0) dots->Y->push_back(die->BY + StepxY * i + StepyY * j);
+            else dots->Y->push_back(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
 
@@ -72,8 +72,8 @@ void Worker::calculateDots(struct DieParameters* die,
         {
             if (i % 2 == 0) dots->X->push_back(die->BX + StepxX * i + StepyX * j);
             else dots->X->push_back(die->BX + StepxX * i + StepyX * j - StepyX * K);
-            if (i % 2 == 0) dots->Y->append(die->BY + StepxY * i + StepyY * j);
-            else dots->Y->append(die->BY + StepxY * i + StepyY * j - StepyY * K);
+            if (i % 2 == 0) dots->Y->push_back(die->BY + StepxY * i + StepyY * j);
+            else dots->Y->push_back(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
     walk->lastIndex = dots->X->length() - 1;
@@ -123,31 +123,32 @@ bool Worker::checkIndex(int i, struct DieParameters* die, struct Dots* dots)
 
 
 void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
-                      struct Currents* currs, struct Dots* dots)
+                      struct Dots* dots, struct DieParameters* die,
+                      struct Currents* currs)
 {
     //if (!planar_status) return;
     //сдвиг индекса до начала рабочей зоны(не попадает в отступ)
-    walk->currentIndex = walk->startIndex < gapIndex ? gapIndex : walk->startIndex;
+    //walk->currentIndex = walk->startIndex < gapIndex ? gapIndex : walk->startIndex;
     QFileInfo fileInfo(dir_cur);
     QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_start_index_"
             + QString::number(walk->currentIndex) + ".csv";
-    emit sendProgressBarRangeSignal();
+    //emit sendProgressBarRangeSignal();
     QFile file(dir_dump);
 
     if (file.open(QIODevice::ReadWrite))
     {
         QTextStream output(&file);
-        int walkTime = (lastIndex - walk->currentIndex) * 5;
+        int walkTime = (walk->lastIndex - walk->currentIndex) * 5;
         QDateTime estFinish = QDateTime::currentDateTime().addSecs(walkTime);
-        emit sendLogSignal(("Время окончания : " + estFinish.toString("hh:mm:ss")).toUtf8());
+        connector->sendLog(("Время окончания : " + estFinish.toString("hh:mm:ss")).toUtf8());
         emit sendEndOfWalkTime(estFinish.toString("hh:mm"));
         int start = clock();
-        stopped = false;
+        walk->stopped = false;
         QString res = "";
         qInfo(logInfo()) << "Начат обход пластины " << fileInfo.baseName()
                          <<" , начиная с элемента -> " << QString::number(walk->currentIndex);
         int lowFCcounter = 0;
-        while (walk->currentIndex <= walk->lastIndex && !stopped)
+        while (walk->currentIndex <= walk->lastIndex && !walk->stopped)
         {
             //если индекс попал на срез, то пропускаем
             if (checkIndex(walk->currentIndex, die, dots))
@@ -157,16 +158,20 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
             }
             //проверка отзывчивости планара в конце ряда,
             //дабы не дырявить пластины активностью(вверх/вниз) на месте
-            if (walk->currentIndex % 16 == 0 && !getCurrentCoords(walk, dots))
+            if (walk->currentIndex % 16 == 0)
             //(currentIndex, planar_status)
             {
-                //emit sendLogSignal(planarResponce);
-                emit sendMessageBox("Ошибка", "Планар не отвечает на элементах :\n"
+                getCurrentCoords(walk->currentIndex, walk, dots);
+
+                connector->sendLog(connector->planar->lastAnswer.toUtf8());
+                connector->sendMessageBox("Ошибка", "Планар не отвечает на элементах :\n"
                                     + QString::number(walk->currentIndex-15)  + " - "
                                     + QString::number(walk->currentIndex));
-                walk->stopped = true;
-                walk->paused = false;
-                break;
+                if(walk->stopped)
+                {
+                    walk->paused = false;
+                    break;
+                }
             }
             //проверка нажатия Паузы
             checkPause();
@@ -175,10 +180,10 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
             connector->measureDot(walk, delays, currs, dots);
             //запись в файл дампа строки с измерениями токов
             res = QString::number(walk->currentIndex, 'D', 0) + ", "
-                    + QString::number(ForwardCurrent, 'E', 4)
-                    + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
-                    QString::number(DarkCurrent1V, 'E', 4) + ", "
-                    + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + '\n';
+                    + QString::number(currs->forward05V, 'E', 4)
+                    + ", " + QString::number(currs->dark10mV, 'E', 4) + ", " +
+                    QString::number(currs->dark1V, 'E', 4) + ", "
+                    + QString::number(currs->light10mV, 'E', 4) + '\n';
             output << res;
             //считаем количество элементов без прямого контакта, если больше 2 подряд выключаем
             if (currs->forward05V > currs->borderFC
@@ -191,17 +196,15 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
                 lowFCcounter = 0;
             }
             //отправляем данные на таблицу, если ток в норме
-            if (lowFCcounter <= 2 || badDie || !keithley_status)
+            if (lowFCcounter <= 2 || walk->badDie || !keithley_status)
             {
-                emit sendAddTableSignal(currentIndex, ForwardCurrent,
-                                        DarkCurrent10mV, DarkCurrent1V,
-                                        LightCurrent - DarkCurrent10mV);
-                emit sendProgressBarValueSignal(currentIndex);
+                emit sendAddTableSignal();
+                emit sendProgressBarValueSignal(walk->currentIndex);
             }
             else
             {
                 stopWalk();
-                emit sendMessageBox("warning", "Недопустимые значения тока");
+                connector->sendMessageBox("warning", "Недопустимые значения тока");
                 qWarning(logWarning())<<"Недопустимые значения тока :"<< res;
             }
             walk->currentIndex++;
@@ -212,12 +215,12 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
 
         walk->currentIndex = 0;
         file.close();
-        connector->planar->down();
+        connector->planar->down(walk);
         timeSpent(start);
     }
     else
     {
-        emit sendMessageBox("warning", "Файл открыт другой программой.\nЗапись не возможна.");
+        connector->sendMessageBox("warning", "Файл открыт другой программой.\nЗапись не возможна.");
     }
     emit sendEndWalkSignal();
 
@@ -257,7 +260,7 @@ void Worker::timeSpent(int start)
     t /= 60;
     int h = t % 24;
     //int d = t - h;
-    emit sendMessageBox("Обход закончен", "Прошло времени: " + QString::number(h)
+    connector->sendMessageBox("Обход закончен", "Прошло времени: " + QString::number(h)
                         + " часов, " +  QString::number(m) + " минут, "
                         + QString::number(s) + " секунд.");
 }
@@ -283,7 +286,7 @@ void Worker::openCsvFile(QString dir, struct Currents* curr)
     QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_copy_" + ".csv";
 
     QFile::copy(dir,  dir_dump);// "C:/qt/log/copyOrbita/" + fileInfo.fileName());
-    emit sendMessageBox("info", "Загружен " + fileInfo.baseName());
+    connector->sendMessageBox("info", "Загружен " + fileInfo.baseName());
     QString line;
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -319,7 +322,7 @@ void Worker::saveMeasure(struct WalkSettings* walk, struct Delays* delays,
 {
     if (checkIndex(walk->currentIndex, dots))
     {
-        emit sendMessageBox("info", "Индекс за пределами измеряемой зоны."
+        connector->sendMessageBox("info", "Индекс за пределами измеряемой зоны."
                                     "\nПроверье отступы по краям\n и выполните ориентацию");
         return;
     }

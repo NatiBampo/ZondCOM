@@ -37,6 +37,7 @@ public:
 
 
 private:
+    //bool status;
     QPair<ViSession, ViSession> *pair = nullptr;
 };
 

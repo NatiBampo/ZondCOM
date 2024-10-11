@@ -30,14 +30,9 @@ class Worker : public QObject
     Q_OBJECT
 
 public:
-    Worker(QMutex*);
+    Worker(QMutex*, struct Peripherals*);
     ~Worker();
 public:
-
-    QByteArray lastAnswer;
-    qint64 m_bytesWritten = 0;
-
-    QTimer m_timer;
     QMutex* mutex;
     QString dir = "С:\temp\1.csv";
 
@@ -56,12 +51,10 @@ public:
     void timeSpent(int start);
 signals:
 
-    void sendLogSignal(QByteArray);
     void sendProgressBarValueSignal(int);
     void sendProgressBarRangeSignal(int, int);
     void sendAddTableSignal();
     void sendBCoordsSignal(int, int);
-    void sendMessageBox(QString, QString);
     void sendEndWalkSignal();
     void sendEndOfWalkTime(QString);
 
@@ -83,8 +76,11 @@ public slots:
      * @param Dots координаты мест контактирования зонда
      * @param WalkSettings настройки обхода пластины
      */
-    void autoWalk(struct WalkSettings*, struct Peripherals*, struct Dots*,
-                  struct DieParameters*);
+    void autoWalk(struct WalkSettings* ,
+                  struct Delays* ,
+                  struct Dots* ,
+                  struct DieParameters*,
+                  struct Currents*);
 
 
     //вынести в отдельный виджет. заполнить таблицу

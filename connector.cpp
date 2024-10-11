@@ -9,7 +9,8 @@ Connector::Connector(struct Peripherals* periph)
 
     planar = new Planar(periph->planar);
     light = new Light(periph->light);
-    meter = new Keithley(periph->keithley);
+
+    kith = new Keithley(periph->keithley);
 }
 
 
@@ -27,42 +28,51 @@ void Connector::openPorts(struct Peripherals* periph)
                           QSerialPort::Baud115200))
         planar->setPort(periph->planar);
 
-    if (light->openPort(periph-light, periph->light_com,
+    if (light->openPort(periph->light, periph->light_com,
                           QSerialPort::Baud9600))
         light->setPort(periph->light);
 
     if (periph->lan)
     {
-        delete meter;
-        meter = new Keysight(periph);
-    }
-    //костыль
-    else //if (light->openPort(periph->keithley, periph->keithley_com, QSerialPort::Baud57600))
-    {
-        //meter->setPort(periph->keithley);
-        openConnection(p);
+        if(meter) delete meter;
+        meter = new Keysight();
     }
     else
     {
-        qDebug() << "you're moron";
-    }
+        meter = new Keithley(periph->keithley);
 
-    emit portsReady();
+    }
+    periph->meter = meter->openConnection(periph);
+
+    emit portsReadySignal();
 }
 
 
 void Connector::parsePorts(struct Peripherals* periph)
 {
-    if (periph->lan ) meter = new Keysight(periph);
-    else meter = new Keithley(periph);
+    if (meter) delete meter;
+    if (periph->lan)
+    {
+        meter = new Keysight();
+        meter->openConnection(periph);
+    }
+    else
+    {
+        if (!kith)
+            kith = new Keithley(periph->keithley);//
+    }
+
 
     foreach(const QSerialPortInfo &port,  QSerialPortInfo::availablePorts())
     {
         planar->parsePort(port.portName(), periph);
-        meter->parsePort(port.portName(), periph);
         light->parsePort(port.portName(), periph);
+        if (!periph->lan)
+            kith->parsePort(port.portName(), periph);
     }
-    emit openPortResultSignal();
+    if(kith) meter = kith;
+
+    emit portsReadySignal();
 }
 
 
@@ -129,6 +139,16 @@ void Connector::measureDot(struct WalkSettings* walk,
 }
 
 
+void Connector::sendLog(QByteArray msg)
+{
+    emit sendLogSignal(msg);
+}
+
+void Connector::sendMessageBox(QString msgtype, QString msg)
+{
+    emit sendMessageBoxSignal(msgtype, msg);
+}
+
 void Connector::measureFC(struct WalkSettings* walk,
                           struct Delays* delays,
                           struct Currents* currs,
@@ -140,7 +160,7 @@ void Connector::measureFC(struct WalkSettings* walk,
         meter->zeroCorrection(delays->zero);
         //emit sendPackageSignalRead(periph->serialPortA5, "Table UP\r\n", 200);
         if (walk->planar_status)
-            table->up(walk);
+            planar->up(walk);
         if (walk->keithley_status)
             meter->darkCurrents(walk, delays, currs);
         //lightController("1111\n", walk->light_status);
@@ -148,11 +168,11 @@ void Connector::measureFC(struct WalkSettings* walk,
 
         meter->lightCurrent(walk, delays, currs);
 
-        emit sendLogSignal((QString::number(currs->currentIndex) + ", "
+        sendLog((QString::number(currs->currentIndex) + ", "
                             + QString::number(currs->forward05V, 'E', 4) + ", "
                             + QString::number(currs->dark10mV, 'E', 4) + ", "
                             + QString::number(currs->dark1V, 'E', 4) + ", "
-                            + QString::number(currs->LightCurrent, 'E', 4)).toUtf8());
+                            + QString::number(currs->light10mV, 'E', 4)).toUtf8());
 
         //lightController("0001\n", walk->light_status);
         light->off(walk);
