@@ -2,7 +2,10 @@
 
 Planar::Planar(QSerialPort* port) : ComPort(port)
 {
-    *m_rate = QSerialPort::Baud115200;
+
+    qDebug() << "Planar 1";
+    m_rate = QSerialPort::Baud115200;
+    qDebug() << "Planar 2";
 }
 
 

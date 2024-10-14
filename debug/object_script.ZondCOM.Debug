@@ -11,8 +11,14 @@ debug/stats.o
 debug/tabcanvas.o
 debug/worker.o
 debug/qrc_images.o
+debug/moc_comport.o
+debug/moc_connector.o
+debug/moc_keysight.o
+debug/moc_light.o
+debug/moc_meter.o
 debug/moc_keithley.o
 debug/moc_mainwindow.o
+debug/moc_planar.o
 debug/moc_stats.o
 debug/moc_tabcanvas.o
 debug/moc_worker.o

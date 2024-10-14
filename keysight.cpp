@@ -1,6 +1,6 @@
 #include "keysight.h"
 
-Keysight::Keysight() : Meter()
+Keysight::Keysight(QSerialPort* serial) : Meter(serial)
 {}
 
 bool Keysight::openConnection(struct Peripherals* p)//const char* ip_address
@@ -297,3 +297,7 @@ double Keysight::forwardCurrent(struct Delays* delays)
     set05V(delays->fc_volt, delays->fc);
     return readDouble(":SENS:FUNC CURR\n:MEAS:CURR?", 1);
 }
+
+
+bool Keysight::parsePort(QString, struct Peripherals*)
+{return false;}

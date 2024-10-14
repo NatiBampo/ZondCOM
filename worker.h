@@ -9,17 +9,14 @@
 #include <QRegularExpressionMatch>
 #include <QThread>
 #include <QFile>
-#include <QTextStream>
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <typeinfo>
 #include <ctime>
-#include <QDebug>
 
 #include "LoggingCategories.h"
 #include "keithley.h"
-#include "mainwindow.h"
 #include "serials.h"
 #include "connector.h"
 
@@ -30,7 +27,7 @@ class Worker : public QObject
     Q_OBJECT
 
 public:
-    Worker(QMutex*, struct Peripherals*);
+    Worker(QMutex*, Connector*);
     ~Worker();
 public:
     QMutex* mutex;
@@ -38,11 +35,10 @@ public:
 
     Connector* connector = nullptr;
 public:
-    void stopWalk();
-    void checkPause();
+    void stopWalk(struct WalkSettings*);
+    void checkPause(struct WalkSettings*);
     /**
      * @brief checkIndex проверяет, попадание индекса за пределы измеряемой зоны
-     * //check if measure is of odd space
      * @param DieParameters параметры пластины
      * @param Dots координаты мест контактирования зонда. gap диапазон разрыва
      */
@@ -51,8 +47,8 @@ public:
     void timeSpent(int start);
 signals:
 
-    void sendProgressBarValueSignal(int);
-    void sendProgressBarRangeSignal(int, int);
+    void sendProgressBarValueSignal();
+    //oid sendProgressBarRangeSignal(int, int);
     void sendAddTableSignal();
     void sendBCoordsSignal(int, int);
     void sendEndWalkSignal();
@@ -66,9 +62,11 @@ public slots:
      * @param WalkSettings настройки обхода пластины
      */
     void calculateDots(struct DieParameters*, struct Dots*, struct WalkSettings*);
-    void pauseWalk();
+    void pauseWalk(struct WalkSettings*);
     //void goToDot(struct WalkSettings*, struct Dots*);
-    void saveMeasure(struct WalkSettings*);
+
+    void saveMeasure(struct WalkSettings* , struct Delays* ,
+                     struct Dots* , struct DieParameters*, struct Currents* );
 
     /**
      * @brief autoWalk проверяет, по ответу, что устройство выбрано правидьно

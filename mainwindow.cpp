@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
-//using namespace QtCharts;
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -16,18 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     createWorkerThread();
     createStatsThread();
-    /*
-    foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
-    {
-        ui->portComboBox->addItem(serialPortInfo.portName());
-        ui->keithlyPortComboBox->addItem(serialPortInfo.portName());
-        ui->lightPortComboBox->addItem(serialPortInfo.portName());
-    }*/
 
     dir_name = "С:\temp\1.csv";
-
-    //delays.append({300, 300, 500, 500, 400, 400, 600});
-    //delays = {300, 300, 500, 500, 400, 400, 600};
 
     initializeShortKeys();
     initializeSettings();
@@ -131,31 +118,43 @@ void MainWindow::initializeSettings()
 void MainWindow::createWorkerThread()
 {
     qInfo(logInfo()) << "Старт Worker";
+
     periph = new Peripherals();
-    worker = new Worker(&mutex, periph);
+    walk = new WalkSettings();
+    dots = new Dots();
+    delays = new Delays();
+    die = new DieParameters();
+    currs = new Currents();
+    qDebug() << "createWorkerThread 2";
+    connector = new Connector(periph);
+    //connector->moveToThread(&workerThread);
+
+    worker = new Worker(&mutex, connector);
+    qDebug() << "createWorkerThread 3";
     worker->moveToThread(&workerThread);
     workerThread.start();
+    qDebug() << "createWorkerThread 4";
 
     connect(this, &MainWindow::calculateDotsSignal, worker, &Worker::calculateDots);
-    connect(this, &MainWindow::measureSignal, worker->connector, &Connector::measureDot);
-    connect(this, &MainWindow::openPortsSignal, worker->connector, &Connector::openPorts);
-    connect(this, &MainWindow::autoOpenPortsSignal, worker->connector, &Connector::parsePorts);
-    connect(this, &MainWindow::tableControllerSignal, worker->connector->planar, &Planar::tableController);
-    connect(this, &MainWindow::lightControllerSignal, worker->connector->light, &Light::lightController);
-    connect(this, &MainWindow::closePortsSignal, worker->connector, &Connector::closePorts);
-    connect(this, &MainWindow::sendPauseCommandSignal, worker, &Worker::pauseWalk);
-    connect(this, &MainWindow::goToElementSignal, worker->connector->planar, &Planar::goToDot);
+    connect(this, &MainWindow::measureSignal, connector, &Connector::measureDot);
+    connect(this, &MainWindow::openPortsSignal, connector, &Connector::openPorts);
+    connect(this, &MainWindow::autoOpenPortsSignal, connector, &Connector::parsePorts);
+    connect(this, &MainWindow::tableControllerSignal, connector->planar, &Planar::tableController);
+    connect(this, &MainWindow::lightControllerSignal, connector->light, &Light::lightController);
+    connect(this, &MainWindow::closePortsSignal, connector, &Connector::closePorts);
+//    connect(this, &MainWindow::sendPauseCommandSignal, worker, &Worker::pauseWalk);
+    connect(this, &MainWindow::goToElementSignal, connector->planar, &Planar::goToDot);
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
     connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
     connect(this, &MainWindow::getCurrentCoordsSignal,
-            worker->connector->planar, &Planar::currentCoords);
+            connector->planar, &Planar::currentCoords);
     //connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
-    connect(this, &MainWindow::measureFCSignal, worker->connector, &Connector::measureFC);
+    connect(this, &MainWindow::measureFCSignal, connector, &Connector::measureFC);
     connect(this, &MainWindow::openCsvFileSignal, worker, &Worker::openCsvFile);
 
     connect(worker->connector, &Connector::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
-    connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
+    //connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
     connect(worker->connector, &Connector::portsReadySignal, this, &MainWindow::openPortsResult);
     //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
@@ -163,12 +162,13 @@ void MainWindow::createWorkerThread()
 
     /*connect(worker->connector->planar, &Planar::sendBCoordsSignal,
             this, &MainWindow::setBCoords);*/
-    connect(worker->connector->planar, &Planar::sendCurrentCoordsSignal,
+    connect(connector->planar, &Planar::sendCurrentCoordsSignal,
             this, &MainWindow::setCurrentCoords);
-    connect(worker->connector, &Connector::sendMessageBoxSignal, this, &MainWindow::showMessageBox);
-    connect(worker->connector->planar, &Planar::sendMessageBoxSignal, this, &MainWindow::showMessageBox);
+    connect(connector, &Connector::sendMessageBoxSignal, this, &MainWindow::showMessageBox);
+    connect(connector->planar, &Planar::sendMessageBoxSignal, this, &MainWindow::showMessageBox);
     connect(worker, &Worker::sendEndWalkSignal, this, &MainWindow::sendEndWalk);
     connect(worker, &Worker::sendEndOfWalkTime, this, &MainWindow::setEndOfWalkTime);
+    qDebug() << "createWorkerThread 5";
 }
 
 
@@ -226,9 +226,14 @@ void MainWindow::openPortPushButton_on()
 {
     if (ui->openPortPushButton->text() == "Открыть")
     {
-        emit openPortsSignal(ui->portComboBox->currentText(),
-                             ui->keithlyPortComboBox->currentText(),
-                             ui->lightPortComboBox->currentText());
+        keithley_com = ui->keithlyPortComboBox->currentText();
+        planar_com =  ui->portComboBox->currentText();
+        light_com =  ui->lightPortComboBox->currentText();
+        periph->keithley_com = &keithley_com;
+        periph->planar_com = &planar_com;
+        periph->light_com = &light_com;
+
+        emit openPortsSignal(periph);
         ui->openPortPushButton->setText("Закрыть");
     } else
     {
@@ -253,12 +258,12 @@ void MainWindow::openPortPushButton_on()
 
 void MainWindow::openPortsResult()
 {
-    QString work = "открыт\n";
-    QString no = "закрыт\n";
+    QByteArray work = "открыт\n";
+    QByteArray no = "закрыт\n";
     QString msg = QString("Выбранные порты:\nПланар ")
-                          + (periph->planar_open) ? work : no
-            + QString("Измеритель ") + (periph->meter) ? work : no
-            + QString("Диода ") + (periph->light_open) ? work : no;
+            .append(periph->planar_open ? work : no)
+            .append("Измеритель ").append(periph->meter ? work : no)
+            .append("Диода ").append(periph->light_open ? work : no);
     portsReady();
     QMessageBox::information(this, "Сообщение", msg);
 }
@@ -305,7 +310,8 @@ bool MainWindow::readyCheck()
 void MainWindow::statePushButton_on()
 {
     //emit sendPackageSignal(serialPortA5, "State\r\n", 1000);
-    emit getCurrentCoordsSignal(-1, ui->planarCheckBox->isChecked());
+    updateDelays();
+    emit getCurrentCoordsSignal(-1, walk, dots);
 }
 
 
@@ -456,17 +462,22 @@ void MainWindow::writeLog(QByteArray log)
 }
 
 
-void MainWindow::setProgressBarValue(int val)
+void MainWindow::setProgressBarValue()
 {
-    ui->progressBar->setValue(val);
+    ui->progressBar->setMinimum(walk->startIndex);
+    ui->progressBar->setMaximum(walk->lastIndex);
+
+    ui->progressBar->setValue(walk->currentIndex);
 }
 
 
-void MainWindow::setProgressBarRange(int minVal, int maxVal)
+/*void MainWindow::setProgressBarRange()//(int minVal, int maxVal)
 {
-    ui->progressBar->setMinimum(minVal);
-    ui->progressBar->setMaximum(maxVal);
-}
+    ui->progressBar->setMinimum(walk->startIndex);
+    ui->progressBar->setMaximum(walk->lastIndex);
+//    ui->progressBar->setMinimum(minVal);
+//    ui->progressBar->setMaximum(maxVal);
+}*/
 
 
 void MainWindow::pauseButton_clicked(bool checked)
@@ -481,7 +492,8 @@ void MainWindow::pauseButton_clicked(bool checked)
     }
     mutex.lock();
     //в перспективе добавить вспомогателный поток или выходить из цикла обхода пластины вместо ожидания даже при паузе
-    worker->pauseWalk();
+    walk->paused = checked;
+    worker->pauseWalk(walk);
     mutex.unlock();
 }
 
@@ -517,7 +529,7 @@ void MainWindow::saveMeasureButton_clicked()
     walk->currentIndex = getUIIndex();
     if (!busy)
     {
-        emit saveMeasureSignal(walk, delays, dots, currs);
+        emit saveMeasureSignal(walk, delays, dots, die, currs);
     }
 }
 
@@ -526,14 +538,14 @@ void MainWindow::continueFromButton_clicked(bool checked)
 {
     updateDelays();
     bool cond = true;
-    if (dir_name == "" || dir_name == "С:\temp\1.csv")
+    if (walk->dir_cur == "" || walk->dir_cur == "С:\temp\1.csv")
     {
         QFileDialog directory;
         QString dir = directory.getSaveFileName(this,"Choose directory and name");
 
         if (dir != "")
         {
-            dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
+            walk->dir_cur = dir.endsWith(".csv") ? dir : dir + ".csv";
             cond = true;
         }
     }
@@ -562,7 +574,7 @@ void MainWindow::scanPushButton_clicked(bool checked)
     QString dir = directory.getSaveFileName(this,"Choose directory and name");
     if (dir != "")
     {
-        dir_name = dir.endsWith(".csv") ? dir : dir + ".csv";
+        walk->dir_cur = dir.endsWith(".csv") ? dir : dir + ".csv";
         ui->pauseButton->setEnabled(true);
         ui->addressLabel->setText(dir_name);
         updateDelays();
@@ -816,8 +828,8 @@ void MainWindow::on_loadFilePushButton_clicked()
 
             updateDelays();
             initializeModel();
-
-            emit openCsvFileSignal(dir_name);
+            currs->currentIndex = walk->currentIndex;
+            emit openCsvFileSignal(dir_name, currs);
             readyCheck();
         }
     }
@@ -827,7 +839,8 @@ void MainWindow::on_loadFilePushButton_clicked()
 void MainWindow::stopPushButton_clicked()
 {
     mutex.lock();
-    worker->stopWalk();
+    walk->stopped = true;
+    worker->stopWalk(walk);
     mutex.unlock();
 
     busy = false;
@@ -936,7 +949,8 @@ void MainWindow::setEndOfWalkTime(QString endTime)
 void MainWindow::on_stop2pushButton_clicked()
 {
     mutex.lock();
-    worker->stopWalk();
+    walk->stopped = true;
+    worker->stopWalk(walk);
     mutex.unlock();
 
     busy = false;

@@ -1,6 +1,8 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+
+#include <QObject>
 #include <QByteArray>
 #include <QString>
 #include <QDebug>
@@ -14,9 +16,11 @@
 
 class Light : public ComPort
 {
+    Q_OBJECT
+
 public:
     Light(QSerialPort*);
-    ~Light();
+    ~Light(){}
 
     void lightController(QByteArray msg, struct WalkSettings* walk);
     void on(struct WalkSettings* walk);

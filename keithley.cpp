@@ -1,9 +1,9 @@
 #include "keithley.h"
 
 
-Keithley::Keithley(QSerialPort* serial) : ComPort(serial), Meter()
+Keithley::Keithley(QSerialPort* serial) : Meter(serial)
 {
-    *m_rate =  QSerialPort::Baud57600;
+    m_rate =  QSerialPort::Baud57600;
 }
 
 Keithley::~Keithley()

@@ -1,17 +1,21 @@
 #ifndef METER_H
 #define METER_H
 
+#include <QObject>
 #include <QPair>
 #include <QList>
 #include <QDebug>
 #include <QString>
 
+#include "comport.h"
 #include "serials.h"
 
-class Meter
+class Meter : public ComPort
 {
+    Q_OBJECT
+
 public:
-    Meter(){}
+    Meter(QSerialPort *m_serial) : ComPort(m_serial){}
     ~Meter() {}
 
     virtual bool openConnection(struct Peripherals*) = 0; //{return false;}
@@ -31,9 +35,6 @@ public:
     virtual int writePackage(const char*, int) = 0;
     virtual QString* readResponce(const char*, int) = 0;
     virtual double readDouble(const char*, int) = 0;
-
-
-
 };
 
 #endif // METER_H

@@ -53,9 +53,6 @@ compile_commands.json
 
 *_qmlcache.qrc
 
-WindCOM
 release
 debug
 csv
-SerialWin.*
-colortableview.*

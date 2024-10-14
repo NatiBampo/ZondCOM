@@ -1,15 +1,21 @@
 #ifndef KEYSIGHT_H
 #define KEYSIGHT_H
 
+
+#include <QObject>
 #include <QThread>
+#include <QSerialPort>
 
 #include "visa/visa.h"
 #include "meter.h"
 
 class Keysight : public Meter
 {
+    Q_OBJECT
+
 public:
-    Keysight();
+    Keysight(QSerialPort*);
+    ~Keysight(){}
     //const char*
     bool openConnection(struct Peripherals*);
     void closeConnection()  override;
@@ -17,8 +23,7 @@ public:
     double readDouble(const char*, int) override;
     QString* readResponce(const char*, int) override;
 
-    bool parsePort(QSerialPort *port,
-                   QString* com_name);
+    bool parsePort(QString, struct Peripherals*) override;
 
     void zeroCorrection(int) override;
     void set05V(int, int) override;

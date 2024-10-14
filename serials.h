@@ -67,7 +67,9 @@ struct Peripherals
 
 struct Dots
 {
-    int gap[12]{};
+    int gap[12]{0,0,0,0,
+               0,0,0,0,
+               0,0,0,0};
     std::vector<int> *X;
     std::vector<int> *Y;
 

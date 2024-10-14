@@ -6,10 +6,9 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QThread>
-#include "comport.h"
 #include "meter.h"
 
-class Keithley : public ComPort, public Meter
+class Keithley : public Meter
 {
     Q_OBJECT
 

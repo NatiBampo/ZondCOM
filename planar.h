@@ -1,6 +1,7 @@
 #ifndef PLANAR_H
 #define PLANAR_H
 
+#include <QObject>
 #include <QThread>
 #include <QSerialPort>
 #include <QRegularExpression>
@@ -12,6 +13,8 @@
 
 class Planar : public ComPort
 {
+    Q_OBJECT
+
 public:
     Planar(QSerialPort*);
     ~Planar();

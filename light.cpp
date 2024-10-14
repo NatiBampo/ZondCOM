@@ -3,7 +3,7 @@
 
 Light::Light(QSerialPort *port) : ComPort(port)
 {
-    *m_rate = QSerialPort::Baud9600;
+    m_rate = QSerialPort::Baud9600;
 }
 
 

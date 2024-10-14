@@ -3,14 +3,17 @@
 
 Connector::Connector(struct Peripherals* periph)
 {
+    qDebug() << "Connector 1";
     periph->planar = new QSerialPort();
     periph->keithley = new QSerialPort();
     periph->light = new QSerialPort();
-
+    qDebug() << "Connector 2";
     planar = new Planar(periph->planar);
+    qDebug() << "Connector 2.5";
     light = new Light(periph->light);
-
+    qDebug() << "Connector 3";
     kith = new Keithley(periph->keithley);
+    qDebug() << "Connector 4";
 }
 
 
@@ -32,15 +35,14 @@ void Connector::openPorts(struct Peripherals* periph)
                           QSerialPort::Baud9600))
         light->setPort(periph->light);
 
-    if (periph->lan)
+    if (!periph->lan)
     {
-        if(meter) delete meter;
-        meter = new Keysight();
+        meter = new Keithley(periph->keithley);
     }
     else
     {
-        meter = new Keithley(periph->keithley);
-
+        if(meter) delete meter;
+        meter = new Keysight(periph->keithley);
     }
     periph->meter = meter->openConnection(periph);
 
@@ -53,7 +55,7 @@ void Connector::parsePorts(struct Peripherals* periph)
     if (meter) delete meter;
     if (periph->lan)
     {
-        meter = new Keysight();
+        meter = new Keysight(periph->keithley);
         meter->openConnection(periph);
     }
     else
@@ -148,6 +150,13 @@ void Connector::sendMessageBox(QString msgtype, QString msg)
 {
     emit sendMessageBoxSignal(msgtype, msg);
 }
+
+/*void Connector::sendProgessRange(int, int);
+
+{
+    emit sendProgressSignal(msgtype, msg);
+}*/
+
 
 void Connector::measureFC(struct WalkSettings* walk,
                           struct Delays* delays,

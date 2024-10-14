@@ -257,8 +257,11 @@ void Stats::drawCharts(const vector<vector<double>> &currRang, const vector<vect
     //axisX->setRange(10, 20.5);
     axisY->setTickCount(10);
     axisY->setLabelFormat("%.0f");
-    //chartView->chart()->setAxisX(axisX, series);
-    chartDC10mV->setAxisY(axisY, seriesDC10mV);
+    //chartView->chart()->setAxisX(axisX, series);//depricated
+
+//    chartDC10mV->setAxisY(axisY, seriesDC10mV);
+    chartDC10mV->axes(Qt::Vertical, seriesDC10mV).append(axisY);
+
     chartDC10mV->setTitle("Dark Current 10mV");
 
     QValueAxis *axisY1 = new QValueAxis;
@@ -266,7 +269,8 @@ void Stats::drawCharts(const vector<vector<double>> &currRang, const vector<vect
     axisY1->setTickCount(10);
     axisY1->setLabelFormat("%.0f");
     //chartView->chart()->setAxisX(axisX, series);
-    chartDC1V->setAxisY(axisY1, seriesDC1V);
+//    chartDC1V->setAxisY(axisY1, seriesDC1V);
+    chartDC1V->axes(Qt::Vertical, seriesDC1V).append(axisY1);
     chartDC1V->setTitle("Dark Current 1V");
 
     QChart *chartFC = new QChart();

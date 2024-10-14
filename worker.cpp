@@ -1,10 +1,13 @@
 #include "worker.h"
 
 
-Worker::Worker(QMutex* mtxp, struct Peripherals* periph)
+Worker::Worker(QMutex* mtxp, Connector* m_connecter)
 {
     mutex = mtxp;
-    connector = new Connector(periph);
+    qDebug() << "worker 1";
+    connector = m_connecter;
+//    connector = new Connector(periph);
+    qDebug() << "worker 2";
 }
 
 Worker::~Worker()
@@ -20,6 +23,9 @@ void Worker::calculateDots(struct DieParameters* die,
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     //numberX необходимо привести к фактическому параметру
+    dots->X = new std::vector<int>();
+    dots->Y = new std::vector<int>();
+    qDebug() << "calculateDots 1";
     dots->X->clear();
     dots->Y->clear();
 
@@ -48,7 +54,7 @@ void Worker::calculateDots(struct DieParameters* die,
         {
             if (i % 2 == 0) dots->X->push_back(die->BX + StepxX * i + StepyX * j  + slideX);
             else dots->X->push_back(die->BX + StepxX * i + StepyX * j - StepyX * K + slideX);
-            if (i % 2 == 0) dots->Y->push_back(BY + StepxY * i + StepyY * j);
+            if (i % 2 == 0) dots->Y->push_back(die->BY + StepxY * i + StepyY * j);
             else dots->Y->push_back(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
@@ -76,7 +82,7 @@ void Worker::calculateDots(struct DieParameters* die,
             else dots->Y->push_back(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
-    walk->lastIndex = dots->X->length() - 1;
+    walk->lastIndex = dots->X->size() - 1;
 
     //нижний правый угол
     dots->gap[0] = 0;
@@ -97,7 +103,7 @@ void Worker::calculateDots(struct DieParameters* die,
     dots->gap[10] = ((die->numX + 1) * die->numY * 3 - 1);
     dots->gap[11] = (dots->gap[10] - (die->numX + 1) * die->upCenter + 1);
 
-    //gapIndex = gap[0] + (die->numX+1) * die->downRight;
+    walk->startIndex = dots->gap[1] + (die->numX+1) * die->downRight;
 
     walk->orientation = true;
     qInfo(logInfo()) << "Ориентация выполнена";
@@ -129,7 +135,7 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
     //if (!planar_status) return;
     //сдвиг индекса до начала рабочей зоны(не попадает в отступ)
     //walk->currentIndex = walk->startIndex < gapIndex ? gapIndex : walk->startIndex;
-    QFileInfo fileInfo(dir_cur);
+    QFileInfo fileInfo(walk->dir_cur);
     QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_start_index_"
             + QString::number(walk->currentIndex) + ".csv";
     //emit sendProgressBarRangeSignal();
@@ -161,8 +167,7 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
             if (walk->currentIndex % 16 == 0)
             //(currentIndex, planar_status)
             {
-                getCurrentCoords(walk->currentIndex, walk, dots);
-
+                connector->planar->currentCoords(walk->currentIndex, walk, dots);
                 connector->sendLog(connector->planar->lastAnswer.toUtf8());
                 connector->sendMessageBox("Ошибка", "Планар не отвечает на элементах :\n"
                                     + QString::number(walk->currentIndex-15)  + " - "
@@ -174,7 +179,7 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
                 }
             }
             //проверка нажатия Паузы
-            checkPause();
+            checkPause(walk);
             //начинаем мерить элемент
             connector->planar->goToDot(walk, dots);
             connector->measureDot(walk, delays, currs, dots);
@@ -196,14 +201,14 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
                 lowFCcounter = 0;
             }
             //отправляем данные на таблицу, если ток в норме
-            if (lowFCcounter <= 2 || walk->badDie || !keithley_status)
+            if (lowFCcounter <= 2 || walk->badDie || !walk->keithley_status)
             {
                 emit sendAddTableSignal();
-                emit sendProgressBarValueSignal(walk->currentIndex);
+                emit sendProgressBarValueSignal();
             }
             else
             {
-                stopWalk();
+                stopWalk(walk);
                 connector->sendMessageBox("warning", "Недопустимые значения тока");
                 qWarning(logWarning())<<"Недопустимые значения тока :"<< res;
             }
@@ -211,7 +216,7 @@ void Worker::autoWalk(struct WalkSettings* walk, struct Delays* delays,
         }
 
         qInfo(logInfo())<<"Закончен обход пластины " << fileInfo.baseName()
-                       <<"  на элементе -> " << QString::number(currentIndex);
+                       <<"  на элементе -> " << QString::number(walk->currentIndex);
 
         walk->currentIndex = 0;
         file.close();
@@ -238,7 +243,7 @@ void Worker::checkPause(struct WalkSettings* walk)
         {
             QThread::msleep(10);
             mutex->lock();
-            if (!paused)
+            if (!walk->paused)
             {
                 qInfo(logInfo()) << "Убрали паузу";
                 break;
@@ -292,15 +297,15 @@ void Worker::openCsvFile(QString dir, struct Currents* curr)
     {
         line = QString::fromUtf8(file.readLine());
         int start = line.split(", ")[0].toInt();
-        currentIndex = 0;
+        curr->currentIndex = 0;
         int tmp = 0;
-        while(!line.isNull() && currentIndex < 1440)
+        while(!line.isNull() && curr->currentIndex < 1440)
         {
             auto arr = line.split(", ");
             tmp = arr[0].toInt();
-            if (tmp == 0 && currentIndex > start ) break;
+            if (tmp == 0 && curr->currentIndex > start ) break;
             //проверка на нулевые строки
-            currentIndex = tmp;
+            curr->currentIndex = tmp;
             curr->currentIndex = arr[0].toInt();
             curr->forward05V = arr[1].toDouble();
             curr->dark10mV = arr[2].toDouble();
@@ -318,18 +323,19 @@ void Worker::openCsvFile(QString dir, struct Currents* curr)
 
 
 void Worker::saveMeasure(struct WalkSettings* walk, struct Delays* delays,
-                         struct Dots* dots, struct Currents* currs)
+                         struct Dots* dots, struct DieParameters* die,
+                         struct Currents* currs)
 {
-    if (checkIndex(walk->currentIndex, dots))
+    if (checkIndex(walk->currentIndex, die, dots))
     {
         connector->sendMessageBox("info", "Индекс за пределами измеряемой зоны."
                                     "\nПроверье отступы по краям\n и выполните ориентацию");
         return;
     }
     //currentIndex = startIndex;
-    //connector->planar->goToDot(walk, dots);
+    connector->planar->goToDot(walk, dots);
     connector->measureDot(walk, delays, currs, dots);
 
-    emit sendAddTableSignal(currs);
+    emit sendAddTableSignal();
 }
 

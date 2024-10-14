@@ -1,6 +1,8 @@
 #ifndef COMPORT_H
 #define COMPORT_H
 
+
+#include <QObject>
 #include <QString>
 #include <QSerialPort>
 
@@ -9,8 +11,10 @@
 #define ANSWER_DELAY 400
 
 
-class ComPort
+class ComPort: public QObject
 {
+    Q_OBJECT
+
 public:
     ComPort(QSerialPort*);
     ~ComPort();
@@ -35,7 +39,7 @@ protected:
     bool opened;
     bool working;
     qint64 m_bytesWritten = 0;
-    QSerialPort::BaudRate *m_rate = nullptr;
+    QSerialPort::BaudRate m_rate;
     QSerialPort* m_serial = nullptr;
     QString* m_port_name = nullptr;
 };

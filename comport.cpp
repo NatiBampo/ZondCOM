@@ -3,13 +3,15 @@
 
 ComPort::ComPort(QSerialPort *port)
 {
+        qDebug() << "ComPort 1";
     m_serial = port;
+    qDebug() << "ComPort 2";
+
 }
 
 ComPort::~ComPort()
 {
     closePort();
-    delete m_rate;
     delete m_serial;
     delete m_port_name;
 }
@@ -40,7 +42,7 @@ bool ComPort::openPort(QSerialPort *port, QString* comPort,
 bool ComPort::openPort(QString* portName)
 {
     m_serial->setPortName(*portName);
-    m_serial->setBaudRate(*m_rate);
+    m_serial->setBaudRate(m_rate);
     m_serial->setDataBits(QSerialPort::DataBits::Data8);
     m_serial->setStopBits(QSerialPort::StopBits::OneStop);
     m_serial->setParity(QSerialPort::Parity::NoParity);
