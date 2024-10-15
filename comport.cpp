@@ -3,10 +3,9 @@
 
 ComPort::ComPort(QSerialPort *port)
 {
-        qDebug() << "ComPort 1";
+    qDebug() << "Comport 1";
     m_serial = port;
-    qDebug() << "ComPort 2";
-
+    qDebug() << "Comport 2";
 }
 
 ComPort::~ComPort()
@@ -54,8 +53,11 @@ bool ComPort::openPort(QString* portName)
 
 void ComPort::closePort()
 {
+    qDebug() << "ComPort::closePort 1";
     if (m_serial->isOpen())
         m_serial->close();
+   qDebug() << "ComPort::closePort 2";
+
 }
 
 

@@ -91,10 +91,10 @@ private:
 
     Worker *worker = nullptr;
     Connector *connector = nullptr;
-
     Stats *stats = nullptr;
 
-
+    void initStructs();
+    void initUIelemenets();
     void createWorkerThread();
     void createStatsThread();
     void addElement(int, int, double);

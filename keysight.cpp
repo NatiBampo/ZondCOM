@@ -1,7 +1,10 @@
 #include "keysight.h"
 
 Keysight::Keysight(QSerialPort* serial) : Meter(serial)
-{}
+{
+    qDebug() << "Keysight1";
+
+}
 
 bool Keysight::openConnection(struct Peripherals* p)//const char* ip_address
 {
@@ -86,6 +89,7 @@ bool Keysight::openConnection(struct Peripherals* p)//const char* ip_address
 
 void Keysight::closeConnection()
 {
+    qDebug() << "Keysight::closeConnection()";
     if (!pair->first)
         return;
     viClose(pair->first);

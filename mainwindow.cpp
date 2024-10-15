@@ -7,30 +7,23 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     qInfo(logInfo()) << "Start MainWindow";
-    ui->progressBar->setMinimum(0);
-    ui->progressBar->setMaximum(1);
-    ui->progressBar->setValue(0);
+    dir_name = "С:\temp\1.csv";
+
+    initStructs();
+    initUIelemenets();
+    initializeShortKeys();
+    initializeSettings();
+    initConnects();
+    readyCheck();
 
     createWorkerThread();
     createStatsThread();
 
-    dir_name = "С:\temp\1.csv";
 
-    initializeShortKeys();
-    initializeSettings();
-    initConnects();
 
-    readyCheck();
     //statsThread.quit();
     //statsThread.terminate();
 
-    tabCanvas *page = new tabCanvas(ui->tabWidget);
-
-    ui->tabWidget->addTab(page,"Scheme");
-
-    ui->tabWidget->setTabVisible(3, true);
-    ui->tabWidget->setTabVisible(4, false);
-    ui->chartsButton->setVisible(true);
 }
 
 MainWindow::~MainWindow()
@@ -47,6 +40,23 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::initUIelemenets()
+{
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->setMaximum(1);
+    ui->progressBar->setValue(0);
+
+    ui->keithleyRB->setChecked(true);
+
+
+    tabCanvas *page = new tabCanvas(ui->tabWidget);
+    ui->tabWidget->addTab(page,"Scheme");
+    ui->tabWidget->setTabVisible(3, true);
+    ui->tabWidget->setTabVisible(4, false);
+    ui->chartsButton->setVisible(true);
+
+}
+
 void MainWindow::initConnects()
 {
     connect(ui->statePushButton, &QPushButton::clicked, this, &MainWindow::statePushButton_on);
@@ -59,9 +69,7 @@ void MainWindow::initConnects()
     connect(ui->leftPushButton, &QPushButton::clicked, this, &MainWindow::leftPushButton_on);
     connect(ui->rightPushButton, &QPushButton::clicked, this, &MainWindow::rightPushButton_on);
     connect(ui->scanPushButton, &QPushButton::clicked, this, &MainWindow::scanPushButton_clicked);
-    //connect(ui->measurePushButton, &QPushButton::clicked, this, &MainWindow::measurePushButton_on);
     connect(ui->lightPushButton, &QPushButton::clicked, this, &MainWindow::lightPushButton_on);
-
     connect(ui->goToButton, &QPushButton::clicked, this, &MainWindow::goToButton_clicked);
     connect(ui->continueFromButton, &QPushButton::clicked, this, &MainWindow::continueFromButton_clicked);
     connect(ui->saveMeasureButton, &QPushButton::clicked, this, &MainWindow::saveMeasureButton_clicked);
@@ -71,15 +79,8 @@ void MainWindow::initConnects()
     connect(ui->measureBButton, &QPushButton::clicked, this, &MainWindow::measureBButton_clicked);
     connect(ui->measure2pushButton, &QPushButton::clicked, this, &MainWindow::measure2pushButton_clicked);
     connect(ui->FCMeasureButton, &QPushButton::clicked, this, &MainWindow::on_FCMeasureButton_clicked);
-
     connect(ui->savePushButton, &QPushButton::clicked, this, &MainWindow::savePushButton_clicked);
-    //connect(ui->loadFilePushButton, &QPushButton::clicked, this, &MainWindow::on_loadFilePushButton_clicked);
     connect(ui->stopPushButton, &QPushButton::clicked, this, &MainWindow::stopPushButton_clicked);
-
-    //connect(ui->toAPushButton, &QPushButton::clicked, this, &MainWindow::on_toAPushButton_clicked);
-    //connect(ui->toBPushButton, &QPushButton::clicked, this, &MainWindow::on_toBPushButton_clicked);
-    //connect(ui->planarCMDButton, &QPushButton::clicked, this, &MainWindow::on_planarCMDButton_clicked);
-    //connect(ui->schemePushButton, &QPushButton::clicked, this, &MainWindow::on_schemePushButton_clicked);
 
 }
 
@@ -115,26 +116,29 @@ void MainWindow::initializeSettings()
 }
 
 
-void MainWindow::createWorkerThread()
+void MainWindow::initStructs()
 {
-    qInfo(logInfo()) << "Старт Worker";
-
     periph = new Peripherals();
     walk = new WalkSettings();
     dots = new Dots();
     delays = new Delays();
     die = new DieParameters();
     currs = new Currents();
-    qDebug() << "createWorkerThread 2";
-    connector = new Connector(periph);
+
+}
+
+void MainWindow::createWorkerThread()
+{
+    qInfo(logInfo()) << "createWorkerThread 1";
+
     //connector->moveToThread(&workerThread);
+    connector = new Connector(periph);
 
     worker = new Worker(&mutex, connector);
-    qDebug() << "createWorkerThread 3";
     worker->moveToThread(&workerThread);
+    qInfo(logInfo()) << "createWorkerThread 2";
     workerThread.start();
-    qDebug() << "createWorkerThread 4";
-
+    qInfo(logInfo()) << "createWorkerThread 3";
     connect(this, &MainWindow::calculateDotsSignal, worker, &Worker::calculateDots);
     connect(this, &MainWindow::measureSignal, connector, &Connector::measureDot);
     connect(this, &MainWindow::openPortsSignal, connector, &Connector::openPorts);
@@ -142,33 +146,25 @@ void MainWindow::createWorkerThread()
     connect(this, &MainWindow::tableControllerSignal, connector->planar, &Planar::tableController);
     connect(this, &MainWindow::lightControllerSignal, connector->light, &Light::lightController);
     connect(this, &MainWindow::closePortsSignal, connector, &Connector::closePorts);
-//    connect(this, &MainWindow::sendPauseCommandSignal, worker, &Worker::pauseWalk);
     connect(this, &MainWindow::goToElementSignal, connector->planar, &Planar::goToDot);
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
     connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
     connect(this, &MainWindow::getCurrentCoordsSignal,
             connector->planar, &Planar::currentCoords);
-    //connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
     connect(this, &MainWindow::measureFCSignal, connector, &Connector::measureFC);
     connect(this, &MainWindow::openCsvFileSignal, worker, &Worker::openCsvFile);
-
     connect(worker->connector, &Connector::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
-    //connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
     connect(worker->connector, &Connector::portsReadySignal, this, &MainWindow::openPortsResult);
-    //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
-    //сигнал паузы
-
-    /*connect(worker->connector->planar, &Planar::sendBCoordsSignal,
-            this, &MainWindow::setBCoords);*/
     connect(connector->planar, &Planar::sendCurrentCoordsSignal,
             this, &MainWindow::setCurrentCoords);
     connect(connector, &Connector::sendMessageBoxSignal, this, &MainWindow::showMessageBox);
     connect(connector->planar, &Planar::sendMessageBoxSignal, this, &MainWindow::showMessageBox);
     connect(worker, &Worker::sendEndWalkSignal, this, &MainWindow::sendEndWalk);
     connect(worker, &Worker::sendEndOfWalkTime, this, &MainWindow::setEndOfWalkTime);
-    qDebug() << "createWorkerThread 5";
+    qInfo(logInfo()) << "createWorkerThread 4";
+
 }
 
 
@@ -232,6 +228,14 @@ void MainWindow::openPortPushButton_on()
         periph->keithley_com = &keithley_com;
         periph->planar_com = &planar_com;
         periph->light_com = &light_com;
+        periph->lan = ui->keisightRB->isChecked();
+        if (periph->lan)
+        {
+            periph->ip[0] = ui->ip0->value();
+            periph->ip[1] = ui->ip1->value();
+            periph->ip[2] = ui->ip2->value();
+            periph->ip[3] = ui->ip3->value();
+        }
 
         emit openPortsSignal(periph);
         ui->openPortPushButton->setText("Закрыть");
@@ -471,15 +475,6 @@ void MainWindow::setProgressBarValue()
 }
 
 
-/*void MainWindow::setProgressBarRange()//(int minVal, int maxVal)
-{
-    ui->progressBar->setMinimum(walk->startIndex);
-    ui->progressBar->setMaximum(walk->lastIndex);
-//    ui->progressBar->setMinimum(minVal);
-//    ui->progressBar->setMaximum(maxVal);
-}*/
-
-
 void MainWindow::pauseButton_clicked(bool checked)
 {
     if (checked)
@@ -610,7 +605,6 @@ void MainWindow::orientationButton_clicked()
     //double rowSlide = (double)ui->stepRowSpinBox->value();
 
     initializeModel();
-    qDebug()<<"all througth";
     emit calculateDotsSignal(die, dots, walk);
     updateDelays();
     //orientation = true;
@@ -701,11 +695,14 @@ void MainWindow::setCurrentCoords(int x, int y, int param)
 
 void  MainWindow::createStatsThread()
 {
-    qInfo(logInfo()) << "создание Stats";
+    qInfo(logInfo()) << "createStatsThread 1";
     stats = new Stats();
     //stats->moveToThread(&statsThread);
     //statsThread.start();
+    qDebug() << "createStatsThread 2";
     connect(this, &MainWindow::showChartsSignal, stats, &Stats::showCharts);
+    qDebug() << "createStatsThread 3";
+
 }
 
 
@@ -1018,6 +1015,9 @@ void MainWindow::updateDelays()
     walk->planar_status = ui->planarCheckBox->isChecked();
     walk->keithley_status = ui->keithleyCheckBox->isChecked();
     walk->light_status = ui->lightCheckBox->isChecked();
+
+    periph->lan = ui->keisightRB->isChecked();
+
 }
 
 /*void MainWindow::setBCoords(int x, int y)

@@ -4,10 +4,8 @@
 Worker::Worker(QMutex* mtxp, Connector* m_connecter)
 {
     mutex = mtxp;
-    qDebug() << "worker 1";
     connector = m_connecter;
 //    connector = new Connector(periph);
-    qDebug() << "worker 2";
 }
 
 Worker::~Worker()
@@ -20,22 +18,26 @@ void Worker::calculateDots(struct DieParameters* die,
                             struct Dots* dots,
                             struct WalkSettings* walk)
 {
+    qDebug() << "calculateDots 1";
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     //numberX необходимо привести к фактическому параметру
     dots->X = new std::vector<int>();
     dots->Y = new std::vector<int>();
-    qDebug() << "calculateDots 1";
+    qDebug() << "calculateDots 2";
+
     dots->X->clear();
     dots->Y->clear();
 
     double tgAlpha = ((die->numY - 1) * die->stepY) / ((die->numX - 1) * die->stepX);
     double CosAlpha = qPow(1 + tgAlpha * tgAlpha, -0.5);
     double SinAlpha = tgAlpha * CosAlpha;
+    qDebug() << "calculateDots 3";
 
     die->BX = abs(die->AX - die->BX);
     die->BY = abs(die->AY - die->BY);
     //emit sendBCoordsSignal(die->BX, die->BY);
+    qDebug() << "calculateDots 4";
 
     double X3 = -die->BX * CosAlpha * CosAlpha - die->BY * SinAlpha * CosAlpha + die->BX;
     double Y3 = -die->BY * CosAlpha * CosAlpha + die->BX * SinAlpha * CosAlpha + die->BY;
@@ -45,6 +47,7 @@ void Worker::calculateDots(struct DieParameters* die,
     double StepyY = -Y3 / (die->numY - 1);
     double K = 1.75 / 2.805;
     double slideX = (die->colSlide - (die->numX + 1) * die->stepX) * 1000;
+    qDebug() << "calculateDots 5";
 
 
     //сперва правый столбец
@@ -58,7 +61,7 @@ void Worker::calculateDots(struct DieParameters* die,
             else dots->Y->push_back(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
-
+    qDebug() << "calculateDots 6";
     //потом левый столбец
     for (int j = 0; j < die->numY; j++)
     {
@@ -70,6 +73,7 @@ void Worker::calculateDots(struct DieParameters* die,
             else dots->Y->push_back(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
+    qDebug() << "calculateDots 7";
 
     //центральный столбец
     for (int j = 0; j < die->numY; j++)
@@ -82,6 +86,8 @@ void Worker::calculateDots(struct DieParameters* die,
             else dots->Y->push_back(die->BY + StepxY * i + StepyY * j - StepyY * K);
         }
     }
+    qDebug() << "calculateDots 8";
+
     walk->lastIndex = dots->X->size() - 1;
 
     //нижний правый угол
@@ -102,6 +108,7 @@ void Worker::calculateDots(struct DieParameters* die,
     //центр верх
     dots->gap[10] = ((die->numX + 1) * die->numY * 3 - 1);
     dots->gap[11] = (dots->gap[10] - (die->numX + 1) * die->upCenter + 1);
+    qDebug() << "calculateDots 9";
 
     walk->startIndex = dots->gap[1] + (die->numX+1) * die->downRight;
 

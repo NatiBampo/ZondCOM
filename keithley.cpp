@@ -3,7 +3,9 @@
 
 Keithley::Keithley(QSerialPort* serial) : Meter(serial)
 {
+    qDebug() << "Keithley 1";
     m_rate =  QSerialPort::Baud57600;
+    qDebug() << "Keithley 2";
 }
 
 Keithley::~Keithley()
@@ -19,6 +21,7 @@ bool Keithley::openConnection(struct Peripherals* p)
 
 void Keithley::closeConnection()
 {
+    qDebug() << "Keithley::closeConnection()";
     return ComPort::closePort();
 }
 

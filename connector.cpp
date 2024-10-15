@@ -14,6 +14,8 @@ Connector::Connector(struct Peripherals* periph)
     qDebug() << "Connector 3";
     kith = new Keithley(periph->keithley);
     qDebug() << "Connector 4";
+    Keysight* key = new Keysight(periph->keithley);
+    meter = periph->lan? static_cast<Meter*>(key) : static_cast<Meter*>(kith);
 }
 
 
@@ -26,17 +28,21 @@ Connector::~Connector()
 
 void Connector::openPorts(struct Peripherals* periph)
 {
+    qDebug() << "openPorts 1";
     closePorts();
     if (planar->openPort(periph->planar, periph->planar_com,
                           QSerialPort::Baud115200))
         planar->setPort(periph->planar);
+    qDebug() << "openPorts 2";
 
     if (light->openPort(periph->light, periph->light_com,
                           QSerialPort::Baud9600))
         light->setPort(periph->light);
+    qDebug() << "openPorts 3";
 
     if (!periph->lan)
     {
+        qDebug() << " chepuha " << periph->lan;
         meter = new Keithley(periph->keithley);
     }
     else
@@ -44,8 +50,10 @@ void Connector::openPorts(struct Peripherals* periph)
         if(meter) delete meter;
         meter = new Keysight(periph->keithley);
     }
+    qDebug() << "openPorts 4";
     periph->meter = meter->openConnection(periph);
 
+    qDebug() << "openPorts 5";
     emit portsReadySignal();
 }
 
@@ -80,9 +88,13 @@ void Connector::parsePorts(struct Peripherals* periph)
 
 void Connector::closePorts()
 {
+    qDebug() << "closePorts 1";
     meter->closeConnection();
+        qDebug() << "closePorts 2";
     planar->closePort();
+        qDebug() << "closePorts 3";
     light->closePort();
+        qDebug() << "closePorts 4";
 }
 
 
