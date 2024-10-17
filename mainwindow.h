@@ -85,6 +85,7 @@ private:
     void planarSender(QString);
     void initializeSettings();
     void initConnects();
+    void initScheme();
 
 
 signals:

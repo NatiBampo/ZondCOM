@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->progressBar->setValue(0);
 
     createWorkerThread();
-    createStatsThread();
+    //createStatsThread();
 
     foreach (const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts())
     {
@@ -44,14 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
     readyCheck();
     //statsThread.quit();
     //statsThread.terminate();
-
-    tabCanvas *page = new tabCanvas(ui->tabWidget);
-
-    ui->tabWidget->addTab(page,"Scheme");
-
-    ui->tabWidget->setTabVisible(3, true);
-    ui->tabWidget->setTabVisible(4, false);
-    ui->chartsButton->setVisible(true);
+    initScheme();
 }
 
 MainWindow::~MainWindow()
@@ -68,6 +61,18 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::initScheme()
+{
+    tabCanvas *page = new tabCanvas(ui->tabWidget);
+
+    ui->tabWidget->addTab(page,"Scheme");
+
+    ui->tabWidget->setTabVisible(3, true);
+    ui->tabWidget->setTabVisible(4, false);
+    ui->chartsButton->setVisible(true);
+
+}
+
 void MainWindow::initConnects()
 {
     connect(ui->statePushButton, &QPushButton::clicked, this, &MainWindow::statePushButton_on);
@@ -80,7 +85,6 @@ void MainWindow::initConnects()
     connect(ui->leftPushButton, &QPushButton::clicked, this, &MainWindow::leftPushButton_on);
     connect(ui->rightPushButton, &QPushButton::clicked, this, &MainWindow::rightPushButton_on);
     connect(ui->scanPushButton, &QPushButton::clicked, this, &MainWindow::scanPushButton_clicked);
-    //connect(ui->measurePushButton, &QPushButton::clicked, this, &MainWindow::measurePushButton_on);
     connect(ui->lightPushButton, &QPushButton::clicked, this, &MainWindow::lightPushButton_on);
 
     connect(ui->goToButton, &QPushButton::clicked, this, &MainWindow::goToButton_clicked);
@@ -94,14 +98,7 @@ void MainWindow::initConnects()
     connect(ui->FCMeasureButton, &QPushButton::clicked, this, &MainWindow::on_FCMeasureButton_clicked);
 
     connect(ui->savePushButton, &QPushButton::clicked, this, &MainWindow::savePushButton_clicked);
-    //connect(ui->loadFilePushButton, &QPushButton::clicked, this, &MainWindow::on_loadFilePushButton_clicked);
     connect(ui->stopPushButton, &QPushButton::clicked, this, &MainWindow::stopPushButton_clicked);
-
-    //connect(ui->toAPushButton, &QPushButton::clicked, this, &MainWindow::on_toAPushButton_clicked);
-    //connect(ui->toBPushButton, &QPushButton::clicked, this, &MainWindow::on_toBPushButton_clicked);
-    //connect(ui->planarCMDButton, &QPushButton::clicked, this, &MainWindow::on_planarCMDButton_clicked);
-    //connect(ui->schemePushButton, &QPushButton::clicked, this, &MainWindow::on_schemePushButton_clicked);
-
 }
 
 void MainWindow::initializeSettings()
@@ -148,27 +145,19 @@ void MainWindow::createWorkerThread()
     connect(this, &MainWindow::tableControllerSignal, worker, &Worker::tableController);
     connect(this, &MainWindow::lightControllerSignal, worker, &Worker::lightController);
     connect(this, &MainWindow::closePortsSignal, worker, &Worker::closePorts);
-    //остановка цикла обхода
     connect(this, &MainWindow::sendPauseCommandSignal, worker, &Worker::pauseWalk);
-    //переход на элемент в строке
     connect(this, &MainWindow::goToElementSignal, worker, &Worker::goToElement);
-    //сохрание элемента в строке
     connect(this, &MainWindow::saveMeasureSignal, worker, &Worker::saveMeasure);
-    //начать обход
     connect(this, &MainWindow::autoWalkSignal, worker, &Worker::autoWalk);
     connect(this, &MainWindow::getCurrentCoordsSignal, worker, &Worker::getCurrentCoords);
     connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
     connect(this, &MainWindow::measureFCSignal, worker, &Worker::measureFC);
     connect(this, &MainWindow::openCsvFileSignal, worker, &Worker::openCsvFile);
-
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
     connect(worker, &Worker::sendProgressBarRangeSignal, this, &MainWindow::setProgressBarRange);
     connect(worker, &Worker::openPortResultSignal, this, &MainWindow::openPortResult);
-    //сигнал для вывода последних измерений на форму
     connect(worker, &Worker::sendAddTableSignal, this, &MainWindow::addRowToTable);
-    //сигнал паузы
-
     connect(worker, &Worker::sendBCoordsSignal, this, &MainWindow::setBCoords);
     connect(worker, &Worker::sendCurrentCoordsSignal, this, &MainWindow::setCurrentCoords);
     connect(worker, &Worker::sendMessageBox, this, &MainWindow::showMessageBox);
