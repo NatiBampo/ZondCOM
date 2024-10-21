@@ -789,8 +789,11 @@ void Worker::measureElement(const bool &planar_status, const bool &keithley_stat
 
         int end = clock();
         int t = (end - start);
-        emit sendMessageBox("Последнее измерение: ", "FC: " + QString::number(ForwardCurrent, 'E', 4) + ", \nDC10mV: " + QString::number(DarkCurrent10mV, 'E', 4) + ", \nDC1V: " +
-                            QString::number(DarkCurrent1V, 'E', 4) + ", \nLC10mV: " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) + "\n\nВремя: " + QString::number(t / CLOCKS_PER_SEC) + "сек"); //QString::number(t));
+        emit sendMessageBox("Последнее измерение: ", "FC: " + QString::number(ForwardCurrent, 'E', 4) +
+                            ", \nDC10mV: " + QString::number(DarkCurrent10mV, 'E', 4) + ", \nDC1V: " +
+                            QString::number(DarkCurrent1V, 'E', 4) + ", \nLC10mV: " +
+                            QString::number(LightCurrent - DarkCurrent10mV, 'E', 4) +
+                            "\n\nВремя: " + QString::number(t / CLOCKS_PER_SEC) + "сек"); //QString::number(t));
     }
 }
 
@@ -824,3 +827,5 @@ void Worker::setDelay(QList<int> * delays)
     planarDelay = delays->at(6);
 }
 //
+
+
