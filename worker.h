@@ -4,14 +4,14 @@
 #include <QObject>
 #include <QSerialPort>
 #include <QFile>
-#include <QSqlQuery>
 #include <QMutex>
-#include <keithley.h>
 #include <QTimer>
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
+#include "serials.h"
+#include "keysight.h"
 
 #define ANSWER_DELAY 400
 #define NO_ANSWER_DELAY 10
@@ -27,6 +27,8 @@ public:
     void stopWalk();
     void setIndex(int);
 private:
+    Keysight *keysight = nullptr;
+    bool key;
     QSerialPort *serialPortA5;
     QSerialPort *serialPortKeithly;
     QSerialPort *serialPortLight;
@@ -82,7 +84,8 @@ private:
     bool checkLightCOM();
     bool checkIndex(int);
 
-    void MeasureDie(QSerialPort *, QSerialPort *, const bool &, const bool &, const bool &);
+    void MeasureDie(QSerialPort *, QSerialPort *,
+                    bool ,  bool ,  bool);
     void KeithlyZeroCorrection(QSerialPort *);
     void Keithly05VSet(QSerialPort *);
     double KeithlyGet(QSerialPort *);
@@ -110,24 +113,29 @@ signals:
     void sendEndOfWalkTime(QString);
 
 public slots:
-    void measureElement(const bool &, const bool &, const bool &);
-    void scanningPlate(double, double, double, double, double, double, double, double, double, bool, int, int, int, int, int, int, bool, bool);
-    void tableController(QByteArray, const bool &);
-    void lightController(QByteArray, const bool &);
-    void openPorts(QString, QString, QString);
+    void measureElement(bool, bool, bool);
+    void scanningPlate(double, double, double, double,
+                       double, double, double, double,
+                       double, bool,
+                       int, int, int, int, int, int,
+                       bool, bool);
+    void tableController(QByteArray, bool );
+    void lightController(QByteArray, bool );
+    void openPorts(QString, QString, QString, bool);
     void closePorts();
     void pauseWalk();
-    void goToElement(int, const bool &);
-    void saveMeasure(int, const bool &, const bool &, const bool &);
+    void goToElement(int, bool );
+    void saveMeasure(int,  bool , bool , bool );
     void autoOpenPorts();
-    bool getCurrentCoords(int,  const bool &);
+    bool getCurrentCoords(int,  bool );
 
-    void autoWalk(bool , QString , int , const bool &, const bool &, const bool &, const bool &);
+    void autoWalk(bool , QString , int ,  bool , bool , bool, bool, bool );
     void setDelay(QList<int> *);
     void sendPackage(QSerialPort*, QByteArray, int);
     void sendPackageRead(QSerialPort*, QByteArray, int);
-    void measureFC(const bool &, const bool &);
+    void measureFC( bool, bool );
     void openCsvFile(QString dir);
+
 };
 
 #endif // WORKER_H

@@ -1,12 +1,7 @@
 #include "keysight.h"
 
-Keysight::Keysight()//QSerialPort* serial) : Meter(serial)
-{
-    qDebug() << "Keysight";
 
-}
-
-bool Keysight::openConnection(struct Peripherals* p)//const char* ip_address
+bool Keysight::openConnection()//struct Peripherals* p)//const char* ip_address
 {
     ViChar resource_string[] = "TCPIP::192.168.0.9::INSTR";
     ViAccessMode access_mode = VI_NULL;
@@ -14,9 +9,9 @@ bool Keysight::openConnection(struct Peripherals* p)//const char* ip_address
     char full_address[32];
     //if(strlen(p->ip))
     //{
-        snprintf(full_address, 32, "%s%d.%d.%d.%d%s", "TCPIP::",
+        /*snprintf(full_address, 32, "%s%d.%d.%d.%d%s", "TCPIP::",
                  p->ip[0], p->ip[1], p->ip[2], p->ip[3], "::INSTR"); //"%s%s%s"
-        memmove(resource_string,  full_address, strlen(full_address));
+        memmove(resource_string,  full_address, strlen(full_address));*/
     ///}
     // Communication buffer
     const ViUInt32 buffer_size_B = 1000;
@@ -79,12 +74,9 @@ bool Keysight::openConnection(struct Peripherals* p)//const char* ip_address
     pair->first = resource_manager;
     pair->second = instrument;
 
-    p->keysight_open = true;
-    p->meter = true;
-    status = true;
 
-    qDebug() << "Keysight::openConnection status: " << status;
-    return status;
+    qDebug() << "Keysight::openConnection ";
+    return true;
 }
 
 
@@ -153,10 +145,10 @@ QString* Keysight::readResponce(const char* cmd, int l = 0)
 }
 
 
-double Keysight::readDouble(const char* command, int l = 0)
+double Keysight::readDouble()//const char* command, int l = 0)
 {
 
-    if (!writePackage(command, l))
+    if (!writePackage(":SENS:FUNC CURR\n:MEAS:CURR?", 0))
         return 0.0;
     // Communication buffer
     const ViUInt32 buffer_size_B = 1000;
@@ -231,54 +223,50 @@ void Keysight::set1V(int delay)
     writePackage("CURR:RANG 2e-10\n");
 }
 
-void Keysight::set10mV(int delay)
+void Keysight::set10mV(int delay = 400)
 {
     writePackage("SOUR:VOLT:STAT OFF\n");
     writePackage("SOUR:VOLT -1e-2\n");
     writePackage("SOUR:VOLT:STAT ON\n");
-    writePackage("CURR:RANG 2e-10\n");
     QThread::msleep(delay);
+    writePackage("CURR:RANG 2e-10\n");
 }
 
 
-void Keysight::darkCurrents(struct WalkSettings* walk,
-                            struct Delays* delays,
-                            struct Currents* curr)
+void Keysight::darkCurrents(int dc10, int dc1, int dc05, int dc05volt)
+//struct WalkSettings* walk, struct Delays* delays, struct Currents* curr)
 {
 
-    zeroCorrection(delays->zero);
-    set10mV(delays->dc_10mV);
+    //zeroCorrection(delays->zero);
+    set10mV(dc10);
     //get dark current
-    curr->dark10mV = readDouble(":SENS:FUNC CURR\n:MEAS:CURR?");
+    dark10mV = readDouble();
 
-    set1V(delays->dc_1V);
-    curr->dark1V = readDouble(":SENS:FUNC CURR\n:MEAS:CURR?");
+    set1V(dc1);
+    dark1V = readDouble();
 
     //get forward current
-    set05V(delays->fc_volt, delays->fc);
-    curr->forward05V = readDouble(":SENS:FUNC CURR\n:MEAS:CURR?");
+    set05V(dc05volt, dc05);
+    forward05V = readDouble();
 }
 
 
-void Keysight::lightCurrent(struct WalkSettings* walk,
-                            struct Delays* delays,
-                            struct Currents* curr)
+double Keysight::lightCurrent(int lightDelay)
 {
-    if (!walk->keithley_status)
-        return;
 
-    set10mV(delays->light);
+    set10mV(400);
+    QThread::msleep(lightDelay);
     //get light current
-    curr->light10mV = readDouble(":SENS:FUNC CURR\n:MEAS:CURR?");
+    return readDouble();
 }
 
 
-double Keysight::forwardCurrent(struct Delays* delays)
+double Keysight::forwardCurrent(int dc05, int dc05volt)
 {
 
-    zeroCorrection(delays->zero);
-    set05V(delays->fc_volt, delays->fc);
-    return readDouble(":SENS:FUNC CURR\n:MEAS:CURR?", 1);
+//    zeroCorrection(delays->zero);
+    set05V(dc05volt, dc05);
+    return readDouble();
 }
 
 

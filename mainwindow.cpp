@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     delays.append({300, 300, 500, 500, 400, 400, 600});
 
+    ui->keithleyRB->setChecked(true);
     initializeShortKeys();
     initializeSettings();
     initConnects();
@@ -221,7 +222,10 @@ void MainWindow::openPortPushButton_on()
 {
     if (ui->openPortPushButton->text() == "Открыть")
     {
-        emit openPortsSignal(ui->portComboBox->currentText(), ui->keithlyPortComboBox->currentText(), ui->lightPortComboBox->currentText());
+        emit openPortsSignal(ui->portComboBox->currentText(),
+                             ui->keithlyPortComboBox->currentText(),
+                             ui->lightPortComboBox->currentText(),
+                             ui->keysightRB->isChecked());
         ui->openPortPushButton->setText("Закрыть");
     } else
     {
@@ -260,17 +264,20 @@ void MainWindow::openPortResult(QString port, QString portName, bool result)
         if (!portName.compare("Planar"))
         {
             ui->portComboBox->setCurrentText(port);
-            portResult[0] = true;
+            ui->planarCheckBox->setChecked(result);
+            portResult[0] = result;
         }
         else if (!portName.compare("Keithley"))
         {
             ui->keithlyPortComboBox->setCurrentText(port);
-            portResult[1] = true;
+            ui->keithleyCheckBox->setChecked(result);
+            portResult[1] = result;
         }
         else if (!portName.compare("Light"))
         {
             ui->lightPortComboBox->setCurrentText(port);
-            portResult[2] = true;
+            ui->lightCheckBox->setChecked(result);
+            portResult[2] = result;
         }
     }
 
@@ -552,7 +559,12 @@ void MainWindow::continueFromButton_clicked(bool checked)
 
         ui->scanPushButton->setEnabled(false);
 
-        emit autoWalkSignal(getUIIndex() <= gapIndex, dir_name, getUIIndex(), ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked(),  ui->badDieCheckBox->isChecked());
+        emit autoWalkSignal(getUIIndex() <= gapIndex, dir_name, getUIIndex(),
+                            ui->planarCheckBox->isChecked(),
+                            ui->keithleyCheckBox->isChecked(),
+                            ui->lightCheckBox->isChecked(),
+                            ui->badDieCheckBox->isChecked(),
+                            ui->keysightRB->isChecked());
 
         busy = true;
         checkBusy();
@@ -574,7 +586,11 @@ void MainWindow::scanPushButton_clicked(bool checked)
         ui->pauseButton->setEnabled(true);
         ui->addressLabel->setText(dir_name);
         updateDelays();
-        emit autoWalkSignal(true, dir_name, 0,ui->planarCheckBox->isChecked(),  ui->keithleyCheckBox->isChecked(), ui->lightCheckBox->isChecked(), ui->badDieCheckBox->isChecked());
+        emit autoWalkSignal(true, dir_name, 0,ui->planarCheckBox->isChecked(),
+                            ui->keithleyCheckBox->isChecked(),
+                            ui->lightCheckBox->isChecked(),
+                            ui->badDieCheckBox->isChecked(),
+                            ui->keysightRB->isChecked());
 
         busy = true;
         checkBusy();
@@ -598,7 +614,9 @@ void MainWindow::orientationButton_clicked()
 
     initializeModel();
     qDebug()<<"all througth";
-    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, (double) numX, (double) numY, colSlide, centerColumn, upLeft, upRight, downLeft, downRight, upCenter, downCenter, leftColumn, rightColumn);
+    emit scanningPlateSignal(AX, AY, BX, BY, stepX, stepY, (double) numX, (double) numY,
+                             colSlide, centerColumn, upLeft, upRight, downLeft, downRight,
+                             upCenter, downCenter, leftColumn, rightColumn);
     updateDelays();
     orientation = true;
     readyCheck();
@@ -624,7 +642,9 @@ void MainWindow::initializeModel()
     downCenter = ui->downCenterOffspinBox->value();
     upCenter = ui->centerUpOffSpinBox->value();
 
-    if (((upLeft + downLeft) > (numX+1)*numY) || ((downRight + upRight) > (numX+1)*numY) || ((downCenter + upCenter) > (numX+1)*numY))
+    if (((upLeft + downLeft) > (numX+1)*numY) ||
+            ((downRight + upRight) > (numX+1)*numY) ||
+            ((downCenter + upCenter) > (numX+1)*numY))
     {
         showMessageBox("warning", "Не допустимое значение отступов");
         return;

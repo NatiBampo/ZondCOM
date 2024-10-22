@@ -1,6 +1,5 @@
-QT       += core gui
+QT += core gui
 QT += serialport
-QT += sql
 QT += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -23,9 +22,11 @@ HEADERS += \
     LoggingCategories.h \
     keysight.h \
     mainwindow.h \
+    serials.h \
     stats.h \
     tabcanvas.h \
-    worker.h
+    worker.h \
+    visa/visa.h
 
 FORMS += \
     mainwindow.ui \
@@ -40,3 +41,8 @@ DISTFILES +=
 
 RESOURCES += \
     images.qrc
+
+win32: LIBS += -L$$PWD/visa/ -lvisa64
+
+INCLUDEPATH += $$PWD/visa
+DEPENDPATH += $$PWD/visa

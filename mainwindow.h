@@ -6,7 +6,6 @@
 #include <worker.h>
 #include <tabcanvas.h>
 #include <QStandardItemModel>
-#include <QSqlDatabase>
 #include <QMutex>
 #include <stats.h>
 #include <QSettings>
@@ -89,16 +88,18 @@ private:
 
 
 signals:
-    void scanningPlateSignal(double, double, double, double, double, double, double, double, double, bool, int, int, int, int, int, int, bool, bool);
+    void scanningPlateSignal(double, double, double, double,
+                             double, double, double, double, double,
+                             bool, int, int, int, int, int, int, bool, bool);
     void measureSignal(bool, bool, bool);
     void tableControllerSignal(QByteArray, bool);
     void lightControllerSignal(QByteArray, bool);
-    void openPortsSignal(QString, QString, QString);
+    void openPortsSignal(QString, QString, QString, bool);
     void closePortsSignal();
     void goToElementSignal(int, bool);
     void sendPauseCommandSignal();
     void saveMeasureSignal(int, bool, bool, bool);
-    void autoWalkSignal(bool, QString, int, bool, bool, bool, bool);
+    void autoWalkSignal(bool, QString, int, bool, bool, bool, bool, bool);
     void autoOpenPortsSignal();
     void showChartsSignal(QString);
     void setDelaySignal(QList<int>*);

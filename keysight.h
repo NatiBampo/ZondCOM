@@ -2,27 +2,40 @@
 #define KEYSIGHT_H
 
 
+#include <QThread>
+#include <QDebug>
 #include <QString>
+#include "serials.h"
+#include "visa/visa.h"
 
-
-class Keysight{
+class Keysight
+{
 public:
 
     Keysight(){}
     ~Keysight(){}
 
 
-    bool openConnection(Peripherals *p);
+    bool openConnection();//Peripherals *p);
     void closeConnection();
-    int writePackage(const char *command, int l = 0);
-    QString *readResponce(const char *cmd, int l = 0);
-    double readDouble(const char *command, int l = 0);
+    int writePackage(const char *, int);
+    QString *readResponce(const char *, int );
+    double readDouble();//const char *command, int l = 0);
     void zeroCorrection(int delay);
-    void set05V(int volt = 600, int delay = 600);
+    void set05V(int , int );
     void set1V(int delay);
     void set10mV(int delay);
-    void darkCurrents(WalkSettings *walk, Delays *delays, Currents *curr);
-    void lightCurrent(WalkSettings *walk, Delays *delays, Currents *curr);
-    double forwardCurrent(Delays *delays);
+
+
+    double lightCurrent(int );
+    double forwardCurrent(int , int );
+    void darkCurrents(int , int , int , int );
+
+public:
+    double dark10mV;
+    double dark1V;
+    double forward05V;
+private:
+    QPair<ViSession, ViSession> *pair = nullptr;
 };
 #endif // KEYSIGHT_H

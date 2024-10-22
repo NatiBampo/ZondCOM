@@ -23,6 +23,7 @@ Worker::Worker(QMutex* mtxp)
     serialPortLight = new QSerialPort();
     closePorts();
 
+    keysight = new Keysight();
 }
 
 Worker::~Worker()
@@ -51,7 +52,7 @@ void Worker:: sendPackageRead (QSerialPort *serialPort, QByteArray package, int 
 }
 
 
-void Worker::tableController(const QByteArray message, const bool &planarStatus)
+void Worker::tableController(const QByteArray message, bool planarStatus)
 {
     if (serialPortA5->isOpen() || planarStatus)
     {
@@ -123,9 +124,18 @@ void Worker::endLinePlanar()
 }
 
 
-void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight)
+void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight, bool l_key)
 {
     closePorts();
+    key = l_key;
+    if (key)
+    {
+        if (keysight->openConnection())
+            emit sendMessageBox("Info", "Keysight works");
+        else
+            emit sendMessageBox("Info", "Keysight not responding");
+    }
+
     emit openPortResultSignal(portNameA5, "Planar", openPort(serialPortA5, portNameA5, QSerialPort::Baud115200));
     emit openPortResultSignal(portNameKeithly,"Keithley", openPort(serialPortKeithly, portNameKeithly, QSerialPort::Baud57600));
     emit openPortResultSignal(portNameLight, "Light", openPort(serialPortLight, portNameLight, QSerialPort::Baud9600));
@@ -189,6 +199,18 @@ void Worker::autoOpenPorts()
             }
         }
     }
+
+    if (keysight->openConnection())
+    {
+        emit sendMessageBox("Info", "Keysight works");
+        key = true;
+    }
+    else
+    {
+
+        emit sendMessageBox("Info", "Keysight not responding");
+    }
+
 }
 
 
@@ -295,6 +317,9 @@ bool Worker::allPortsOpen()
 {
     return (serialPortA5->isOpen() && serialPortKeithly->isOpen() && serialPortLight->isOpen());
 }
+
+
+
 
 
 void Worker::scanningPlate(double AX, double AY,double BX, double BY, double stepX, double stepY, double numberX,
@@ -408,7 +433,9 @@ bool Worker::checkIndex(int i)
 }
 
 
-void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex, const bool &planar_status, const bool &keithley_status, const bool &light_status, const bool &badDie)
+void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex,
+                       bool planar_status,  bool keithley_status,
+                       bool light_status,  bool badDie, bool key)
 {
 
     //if (!planar_status) return;
@@ -555,7 +582,7 @@ void Worker::stopWalk()
 }
 
 
-void Worker::goToElement(int index, const bool & planar_status)
+void Worker::goToElement(int index, bool planar_status)
 {
     //опустить стол
     tableController("Table DN\r\n", planar_status);
@@ -566,7 +593,7 @@ void Worker::goToElement(int index, const bool & planar_status)
 }
 
 
-void Worker::saveMeasure(int index, const bool &planar_status, const bool &keithley_status, const bool &light_status)
+void Worker::saveMeasure(int index,  bool planar_status, bool keithley_status,  bool light_status)
 {
     if (checkIndex(index))
     {
@@ -618,7 +645,7 @@ void Worker::openCsvFile(QString dir)
 }
 
 
-bool Worker::getCurrentCoords(int index, const bool & planar_status)
+bool Worker::getCurrentCoords(int index,  bool planar_status)
 {
     int x = 0;
     int y = 0;
@@ -672,7 +699,7 @@ bool Worker::getCurrentCoords(int index, const bool & planar_status)
 
 
 
-void Worker::lightController(QByteArray msg, const bool &light_status)
+void Worker::lightController(QByteArray msg, bool light_status)
 {
     if (serialPortLight->isOpen() || light_status)
     {
@@ -680,36 +707,57 @@ void Worker::lightController(QByteArray msg, const bool &light_status)
     }
     else
     {
-        emit sendMessageBox("warning", "Порт диода закрыт.\n Отправка комманды не работает");
+        //emit sendMessageBox("warning", "Порт диода закрыт.\n Отправка комманды не работает");
         qWarning(logWarning()) << "Порт диода закрыт. Отправка комманды не работает.\r\n";
     }
 
 }
 
 
-void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly, const bool &planar_status, const bool &keithley_status, const bool &light_status)
+void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly,
+                        bool planar_status, bool keithley_status, bool light_status)
 {
     if (allPortsOpen() || keithley_status)
     {
-        KeithlyZeroCorrection(serialPortKeithly);
+        if (key)
+            keysight->zeroCorrection(zeroDelay);
+        else
+            KeithlyZeroCorrection(serialPortKeithly);
 
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table UP\r\n", 200);
 
         QThread::msleep(200);//800
-        Keithly10mVSet(serialPortKeithly);
-        QThread::msleep(DC10mVDelay);//800
-        DarkCurrent10mV = KeithlyGet(serialPortKeithly);
-        Keithly1VSet(serialPortKeithly);
-        DarkCurrent1V = KeithlyGet(serialPortKeithly);
-        Keithly05VSet(serialPortKeithly);
-        ForwardCurrent = KeithlyGet(serialPortKeithly);
-
+        if (key)
+        {
+            keysight->darkCurrents(DC10mVDelay, DC1VDelay, FCdelay, FCVoltage);
+            DarkCurrent10mV = keysight->dark10mV;
+            DarkCurrent1V = keysight->dark1V;
+            ForwardCurrent = keysight->forward05V;
+        }
+        else
+        {
+            Keithly10mVSet(serialPortKeithly);
+            QThread::msleep(DC10mVDelay);//800
+            DarkCurrent10mV = KeithlyGet(serialPortKeithly);
+            Keithly1VSet(serialPortKeithly);
+            DarkCurrent1V = KeithlyGet(serialPortKeithly);
+            Keithly05VSet(serialPortKeithly);
+            ForwardCurrent = KeithlyGet(serialPortKeithly);
+        }
         lightController("1111\n", light_status);
 
-        Keithly10mVSet(serialPortKeithly);
-        emit sendPackageSignal(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
-        QThread::msleep(lightDelay);//200
-        LightCurrent = KeithlyGet(serialPortKeithly);
+        if (key)
+        {
+            LightCurrent = keysight->lightCurrent(lightDelay);
+        }
+        else
+        {
+            Keithly10mVSet(serialPortKeithly);
+            emit sendPackageSignal(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
+            QThread::msleep(lightDelay);//200
+            LightCurrent = KeithlyGet(serialPortKeithly);
+        }
+
         emit sendPackageSignal(serialPortKeithly, "*RST\n", NO_ANSWER_DELAY);
         emit sendLogSignal((QString::number(currentIndex) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                         QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
@@ -780,7 +828,7 @@ void Worker::Keithly1VSet(QSerialPort *serialPort)
 }
 
 
-void Worker::measureElement(const bool &planar_status, const bool &keithley_status, const bool &light_status)
+void Worker::measureElement(bool planar_status, bool keithley_status, bool light_status)
 {
     if (keithley_status)
     {
@@ -797,15 +845,26 @@ void Worker::measureElement(const bool &planar_status, const bool &keithley_stat
     }
 }
 
-void Worker::measureFC(const bool &planar_status, const bool &keithley_status)
+void Worker::measureFC(bool planar_status, bool keithley_status)
 {
 
     if (allPortsOpen() || keithley_status)
     {
-        KeithlyZeroCorrection(serialPortKeithly);
+        if (key)
+            keysight->zeroCorrection(zeroDelay);
+        else
+            KeithlyZeroCorrection(serialPortKeithly);
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
-        Keithly05VSet(serialPortKeithly);
+
+        if (key)
+        {
+            ForwardCurrent = keysight->forwardCurrent(FCdelay, FCVoltage);
+        }
+        else
+        {
+            Keithly05VSet(serialPortKeithly);
         ForwardCurrent = KeithlyGet(serialPortKeithly);
+        }
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
         emit sendMessageBox("Прямой ток измерение: ", "Voltage : " + QByteArray::number(((double)FCVoltage) / 1000) + " V : " + QString::number(ForwardCurrent, 'E', 4));
     }
