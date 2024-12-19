@@ -8,6 +8,9 @@
 #include "serials.h"
 #include "visa/visa.h"
 
+#define NO_ANSWER_DELAY 10
+#define ANSWER_DELAY 10
+
 class Keysight
 {
 public:
