@@ -97,6 +97,7 @@ void MainWindow::initConnects()
     connect(ui->measureBButton, &QPushButton::clicked, this, &MainWindow::measureBButton_clicked);
     connect(ui->measure2pushButton, &QPushButton::clicked, this, &MainWindow::measure2pushButton_clicked);
     connect(ui->FCMeasureButton, &QPushButton::clicked, this, &MainWindow::on_FCMeasureButton_clicked);
+    connect(ui->ZeroCorrButton, &QPushButton::clicked, this, &MainWindow::ZeroCorrButton_clicked);
 
     connect(ui->savePushButton, &QPushButton::clicked, this, &MainWindow::savePushButton_clicked);
     connect(ui->stopPushButton, &QPushButton::clicked, this, &MainWindow::stopPushButton_clicked);
@@ -153,6 +154,7 @@ void MainWindow::createWorkerThread()
     connect(this, &MainWindow::getCurrentCoordsSignal, worker, &Worker::getCurrentCoords);
     connect(this, &MainWindow::setDelaySignal, worker, &Worker::setDelay);
     connect(this, &MainWindow::measureFCSignal, worker, &Worker::measureFC);
+    connect(this, &MainWindow::zeroCorrSignal, worker, &Worker::zeroCorr);
     connect(this, &MainWindow::openCsvFileSignal, worker, &Worker::openCsvFile);
     connect(worker, &Worker::sendLogSignal, this, &MainWindow::writeLog);
     connect(worker, &Worker::sendProgressBarValueSignal, this, &MainWindow::setProgressBarValue);
@@ -290,15 +292,15 @@ void MainWindow::openPortResult(QString port, QString portName, bool result)
 
 bool MainWindow::portsReady()
 {
-    bool res = portResult[0] && portResult[1] && portResult[2];
+    bool res = portResult[0] && portResult[1] && portResult[2] ;
     ui->measureBButton->setEnabled(res);
-    ui->orientationButton->setEnabled(res);
-    ui->toAPushButton->setEnabled(res);
-    ui->toBPushButton->setEnabled(res);
-    ui->moveGroupBox->setEnabled(res);
-    ui->coordsGroupBox->setEnabled(res);
-
-    ui->FCMeasureButton->setEnabled(res);
+    ui->orientationButton->setEnabled(portResult[0]);
+    ui->toAPushButton->setEnabled(portResult[0]);
+    ui->toBPushButton->setEnabled(portResult[0]);
+    ui->moveGroupBox->setEnabled(portResult[0]);
+    ui->coordsGroupBox->setEnabled(portResult[0]);
+    ui->measureBButton->setEnabled((portResult[0]));
+    ui->FCMeasureButton->setEnabled(portResult[0] && portResult[1]);
     ui->measure2pushButton->setEnabled(res);
 
     return res;
@@ -318,6 +320,8 @@ bool MainWindow::readyCheck()
     ui->scanPushButton->setEnabled(res);
     //ui->loadFilePushButton->setEnabled(res);
     ui->stopPushButton->setEnabled(res);
+    ui->stop2pushButton->setEnabled(res);
+
     return res;
 }
 
@@ -786,6 +790,14 @@ void MainWindow::on_FCMeasureButton_clicked()
 {
     updateDelays();
     emit measureFCSignal(ui->planarCheckBox->isChecked(), ui->keithleyCheckBox->isChecked());
+}
+
+
+void MainWindow::ZeroCorrButton_clicked()
+{
+    updateDelays();
+    emit zeroCorrSignal(ui->planarCheckBox->isChecked(), ui->keithleyCheckBox->isChecked());
+
 }
 
 

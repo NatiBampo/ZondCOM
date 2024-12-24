@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSerialPort>
 #include <QFile>
+#include <QDir>
 #include <QMutex>
 #include <QTimer>
 #include <QTextStream>
@@ -134,6 +135,7 @@ public slots:
     void sendPackage(QSerialPort*, QByteArray, int);
     void sendPackageRead(QSerialPort*, QByteArray, int);
     void measureFC( bool, bool );
+    void zeroCorr(bool, bool);
     void openCsvFile(QString dir);
 
 };

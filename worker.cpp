@@ -204,6 +204,7 @@ void Worker::autoOpenPorts()
     {
         emit sendMessageBox("Info", "Keysight works");
         key = true;
+        emit openPortResultSignal("null", "Keithley", true);
     }
     else
     {
@@ -444,15 +445,20 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex,
     currentIndex = startIndex < gapIndex ? gapIndex : startIndex;
 
     QFileInfo fileInfo(dir_cur);
-    QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_start_index_" + QString::number(currentIndex) + ".csv";
+    const QString dir_dump = "C:/qt/dump/" + fileInfo.baseName() + "_start_index_" + QString::number(currentIndex) + ".csv";
 
     emit sendProgressBarRangeSignal(currentIndex, lastIndex);
 
+    QDir dir1(dir_dump);
+    if (!dir1.exists())
+    {
+       dir1.mkpath(dir_dump);
+    }
 
     QFile file(dir_dump);
 
     //если обход с начала, то переписать файл, иначе добавить
-    if (file.open(QIODevice::ReadWrite))
+    if (!file.open(QIODevice::ReadWrite))
     {
         QTextStream output(&file);
         int walkTime = (lastIndex - currentIndex) * 5;
@@ -698,7 +704,6 @@ bool Worker::getCurrentCoords(int index,  bool planar_status)
 }
 
 
-
 void Worker::lightController(QByteArray msg, bool light_status)
 {
     if (serialPortLight->isOpen() || light_status)
@@ -850,10 +855,12 @@ void Worker::measureFC(bool planar_status, bool keithley_status)
 
     if (allPortsOpen() || keithley_status)
     {
-        if (key)
+
+        //case zerocorr already done while pointing on aluminium
+        /*if (key)
             keysight->zeroCorrection(zeroDelay);
         else
-            KeithlyZeroCorrection(serialPortKeithly);
+            KeithlyZeroCorrection(serialPortKeithly);*/
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
 
         if (key)
@@ -873,6 +880,37 @@ void Worker::measureFC(bool planar_status, bool keithley_status)
         emit sendMessageBox("warning", "Один из портов закрыт.\n Измерение не возможно.");
     }
 }
+
+
+void Worker::zeroCorr(bool planar_status, bool keithley_status)
+{
+    qDebug() << "i'm in zerocorr worker";
+    if (allPortsOpen() || keithley_status)
+    {
+        if (key)
+            keysight->zeroCorrection(zeroDelay);
+        else
+            KeithlyZeroCorrection(serialPortKeithly);
+        if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
+
+        if (key)
+        {
+            ForwardCurrent = keysight->forwardCurrent(FCdelay, FCVoltage);
+        }
+        else
+        {
+            Keithly05VSet(serialPortKeithly);
+            ForwardCurrent = KeithlyGet(serialPortKeithly);
+        }
+        if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
+        emit sendMessageBox("Прямой ток измерение: ", "Voltage : " + QByteArray::number(((double)FCVoltage) / 1000) + " V : " + QString::number(ForwardCurrent, 'E', 4));
+    }
+    else
+    {
+        emit sendMessageBox("warning", "Один из портов закрыт.\n Измерение не возможно.");
+    }
+}
+
 
 
 void Worker::setDelay(QList<int> * delays)

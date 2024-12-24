@@ -105,6 +105,7 @@ signals:
     void setDelaySignal(QList<int>*);
     void getCurrentCoordsSignal(int, bool);
     void measureFCSignal(bool, bool);
+    void zeroCorrSignal(bool, bool);
     void openCsvFileSignal(QString);
     void copyUpSlot(int, QString);
 
@@ -141,7 +142,9 @@ public slots:
     void showMessageBox(QString, QString);
     void sendEndWalk();
     void on_FCMeasureButton_clicked();
-//private slots:
+    void ZeroCorrButton_clicked();
+
+    //private slots:
     void on_hotKeysCheckBox_stateChanged(int arg1);
     void savePushButton_clicked();
     void on_loadFilePushButton_clicked();

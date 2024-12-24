@@ -8,9 +8,6 @@
 #include "serials.h"
 #include "visa/visa.h"
 
-#define NO_ANSWER_DELAY 10
-#define ANSWER_DELAY 10
-
 class Keysight
 {
 public:
@@ -26,6 +23,7 @@ public:
     double readDouble();//const char *command, int l = 0);
     void zeroCorrection(int delay);
     void set05V(int , int );
+    void set10V(int , int );
     void set1V(int delay);
     void set10mV(int delay);
 
@@ -38,6 +36,7 @@ public:
     double dark10mV;
     double dark1V;
     double forward05V;
+    void sourceOff();
 private:
     QPair<ViSession, ViSession> *pair = nullptr;
 };
