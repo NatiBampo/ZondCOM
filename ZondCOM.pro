@@ -10,8 +10,10 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 SOURCES += \
+    Controllers/spinboxdelegate.cpp \
     LoggingCategories.cpp \
     Views/abstractitemview.cpp \
+    Views/delayview.cpp \
     keysight.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -20,8 +22,10 @@ SOURCES += \
     worker.cpp
 
 HEADERS += \
+    Controllers/spinboxdelegate.h \
     LoggingCategories.h \
     Views/abstractitemview.h \
+    Views/delayview.h \
     keysight.h \
     mainwindow.h \
     serials.h \

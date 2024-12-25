@@ -12,7 +12,7 @@ struct Layout
     QGridLayout *layout = Q_NULLPTR;
     QScrollArea *scrollArea = Q_NULLPTR;
 };
-class AbstractItemView : QAbstractItemView
+class AbstractItemView : public QAbstractItemView
 {
 public:
     AbstractItemView(QWidget *parent = Q_NULLPTR);
