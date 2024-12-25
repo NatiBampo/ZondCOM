@@ -46,6 +46,14 @@ MainWindow::MainWindow(QWidget *parent)
     //statsThread.quit();
     //statsThread.terminate();
     initScheme();
+
+    // Отправка произвольных команд
+    delayModel = new DelayModel();
+    connect(delayModel, &DelayModel::sendDataSignal, worker, &Worker::updateDelays);//setDelay(QList<int> * delays)
+
+    // Представление командного окна
+    delayView = new DelayView();
+    delayView->setModel(delayModel);
 }
 
 MainWindow::~MainWindow()

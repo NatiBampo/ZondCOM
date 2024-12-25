@@ -923,6 +923,18 @@ void Worker::setDelay(QList<int> * delays)
     FCVoltage =  delays->at(5);
     planarDelay = delays->at(6);
 }
+
+
+void Worker::updateDelays(std::vector<int> delays)
+{
+    zeroDelay = delays[0];
+    FCdelay = delays[1];
+    DC10mVDelay = delays[2];
+    DC1VDelay = delays[3];
+    lightDelay = delays[4];
+    FCVoltage =  delays[5];
+    planarDelay = delays[6];
+}
 //
 
 

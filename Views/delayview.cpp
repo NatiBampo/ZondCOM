@@ -5,7 +5,7 @@ DelayView::DelayView(QObject*):
 {
     addLayout("Команды");
 
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < 7; ++i)
     {
         SpinBoxDelegate *spinBoxDelegate = new SpinBoxDelegate();
         QSpinBox *spinBox = static_cast<QSpinBox*>(spinBoxDelegate->createEditor(this, QStyleOptionViewItem(), QModelIndex()));
@@ -60,21 +60,24 @@ void DelayView::setDefault(SpinBoxDelegate *spinBoxDelegate, QSpinBox *spinBox, 
 {
     switch (index) {
     case 0:
-        spinBoxDelegate->setValue(spinBox, 0x5);
+        spinBoxDelegate->setValue(spinBox, 300);
         break;
     case 1:
-        spinBoxDelegate->setValue(spinBox, 0x5c);
+        spinBoxDelegate->setValue(spinBox, 300);
         break;
     case 2:
-        spinBoxDelegate->setValue(spinBox, 0x0);
+        spinBoxDelegate->setValue(spinBox, 500);
         break;
     case 3:
-        spinBoxDelegate->setValue(spinBox, 0x0);
+        spinBoxDelegate->setValue(spinBox, 500);
         break;
     case 4:
-        spinBoxDelegate->setValue(spinBox, 0xe);
+        spinBoxDelegate->setValue(spinBox, 400);
         break;
     case 5:
-        spinBoxDelegate->setValue(spinBox, 0x80);
+        spinBoxDelegate->setValue(spinBox, 400);
+        break;
+    case 6:
+        spinBoxDelegate->setValue(spinBox, 600);
     }
 }

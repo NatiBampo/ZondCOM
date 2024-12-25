@@ -12,6 +12,7 @@ CONFIG += c++17
 SOURCES += \
     Controllers/spinboxdelegate.cpp \
     LoggingCategories.cpp \
+    Models/delaymodel.cpp \
     Views/abstractitemview.cpp \
     Views/delayview.cpp \
     keysight.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 HEADERS += \
     Controllers/spinboxdelegate.h \
     LoggingCategories.h \
+    Models/delaymodel.h \
     Views/abstractitemview.h \
     Views/delayview.h \
     keysight.h \

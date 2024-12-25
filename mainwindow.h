@@ -3,13 +3,17 @@
 
 #include <QMainWindow>
 #include <QThread>
-#include <worker.h>
-#include <tabcanvas.h>
 #include <QStandardItemModel>
 #include <QMutex>
-#include <stats.h>
 #include <QSettings>
 #include <QShortcut>
+
+
+#include <stats.h>
+#include <worker.h>
+#include <tabcanvas.h>
+#include <Models/delaymodel.h>
+#include <Views/delayview.h>
 
 
 #define ORGANIZATION_NAME "Orion"
@@ -85,7 +89,9 @@ private:
     void initializeSettings();
     void initConnects();
     void initScheme();
-
+private:
+    DelayModel *delayModel = Q_NULLPTR; // Модуль отправки управляющей задержки
+    DelayView *delayView = Q_NULLPTR;
 
 signals:
     void scanningPlateSignal(double, double, double, double,

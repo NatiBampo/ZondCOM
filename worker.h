@@ -137,6 +137,7 @@ public slots:
     void measureFC( bool, bool );
     void zeroCorr(bool, bool);
     void openCsvFile(QString dir);
+    void updateDelays(std::vector<int> delays);
 
 };
 
