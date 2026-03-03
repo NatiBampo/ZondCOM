@@ -28,6 +28,7 @@ HEADERS += \
     Models/delaymodel.h \
     Views/abstractitemview.h \
     Views/delayview.h \
+    exchangeables.h \
     keysight.h \
     mainwindow.h \
     serials.h \

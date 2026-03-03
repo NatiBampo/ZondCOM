@@ -10,8 +10,7 @@
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
-
-#include "serials.h"
+#include "exchangeables.h"
 #include "keysight.h"
 
 #define ANSWER_DELAY 400
@@ -80,13 +79,13 @@ private:
 
     bool openPort(QSerialPort*, QString, QSerialPort::BaudRate);
     bool copyUpToIndex(int);
-    bool checkPlanarCOM();
+    bool checkPlanarCOM(RunStatus*);
     bool checkKeithlyCOM();
-    bool checkLightCOM();
+    bool checkLightCOM(RunStatus*);
     bool checkIndex(int);
 
     void MeasureDie(QSerialPort *, QSerialPort *,
-                    bool ,  bool ,  bool);
+                    RunStatus *);
     void KeithlyZeroCorrection(QSerialPort *);
     void Keithly05VSet(QSerialPort *);
     double KeithlyGet(QSerialPort *);
@@ -114,30 +113,27 @@ signals:
     void sendEndOfWalkTime(QString);
 
 public slots:
-    void measureElement(bool, bool, bool);
-    void scanningPlate(double, double, double, double,
-                       double, double, double, double,
-                       double, bool,
-                       int, int, int, int, int, int,
-                       bool, bool);
-    void tableController(QByteArray, bool );
-    void lightController(QByteArray, bool );
-    void openPorts(QString, QString, QString, bool);
+    void measureElement(RunStatus*);
+    void calculateDots(DieSettings*);
+
+    void tableController(QByteArray, RunStatus *);
+    void lightController(QByteArray, RunStatus *);
+    void openPorts(QString, QString, QString, RunStatus *);
     void closePorts();
     void pauseWalk();
-    void goToElement(int, bool );
-    void saveMeasure(int,  bool , bool , bool );
-    void autoOpenPorts();
-    bool getCurrentCoords(int,  bool );
+    void goToElement(int, RunStatus * );
+    void saveMeasure(RunStatus *);
+    void autoOpenPorts(RunStatus*);
+    bool getCurrentCoords(int,  RunStatus *);
 
-    void autoWalk(bool , QString , int ,  bool , bool , bool, bool, bool );
-    void setDelay(QList<int> *);
+    void autoWalk(RunStatus *, QString);
+    void setDelay(VoltDelay*);
     void sendPackage(QSerialPort*, QByteArray, int);
     void sendPackageRead(QSerialPort*, QByteArray, int);
-    void measureFC( bool, bool );
-    void zeroCorr(bool, bool);
+    void measureFC(RunStatus *);
+    void zeroCorr(RunStatus *);
     void openCsvFile(QString dir);
-    void updateDelays(std::vector<int> delays);
+    void updateDelays(VoltDelay*);
 
 };
 

@@ -42,6 +42,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    //std::unique_ptr<DieSettings> ds = std::unique_ptr();
+    DieSettings* ds = nullptr;
+    RunStatus* rs = nullptr;
+    VoltDelay* vd = nullptr;
+
 
 private:
     Ui::MainWindow *ui;
@@ -54,7 +59,6 @@ private:
     QString dir_name;
     QList<int> delays;
     QList<bool> portResult = {false, false, false};
-    bool orientation = false;
     bool busy = false;
     void checkBusy();
     bool portsReady();
@@ -76,8 +80,6 @@ private:
     void createWorkerThread();
     void createStatsThread();
     void addElement(int, int, double);
-    int getUIIndex();
-    void updateDelays();
     void syncSettings();
     void initializeShortKeys();
     void activateShortKeys();
@@ -89,29 +91,32 @@ private:
     void initializeSettings();
     void initConnects();
     void initScheme();
+    int getUIIndex();
+    void updateDelays();
+    void updateRunStatus();
+    void updateDieSettings();
+
 private:
     DelayModel *delayModel = Q_NULLPTR; // Модуль отправки управляющей задержки
     DelayView *delayView = Q_NULLPTR;
 
 signals:
-    void scanningPlateSignal(double, double, double, double,
-                             double, double, double, double, double,
-                             bool, int, int, int, int, int, int, bool, bool);
-    void measureSignal(bool, bool, bool);
-    void tableControllerSignal(QByteArray, bool);
-    void lightControllerSignal(QByteArray, bool);
-    void openPortsSignal(QString, QString, QString, bool);
+    void calculateDotsSignal(DieSettings*);
+    void measureSignal(RunStatus*);
+    void tableControllerSignal(QByteArray, RunStatus*);
+    void lightControllerSignal(QByteArray, RunStatus*);
+    void openPortsSignal(QString, QString, QString, RunStatus*);
     void closePortsSignal();
-    void goToElementSignal(int, bool);
+    void goToElementSignal(int, RunStatus*);
     void sendPauseCommandSignal();
-    void saveMeasureSignal(int, bool, bool, bool);
-    void autoWalkSignal(bool, QString, int, bool, bool, bool, bool, bool);
-    void autoOpenPortsSignal();
+    void saveMeasureSignal(RunStatus*);
+    void autoWalkSignal(RunStatus* , QString);
+    void autoOpenPortsSignal(RunStatus*);
     void showChartsSignal(QString);
-    void setDelaySignal(QList<int>*);
-    void getCurrentCoordsSignal(int, bool);
-    void measureFCSignal(bool, bool);
-    void zeroCorrSignal(bool, bool);
+    void setDelaySignal(VoltDelay*);
+    void getCurrentCoordsSignal(int, RunStatus*);
+    void measureFCSignal(RunStatus*);
+    void zeroCorrSignal(RunStatus*);
     void openCsvFileSignal(QString);
     void copyUpSlot(int, QString);
 

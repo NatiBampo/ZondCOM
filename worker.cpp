@@ -7,7 +7,6 @@
 #include <QSerialPortInfo>
 #include <ctime>
 #include <QMessageBox>
-#include <typeinfo>
 #include <QDebug>
 #include "LoggingCategories.h"
 
@@ -52,8 +51,10 @@ void Worker:: sendPackageRead (QSerialPort *serialPort, QByteArray package, int 
 }
 
 
-void Worker::tableController(const QByteArray message, bool planarStatus)
+void Worker::tableController(const QByteArray message, RunStatus* rs)
 {
+
+    bool planarStatus = rs->planar;
     if (serialPortA5->isOpen() || planarStatus)
     {
         //if (message == "State\r\n") serialPortA5->flush();
@@ -124,10 +125,10 @@ void Worker::endLinePlanar()
 }
 
 
-void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight, bool l_key)
+void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString portNameLight, RunStatus *rs)
 {
     closePorts();
-    key = l_key;
+    bool key = rs->keysight;
     if (key)
     {
         if (keysight->openConnection())
@@ -142,7 +143,7 @@ void Worker::openPorts(QString portNameA5, QString portNameKeithly, QString port
 }
 
 
-void Worker::autoOpenPorts()
+void Worker::autoOpenPorts(RunStatus *rs)
 {
     serialPortA5 = new QSerialPort();
     serialPortKeithly = new QSerialPort();
@@ -162,7 +163,7 @@ void Worker::autoOpenPorts()
         {
             tmp_flag = openPort(serialPortA5, list[i], QSerialPort::Baud115200);
 
-            if (tmp_flag && checkPlanarCOM())
+            if (tmp_flag && checkPlanarCOM(rs))
             {
                 map.insert(serialPortA5, list[i]);
                 emit openPortResultSignal(list[i], "Planar", tmp_flag);
@@ -189,7 +190,7 @@ void Worker::autoOpenPorts()
         {
             //qDebug() << i << " light condition";
             tmp_flag = openPort(serialPortLight, list[i], QSerialPort::Baud9600);
-            if (tmp_flag && checkLightCOM())
+            if (tmp_flag && checkLightCOM(rs))
             {
                 map.insert(serialPortLight, list[i]);
                 emit openPortResultSignal(list[i], "Light", tmp_flag);
@@ -215,10 +216,11 @@ void Worker::autoOpenPorts()
 }
 
 
-bool Worker::checkPlanarCOM()
+bool Worker::checkPlanarCOM(RunStatus* rs)
 {
     //serialPortA5->flush();
-    tableController("State\r\n", true);
+    rs->planar = true;
+    tableController("State\r\n", rs);
     QString responce = QString(planarResponce);
     QRegularExpression re(R"(-?\d+ -?\d+ -?\d+ -?\d+\r\n|BSY|OK|ERC|NBP|EDG)");
     QRegularExpressionMatch match = re.match(responce);
@@ -231,7 +233,7 @@ bool Worker::checkPlanarCOM()
     else if (responce == "")
     {
         QThread::msleep(300);
-        tableController("State\r\n", true);
+        tableController("State\r\n", rs);
         responce = QString(planarResponce);
         match = re.match(responce);
         if (responce != "" && match.hasMatch())
@@ -240,6 +242,7 @@ bool Worker::checkPlanarCOM()
         }
 
     }
+    rs->planar = false;
     return false;
 }
 
@@ -260,27 +263,30 @@ bool Worker::checkKeithlyCOM()
 }
 
 
-bool Worker::checkLightCOM()
+bool Worker::checkLightCOM(RunStatus *rs)
 {
     for (int i =0; i < 5; i++)
     {
+        rs->light = true;
         try
         {
-            lightController("1111\r\n", true);
+            lightController("1111\r\n", rs);
             if (serialPortLight->waitForReadyRead(1000)) lastAnswer.append(serialPortLight->readAll());
             emit sendLogSignal(lastAnswer);
             if (lastAnswer.contains("C3B2A1") || lastAnswer.contains("A1B2C3"))
             {
-                lightController("0001\n", true);
+                lightController("0001\n", rs);
                 return true;
             }
-            lightController("0001\n", true);
+            lightController("0001\n", rs);
         }
         catch (QSerialPort::SerialPortError error)
         {
             qDebug() << error;
+            rs->meter = false;
         }
     }
+    rs->meter = false;
     return false;
 }
 
@@ -320,14 +326,29 @@ bool Worker::allPortsOpen()
 }
 
 
+//TODO: insert DieSettings
+void Worker::calculateDots(DieSettings* s){
+
+    double AX = (double) s->AX;
+    double AY = (double) s->AY;
+    double BX = (double) s->BX;
+    double BY = (double) s->BY;
+    double stepX = (double) s->stepX;
+    double stepY = (double) s->stepY;
+    double numberX = (double) s->numX;
+    double numberY = (double) s->numY;
+    double colSlide = (double) s->colSlide;
+    bool centerColumn = s->centerColumn;
+    bool leftColumn = s->leftColumn;
+    bool rightColumn = s->rightColumn;
+    int upLeft = s->upLeft;
+    int upRight = s->upRight;
+    int downLeft = s->downLeft;
+    int downRight = s->downRight;
+    int upCenter = s->upCenter;
+    int downCenter = s->downCenter;
 
 
-
-void Worker::scanningPlate(double AX, double AY,double BX, double BY, double stepX, double stepY, double numberX,
-                           double numberY, double colSlide, bool centerColumn,
-                           int upLeft, int upRight, int downLeft, int downRight, int upCenter, int downCenter,
-                           bool leftColumn, bool rightColumn)
-{
     //функция пересчета таблицы координат первоначально или после изменений спинбаров на форме
     //сперва обновляем глобальные переменные
     //numberX необходимо привести к фактическому параметру
@@ -433,13 +454,11 @@ bool Worker::checkIndex(int i)
     return false;
 }
 
-
-void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex,
-                       bool planar_status,  bool keithley_status,
-                       bool light_status,  bool badDie, bool key)
-{
-
-    //if (!planar_status) return;
+//TODO: insert RunStatus
+void Worker::autoWalk(RunStatus *rs, QString dir_cur){
+    int startIndex = rs->startIndex;
+    bool keithley_status = rs->meter;
+    bool badDie = rs->badDie;
 
     //сдвиг индекса до начала рабочей зоны(не попадает в отступ)
     currentIndex = startIndex < gapIndex ? gapIndex : startIndex;
@@ -458,6 +477,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex,
     QFile file(dir_dump);
 
     //если обход с начала, то переписать файл, иначе добавить
+    //пишем всегда с начал, так как это дамп
     if (!file.open(QIODevice::ReadWrite))
     {
         QTextStream output(&file);
@@ -475,6 +495,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex,
         int lowFCcounter = 0;
         while (currentIndex <= lastIndex && !stopped)
         {
+
             //если индекс попал на срез, то пропускаем
             if (checkIndex(currentIndex))
             {
@@ -482,10 +503,10 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex,
                 continue;
             }
 
-            goToElement(currentIndex, planar_status);
+            goToElement(currentIndex, rs);
 
             //проверка отзывчивости планара в конце ряда, дабы не дырявить пластины активностью(вверх/вниз) на месте
-            if (currentIndex % 16 == 0 && !getCurrentCoords(currentIndex, planar_status))
+            if (currentIndex % 16 == 0 && !getCurrentCoords(currentIndex, rs))
             {
                 emit sendLogSignal(planarResponce);
                 emit sendMessageBox("Ошибка", "Планар не отвечает на элементах :\n" + QString::number(currentIndex-15)  + " - " + QString::number(currentIndex));
@@ -515,7 +536,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex,
             mutex->unlock();
 
             //начинаем мерить элемент
-            if (keithley_status) MeasureDie(serialPortA5, serialPortKeithly, planar_status, keithley_status, light_status);
+            if (keithley_status) MeasureDie(serialPortA5, serialPortKeithly, rs);
 
             //запись в файл строки с измерениями токов
             res = QString::number(currentIndex, 'D', 0) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
@@ -553,7 +574,7 @@ void Worker::autoWalk(bool allNew, QString dir_cur, int startIndex,
 
         file.close();
 
-        tableController("Table DN\r\n", planar_status);
+        tableController("Table DN\r\n", rs);
 
         int end = clock();
         int t = (end - start) / CLOCKS_PER_SEC;
@@ -587,29 +608,29 @@ void Worker::stopWalk()
     stopped = true;
 }
 
-
-void Worker::goToElement(int index, bool planar_status)
+//TODO: insert RunStatus
+void Worker::goToElement(int index, RunStatus *rs)
 {
     //опустить стол
-    tableController("Table DN\r\n", planar_status);
+    tableController("Table DN\r\n", rs);
     //перевод координат в массив байтов для передачи станку
     QByteArray x = QByteArray::number((int)DotsX[index]);
     QByteArray y = QByteArray::number((int)DotsY[index]);
-    tableController("Set " + x + " " + y + '\r' + '\n', planar_status);
+    tableController("Set " + x + " " + y + '\r' + '\n', rs);
 }
 
-
-void Worker::saveMeasure(int index,  bool planar_status, bool keithley_status,  bool light_status)
+//TODO: insert RunStatus
+void Worker::saveMeasure(RunStatus *rs)
 {
+    int index = rs->currentIndex;
     if (checkIndex(index))
     {
         emit sendMessageBox("info", "Индекс за пределами измеряемой зоны.\nПроверье отступы по краям\n и выполните ориентацию");
         return;
     }
-    currentIndex = index;
-    goToElement(currentIndex, planar_status);
+    goToElement(index, rs);
 
-    MeasureDie(serialPortA5, serialPortKeithly, planar_status, keithley_status, light_status);
+    MeasureDie(serialPortA5, serialPortKeithly, rs);
     emit sendAddTableSignal(currentIndex, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
 }
 
@@ -650,12 +671,12 @@ void Worker::openCsvFile(QString dir)
     //source.remove();
 }
 
-
-bool Worker::getCurrentCoords(int index,  bool planar_status)
+//TODO: insert RunStatus
+bool Worker::getCurrentCoords(int index, RunStatus *rs)
 {
     int x = 0;
     int y = 0;
-    tableController("State\r\n", planar_status);
+    tableController("State\r\n", rs);
     QRegularExpression re(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)");
 
     //if (responce.contains(QRegularExpression(R"(< -?\d+ -?\d+ -?\d+ -?\d+\r\n)")))
@@ -670,17 +691,18 @@ bool Worker::getCurrentCoords(int index,  bool planar_status)
             x = line.split(" ")[2].toInt();
             y = line.split(" ")[3].toInt();
 
-            if (index == -1)
+            if (index == CoordsEnum::POINT_CURRENT)
             {
                 emit sendCurrentCoordsSignal(x, y);
             }
-            if (index == -2)
+            if (index == CoordsEnum::POINT_B)
             {
                 emit sendBCoordsSignal(x, y);
             }
             if (index > 0)
             {
-                qDebug(logDebug()) << "Парсинг x, y : " << x << ", " << y << "  Dots: i, x , y = " << currentIndex << ", " << DotsX[currentIndex] << ", " << DotsY[currentIndex];
+                qDebug(logDebug()) << "Парсинг x, y : " << x << ", " << y << "  Dots: i, x , y = "
+                                   << currentIndex << ", " << DotsX[currentIndex] << ", " << DotsY[currentIndex];
                 if (currentIndex < lastIndex && (x==0 && y == 0))
                 {
                     QThread::msleep(1000);
@@ -704,8 +726,9 @@ bool Worker::getCurrentCoords(int index,  bool planar_status)
 }
 
 
-void Worker::lightController(QByteArray msg, bool light_status)
+void Worker::lightController(QByteArray msg, RunStatus* rs)
 {
+    bool light_status = rs->light;
     if (serialPortLight->isOpen() || light_status)
     {
         emit sendPackageSignal(serialPortLight, msg, NO_ANSWER_DELAY);
@@ -720,8 +743,12 @@ void Worker::lightController(QByteArray msg, bool light_status)
 
 
 void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly,
-                        bool planar_status, bool keithley_status, bool light_status)
+                        RunStatus *rs)
 {
+    bool planar_status = rs->planar;
+    bool keithley_status = rs->meter;
+    bool key = rs->keysight;
+    //{
     if (allPortsOpen() || keithley_status)
     {
         if (key)
@@ -749,7 +776,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
             Keithly05VSet(serialPortKeithly);
             ForwardCurrent = KeithlyGet(serialPortKeithly);
         }
-        lightController("1111\n", light_status);
+        lightController("1111\n", rs);
 
         if (key)
         {
@@ -767,7 +794,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
         emit sendLogSignal((QString::number(currentIndex) + ", " + QString::number(ForwardCurrent, 'E', 4) + ", " + QString::number(DarkCurrent10mV, 'E', 4) + ", " +
                         QString::number(DarkCurrent1V, 'E', 4) + ", " + QString::number(LightCurrent - DarkCurrent10mV, 'E', 4)).toUtf8());
 
-        lightController("0001\n", light_status);
+        lightController("0001\n", rs);
 
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table DN\r\n", 200);
 
@@ -794,7 +821,6 @@ void Worker::KeithlyZeroCorrection(QSerialPort *serialPort)
     sendPackage(serialPort, "SYST:ZCOR ON\n", NO_ANSWER_DELAY);
 }
 
-
 void Worker::Keithly05VSet(QSerialPort *serialPort)
 {
     sendPackage(serialPort, "CURR:RANG 2e-3\n", NO_ANSWER_DELAY);
@@ -805,7 +831,6 @@ void Worker::Keithly05VSet(QSerialPort *serialPort)
     sendPackage(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
     QThread::msleep(FCdelay);
 }
-
 
 double Worker::KeithlyGet(QSerialPort *serialPort)
 {
@@ -833,12 +858,14 @@ void Worker::Keithly1VSet(QSerialPort *serialPort)
 }
 
 
-void Worker::measureElement(bool planar_status, bool keithley_status, bool light_status)
+void Worker::measureElement(RunStatus *rs)
 {
+    bool keithley_status = rs->meter;
+
     if (keithley_status)
     {
         int start = clock();
-        MeasureDie(serialPortA5, serialPortKeithly, planar_status, keithley_status, light_status);
+        MeasureDie(serialPortA5, serialPortKeithly, rs);//planar_status, keithley_status, light_status
 
         int end = clock();
         int t = (end - start);
@@ -850,8 +877,10 @@ void Worker::measureElement(bool planar_status, bool keithley_status, bool light
     }
 }
 
-void Worker::measureFC(bool planar_status, bool keithley_status)
+void Worker::measureFC(RunStatus *rs)
 {
+    bool planar_status = rs->planar;
+    bool keithley_status = rs->meter;
 
     if (allPortsOpen() || keithley_status)
     {
@@ -861,6 +890,7 @@ void Worker::measureFC(bool planar_status, bool keithley_status)
             keysight->zeroCorrection(zeroDelay);
         else
             KeithlyZeroCorrection(serialPortKeithly);*/
+
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
 
         if (key)
@@ -870,7 +900,7 @@ void Worker::measureFC(bool planar_status, bool keithley_status)
         else
         {
             Keithly05VSet(serialPortKeithly);
-        ForwardCurrent = KeithlyGet(serialPortKeithly);
+            ForwardCurrent = KeithlyGet(serialPortKeithly);
         }
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
         emit sendMessageBox("Прямой ток измерение: ", "Voltage : " + QByteArray::number(((double)FCVoltage) / 1000) + " V : " + QString::number(ForwardCurrent, 'E', 4));
@@ -882,8 +912,11 @@ void Worker::measureFC(bool planar_status, bool keithley_status)
 }
 
 
-void Worker::zeroCorr(bool planar_status, bool keithley_status)
+void Worker::zeroCorr(RunStatus *rs)
 {
+    bool planar_status = rs->planar;
+    bool keithley_status = rs->meter;
+
     qDebug() << "i'm in zerocorr worker";
     if (allPortsOpen() || keithley_status)
     {
@@ -912,29 +945,26 @@ void Worker::zeroCorr(bool planar_status, bool keithley_status)
 }
 
 
-
-void Worker::setDelay(QList<int> * delays)
+void Worker::setDelay(VoltDelay* s)//QList<int> * delays)
 {
-    zeroDelay = delays->at(0);
-    FCdelay = delays->at(1);
-    DC10mVDelay = delays->at(2);
-    DC1VDelay = delays->at(3);
-    lightDelay = delays->at(4);
-    FCVoltage =  delays->at(5);
-    planarDelay = delays->at(6);
+    zeroDelay = s->zeroDelay;
+    planarDelay = s->planarDelay;
+    FCdelay = s->fcDelay;
+    DC10mVDelay = s->dc1Delay;
+    DC1VDelay = s->dc2Delay;
+    lightDelay = s->lightDelay;
+    FCVoltage =  s->fcVolt;
 }
 
 
-void Worker::updateDelays(std::vector<int> delays)
+void Worker::updateDelays(VoltDelay* s)
 {
-    zeroDelay = delays[0];
-    FCdelay = delays[1];
-    DC10mVDelay = delays[2];
-    DC1VDelay = delays[3];
-    lightDelay = delays[4];
-    FCVoltage =  delays[5];
-    planarDelay = delays[6];
+
+    zeroDelay = s->zeroDelay;
+    planarDelay = s->planarDelay;
+    FCdelay = s->fcDelay;
+    DC10mVDelay = s->dc1Delay;
+    DC1VDelay = s->dc2Delay;
+    lightDelay = s->lightDelay;
+    FCVoltage =  s->fcVolt;
 }
-//
-
-

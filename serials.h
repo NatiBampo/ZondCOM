@@ -57,7 +57,7 @@ struct Peripherals
     bool planar_open;
     bool keithley_open;
 
-    bool meter;
+    bool keysight;
 
     bool lan;
     int ip[4];
