@@ -8,6 +8,7 @@ typedef struct {
     int fcVolt;
     int dc1Volt; //prior DC10mV .also used for diod current set
     int dc2Volt;    //DC1V
+    int lightVolt;
 
     int fcDelay;
     int zeroDelay;
@@ -15,6 +16,9 @@ typedef struct {
     int dc2Delay;
     int lightDelay;
     int planarDelay;
+
+    int rangedc1;
+    int rangedc2;
 } VoltDelay;
 
 typedef struct  {

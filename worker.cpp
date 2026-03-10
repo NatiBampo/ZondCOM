@@ -460,6 +460,7 @@ void Worker::autoWalk(RunStatus *rs, QString dir_cur){
     bool keithley_status = rs->meter;
     bool badDie = rs->badDie;
 
+
     //сдвиг индекса до начала рабочей зоны(не попадает в отступ)
     currentIndex = startIndex < gapIndex ? gapIndex : startIndex;
 
@@ -761,7 +762,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
         QThread::msleep(200);//800
         if (key)
         {
-            keysight->darkCurrents(DC10mVDelay, DC1VDelay, FCdelay, FCVoltage);
+            keysight->darkCurrents(FCdelay, DC10mVDelay, DC1VDelay,  FCVoltage, dc1Volt, dc2Volt, rangedc2);
             DarkCurrent10mV = keysight->dark10mV;
             DarkCurrent1V = keysight->dark1V;
             ForwardCurrent = keysight->forward05V;
@@ -780,7 +781,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
 
         if (key)
         {
-            LightCurrent = keysight->lightCurrent(lightDelay);
+            LightCurrent = keysight->lightCurrent(lightDelay, lightVolt);
         }
         else
         {
@@ -945,26 +946,21 @@ void Worker::zeroCorr(RunStatus *rs)
 }
 
 
-void Worker::setDelay(VoltDelay* s)//QList<int> * delays)
+void Worker::setDelay(VoltDelay* s)
 {
-    zeroDelay = s->zeroDelay;
     planarDelay = s->planarDelay;
+    zeroDelay = s->zeroDelay;
     FCdelay = s->fcDelay;
     DC10mVDelay = s->dc1Delay;
     DC1VDelay = s->dc2Delay;
     lightDelay = s->lightDelay;
+
     FCVoltage =  s->fcVolt;
+    dc1Volt = s->dc1Volt;
+    dc2Volt = s->dc2Volt;
+    lightVolt = s->lightVolt;
+
+    //rangedc1 = s->rangedc1;
+    rangedc2 = s->rangedc2;
 }
 
-
-void Worker::updateDelays(VoltDelay* s)
-{
-
-    zeroDelay = s->zeroDelay;
-    planarDelay = s->planarDelay;
-    FCdelay = s->fcDelay;
-    DC10mVDelay = s->dc1Delay;
-    DC1VDelay = s->dc2Delay;
-    lightDelay = s->lightDelay;
-    FCVoltage =  s->fcVolt;
-}

@@ -1,7 +1,7 @@
 #include "delaymodel.h"
 
 
-DelayModel::DelayModel(QObject* parent) :
+DelayModel::DelayModel(QObject* parent, VoltDelay*) :
     QAbstractListModel(parent)
 {
 
@@ -16,6 +16,11 @@ int DelayModel::rowCount(const QModelIndex&) const
 {
     return delayData.size();
 }
+
+int DelayModel::columnCount(const QModelIndex& parent) const {
+    return 2;
+}
+
 
 QVariant DelayModel::data(const QModelIndex &index, int role) const
 {
@@ -46,6 +51,7 @@ bool DelayModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
 void DelayModel::sendCommand()
 {
-    emit sendDataSignal(delayData);
+
+    emit sendDataSignal(vd);
 }
 

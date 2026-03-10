@@ -67,7 +67,14 @@ private:
     int DC1VDelay = 600;
     int lightDelay = 400;
     int planarDelay = 1000;
+
     int FCVoltage = 600;
+    int dc1Volt = 10;
+    int dc2Volt = 1000;
+    int lightVolt = 10;
+
+    int rangedc1 = 10;
+    int rangedc2 = 10;
 
     double localCurrent = 0.0;
     double ForwardCurrent = 0.0;
@@ -133,7 +140,6 @@ public slots:
     void measureFC(RunStatus *);
     void zeroCorr(RunStatus *);
     void openCsvFile(QString dir);
-    void updateDelays(VoltDelay*);
 
 };
 

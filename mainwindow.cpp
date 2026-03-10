@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     delays.append({300, 300, 500, 500, 400, 400, 600});
 
-    ui->keithleyRB->setChecked(true);
+    ui->keysightRB->setChecked(true);
     initializeShortKeys();
     initializeSettings();
     initConnects();
@@ -54,20 +54,23 @@ MainWindow::MainWindow(QWidget *parent)
     initScheme();
 
     // Отправка произвольных команд
-    delayModel = new DelayModel();
-    //connect(delayModel, &DelayModel::sendDataSignal, worker, &Worker::updateDelays);//setDelay(QList<int> * delays)
+    /*delayModel = new DelayModel();
+    connect(delayModel, &DelayModel::sendDataSignal, worker, &Worker::updateDelays);//setDelay(QList<int> * delays)
 
     // Представление командного окна
     delayView = new DelayView();
     delayView->setModel(delayModel);
     //delayView.
     //ui->tabWidget->setCurrentWidget(delayView);
-
+    //tabCanvas *page = new tabCanvas(ui->tabWidget);
+    ui->tabWidget->addTab(delayView, "Задержки");*/
+    ui->tabWidget->setTabVisible(3, false);
 }
 
 MainWindow::~MainWindow()
 {
-
+    /*delete delayModel;
+    delete delayView;*/
     delete ds;
     delete rs;
     delete vd;
@@ -600,6 +603,7 @@ void MainWindow::continueFromButton_clicked(bool checked)
         ui->scanPushButton->setEnabled(false);
         rs->currentIndex = getUIIndex();
         rs->allNew = (getUIIndex() <= gapIndex);
+        rs->startIndex = rs->currentIndex;
         emit autoWalkSignal(rs, dir_name);
 
         busy = true;
@@ -810,7 +814,13 @@ void MainWindow::updateDelays()
     vd->dc1Delay = ui->DC10spinBox->value();
     vd->dc2Delay = ui->DC1VSpinBox->value();
     vd->lightDelay = ui->lightSpinBox->value();
+
     vd->fcVolt = ui->voltageSpinBox->value();
+    vd->dc1Volt = ui->voltDC10mvSpinBox->value();
+    vd->dc2Volt = ui->voltDC1VSpinBox->value();
+    vd->lightVolt = ui->voltLightSpinBox->value();
+
+    vd->rangedc2 = ui->rangeDC1VSpinBox->value();
 
     emit setDelaySignal(vd);
 }
@@ -1044,7 +1054,6 @@ void MainWindow::drawCanvas()
 {
     ui->tabWidget->setTabVisible(4, true);
 }
-
 
 
 void MainWindow::on_admCheckBox_stateChanged(int arg1)

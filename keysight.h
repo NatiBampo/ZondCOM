@@ -22,15 +22,15 @@ public:
     QString *readResponce(const char *, int );
     double readDouble();//const char *command, int l = 0);
     void zeroCorrection(int delay);
-    void set05V(int , int );
-    void set10V(int , int );
-    void set1V(int delay);
-    void set10mV(int delay);
+    void set05V(int , int);
+    void set10V(int , int, int);
+    void set1V(int, int, int);
+    void set10mV(int, int);
 
 
-    double lightCurrent(int );
-    double forwardCurrent(int , int );
-    void darkCurrents(int , int , int , int );
+    double lightCurrent(int, int);
+    double forwardCurrent(int , int);
+    void darkCurrents(int , int , int , int, int, int, int);
 
 public:
     double dark10mV;

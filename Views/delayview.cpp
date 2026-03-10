@@ -3,15 +3,15 @@
 DelayView::DelayView(QObject*):
     AbstractItemView()
 {
-    addLayout("Команды");
+    addLayout("Delay&Volts");
 
-    for (int i = 0; i < 7; ++i)
+    /*for (int i = 0; i < 7; ++i)
     {
         SpinBoxDelegate *spinBoxDelegate = new SpinBoxDelegate();
         QSpinBox *spinBox = static_cast<QSpinBox*>(spinBoxDelegate->createEditor(this, QStyleOptionViewItem(), QModelIndex()));
         spinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
-        spinBoxDelegate->setMinimum(spinBox, 0x00);
-        spinBoxDelegate->setMaximum(spinBox, 0xff);
+        spinBoxDelegate->setMinimum(spinBox, 10);
+        spinBoxDelegate->setMaximum(spinBox, 10000);
         spinBoxDelegate->setHexValues(spinBox);
         spinBoxDelegate->setStyleSheet(spinBox, QString("QSpinBox {\n"
                                                         "background: #4f4f4f;\n"
@@ -34,9 +34,9 @@ DelayView::DelayView(QObject*):
             spinBoxDelegate->setModelData(spinBox, this->model(), this->model()->index(i, 0));
         });
         addWidgetToLayout(0, spinBox, 0, i, Qt::AlignVCenter);
-    }
-
-    /*PushButtonDelegate *pushButtonDelegate = new PushButtonDelegate();
+    }*/
+    /*
+    PushButtonDelegate *pushButtonDelegate = new PushButtonDelegate();
     QPushButton *sendButton = static_cast<QPushButton*>(pushButtonDelegate->createEditor(this, QStyleOptionViewItem(), QModelIndex()));
     sendButton->setFixedHeight(static_cast<int>(UiFreeCommand::SendButtonHeight));
     sendButton->setText("Отправить");
@@ -44,9 +44,9 @@ DelayView::DelayView(QObject*):
     {
         pushButtonDelegate->setModelData(sendButton, this->model(), this->model()->index(-1, 0));
     });
-
-    addWidgetToLayout(0, sendButton, 1, 0, 1, 6, Qt::AlignVCenter);
     */
+    //addWidgetToLayout(0, sendButton, 1, 0, 1, 6, Qt::AlignVCenter);
+
     setFixedHeight(110);
 }
 

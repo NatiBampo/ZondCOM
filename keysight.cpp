@@ -215,7 +215,7 @@ void Keysight::zeroCorrection(int delay)
 
 }
 
-void Keysight::set05V(int volt = 600, int delay = 600 )
+void Keysight::set05V(int delay = 600, int mvolt = 600 )
 {
     writePackage(":SOUR:VOLT:STAT ON\n");
     writePackage(":OUTP:STAT ON\n");
@@ -223,7 +223,7 @@ void Keysight::set05V(int volt = 600, int delay = 600 )
     //writePackage(":CURR:RANG 2e-2\n");
     //writePackage(":SOUR:VOLT:RANG 1\n");
     char full_address[32];
-    snprintf(full_address, 32, ":SOUR:VOLT -%de-1\n", volt/100);
+    snprintf(full_address, 32, ":SOUR:VOLT -%de-1\n", mvolt/100);
     qDebug() << "Keysight::set_05V cmd:" << full_address;
     writePackage((const char*) full_address);
     //writePackage(":SOUR:VOLT:ILIM 1e-3\n");
@@ -232,42 +232,65 @@ void Keysight::set05V(int volt = 600, int delay = 600 )
     //writePackage(":INP:STAT ON");
     QThread::msleep(delay);//600);
 }
-void Keysight::set10V(int volt = 600, int delay = 600 )
-{
+void Keysight::set10V(int delay = 600, int mvolt = 10000, int range = 10)
+{ 
     writePackage(":SOUR:VOLT:STAT ON\n");
     writePackage(":OUTP:STAT ON\n");
     writePackage(":INP:STAT ON");
-    //writePackage(":CURR:RANG 2e-2\n");
-    //writePackage(":SOUR:VOLT:RANG 1\n");
-    char full_address[32];
-    snprintf(full_address, 32, ":SOUR:VOLT %de-1\n", 10);
-    qDebug() << "Keysight::set_05V cmd:" << full_address;
-    writePackage((const char*) full_address);
+    char str[32];
+    snprintf(str, 32, ":SOUR:VOLT %de-3\n", mvolt);
+    qDebug() << "Keysight::set_10v cmd:" << str;
+    writePackage((const char*) str);
 }
 
-void Keysight::set1V(int delay)
+void Keysight::set1V(int delay, int mvolt = 1000, int range = 10)
 {
     //writePackage("SOUR:VOLT:STAT OFF\n");
     writePackage("*RST\n");
     writePackage(":OUTP:STAT OFF\n");
     writePackage(":INP:STAT OFF");
-    writePackage("SOUR:VOLT 1\n");
+    if (mvolt == 1000){
+        writePackage("SOUR:VOLT 1\n");}
+    else {
+        char str[32];
+        snprintf(str, 32, ":SOUR:VOLT %de-3\n", mvolt);
+        qDebug() << "Keysight::set_1v cmd:" << str;
+        writePackage((const char*) str);
+
+    }
     //writePackage("SOUR:VOLT:STAT ON\n");
     writePackage(":OUTP:STAT ON\n");
     writePackage(":INP:STAT ON");
 
     QThread::msleep(delay);
-    writePackage("CURR:RANG 2e-10\n");
+    if (mvolt == 1000){
+        writePackage("CURR:RANG 1e-10\n");
+    }
+    else {
+        char str[32];
+        snprintf(str, 32, "CURR:RANG 1e-%d\n", range);
+        qDebug() << "Keysight::curr_range cmd:" << str;
+        writePackage((const char*) str);
+    }
 }
 
-void Keysight::set10mV(int delay = 400)
+void Keysight::set10mV(int delay = 400, int mvolt = 10)
 {
     //writePackage("SOUR:VOLT:STAT OFF\n");
     writePackage("*RST\n");
 
     writePackage(":OUTP:STAT OFF\n");
     writePackage(":INP:STAT OFF");
-    writePackage("SOUR:VOLT 1e-2\n");
+    if (mvolt==10) {
+        writePackage("SOUR:VOLT 1e-2\n");
+    }
+    else{
+        char str[32];
+        snprintf(str, 32, ":SOUR:VOLT %de-3\n", mvolt);
+        qDebug() << "Keysight::set_10mv cmd:" << str;
+        writePackage((const char*) str);
+
+    }
     //writePackage("SOUR:VOLT:STAT ON\n");
     writePackage(":OUTP:STAT ON\n");
     writePackage(":INP:STAT ON");
@@ -275,72 +298,45 @@ void Keysight::set10mV(int delay = 400)
     //writePackage("CURR:RANG 2e-10\n");
 }
 
-void Keysight::darkCurrents(int dc10, int dc1, int dc05, int dc05volt)
-//struct WalkSettings* walk, struct Delays* delays, struct Currents* curr)
+void Keysight::darkCurrents(int fcdelay, int dc1delay, int dc2delay, int fcvolt, int dc1volt, int dc2volt, int dc2range )
 {
 
-    //zeroCorrection(delays->zero);
+    forward05V = forwardCurrent(fcdelay, fcvolt);
 
-    //get forward current
-    //set05V(dc05volt, dc05);
-    forward05V = forwardCurrent(dc05, dc05volt);
-
-    set10mV(dc10);
+    set10mV(dc1delay, dc1volt);
     //get dark current
     dark10mV = readDouble();
-    /*int k = 0;
-    while (dark10mV == 0 || k < 3)
-    {
-        dark10mV = readDouble();
-        ++k;
-    }*/
 
 
-    set1V(dc1);
+    set1V(dc2delay, dc2volt, dc2range);
     dark1V = readDouble();
-    /*k = 0;
-    while (dark1V == 0 || k < 5)
-    {
-        dark1V = readDouble();
-        ++k;
-    }*/
-
 }
 
-
-double Keysight::lightCurrent(int lightDelay)
+double Keysight::lightCurrent(int delay, int mvolt)
 {
 
-    set10mV(400);
-    QThread::msleep(lightDelay);
+    set10mV(delay, mvolt);
+    QThread::msleep(delay);
     //get light current
     double res = readDouble();
-    /*int k = 0;
-    while (res == 0 || k < 5)
-    {
-        res = readDouble();
-        ++k;
-    }*/
-    //writePackage("SOUR:VOLT:STAT ON\n");
-    //writePackage(":OUTP:STAT OFF\n");
-    //writePackage(":INP:STAT OFF\n");
+
     return res;
 
 }
 
 
-double Keysight::forwardCurrent(int dc05, int dc05volt)
+double Keysight::forwardCurrent(int delay, int mvolt)
 {
 
-    set05V(dc05volt, dc05);
+    set05V(delay, mvolt);
     QThread::msleep(300);
     //sourceOff();
     double res = readDouble();
     if (res > (-1) * pow(10,-4))
     {
-        set10V(dc05volt, dc05);
+        set10V(delay, 10000);
         //QThread::msleep(300);
-        set05V(dc05volt, dc05);
+        set05V(delay, mvolt);
         //QThread::msleep(300);
         res = readDouble();
 

@@ -3,22 +3,30 @@
 
 #include <QAbstractListModel>
 #include <QList>
+#include "exchangeables.h"
 
 class DelayModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    DelayModel(QObject* parent = Q_NULLPTR);
+    DelayModel(QObject* parent = Q_NULLPTR, VoltDelay* = nullptr);
     ~DelayModel();
 
 private:
-    std::vector<int> delayData = {300, 300, 500, 500, 400, 400, 600};
-
+    VoltDelay *vd;
+    std::vector<int> delayData = {300, 300, 500, 500, 400, 400};
+    std::vector<int> voltData = {0, 600, 10, 1000, 10, 0};
 private:
     void sendCommand();
 
     // QAbstractItemModel interface
 public:
+    /**
+     * @brief rowCount возвращает число управляющих задержек
+     * @param parent
+     * @return число управляющих задержек
+     */
+    virtual int columnCount(const QModelIndex& parent) const override;
     /**
      * @brief rowCount возвращает число управляющих задержек
      * @param parent
@@ -48,7 +56,7 @@ signals:
      * @brief sendDataSignal сигнализирует об отправке пакета данных в worker
      * @param message
      */
-    void sendDataSignal(std::vector<int> delays);
+    void sendDataSignal(VoltDelay* vd);
 };
 
 #endif // DELAYMODEL_H
