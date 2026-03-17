@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -57,7 +57,6 @@ private:
     QThread statsThread;
     QMutex mutex;
     QString dir_name;
-    QList<int> delays;
     QList<bool> portResult = {false, false, false};
     bool busy = false;
     void checkBusy();
@@ -76,7 +75,7 @@ private:
     bool centerColumn, leftColumn, rightColumn;
 
     int numRows, number;
-    int gapIndex;
+    //int gapIndex;
     void createWorkerThread();
     void createStatsThread();
     void addElement(int, int, double);
@@ -113,7 +112,7 @@ signals:
     void autoWalkSignal(RunStatus* , QString);
     void autoOpenPortsSignal(RunStatus*);
     void showChartsSignal(QString);
-    void setDelaySignal(VoltDelay*);
+    void setDelaySignal(VoltDelay);
     void getCurrentCoordsSignal(int, RunStatus*);
     void measureFCSignal(RunStatus*);
     void zeroCorrSignal(RunStatus*);

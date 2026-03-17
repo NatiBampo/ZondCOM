@@ -2,11 +2,12 @@
 #define KEYSIGHT_H
 
 
+#include "visatype.h"
 #include <QThread>
 #include <QDebug>
 #include <QString>
-#include "serials.h"
-#include "visa/visa.h"
+//#include "serials.h"
+#include "exchangeables.h"
 
 class Keysight
 {
@@ -28,9 +29,9 @@ public:
     void set10mV(int, int);
 
 
-    double lightCurrent(int, int);
-    double forwardCurrent(int , int);
-    void darkCurrents(int , int , int , int, int, int, int);
+    double lightCurrent(VoltDelay *);
+    double forwardCurrent(VoltDelay *);
+    void darkCurrents(VoltDelay *);
 
 public:
     double dark10mV;

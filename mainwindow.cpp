@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QSerialPortInfo>
 #include <QMessageBox>
@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-
+    qRegisterMetaType<VoltDelay>("VoltDelay");
     ds = new DieSettings();
     rs = new RunStatus();
     vd = new VoltDelay();
@@ -41,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     dir_name = "С:\temp\1.csv";
 
-    delays.append({300, 300, 500, 500, 400, 400, 600});
 
     ui->keysightRB->setChecked(true);
     initializeShortKeys();
@@ -327,7 +326,7 @@ bool MainWindow::portsReady()
     ui->measureBButton->setEnabled((portResult[0]));
     ui->FCMeasureButton->setEnabled(portResult[0] && portResult[1]);
     ui->measure2pushButton->setEnabled(res);
-
+    ui->tableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     return res;
 }
 
@@ -346,7 +345,7 @@ bool MainWindow::readyCheck()
     //ui->loadFilePushButton->setEnabled(res);
     ui->stopPushButton->setEnabled(res);
     ui->stop2pushButton->setEnabled(res);
-
+    ui->tableView->setEnabled(true);
     return res;
 }
 
@@ -522,7 +521,7 @@ void MainWindow::setProgressBarRange(int minVal, int maxVal)
 
 void MainWindow::pauseButton_clicked(bool checked)
 {
-    if (checked)
+    /*if (checked)
     {
         ui->pauseButton->setText("Продолжить");
     } else
@@ -533,7 +532,14 @@ void MainWindow::pauseButton_clicked(bool checked)
     mutex.lock();
     //в перспективе добавить вспомогателный поток или выходить из цикла обхода пластины вместо ожидания даже при паузе
     worker->pauseWalk();
-    mutex.unlock();
+    mutex.unlock();*/
+
+    ui->pauseButton->setText(checked ? "Продолжить" : "Пауза");
+
+    if (!checked) updateDelays();
+
+    // Просто вызываем метод воркера, он сам разберется с мьютексом
+    worker->setPaused(checked);
 }
 
 
@@ -568,8 +574,11 @@ void MainWindow::saveMeasureButton_clicked()
     if (!busy)
     {
         updateDelays();
+        qInfo(logInfo()) << "MainWindow::saveMeasure" << " 1";
         updateRunStatus();
+        qInfo(logInfo()) << "MainWindow::saveMeasure" << " 2";
         emit saveMeasureSignal(rs);
+        qInfo(logInfo()) << "MainWindow::saveMeasure"<< " 3";
     }
 }
 
@@ -602,7 +611,7 @@ void MainWindow::continueFromButton_clicked(bool checked)
 
         ui->scanPushButton->setEnabled(false);
         rs->currentIndex = getUIIndex();
-        rs->allNew = (getUIIndex() <= gapIndex);
+        //rs->allNew = (getUIIndex() <= gapIndex);
         rs->startIndex = rs->currentIndex;
         emit autoWalkSignal(rs, dir_name);
 
@@ -665,7 +674,8 @@ void MainWindow::scanPushButton_clicked(bool checked)
         ui->addressLabel->setText(dir_name);
         updateDelays();
         updateRunStatus();
-        rs->allNew = true;
+        rs->startIndex = rs->currentIndex;
+        //rs->allNew = true;
         rs->paused = false;
 
         emit autoWalkSignal(rs, dir_name);
@@ -819,10 +829,9 @@ void MainWindow::updateDelays()
     vd->dc1Volt = ui->voltDC10mvSpinBox->value();
     vd->dc2Volt = ui->voltDC1VSpinBox->value();
     vd->lightVolt = ui->voltLightSpinBox->value();
-
     vd->rangedc2 = ui->rangeDC1VSpinBox->value();
 
-    emit setDelaySignal(vd);
+    emit setDelaySignal(*vd);
 }
 
 
@@ -928,6 +937,8 @@ void MainWindow::on_loadFilePushButton_clicked()
 
             emit openCsvFileSignal(dir_name);
             readyCheck();
+            ui->tableView->setEnabled(true);
+
         }
     }
 }
@@ -1013,6 +1024,7 @@ void MainWindow::writeCSV()
             }
             output << model->index(row, column).data().toString()<< "\n";
         }
+
     }
 }
 

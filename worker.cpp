@@ -1,4 +1,4 @@
-#include "worker.h"
+﻿#include "worker.h"
 #include <QThread>
 #include <QFile>
 #include <QTextStream>
@@ -7,7 +7,6 @@
 #include <QSerialPortInfo>
 #include <ctime>
 #include <QMessageBox>
-#include <QDebug>
 #include "LoggingCategories.h"
 
 
@@ -23,10 +22,12 @@ Worker::Worker(QMutex* mtxp)
     closePorts();
 
     keysight = new Keysight();
+    //vd = new VoltDelay();
 }
 
 Worker::~Worker()
 {
+    //delete vd;
     closePorts();
     delete serialPortA5;
     delete serialPortKeithly;
@@ -515,7 +516,7 @@ void Worker::autoWalk(RunStatus *rs, QString dir_cur){
                 paused = false;
                 break;
             }
-
+            /*
             //проверка нажатия Паузы
             mutex->lock();
             if (paused)
@@ -534,7 +535,8 @@ void Worker::autoWalk(RunStatus *rs, QString dir_cur){
                     mutex->unlock();
                 }
             }
-            mutex->unlock();
+            mutex->unlock();*/
+            checkPause();
 
             //начинаем мерить элемент
             if (keithley_status) MeasureDie(serialPortA5, serialPortKeithly, rs);
@@ -596,6 +598,24 @@ void Worker::autoWalk(RunStatus *rs, QString dir_cur){
 
 }
 
+void Worker::checkPause(){
+    unsigned long ms = 10UL;
+    QMutexLocker locker(mutex);
+    while(paused){
+        pauseCondition.wait(mutex, ms);//.wait(&mutex);
+    }
+}
+
+
+void Worker::setPaused(bool p){
+    QMutexLocker locker(mutex);
+    paused = p;
+    if (!paused) {
+        pauseCondition.wakeAll();
+    }
+
+}
+
 
 void Worker::pauseWalk()
 {
@@ -623,16 +643,21 @@ void Worker::goToElement(int index, RunStatus *rs)
 //TODO: insert RunStatus
 void Worker::saveMeasure(RunStatus *rs)
 {
+    qInfo(logInfo()) << "Worker::saveMeasure" << " 1";
     int index = rs->currentIndex;
     if (checkIndex(index))
     {
+         qInfo(logInfo()) << "Worker::saveMeasure" << " 2";
         emit sendMessageBox("info", "Индекс за пределами измеряемой зоны.\nПроверье отступы по краям\n и выполните ориентацию");
         return;
     }
+     qInfo(logInfo()) << "Worker::saveMeasure" << " 3";
     goToElement(index, rs);
-
+    qInfo(logInfo()) << "Worker::saveMeasure" << " 4";
     MeasureDie(serialPortA5, serialPortKeithly, rs);
+    qInfo(logInfo()) << "Worker::saveMeasure" << " 5";
     emit sendAddTableSignal(currentIndex, ForwardCurrent, DarkCurrent10mV, DarkCurrent1V, LightCurrent - DarkCurrent10mV);
+     qInfo(logInfo()) << "Worker::saveMeasure" << " 6";
 }
 
 
@@ -746,6 +771,7 @@ void Worker::lightController(QByteArray msg, RunStatus* rs)
 void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithly,
                         RunStatus *rs)
 {
+    VoltDelay *vd = &m_vd;
     bool planar_status = rs->planar;
     bool keithley_status = rs->meter;
     bool key = rs->keysight;
@@ -753,16 +779,16 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
     if (allPortsOpen() || keithley_status)
     {
         if (key)
-            keysight->zeroCorrection(zeroDelay);
+            keysight->zeroCorrection(vd->zeroDelay);
         else
             KeithlyZeroCorrection(serialPortKeithly);
 
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table UP\r\n", 200);
 
-        QThread::msleep(200);//800
+        QThread::msleep(m_vd.planarDelay);//200//800
         if (key)
         {
-            keysight->darkCurrents(FCdelay, DC10mVDelay, DC1VDelay,  FCVoltage, dc1Volt, dc2Volt, rangedc2);
+            keysight->darkCurrents(vd);
             DarkCurrent10mV = keysight->dark10mV;
             DarkCurrent1V = keysight->dark1V;
             ForwardCurrent = keysight->forward05V;
@@ -770,7 +796,7 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
         else
         {
             Keithly10mVSet(serialPortKeithly);
-            QThread::msleep(DC10mVDelay);//800
+            QThread::msleep(vd->dc1Delay);//800//DC10mVDelay
             DarkCurrent10mV = KeithlyGet(serialPortKeithly);
             Keithly1VSet(serialPortKeithly);
             DarkCurrent1V = KeithlyGet(serialPortKeithly);
@@ -781,13 +807,13 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
 
         if (key)
         {
-            LightCurrent = keysight->lightCurrent(lightDelay, lightVolt);
+            LightCurrent = keysight->lightCurrent(vd);
         }
         else
         {
             Keithly10mVSet(serialPortKeithly);
             emit sendPackageSignal(serialPortKeithly, "CURR:RANG 2e-6\n", NO_ANSWER_DELAY);
-            QThread::msleep(lightDelay);//200
+            QThread::msleep(vd->lightDelay);//200//lightDelay
             LightCurrent = KeithlyGet(serialPortKeithly);
         }
 
@@ -809,14 +835,15 @@ void Worker::MeasureDie(QSerialPort *serialPortA5, QSerialPort *serialPortKeithl
 
 void Worker::KeithlyZeroCorrection(QSerialPort *serialPort)
 {
+    VoltDelay *vd = &m_vd;
     sendPackage(serialPort, "*RST\n", NO_ANSWER_DELAY);
     sendPackage(serialPort, "SYST:ZCH ON\n", NO_ANSWER_DELAY);
     sendPackage(serialPort, "CURR:RANG 2e-9\n", NO_ANSWER_DELAY);
-    QThread::msleep(zeroDelay);//400
+    QThread::msleep(vd->zeroDelay);//400
     sendPackage(serialPort, "INIT\n", NO_ANSWER_DELAY);
-    QThread::msleep(zeroDelay);
+    QThread::msleep(vd->zeroDelay);
     sendPackage(serialPort, "SYST:ZCOR:STAT OFF\n", NO_ANSWER_DELAY);
-    QThread::msleep(zeroDelay);
+    QThread::msleep(vd->zeroDelay);
     sendPackage(serialPort, "SYST:ZCOR:ACQ\n", NO_ANSWER_DELAY);
     sendPackage(serialPort, "SYST:ZCH OFF\n", NO_ANSWER_DELAY);
     sendPackage(serialPort, "SYST:ZCOR ON\n", NO_ANSWER_DELAY);
@@ -826,11 +853,11 @@ void Worker::Keithly05VSet(QSerialPort *serialPort)
 {
     sendPackage(serialPort, "CURR:RANG 2e-3\n", NO_ANSWER_DELAY);
     sendPackage(serialPort, "SOUR:VOLT:RANG 1\n", NO_ANSWER_DELAY);
-    QByteArray tmp = QByteArray::number(((double)FCVoltage) / 1000);
+    QByteArray tmp = QByteArray::number(((double)m_vd.fcVolt) / 1000);//FCVoltage
     sendPackage(serialPort, "SOUR:VOLT " + tmp + '\n', NO_ANSWER_DELAY);
     sendPackage(serialPort, "SOUR:VOLT:ILIM 1e-3\n", NO_ANSWER_DELAY);
     sendPackage(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
-    QThread::msleep(FCdelay);
+    QThread::msleep(m_vd.fcDelay); //FCdelay
 }
 
 double Worker::KeithlyGet(QSerialPort *serialPort)
@@ -846,16 +873,17 @@ void Worker::Keithly10mVSet(QSerialPort *serialPort)
    sendPackage(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
    sendPackage(serialPort, "SOUR:VOLT -1e-2\n", NO_ANSWER_DELAY);
    sendPackage(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
-   QThread::msleep(400);
+   QThread::msleep(m_vd.dc1Delay);//400
     sendPackage(serialPort, "CURR:RANG 2e-10\n", NO_ANSWER_DELAY);
 }
 
 void Worker::Keithly1VSet(QSerialPort *serialPort)
 {
+
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT OFF\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT -1\n", NO_ANSWER_DELAY);
     emit sendPackageSignal(serialPort, "SOUR:VOLT:STAT ON\n", NO_ANSWER_DELAY);
-    QThread::msleep(DC1VDelay);
+    QThread::msleep(m_vd.dc2Delay); //DC1VDelay
 }
 
 
@@ -880,6 +908,7 @@ void Worker::measureElement(RunStatus *rs)
 
 void Worker::measureFC(RunStatus *rs)
 {
+    VoltDelay *vd = &m_vd;
     bool planar_status = rs->planar;
     bool keithley_status = rs->meter;
 
@@ -896,7 +925,7 @@ void Worker::measureFC(RunStatus *rs)
 
         if (key)
         {
-            ForwardCurrent = keysight->forwardCurrent(FCdelay, FCVoltage);
+            ForwardCurrent = keysight->forwardCurrent(vd);
         }
         else
         {
@@ -904,7 +933,7 @@ void Worker::measureFC(RunStatus *rs)
             ForwardCurrent = KeithlyGet(serialPortKeithly);
         }
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
-        emit sendMessageBox("Прямой ток измерение: ", "Voltage : " + QByteArray::number(((double)FCVoltage) / 1000) + " V : " + QString::number(ForwardCurrent, 'E', 4));
+        emit sendMessageBox("Прямой ток измерение: ", "Voltage : " + QByteArray::number(((double)vd->fcVolt) / 1000) + " V : " + QString::number(ForwardCurrent, 'E', 4));
     }
     else
     {
@@ -915,6 +944,7 @@ void Worker::measureFC(RunStatus *rs)
 
 void Worker::zeroCorr(RunStatus *rs)
 {
+    VoltDelay *vd = &m_vd;
     bool planar_status = rs->planar;
     bool keithley_status = rs->meter;
 
@@ -922,14 +952,14 @@ void Worker::zeroCorr(RunStatus *rs)
     if (allPortsOpen() || keithley_status)
     {
         if (key)
-            keysight->zeroCorrection(zeroDelay);
+            keysight->zeroCorrection(vd->zeroDelay);
         else
             KeithlyZeroCorrection(serialPortKeithly);
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table UP\r\n", ANSWER_DELAY);
 
         if (key)
         {
-            ForwardCurrent = keysight->forwardCurrent(FCdelay, FCVoltage);
+            ForwardCurrent = keysight->forwardCurrent(vd);
         }
         else
         {
@@ -937,7 +967,7 @@ void Worker::zeroCorr(RunStatus *rs)
             ForwardCurrent = KeithlyGet(serialPortKeithly);
         }
         if (planar_status) emit sendPackageSignalRead(serialPortA5, "Table DN\r\n", ANSWER_DELAY);
-        emit sendMessageBox("Прямой ток измерение: ", "Voltage : " + QByteArray::number(((double)FCVoltage) / 1000) + " V : " + QString::number(ForwardCurrent, 'E', 4));
+        emit sendMessageBox("Прямой ток измерение: ", "Voltage : " + QByteArray::number(((double)vd->fcVolt) / 1000) + " V : " + QString::number(ForwardCurrent, 'E', 4));
     }
     else
     {
@@ -946,21 +976,8 @@ void Worker::zeroCorr(RunStatus *rs)
 }
 
 
-void Worker::setDelay(VoltDelay* s)
+void Worker::setDelay(VoltDelay s)
 {
-    planarDelay = s->planarDelay;
-    zeroDelay = s->zeroDelay;
-    FCdelay = s->fcDelay;
-    DC10mVDelay = s->dc1Delay;
-    DC1VDelay = s->dc2Delay;
-    lightDelay = s->lightDelay;
-
-    FCVoltage =  s->fcVolt;
-    dc1Volt = s->dc1Volt;
-    dc2Volt = s->dc2Volt;
-    lightVolt = s->lightVolt;
-
-    //rangedc1 = s->rangedc1;
-    rangedc2 = s->rangedc2;
+    m_vd = s;
 }
 

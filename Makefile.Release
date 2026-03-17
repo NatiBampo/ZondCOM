@@ -875,6 +875,10 @@ release\moc_mainwindow.cpp: mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qdatetime.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qcalendar.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qlocale.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMutexLocker \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QWaitCondition \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qwaitcondition.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDeadlineTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qbasictimer.h \
@@ -884,14 +888,9 @@ release\moc_mainwindow.cpp: mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QRegularExpressionMatch \
 		exchangeables.h \
 		keysight.h \
+		visa\visatype.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDebug \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QString \
-		serials.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMap \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPortInfo \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportinfo.h \
-		visa\visa.h \
-		visa\visatype.h \
 		tabcanvas.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\QWidget \
 		Models\delaymodel.h \
@@ -1322,6 +1321,12 @@ release\moc_worker.cpp: worker.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMutex \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qmutex.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qtsan_impl.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMutexLocker \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QWaitCondition \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qwaitcondition.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDeadlineTimer \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qdeadlinetimer.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qbasictimer.h \
@@ -1331,18 +1336,11 @@ release\moc_worker.cpp: worker.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QRegularExpressionMatch \
 		exchangeables.h \
 		keysight.h \
+		visa\visatype.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QThread \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qthread.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qdeadlinetimer.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDebug \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QString \
-		serials.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMap \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPortInfo \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportinfo.h \
-		visa\visa.h \
-		visa\visatype.h \
 		release\moc_predefs.h \
 		..\..\Qt\6.4.3\msvc2019_64\bin\moc.exe
 	C:\Qt\6.4.3\msvc2019_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include C:/projects_1/ZondCOM/release/moc_predefs.h -IC:/Qt/6.4.3/msvc2019_64/mkspecs/win32-msvc -IC:/projects_1/ZondCOM -IC:/projects_1/ZondCOM/visa -IC:/Qt/6.4.3/msvc2019_64/include -IC:/Qt/6.4.3/msvc2019_64/include/QtCharts -IC:/Qt/6.4.3/msvc2019_64/include/QtOpenGLWidgets -IC:/Qt/6.4.3/msvc2019_64/include/QtWidgets -IC:/Qt/6.4.3/msvc2019_64/include/QtOpenGL -IC:/Qt/6.4.3/msvc2019_64/include/QtGui -IC:/Qt/6.4.3/msvc2019_64/include/QtSerialPort -IC:/Qt/6.4.3/msvc2019_64/include/QtCore -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\ATLMFC\include" -I"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt" -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt" worker.h -o release\moc_worker.cpp
@@ -2048,6 +2046,7 @@ release\delayview.obj: Views\delayview.cpp Views\delayview.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\qstyleditemdelegate.h
 
 release\keysight.obj: keysight.cpp keysight.h \
+		visa\visatype.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QThread \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qthread.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qobject.h \
@@ -2135,17 +2134,8 @@ release\keysight.obj: keysight.cpp keysight.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qhash.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qvarlengtharray.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QString \
-		serials.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMap \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPort \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialport.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qiodevice.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportglobal.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qtserialportexports.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPortInfo \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportinfo.h \
-		visa\visa.h \
-		visa\visatype.h
+		exchangeables.h \
+		visa\visa.h
 
 release\main.obj: main.cpp mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\QMainWindow \
@@ -2314,6 +2304,10 @@ release\main.obj: main.cpp mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qdatetime.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qcalendar.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qlocale.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMutexLocker \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QWaitCondition \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qwaitcondition.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDeadlineTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qbasictimer.h \
@@ -2323,14 +2317,9 @@ release\main.obj: main.cpp mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QRegularExpressionMatch \
 		exchangeables.h \
 		keysight.h \
+		visa\visatype.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDebug \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QString \
-		serials.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMap \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPortInfo \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportinfo.h \
-		visa\visa.h \
-		visa\visatype.h \
 		tabcanvas.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\QWidget \
 		Models\delaymodel.h \
@@ -2563,6 +2552,10 @@ release\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qdatetime.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qcalendar.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qlocale.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMutexLocker \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QWaitCondition \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qwaitcondition.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDeadlineTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qbasictimer.h \
@@ -2572,14 +2565,9 @@ release\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QRegularExpressionMatch \
 		exchangeables.h \
 		keysight.h \
+		visa\visatype.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDebug \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QString \
-		serials.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMap \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPortInfo \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportinfo.h \
-		visa\visa.h \
-		visa\visatype.h \
 		tabcanvas.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\QWidget \
 		Models\delaymodel.h \
@@ -2624,6 +2612,8 @@ release\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\QStyledItemDelegate \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\qstyleditemdelegate.h \
 		ui_mainwindow.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPortInfo \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportinfo.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\QMessageBox \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\qmessagebox.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\qdialog.h \
@@ -2746,9 +2736,8 @@ release\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QVariant \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qvariantlist.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qvariantmap.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMap \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qvector.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qwaitcondition.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDeadlineTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qwineventnotifier.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qxmlstream.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qxpfunctional.h \
@@ -3915,6 +3904,12 @@ release\worker.obj: worker.cpp worker.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMutex \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qmutex.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qtsan_impl.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMutexLocker \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QWaitCondition \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qwaitcondition.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDeadlineTimer \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qdeadlinetimer.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QTimer \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qbasictimer.h \
@@ -3924,18 +3919,11 @@ release\worker.obj: worker.cpp worker.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QRegularExpressionMatch \
 		exchangeables.h \
 		keysight.h \
+		visa\visatype.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QThread \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qthread.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qdeadlinetimer.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qelapsedtimer.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QDebug \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QString \
-		serials.h \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QMap \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPortInfo \
-		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportinfo.h \
-		visa\visa.h \
-		visa\visatype.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\QFileDialog \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\qfiledialog.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\qtwidgetsglobal.h \
@@ -3989,6 +3977,8 @@ release\worker.obj: worker.cpp worker.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\QSizeF \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtGui\QTransform \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtCore\qnativeinterface.h \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\QSerialPortInfo \
+		..\..\Qt\6.4.3\msvc2019_64\include\QtSerialPort\qserialportinfo.h \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\QMessageBox \
 		..\..\Qt\6.4.3\msvc2019_64\include\QtWidgets\qmessagebox.h \
 		LoggingCategories.h \

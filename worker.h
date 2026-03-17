@@ -6,10 +6,13 @@
 #include <QFile>
 #include <QDir>
 #include <QMutex>
+#include <QMutexLocker>
+#include <QWaitCondition>
 #include <QTimer>
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+
 #include "exchangeables.h"
 #include "keysight.h"
 
@@ -28,6 +31,7 @@ public:
     void setIndex(int);
 private:
     Keysight *keysight = nullptr;
+    VoltDelay m_vd;
     bool key;
     QSerialPort *serialPortA5;
     QSerialPort *serialPortKeithly;
@@ -42,6 +46,7 @@ private:
 
     QTimer m_timer;
     QMutex* mutex;
+    QWaitCondition pauseCondition;
 
     QList<int> gap;
     QList<double> DotsX;
@@ -60,21 +65,6 @@ private:
     int lastIndex = 0;
     int numX, numY;
     int errorCount = 0;
-
-    int zeroDelay = 400;
-    int FCdelay = 300;
-    int DC10mVDelay = 800;
-    int DC1VDelay = 600;
-    int lightDelay = 400;
-    int planarDelay = 1000;
-
-    int FCVoltage = 600;
-    int dc1Volt = 10;
-    int dc2Volt = 1000;
-    int lightVolt = 10;
-
-    int rangedc1 = 10;
-    int rangedc2 = 10;
 
     double localCurrent = 0.0;
     double ForwardCurrent = 0.0;
@@ -102,6 +92,7 @@ private:
     bool allPortsOpen();
     //void sendPackage(QSerialPort*, QByteArray, int);
     void endLinePlanar();
+    void checkPause();
 signals:
 
     void sendLogSignal(QByteArray);
@@ -128,13 +119,14 @@ public slots:
     void openPorts(QString, QString, QString, RunStatus *);
     void closePorts();
     void pauseWalk();
+    void setPaused(bool);
     void goToElement(int, RunStatus * );
     void saveMeasure(RunStatus *);
     void autoOpenPorts(RunStatus*);
     bool getCurrentCoords(int,  RunStatus *);
 
     void autoWalk(RunStatus *, QString);
-    void setDelay(VoltDelay*);
+    void setDelay(VoltDelay);
     void sendPackage(QSerialPort*, QByteArray, int);
     void sendPackageRead(QSerialPort*, QByteArray, int);
     void measureFC(RunStatus *);

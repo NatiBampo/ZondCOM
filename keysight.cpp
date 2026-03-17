@@ -1,5 +1,5 @@
-#include "keysight.h"
-
+﻿#include "keysight.h"
+#include "visa.h"
 
 bool Keysight::openConnection()//struct Peripherals* p)//const char* ip_address
 {
@@ -298,22 +298,38 @@ void Keysight::set10mV(int delay = 400, int mvolt = 10)
     //writePackage("CURR:RANG 2e-10\n");
 }
 
-void Keysight::darkCurrents(int fcdelay, int dc1delay, int dc2delay, int fcvolt, int dc1volt, int dc2volt, int dc2range )
+void Keysight::darkCurrents(VoltDelay *vd)
 {
 
-    forward05V = forwardCurrent(fcdelay, fcvolt);
+    int dc1delay = vd->dc1Delay;
+    int dc2delay = vd->dc2Delay;
+    int dc1volt = vd->dc1Volt;
+    int dc2volt = vd->dc2Volt;
+    int dc2range = vd->rangedc2;
+
+    forward05V = forwardCurrent(vd);
 
     set10mV(dc1delay, dc1volt);
     //get dark current
     dark10mV = readDouble();
+    int counter = 0;
+    int limit = 2;
+    while (dark10mV < 0 && counter < limit) {
+        counter++;
+        set10mV(dc1delay, dc1volt);
+        dark10mV = readDouble();
+        qDebug() << "Keysight::set_10mV counter:" << counter;
+    }
 
 
     set1V(dc2delay, dc2volt, dc2range);
     dark1V = readDouble();
 }
 
-double Keysight::lightCurrent(int delay, int mvolt)
+double Keysight::lightCurrent(VoltDelay *vd)
 {
+    int delay =vd->lightDelay;
+    int mvolt=vd->lightVolt;
 
     set10mV(delay, mvolt);
     QThread::msleep(delay);
@@ -325,9 +341,9 @@ double Keysight::lightCurrent(int delay, int mvolt)
 }
 
 
-double Keysight::forwardCurrent(int delay, int mvolt)
+double Keysight::forwardCurrent(VoltDelay *vd)
 {
-
+    int delay = vd->fcDelay; int mvolt = vd->fcVolt;
     set05V(delay, mvolt);
     QThread::msleep(300);
     //sourceOff();
