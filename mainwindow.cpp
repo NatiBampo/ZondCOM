@@ -217,6 +217,9 @@ void MainWindow::initializeShortKeys()
 
     keyLight = new QShortcut(this);
     keyLight -> setKey(Qt::Key_T);
+
+    keyCoord = new QShortcut(this);
+    keyCoord -> setKey(Qt::Key_G);
 }
 
 
@@ -229,6 +232,7 @@ void MainWindow::activateShortKeys()
     connect(keyWest, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
     connect(keyEast, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
     connect(keyLight, SIGNAL(activated()), this, SLOT(lightPushButton_on()));
+    connect(keyCoord, SIGNAL(activated()), this, SLOT(lightPushButton_on()));
 }
 
 void MainWindow::deactivateShortKeys()
@@ -240,6 +244,7 @@ void MainWindow::deactivateShortKeys()
     disconnect(keyWest, SIGNAL(activated()), this, SLOT(leftPushButton_on()));
     disconnect(keyEast, SIGNAL(activated()), this, SLOT(rightPushButton_on()));
     disconnect(keyLight, SIGNAL(activated()), this, SLOT(lightPushButton_on()));
+    disconnect(keyCoord, SIGNAL(activated()), this, SLOT(lightPushButton_on()));
 }
 
 
@@ -643,7 +648,7 @@ void MainWindow::updateDieSettings()
     ds->stepX = ui->stepXspinBox->value();
     ds->stepY = ui->stepYspinBox->value();
     ds->colSlide = ui->stepColSpinBox->value();
-
+    ds->rowSlide = ui->stepRowSpinBox->value();
     ds->numX = ui->numXspinBox->value();
     ds->numY = ui->numYspinBox->value();
 
@@ -674,8 +679,8 @@ void MainWindow::scanPushButton_clicked(bool checked)
         ui->addressLabel->setText(dir_name);
         updateDelays();
         updateRunStatus();
-        rs->startIndex = rs->currentIndex;
-        //rs->allNew = true;
+        rs->startIndex = 0;
+
         rs->paused = false;
 
         emit autoWalkSignal(rs, dir_name);

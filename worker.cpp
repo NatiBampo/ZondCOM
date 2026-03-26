@@ -327,7 +327,6 @@ bool Worker::allPortsOpen()
 }
 
 
-//TODO: insert DieSettings
 void Worker::calculateDots(DieSettings* s){
 
     double AX = (double) s->AX;
@@ -339,6 +338,8 @@ void Worker::calculateDots(DieSettings* s){
     double numberX = (double) s->numX;
     double numberY = (double) s->numY;
     double colSlide = (double) s->colSlide;
+    double rowSlide = (double) s->rowSlide;
+
     bool centerColumn = s->centerColumn;
     bool leftColumn = s->leftColumn;
     bool rightColumn = s->rightColumn;
@@ -378,9 +379,9 @@ void Worker::calculateDots(DieSettings* s){
     double StepxY = (Y3 - BY) / (numberX - 1);
     double StepyX = -X3 / (numberY - 1);
     double StepyY = -Y3 / (numberY - 1);
-    double K = 1.75 / 2.805;
+    double K = 1.75 / stepY;//2.805
     double slideX = (colSlide - (numberX+1) * stepX) * 1000;
-
+    double slideY = rowSlide * 1000;
 
     //сперва правый столбец
     for (int j = 0; j < numberY; j++)
@@ -388,7 +389,7 @@ void Worker::calculateDots(DieSettings* s){
         for (int i = -2-numberX; i < -1 ; i++)
         {
             if (i % 2 == 0) DotsX.append(BX + StepxX * i + StepyX * j  + slideX); else DotsX.append(BX + StepxX * i + StepyX * j - StepyX * K + slideX);
-            if (i % 2 == 0) DotsY.append(BY + StepxY * i + StepyY * j); else DotsY.append(BY + StepxY * i + StepyY * j - StepyY * K);
+            if (i % 2 == 0) DotsY.append(BY + StepxY * i + StepyY * j  + slideY); else DotsY.append(BY + StepxY * i + StepyY * j - StepyY * K + slideY);
         }
     }
 

@@ -70,6 +70,7 @@ private:
     QShortcut *keyEast;
     QShortcut *keyWest;
     QShortcut *keyLight;
+    QShortcut *keyCoord;
 
     int numX, numY, upLeft, upRight, downLeft, downRight, downCenter, upCenter;
     bool centerColumn, leftColumn, rightColumn;

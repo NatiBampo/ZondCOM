@@ -263,15 +263,15 @@ void Keysight::set1V(int delay, int mvolt = 1000, int range = 10)
     writePackage(":INP:STAT ON");
 
     QThread::msleep(delay);
-    if (mvolt == 1000){
+    /*if (mvolt == 1000){
         writePackage("CURR:RANG 1e-10\n");
     }
-    else {
+    else {*/
         char str[32];
         snprintf(str, 32, "CURR:RANG 1e-%d\n", range);
         qDebug() << "Keysight::curr_range cmd:" << str;
         writePackage((const char*) str);
-    }
+    //}
 }
 
 void Keysight::set10mV(int delay = 400, int mvolt = 10)

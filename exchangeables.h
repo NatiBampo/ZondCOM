@@ -1,4 +1,4 @@
-#ifndef EXCHANGEABLES_H
+﻿#ifndef EXCHANGEABLES_H
 #define EXCHANGEABLES_H
 
 enum CoordsEnum{POINT_B= -2,
@@ -65,6 +65,7 @@ typedef struct  {
     double stepX;
     double stepY;
     double colSlide;
+    double rowSlide;
 
 
 } DieSettings;

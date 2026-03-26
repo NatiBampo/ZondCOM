@@ -403,7 +403,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
@@ -1896,6 +1896,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="minimum">
+           <double>-99.000000000000000</double>
+          </property>
           <property name="value">
            <double>0.000000000000000</double>
           </property>
@@ -2738,12 +2741,12 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menujh_jg">
     <property name="title">
-     <string>17_03_2026</string>
+     <string>26_03_2026</string>
     </property>
    </widget>
    <addaction name="menujh_jg"/>
